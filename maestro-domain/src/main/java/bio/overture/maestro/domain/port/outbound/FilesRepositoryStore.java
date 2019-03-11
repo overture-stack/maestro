@@ -1,9 +1,10 @@
 package bio.overture.maestro.domain.port.outbound;
 
 import bio.overture.maestro.domain.entities.FilesRepository;
-
-import java.util.Optional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface FilesRepositoryStore {
-    Optional<FilesRepository> getFilesRepository(String code);
+    Mono<FilesRepository> getFilesRepository(String code);
+    Flux<FilesRepository> getAll();
 }

@@ -1,4 +1,4 @@
-package bio.overture.maestro.domain.message;
+package bio.overture.maestro.domain.message.in;
 
 import lombok.Builder;
 import lombok.Getter;

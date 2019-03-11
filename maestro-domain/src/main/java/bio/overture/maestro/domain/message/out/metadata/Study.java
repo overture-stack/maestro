@@ -1,11 +1,11 @@
-package bio.overture.maestro.domain.message.in;
+package bio.overture.maestro.domain.message.out.metadata;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Study {
     @NonNull
     private String studyId;

@@ -1,7 +1,7 @@
 package bio.overture.maestro.infra.adapter.outbound;
 
-import bio.overture.maestro.domain.message.GetStudyAnalysesCommand;
-import bio.overture.maestro.domain.message.in.Analysis;
+import bio.overture.maestro.domain.message.out.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.message.out.metadata.Analysis;
 import bio.overture.maestro.domain.port.outbound.StudyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,8 +21,10 @@ public class SongStudyRepository implements StudyRepository {
 
     @Override
     public Flux<Analysis> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
-        return this.webClient.get().uri(getStudyAnalysesCommand.getFilesRepositoryBaseUrl()
-                + "/study/" + getStudyAnalysesCommand.getStudyId() + "/analysis").retrieve().bodyToFlux(Analysis.class);
+        return this.webClient.get()
+                .uri(getStudyAnalysesCommand.getFilesRepositoryBaseUrl() + "/studies/" + getStudyAnalysesCommand.getStudyId() + "/analysis")
+                .retrieve()
+                .bodyToFlux(Analysis.class);
     }
 
 

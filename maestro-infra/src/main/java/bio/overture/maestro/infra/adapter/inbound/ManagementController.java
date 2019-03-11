@@ -1,8 +1,8 @@
 package bio.overture.maestro.infra.adapter.inbound;
 
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.message.IndexResult;
-import bio.overture.maestro.domain.message.IndexStudyCommand;
+import bio.overture.maestro.domain.message.in.IndexResult;
+import bio.overture.maestro.domain.message.in.IndexStudyCommand;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;

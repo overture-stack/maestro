@@ -1,4 +1,4 @@
-package bio.overture.maestro.domain.message.out;
+package bio.overture.maestro.domain.entities;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +24,6 @@ public class FileCopy {
     private String fileFormat;
     private String fileMd5sum;
     private long fileSize;
-    private long lastModified;
+    private Long lastModified;
 
 }

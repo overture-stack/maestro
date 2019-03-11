@@ -1,0 +1,27 @@
+{
+   "file-centric":{
+      "_all":{
+      	"enabled":false
+      },
+      "dynamic_templates":[
+         {
+            "template_1":{
+               "match":"*",
+               "match_mapping_type":"string",
+               "mapping":{
+                  "type":"keyword"
+               }
+            }
+         }
+      ],
+      "date_detection":false,
+      "properties":{
+         "file_copies":{
+            "type":"nested"
+         },
+         "donors":{
+            "type":"nested"
+         }
+      }
+   }
+}

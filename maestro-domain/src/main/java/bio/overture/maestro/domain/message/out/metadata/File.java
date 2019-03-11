@@ -1,10 +1,14 @@
-package bio.overture.maestro.domain.message.in;
+package bio.overture.maestro.domain.message.out.metadata;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class File {
     private String objectId;
     private String studyId;

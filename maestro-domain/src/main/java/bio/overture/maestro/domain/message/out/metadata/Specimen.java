@@ -1,12 +1,16 @@
-package bio.overture.maestro.domain.message.in;
+package bio.overture.maestro.domain.message.out.metadata;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Specimen {
     private String specimenId;
     private String donorId;

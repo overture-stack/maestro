@@ -1,13 +1,13 @@
-package bio.overture.maestro.domain.message.in;
+package bio.overture.maestro.domain.message.out.metadata;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.Map;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Donor {
     @NonNull
     private String donorId;
