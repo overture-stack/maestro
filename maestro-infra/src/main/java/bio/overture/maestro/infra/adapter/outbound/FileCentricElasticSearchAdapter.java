@@ -1,9 +1,10 @@
 package bio.overture.maestro.infra.adapter.outbound;
 
-import bio.overture.maestro.domain.message.in.IndexResult;
-import bio.overture.maestro.domain.entities.FileCentricDocument;
+import bio.overture.maestro.domain.api.exception.UpstreamServiceException;
+import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 
 @Slf4j
 @ConfigurationProperties(prefix = "maestro.elasticsearch.indexes.file-centric")
@@ -45,11 +48,10 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerA
     }
 
     @Override
-    public Mono<IndexResult> batchIndexFiles(List<FileCentricDocument> fileList) {
-        return  Mono.fromSupplier(() -> this.bulkIndexFiles(fileList))
-                // https://stackoverflow.com/questions/52071249/how-to-wrap-a-flux-with-a-blocking-operation-in-the-subscribe
-                .publishOn(Schedulers.elastic())
-                .onErrorReturn((e) -> e instanceof ElasticsearchException, IndexResult.builder().successful(false).build());
+    public Mono<IndexResult> batchIndexFiles(BatchIndexFilesCommand batchIndexFilesCommand) {
+        return  Mono.fromSupplier(() -> this.bulkIndexFiles(batchIndexFilesCommand.getFiles()))
+            .onErrorMap((e) -> e instanceof ElasticsearchException, (e) -> new UpstreamServiceException("batch Index failed", e))
+            .subscribeOn(Schedulers.elastic());
     }
 
     @PostConstruct
@@ -68,25 +70,25 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerA
         log.debug("indexExists result: {} ", indexExists);
         if (!indexExists) {
             this.createIndex();
+            template.putMapping(this.alias, this.alias, loadMappingMap(this.alias));
         }
-        template.putMapping(this.alias, this.alias, loadMappingMap(this.alias));
     }
 
     @SneakyThrows
     private void createIndex() {
-        val jsonNode = new ObjectMapper().readTree(this.indexSettings.getInputStream()).toString();
-        this.template.createIndex(this.alias, jsonNode);
+        val indexSettings = inputStreamToString(this.indexSettings.getInputStream());
+        this.template.createIndex(this.alias, indexSettings);
     }
 
     private IndexResult bulkIndexFiles(List<FileCentricDocument> filesList) {
         this.template.bulkIndex(filesList.stream()
-                .map(file -> new IndexQueryBuilder()
-                        .withId(file.getId())
-                        .withIndexName(this.alias)
-                        .withType(this.alias)
-                        .withObject(file)
-                        .build()
-                ).collect(Collectors.toList())
+            .map(file -> new IndexQueryBuilder()
+                .withId(file.getObjectId())
+                .withIndexName(this.alias)
+                .withType(this.alias)
+                .withObject(file)
+                .build()
+            ).collect(Collectors.toList())
         );
         return IndexResult.builder().successful(true).build();
     }
@@ -94,7 +96,7 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerA
     @SneakyThrows
     private String loadMappingMap(String typeName) {
         val mapping = this.resourceLoader.getResource("classpath:" + typeName + ".mapping.json");
-        return new ObjectMapper().readTree(mapping.getURL()).toString();
+        return inputStreamToString(mapping.getInputStream());
     }
 
 }

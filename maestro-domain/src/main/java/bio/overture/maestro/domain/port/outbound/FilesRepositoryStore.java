@@ -1,6 +1,6 @@
 package bio.overture.maestro.domain.port.outbound;
 
-import bio.overture.maestro.domain.entities.FilesRepository;
+import bio.overture.maestro.domain.entities.indexer.FilesRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

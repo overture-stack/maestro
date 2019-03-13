@@ -1,8 +1,9 @@
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.entities.*;
-import bio.overture.maestro.domain.message.out.metadata.Analysis;
-import bio.overture.maestro.domain.message.out.metadata.File;
+import bio.overture.maestro.domain.api.exception.BadDataException;
+import bio.overture.maestro.domain.entities.indexer.*;
+import bio.overture.maestro.domain.entities.studymetadata.Analysis;
+import bio.overture.maestro.domain.entities.studymetadata.File;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,78 +33,76 @@ final class FileCentricDocumentConverter {
     private static  FileCentricDocument convert(File file, Analysis analysis, FilesRepository repository) {
         val id = file.getObjectId();
         val repoFile = FileCentricDocument.builder()
-                // TODO: ask why song doens;t set file id
-                .id(id)
-                .objectId(id)
-                .study(List.of(file.getStudyId()))
-                .access(file.getFileAccess())
-                .analysis(FileCentricAnalysis.builder()
-                    .analysisId(analysis.getAnalysisId())
-                    .analysisState(analysis.getAnalysisState())
-                    .analysisType(analysis.getAnalysisType())
-                    .study(analysis.getStudy())
-                    .experiment(analysis.getExperiment())
-                    .build()
-                )
-                .fileCopies(List.of(getFileCopy(analysis, file,repository)))
-                .donors(getDonors(analysis));
+            .objectId(id)
+            .study(List.of(file.getStudyId()))
+            .access(file.getFileAccess())
+            .analysis(FileCentricAnalysis.builder()
+                .analysisId(analysis.getAnalysisId())
+                .analysisState(analysis.getAnalysisState())
+                .analysisType(analysis.getAnalysisType())
+                .study(analysis.getStudy())
+                .experiment(analysis.getExperiment())
+                .build()
+            )
+            .fileCopies(List.of(getFileCopy(analysis, file,repository)))
+            .donors(getDonors(analysis));
         return repoFile.build();
     }
 
-    private static FileCopy getFileCopy(Analysis a, File file, FilesRepository repository) {
-        val id = a.getAnalysisId();
+    private static FileCopy getFileCopy(Analysis analysis, File file, FilesRepository repository) {
+        val id = analysis.getAnalysisId();
         val fileId = file.getObjectId();
         val fileName = file.getFileName();
-        val indexFile = getIndexFile(a.getFile(), fileName);
-        val metadataPath = getMetadataPath(a);
+        val indexFile = getIndexFile(analysis.getFile(), fileName);
+        val metadataPath = getMetadataPath(analysis);
 
         return FileCopy.builder()
-                .fileName(fileName)
-                .fileFormat(file.getFileType())
-                .fileSize(file.getFileSize())
-                .fileMd5sum(file.getFileMd5sum())
-                .repoDataBundleId(id)
-                .repoFileId(fileId)
-                .repoType(repository.getStorageType())
-                .repoOrg(repository.getOrganization())
-                .repoName(repository.getName())
-                .repoCode(repository.getCode())
-                .repoCountry(repository.getCountry())
-                .repoBaseUrl(repository.getBaseUrl())
-                .repoDataPath(repository.getDataPath() + "/" + fileId)
-                .repoMetadataPath(repository.getMetadataPath() + "/" + metadataPath)
-                .indexFile(indexFile)
-                .build();
+            .fileName(fileName)
+            .fileFormat(file.getFileType())
+            .fileSize(file.getFileSize())
+            .fileMd5sum(file.getFileMd5sum())
+            .analysisId(id)
+            .fileId(fileId)
+            .repoType(repository.getStorageType().name().toUpperCase())
+            .repoOrg(repository.getOrganization())
+            .repoName(repository.getName())
+            .repoCode(repository.getCode())
+            .repoCountry(repository.getCountry())
+            .repoBaseUrl(repository.getBaseUrl())
+            .repoDataPath(repository.getDataPath() + "/" + fileId)
+            .repoMetadataPath(repository.getMetadataPath() + "/" + metadataPath)
+            .indexFile(indexFile)
+            .build();
     }
 
     private static String getMetadataPath(Analysis analysis) {
-        val xmlFile = analysis.getFile().stream()
-                .filter(f -> isXMLFile(f.getFileName()))
-                .findFirst()
-                .orElse(null);
+        val xmlFile = analysis.getFile()
+            .stream()
+            .filter(f -> isXMLFile(f.getFileName()))
+            .findFirst()
+            .orElse(null);
 
-        return xmlFile == null ? "" : xmlFile.getObjectId();
+        return xmlFile == null ? EMPTY_STRING : xmlFile.getObjectId();
     }
 
     private static IndexFile getIndexFile(List<File> files, String fileName) {
         Optional<File> sf = Optional.empty();
-        if (hasExtension(fileName, "BAM")) {
-            sf = getSongIndexFile(files, fileName + ".BAI");
-        } else if (hasExtension(fileName, "VCF")) {
-            sf = Stream.of(".TBI", ".IDX", ".TCG")
-                    .map(suffix -> getSongIndexFile(files, fileName + suffix))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .findFirst();
+        if (hasExtension(fileName, BAM)) {
+            sf = getSongIndexFile(files, fileName + BAI_EXT);
+        } else if (hasExtension(fileName, VCF)) {
+            sf = Stream.of(TBI_EXT, IDX_EXT, TCG_EXT)
+                .map(suffix -> getSongIndexFile(files, fileName + suffix))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
         }
         return sf
-                .map(FileCentricDocumentConverter::createIndexFile)
-                .orElse(IndexFile.builder().build());
+            .map(FileCentricDocumentConverter::createIndexFile)
+            .orElse(IndexFile.builder().build());
     }
 
     private static IndexFile createIndexFile(File file) {
         return IndexFile.builder()
-            .id(file.getObjectId())
             .objectId(file.getObjectId())
             .fileName(file.getFileName())
             .fileFormat(indexFileFormat(file.getFileName()))
@@ -124,7 +123,10 @@ final class FileCentricDocumentConverter {
 
     private static FileCentricDonor getDonor(Analysis analysis) {
         val studyId = analysis.getStudy();
-        val sample = analysis.getSample().stream().findFirst().orElseThrow(() -> new RuntimeException("incorrect structure of song data, sample is empty"));
+        val sample = analysis.getSample()
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new BadDataException("incorrect structure of song data, sample is empty"));
         val donor = sample.getDonor();
         val specimen = sample.getSpecimen();
         return FileCentricDonor.builder()
@@ -146,19 +148,19 @@ final class FileCentricDocumentConverter {
     }
 
     private static boolean isXMLFile(String filename) {
-        return hasExtension(filename, "XML");
+        return hasExtension(filename, XML);
     }
 
     private static boolean isBAIFile(String filename) {
-        return hasExtension(filename, "BAI");
+        return hasExtension(filename, BAI);
     }
 
     private static boolean isTBIFile(String filename) {
-        return hasExtension(filename, "TBI");
+        return hasExtension(filename, TBI);
     }
 
     private static boolean isIDXFile(String filename) {
-        return hasExtension(filename, "IDX");
+        return hasExtension(filename, IDX);
     }
 
     private static boolean isIndexFile(String filename) {
@@ -170,19 +172,19 @@ final class FileCentricDocumentConverter {
 
     private static String indexFileFormat(String fileName) {
         if (isBAIFile(fileName)) {
-            return "BAI";
+            return BAI;
         }
         if (isTBIFile(fileName)) {
-            return "TBI";
+            return TBI;
         }
         if (isIDXFile(fileName)) {
-            return "IDX";
+            return IDX;
         }
         return null;
     }
 
     private static boolean hasExtension(String filename, String extension) {
-        String[] suffixes = { "", ".gz", ".zip", ".b2zip" };
+        String[] suffixes = { EMPTY_STRING, GZ, ZIP, B_2_ZIP};
         val f = filename.toLowerCase();
         val ext = extension.toLowerCase();
         for (val s : suffixes) {
@@ -195,4 +197,20 @@ final class FileCentricDocumentConverter {
         }
         return false;
     }
+
+    private static final String BAM = "BAM";
+    private final static String EMPTY_STRING = "";
+    private static final String BAI = "BAI";
+    private static final String XML = "XML";
+    private static final String TBI = "TBI";
+    private static final String IDX = "IDX";
+    private static final String GZ = ".gz";
+    private static final String ZIP = ".zip";
+    private static final String B_2_ZIP = ".b2zip";
+    private static final String VCF = "VCF";
+    private static final String TCG = "TCG";
+    private static final String IDX_EXT = "." + IDX;
+    private static final String TCG_EXT = "." + TCG;
+    private static final String BAI_EXT = "." + BAI;
+    private static final String TBI_EXT = "." + TBI;
 }

@@ -1,21 +1,28 @@
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.entities.FilesRepository;
-import bio.overture.maestro.domain.message.out.GetStudyAnalysesCommand;
-import bio.overture.maestro.domain.message.in.IndexResult;
-import bio.overture.maestro.domain.message.in.IndexStudyCommand;
-import bio.overture.maestro.domain.message.out.metadata.Analysis;
-import bio.overture.maestro.domain.entities.FileCentricDocument;
+import bio.overture.maestro.domain.api.exception.BadDataException;
+import bio.overture.maestro.domain.api.exception.IndexerException;
+import bio.overture.maestro.domain.api.exception.NotFoundException;
+import bio.overture.maestro.domain.entities.indexer.FilesRepository;
+import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.entities.studymetadata.Analysis;
+import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter;
 import bio.overture.maestro.domain.port.outbound.FilesRepositoryStore;
 import bio.overture.maestro.domain.port.outbound.StudyRepository;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bio.overture.maestro.domain.utility.ErrorHandlers.logAndReturn;
 
 @Slf4j
 public class DefaultIndexer implements Indexer {
@@ -25,7 +32,7 @@ public class DefaultIndexer implements Indexer {
     private final FilesRepositoryStore filesRepositoryStore;
 
     @Inject
-    public DefaultIndexer(FileDocumentIndexServerAdapter fileDocumentIndexServerAdapter,
+    DefaultIndexer(FileDocumentIndexServerAdapter fileDocumentIndexServerAdapter,
                           StudyRepository studyRepository,
                           FilesRepositoryStore filesRepositoryStore) {
         this.fileDocumentIndexServerAdapter = fileDocumentIndexServerAdapter;
@@ -35,38 +42,52 @@ public class DefaultIndexer implements Indexer {
 
     @Override
     public Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand) {
-       return
-            this.filesRepositoryStore.getFilesRepository(indexStudyCommand.getRepositoryCode())
-            .switchIfEmpty(Mono.error(new RuntimeException("repository not found")))
-            .flatMap(repo -> studyRepository.getStudyAnalyses(GetStudyAnalysesCommand.builder()
-                        .filesRepositoryBaseUrl(repo.getBaseUrl())
-                        .studyId(indexStudyCommand.getStudyId())
-                        .build()
-                )
-                // TODO: remove take
-                .take(3)
-                .collectList()
-                 .map(analyses -> analyses.stream()
-                        .map(a -> buildFileDocuments(a, repo))
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList())
-                )
-            )
-            .switchIfEmpty(Mono.error(new RuntimeException("empty study")))
-            .flatMap(fileDocumentIndexServerAdapter::batchIndexFiles)
-            .onErrorMap((e) -> {
-                log.error("failed to index study", e);
-                return new RuntimeException("failed indexing study", e);
-            });
+        return this.filesRepositoryStore.getFilesRepository(indexStudyCommand.getRepositoryCode())
+            .switchIfEmpty(Mono.error(new NotFoundException("Repository not found")))
+            .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand))
+            .switchIfEmpty(Mono.error(new BadDataException("Empty study " + indexStudyCommand.getStudyId())))
+            .flatMap(this::batchIndexFiles)
+            .onErrorMap((e) -> logAndReturn(e, "Failed to index study", log));
     }
 
     @Override
     public void indexAll() {
-        throw new RuntimeException("Not implemented");
+        throw new IndexerException("Not implemented yet");
     }
+
+    /* ****************
+     * Private Methods
+     * ***************/
 
     private List<FileCentricDocument> buildFileDocuments(Analysis analysis, FilesRepository repository) {
         return FileCentricDocumentConverter.fromAnalysis(analysis, repository);
     }
 
+    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(FilesRepository repo, IndexStudyCommand indexStudyCommand) {
+        return getStudyAnalyses(repo, indexStudyCommand)
+            .collectList()
+            .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
+    }
+
+    private Flux<Analysis> getStudyAnalyses(FilesRepository filesRepository, IndexStudyCommand command) {
+        return this.studyRepository.getStudyAnalyses(GetStudyAnalysesCommand.builder()
+            .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
+            .studyId(command.getStudyId())
+            .build()
+        );
+    }
+
+    private List<FileCentricDocument> buildAnalysisFileDocuments(FilesRepository repo, List<Analysis> analyses) {
+        return analyses.stream()
+            .map(analysis -> buildFileDocuments(analysis, repo))
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+    }
+
+    private Mono<IndexResult> batchIndexFiles(List<FileCentricDocument> files) {
+        return this.fileDocumentIndexServerAdapter.batchIndexFiles(BatchIndexFilesCommand.builder()
+            .files(files)
+            .build()
+        );
+    }
 }

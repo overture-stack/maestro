@@ -1,7 +1,7 @@
 package bio.overture.maestro.infra.adapter.outbound;
 
-import bio.overture.maestro.domain.message.out.GetStudyAnalysesCommand;
-import bio.overture.maestro.domain.message.out.metadata.Analysis;
+import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.entities.studymetadata.Analysis;
 import bio.overture.maestro.domain.port.outbound.StudyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;

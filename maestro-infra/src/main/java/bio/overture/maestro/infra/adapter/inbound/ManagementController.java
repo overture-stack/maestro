@@ -1,9 +1,12 @@
 package bio.overture.maestro.infra.adapter.inbound;
 
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.message.in.IndexResult;
-import bio.overture.maestro.domain.message.in.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -20,9 +23,10 @@ public class ManagementController {
     }
 
     @PostMapping("/index/{repositoryId}/{studyId}")
-    public Mono<IndexResult> indexStudy(String studyId) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryId) {
         return indexer.indexStudy(IndexStudyCommand.builder()
-                .repositoryCode("collab")
+                .repositoryCode(repositoryId)
                 .studyId(studyId)
                 .build()
         );
