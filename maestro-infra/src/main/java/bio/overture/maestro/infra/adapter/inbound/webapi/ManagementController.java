@@ -1,16 +1,16 @@
-package bio.overture.maestro.infra.adapter.inbound;
+package bio.overture.maestro.infra.adapter.inbound.webapi;
 
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import lombok.val;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class ManagementController {
@@ -22,7 +22,14 @@ public class ManagementController {
         this.indexer = indexer;
     }
 
-    @PostMapping("/index/{repositoryId}/{studyId}")
+    @GetMapping
+    public Mono<Map<String, String>> ping() {
+        val response = new HashMap<String, String>();
+        response.put("status", "up");
+        return Mono.just(response);
+    }
+
+    @PostMapping("/index/repository/{repositoryId}/study/{studyId}")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryId) {
         return indexer.indexStudy(IndexStudyCommand.builder()
@@ -31,5 +38,12 @@ public class ManagementController {
                 .build()
         );
     }
+
+    @PostMapping("/index/repository/{repositoryId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void indexRepository(@PathVariable String repositoryId) {
+        indexer.indexAll();
+    }
+
 
 }

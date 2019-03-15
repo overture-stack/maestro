@@ -16,7 +16,7 @@
       ],
       "date_detection":false,
       "properties":{
-         "file_copies":{
+         "fileCopies":{
             "type":"nested"
          },
          "donors":{

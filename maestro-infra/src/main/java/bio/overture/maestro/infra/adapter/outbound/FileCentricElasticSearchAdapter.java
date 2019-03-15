@@ -5,12 +5,10 @@ import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.elasticsearch.ElasticsearchException;
@@ -18,7 +16,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -28,14 +25,13 @@ import java.util.stream.Collectors;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 
 @Slf4j
-@ConfigurationProperties(prefix = "maestro.elasticsearch.indexes.file-centric")
 public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerAdapter {
 
     private final ElasticsearchTemplate template;
     private final Resource indexSettings;
     private final ResourceLoader resourceLoader;
 
-    @Setter
+    @Value("${maestro.elasticsearch.indexes.file-centric.alias:file-centric}")
     private String alias;
 
     @Inject

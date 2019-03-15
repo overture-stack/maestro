@@ -43,15 +43,11 @@ class DefaultIndexerTest {
 
     @Mock
     private FilesRepositoryStore filesRepositoryStore;
-
     @Mock
     private StudyRepository studyRepository;
-
     @Mock
     private FileDocumentIndexServerAdapter indexServerAdapter;
-
     private Indexer indexer;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
@@ -127,6 +123,5 @@ class DefaultIndexerTest {
             .metadataPath("/m1/m2")
             .build();
     }
-
 
 }

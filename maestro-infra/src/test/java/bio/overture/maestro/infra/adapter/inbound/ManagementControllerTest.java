@@ -5,15 +5,17 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.entities.studymetadata.Analysis;
 import bio.overture.maestro.domain.port.outbound.StudyRepository;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import bio.overture.maestro.infra.adapter.inbound.webapi.ManagementController;
+import bio.overture.masestro.test.TestCategory;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
@@ -24,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 
+@Tag(TestCategory.INT_TEST)
 class ManagementControllerTest extends MaestroIntegrationTest {
 
     private WebTestClient client;
@@ -47,18 +50,23 @@ class ManagementControllerTest extends MaestroIntegrationTest {
 
     @Test
     void indexStudy() throws InterruptedException {
+        // Given
         val analyses = Flux.just(loadJsonFixture(this.getClass(), "study.json", Analysis[].class));
         given(studyRepository.getStudyAnalyses(any(GetStudyAnalysesCommand.class))).willReturn(analyses);
+
+        // test
         client.post()
             .uri("/index/collab/PEME-CA")
             .exchange()
             .expectStatus()
                 .isCreated();
         Thread.sleep(1000);
-        SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+
+        // assertions
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
             .withIndices(alias)
             .build();
-        long count = elasticsearchTemplate.count(query);
+        val count = elasticsearchTemplate.count(query);
         assertEquals(2L, count);
     }
 

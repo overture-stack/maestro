@@ -1,14 +1,33 @@
 package bio.overture.maestro.infra.config;
 
 import bio.overture.maestro.domain.api.DefaultIndexer;
+import bio.overture.maestro.infra.adapter.inbound.webapi.GlobalWebExceptionHandler;
+import bio.overture.maestro.infra.adapter.inbound.webapi.ManagementController;
+import bio.overture.maestro.infra.adapter.outbound.ConfigurationPropertiesFilesRepositoryStore;
 import bio.overture.maestro.infra.adapter.outbound.FileCentricElasticSearchAdapter;
 import bio.overture.maestro.infra.adapter.outbound.SongStudyRepository;
-import bio.overture.maestro.infra.adapter.outbound.ConfigurationPropertiesFilesRepositoryStore;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+@Import({
+    DomainConfig.class,
+    WebConfig.class,
+})
+public class RootConfiguration {
+    static {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
+    }
+}
+
+@Configuration
+@Import({
+    GlobalWebExceptionHandler.class,
+    ManagementController.class
+})
+class WebConfig{}
 
 @Configuration
 @Import({
@@ -17,18 +36,9 @@ import org.springframework.web.reactive.function.client.WebClient;
     SongStudyRepository.class,
     ConfigurationPropertiesFilesRepositoryStore.class,
 })
-public class RootConfiguration {
-
-    static {
-        System.setProperty("es.set.netty.runtime.available.processors", "false");
-    }
-
+class DomainConfig{
     @Bean
     WebClient webClient() {
         return WebClient.builder().build();
     }
-
-    @Value("${elasticsearch.cluster.name:elasticsearch}")
-    private String clusterName;
-
 }

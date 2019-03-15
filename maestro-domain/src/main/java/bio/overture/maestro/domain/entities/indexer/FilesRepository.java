@@ -5,8 +5,10 @@ import lombok.*;
 
 @Builder
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class FilesRepository {
     private String name;
     private String code;

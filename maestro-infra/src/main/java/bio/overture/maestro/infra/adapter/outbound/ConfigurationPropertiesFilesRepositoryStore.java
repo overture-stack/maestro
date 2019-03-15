@@ -5,7 +5,6 @@ import bio.overture.maestro.domain.entities.indexer.StorageType;
 import bio.overture.maestro.domain.port.outbound.FilesRepositoryStore;
 import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Component
 @Setter
 @Getter
 @ConfigurationProperties(prefix = "maestro", ignoreInvalidFields = true)
@@ -23,7 +21,7 @@ public class ConfigurationPropertiesFilesRepositoryStore implements FilesReposit
     private List<PropertiesFileRepository> repositories;
 
     @Override
-    public Mono<FilesRepository> getFilesRepository(String code) {
+    public Mono<FilesRepository> getFilesRepository(@NonNull String code) {
         return Mono.justOrEmpty(
             repositories.stream()
                 .filter(propertiesFileRepository -> propertiesFileRepository.getCode().equalsIgnoreCase(code))

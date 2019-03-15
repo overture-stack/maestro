@@ -19,13 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest(classes = Maestro.class)
+//initializes the containers annotated with @Container
 @Testcontainers
 @ContextConfiguration(classes = Maestro.class, initializers = MaestroIntegrationTest.Initializer.class)
 @Tag(TestCategory.INT_TEST)
 public class MaestroIntegrationTest {
 
     @Container
-    private static ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1");
+    private static ElasticsearchContainer container =
+        new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1");
 
     // @inject doesn't work
     @Autowired
@@ -42,7 +44,7 @@ public class MaestroIntegrationTest {
     }
 
     @Test
-    public void testContext() {
+    void testContext() {
         assertNotNull(indexer);
         assertTrue(container.isRunning());
         System.out.println(container);

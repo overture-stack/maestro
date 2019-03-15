@@ -24,4 +24,5 @@ public class StringUtilities {
             return result.toString(UTF_8);
         }
     }
+
 }

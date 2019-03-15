@@ -4,10 +4,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class NotFoundException extends IndexerException {
-    private String message;
-
     public NotFoundException(String message) {
         super(message);
     }
-
 }
