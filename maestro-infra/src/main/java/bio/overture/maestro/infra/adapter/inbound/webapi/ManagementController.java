@@ -45,5 +45,4 @@ public class ManagementController {
         indexer.indexAll();
     }
 
-
 }
