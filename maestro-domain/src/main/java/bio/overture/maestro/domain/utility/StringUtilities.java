@@ -15,7 +15,6 @@ public final class StringUtilities {
     /**
      * loads a string out of input stream.
      */
-    // implemented here as this is faster than using 3rd party
     @SneakyThrows
     public static String inputStreamToString(InputStream inputStream) {
         try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
