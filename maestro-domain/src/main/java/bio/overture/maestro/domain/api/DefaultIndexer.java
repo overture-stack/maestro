@@ -4,11 +4,10 @@ import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
-import bio.overture.maestro.domain.entities.indexer.FilesRepository;
-import bio.overture.maestro.domain.entities.studymetadata.Analysis;
-import bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter;
-import bio.overture.maestro.domain.port.outbound.FilesRepositoryStore;
-import bio.overture.maestro.domain.port.outbound.StudyRepository;
+import bio.overture.maestro.domain.entities.indexer.FileMetadataRepository;
+import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.port.outbound.FileDocumentIndexingAdapter;
+import bio.overture.maestro.domain.port.outbound.FileMetadataRepositoryStore;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
 import lombok.NonNull;
@@ -27,25 +26,28 @@ import static reactor.core.publisher.Mono.error;
 @Slf4j
 public class DefaultIndexer implements Indexer {
 
-    private final FileDocumentIndexServerAdapter fileDocumentIndexServerAdapter;
-    private final StudyRepository studyRepository;
-    private final FilesRepositoryStore filesRepositoryStore;
+    private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
+    private static final String EMPTY_STUDY_MSG = "Empty study {0}";
+    private final FileDocumentIndexingAdapter fileDocumentIndexingAdapter;
+    private final bio.overture.maestro.domain.port.outbound.FileMetadataRepository fileMetadataRepository;
+    private final FileMetadataRepositoryStore fileMetadataRepositoryStore;
 
     @Inject
-    DefaultIndexer(FileDocumentIndexServerAdapter fileDocumentIndexServerAdapter,
-                          StudyRepository studyRepository,
-                          FilesRepositoryStore filesRepositoryStore) {
-        this.fileDocumentIndexServerAdapter = fileDocumentIndexServerAdapter;
-        this.studyRepository = studyRepository;
-        this.filesRepositoryStore = filesRepositoryStore;
+    DefaultIndexer(FileDocumentIndexingAdapter fileDocumentIndexingAdapter,
+                   bio.overture.maestro.domain.port.outbound.FileMetadataRepository fileMetadataRepository,
+                   FileMetadataRepositoryStore fileMetadataRepositoryStore) {
+        this.fileDocumentIndexingAdapter = fileDocumentIndexingAdapter;
+        this.fileMetadataRepository = fileMetadataRepository;
+        this.fileMetadataRepositoryStore = fileMetadataRepositoryStore;
     }
 
     @Override
     public Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand) {
-        return this.filesRepositoryStore.getFilesRepository(indexStudyCommand.getRepositoryCode())
-            .switchIfEmpty(error(notFound("Repository {0} not found", indexStudyCommand.getRepositoryCode())))
+        log.trace("in indexStudy, args: {} ", indexStudyCommand);
+        return this.fileMetadataRepositoryStore.getFilesRepository(indexStudyCommand.getRepositoryCode())
+            .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
             .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand))
-            .switchIfEmpty(error(badData("Empty study {0}", indexStudyCommand.getStudyId())))
+            .switchIfEmpty(error(badData(EMPTY_STUDY_MSG, indexStudyCommand.getStudyId())))
             .flatMap(this::batchIndexFiles);
     }
 
@@ -58,34 +60,35 @@ public class DefaultIndexer implements Indexer {
      * Private Methods
      * ***************/
 
-    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(FilesRepository repo,
+    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(FileMetadataRepository repo,
                                                                               IndexStudyCommand indexStudyCommand) {
         return getStudyAnalyses(repo, indexStudyCommand)
             .collectList()
+            .doOnSuccess(analyses -> log.debug("loaded {} analyses", analyses.size()))
             .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
     }
 
-    private Flux<Analysis> getStudyAnalyses(FilesRepository filesRepository, IndexStudyCommand command) {
-        return this.studyRepository.getStudyAnalyses(GetStudyAnalysesCommand.builder()
-            .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
+    private Flux<Analysis> getStudyAnalyses(FileMetadataRepository fileMetadataRepository, IndexStudyCommand command) {
+        return this.fileMetadataRepository.getStudyAnalyses(GetStudyAnalysesCommand.builder()
+            .filesRepositoryBaseUrl(fileMetadataRepository.getBaseUrl())
             .studyId(command.getStudyId())
             .build()
         );
     }
 
-    private List<FileCentricDocument> buildAnalysisFileDocuments(FilesRepository repo, List<Analysis> analyses) {
+    private List<FileCentricDocument> buildAnalysisFileDocuments(FileMetadataRepository repo, List<Analysis> analyses) {
         return analyses.stream()
             .map(analysis -> buildFileDocuments(analysis, repo))
             .flatMap(List::stream)
             .collect(Collectors.toList());
     }
 
-    private List<FileCentricDocument> buildFileDocuments(Analysis analysis, FilesRepository repository) {
+    private List<FileCentricDocument> buildFileDocuments(Analysis analysis, FileMetadataRepository repository) {
         return FileCentricDocumentConverter.fromAnalysis(analysis, repository);
     }
 
     private Mono<IndexResult> batchIndexFiles(List<FileCentricDocument> files) {
-        return this.fileDocumentIndexServerAdapter.batchIndexFiles(BatchIndexFilesCommand.builder()
+        return this.fileDocumentIndexingAdapter.batchIndexFiles(BatchIndexFilesCommand.builder()
             .files(files)
             .build()
         );

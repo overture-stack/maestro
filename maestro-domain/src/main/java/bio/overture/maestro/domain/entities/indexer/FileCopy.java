@@ -4,6 +4,7 @@ import lombok.*;
 
 @Builder
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -13,7 +14,7 @@ public class FileCopy {
     private String fileName;
     private String fileFormat;
     private String fileMd5sum;
-    private long fileSize;
+    private Long fileSize;
     private Long lastModified;
 
     private String repoCode;

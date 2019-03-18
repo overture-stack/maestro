@@ -3,15 +3,13 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
-import bio.overture.maestro.domain.entities.indexer.FilesRepository;
+import bio.overture.maestro.domain.entities.indexer.FileMetadataRepository;
 import bio.overture.maestro.domain.entities.indexer.StorageType;
-import bio.overture.maestro.domain.entities.studymetadata.Analysis;
-import bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter;
-import bio.overture.maestro.domain.port.outbound.FilesRepositoryStore;
-import bio.overture.maestro.domain.port.outbound.StudyRepository;
+import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.port.outbound.FileDocumentIndexingAdapter;
+import bio.overture.maestro.domain.port.outbound.FileMetadataRepositoryStore;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
@@ -21,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -38,22 +38,25 @@ import static org.mockito.Mockito.times;
 
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.WARN)
 @Tag(UNIT_TEST)
 class DefaultIndexerTest {
 
     @Mock
-    private FilesRepositoryStore filesRepositoryStore;
+    private FileMetadataRepositoryStore fileMetadataRepositoryStore;
+
     @Mock
-    private StudyRepository studyRepository;
+    private bio.overture.maestro.domain.port.outbound.FileMetadataRepository fileMetadataRepository;
+
     @Mock
-    private FileDocumentIndexServerAdapter indexServerAdapter;
+    private FileDocumentIndexingAdapter indexServerAdapter;
+
     private Indexer indexer;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
-        reset(filesRepositoryStore, studyRepository, indexServerAdapter);
-        this.indexer = new DefaultIndexer(indexServerAdapter, studyRepository, filesRepositoryStore);
+        reset(fileMetadataRepositoryStore, fileMetadataRepository, indexServerAdapter);
+        this.indexer = new DefaultIndexer(indexServerAdapter, fileMetadataRepository, fileMetadataRepositoryStore);
     }
 
     @AfterEach
@@ -80,8 +83,8 @@ class DefaultIndexerTest {
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
 
-        given(filesRepositoryStore.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
-        given(studyRepository.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
+        given(fileMetadataRepositoryStore.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(fileMetadataRepository.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchIndexFiles(eq(batchIndexFilesCommand))).willReturn(monoResult);
 
         // When
@@ -97,8 +100,8 @@ class DefaultIndexerTest {
             .expectComplete()
             .verify();
 
-        then(filesRepositoryStore).should(times(1)).getFilesRepository(repoCode);
-        then(studyRepository).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
+        then(fileMetadataRepositoryStore).should(times(1)).getFilesRepository(repoCode);
+        then(fileMetadataRepository).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
         then(indexServerAdapter).should(times(1)).batchIndexFiles(eq(batchIndexFilesCommand));
     }
 
@@ -112,8 +115,9 @@ class DefaultIndexerTest {
         return loadJsonFixture(getClass(), "analysis.json", Analysis.class);
     }
 
-    private FilesRepository getStubFilesRepository() {
-        return FilesRepository.builder()
+    private FileMetadataRepository getStubFilesRepository() {
+        return FileMetadataRepository.builder()
+            .name("singer")
             .baseUrl("http://song.sing.sung")
             .code("TEST-REPO")
             .country("CA")

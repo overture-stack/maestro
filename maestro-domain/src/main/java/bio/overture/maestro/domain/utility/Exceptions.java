@@ -8,8 +8,7 @@ import lombok.experimental.UtilityClass;
 import static java.text.MessageFormat.format;
 
 @UtilityClass
-public class Exceptions {
-
+public final class Exceptions {
 
     public static Exception notFound(String msg, Object ...args) {
         return new NotFoundException(format(msg, args));

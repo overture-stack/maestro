@@ -1,16 +1,18 @@
-package bio.overture.maestro.domain.entities.studymetadata;
+package bio.overture.maestro.domain.entities.metadata.study;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Map;
 
+/**
+ * A Specimen provides information about the source of the sample
+ */
 @Getter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Specimen {
     private String specimenId;
     private String donorId;

@@ -1,11 +1,11 @@
 package bio.overture.maestro.domain.api.message;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 @Builder
 @Getter
+@ToString
+@EqualsAndHashCode
 public class IndexStudyCommand {
     @NonNull
     private String studyId;

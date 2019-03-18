@@ -3,16 +3,16 @@ package bio.overture.maestro.infra.adapter.outbound;
 import bio.overture.maestro.domain.api.exception.UpstreamServiceException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
-import bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter;
+import bio.overture.maestro.domain.port.outbound.FileDocumentIndexingAdapter;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
+import bio.overture.maestro.infra.config.ApplicationProperties;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.elasticsearch.ElasticsearchException;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -25,28 +25,29 @@ import java.util.stream.Collectors;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 
 @Slf4j
-public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerAdapter {
+public class FileCentricElasticSearchAdapter implements FileDocumentIndexingAdapter {
 
-    private final ElasticsearchTemplate template;
+    private final ElasticsearchRestTemplate template;
     private final Resource indexSettings;
     private final ResourceLoader resourceLoader;
-
-    @Value("${maestro.elasticsearch.indexes.file-centric.alias:file-centric}")
     private String alias;
 
     @Inject
-    public FileCentricElasticSearchAdapter(ElasticsearchTemplate template,
-                                           @Value("classpath:index.settings.json") Resource indexSettings,
-                                           ResourceLoader resourceLoader) {
+    public FileCentricElasticSearchAdapter(ElasticsearchRestTemplate template,
+                                           ResourceLoader resourceLoader,
+                                           ApplicationProperties properties) {
         this.template = template;
-        this.indexSettings = indexSettings;
+        this.alias = properties.getFileCentricAlias();
+        this.indexSettings = properties.getIndexSettings();
         this.resourceLoader = resourceLoader;
     }
 
     @Override
     public Mono<IndexResult> batchIndexFiles(BatchIndexFilesCommand batchIndexFilesCommand) {
+        log.trace("in batchIndexFiles, args: {} ", batchIndexFilesCommand);
         return  Mono.fromSupplier(() -> this.bulkIndexFiles(batchIndexFilesCommand.getFiles()))
-            .onErrorMap((e) -> e instanceof ElasticsearchException, (e) -> new UpstreamServiceException("batch Index failed", e))
+            .onErrorMap((e) -> e instanceof ElasticsearchException,
+                (e) -> new UpstreamServiceException("batch Index failed", e))
             .subscribeOn(Schedulers.elastic());
     }
 
@@ -67,6 +68,7 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerA
         if (!indexExists) {
             this.createIndex();
             template.putMapping(this.alias, this.alias, loadMappingMap(this.alias));
+            log.info("index {} with mapping {} have been created", this.alias, this.alias);
         }
     }
 
@@ -77,6 +79,7 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerA
     }
 
     private IndexResult bulkIndexFiles(List<FileCentricDocument> filesList) {
+        log.trace("in bulkIndexFiles, filesList count : {} ", filesList.size());
         this.template.bulkIndex(filesList.stream()
             .map(file -> new IndexQueryBuilder()
                 .withId(file.getObjectId())
@@ -91,6 +94,7 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexServerA
 
     @SneakyThrows
     private String loadMappingMap(String typeName) {
+        log.trace("in loadMappingMap: {}", typeName);
         val mapping = this.resourceLoader.getResource("classpath:" + typeName + ".mapping.json");
         return inputStreamToString(mapping.getInputStream());
     }

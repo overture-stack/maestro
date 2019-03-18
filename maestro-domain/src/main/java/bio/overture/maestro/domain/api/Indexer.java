@@ -2,6 +2,7 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.port.outbound.FileDocumentIndexingAdapter;
 import lombok.NonNull;
 import reactor.core.publisher.Mono;
 
@@ -11,7 +12,7 @@ import reactor.core.publisher.Mono;
 public interface Indexer {
     /**
      * This method will fetch the specified study from the specified repository
-     * and will invoke the index server {@link bio.overture.maestro.domain.port.outbound.FileDocumentIndexServerAdapter}
+     * and will invoke the index server {@link FileDocumentIndexingAdapter}
      * adapter to batch index the resulting documents.
      *
      * @param indexStudyCommand contains the arguments needed to index a single study.

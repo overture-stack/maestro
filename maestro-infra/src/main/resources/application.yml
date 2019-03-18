@@ -1,8 +1,10 @@
-
 server:
-  port: 0
+  port: 11235
+
 maestro:
   elasticsearch:
+    cluster-name: maestro.elasticsearch
+    cluster-nodes: localhost:9200, localhost:9201
     indexes:
       file-centric:
         alias: file-centric
@@ -19,8 +21,3 @@ maestro:
       url: http://aws.amazon.com
       name: aws repo
       country: US
-spring:
-  data:
-    elasticsearch:
-      cluster-name: maestro.elasticsearch
-      cluster-nodes: localhost:9300

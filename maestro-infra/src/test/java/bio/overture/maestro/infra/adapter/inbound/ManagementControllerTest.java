@@ -2,19 +2,19 @@ package bio.overture.maestro.infra.adapter.inbound;
 
 import bio.overture.maestor.infra.app.MaestroIntegrationTest;
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.entities.studymetadata.Analysis;
-import bio.overture.maestro.domain.port.outbound.StudyRepository;
+import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.port.outbound.FileMetadataRepository;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
 import bio.overture.maestro.infra.adapter.inbound.webapi.ManagementController;
+import bio.overture.maestro.infra.config.ApplicationProperties;
 import bio.overture.masestro.test.TestCategory;
 import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -32,19 +32,22 @@ class ManagementControllerTest extends MaestroIntegrationTest {
     private WebTestClient client;
 
     @MockBean
-    private StudyRepository studyRepository;
+    private FileMetadataRepository fileMetadataRepository;
 
     @Autowired
     private Indexer indexer;
 
     @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+    private ElasticsearchRestTemplate elasticsearchTemplate;
 
-    @Value("${maestro.elasticsearch.indexes.file-centric.alias}")
+    @Autowired
+    ApplicationProperties applicationProperties;
+
     private String alias;
 
     @BeforeEach
     void setUp() {
+        alias = applicationProperties.getFileCentricAlias();
         client = WebTestClient.bindToController(new ManagementController(indexer)).build();
     }
 
@@ -52,11 +55,11 @@ class ManagementControllerTest extends MaestroIntegrationTest {
     void indexStudy() throws InterruptedException {
         // Given
         val analyses = Flux.just(loadJsonFixture(this.getClass(), "study.json", Analysis[].class));
-        given(studyRepository.getStudyAnalyses(any(GetStudyAnalysesCommand.class))).willReturn(analyses);
+        given(fileMetadataRepository.getStudyAnalyses(any(GetStudyAnalysesCommand.class))).willReturn(analyses);
 
         // test
         client.post()
-            .uri("/index/collab/PEME-CA")
+            .uri("/index/repository/collab/study/PEME-CA")
             .exchange()
             .expectStatus()
                 .isCreated();

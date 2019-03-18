@@ -2,8 +2,8 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.exception.BadDataException;
 import bio.overture.maestro.domain.entities.indexer.*;
-import bio.overture.maestro.domain.entities.studymetadata.Analysis;
-import bio.overture.maestro.domain.entities.studymetadata.File;
+import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.entities.metadata.study.File;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,15 +14,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//TODO: add documentation + tracing logs when this stabilizes
+
+/**
+ * This class holds the structural changes that the indexer applies to prepare the File documents
+ * according to the needed final index document structure.
+ *
+ */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class FileCentricDocumentConverter {
 
-    static List<FileCentricDocument> fromAnalysis(Analysis analysis, FilesRepository repository) {
+    static List<FileCentricDocument> fromAnalysis(Analysis analysis, FileMetadataRepository repository) {
         return convertFiles(analysis, repository);
     }
 
-    private static List<FileCentricDocument> convertFiles(Analysis analysis, FilesRepository repository) {
+    private static List<FileCentricDocument> convertFiles(Analysis analysis, FileMetadataRepository repository) {
         return analysis.getFile()
             .stream()
             .filter(FileCentricDocumentConverter::isDataFile)
@@ -30,7 +37,7 @@ final class FileCentricDocumentConverter {
             .collect(Collectors.toList());
     }
 
-    private static  FileCentricDocument convert(File file, Analysis analysis, FilesRepository repository) {
+    private static  FileCentricDocument convert(File file, Analysis analysis, FileMetadataRepository repository) {
         val id = file.getObjectId();
         val repoFile = FileCentricDocument.builder()
             .objectId(id)
@@ -49,7 +56,7 @@ final class FileCentricDocumentConverter {
         return repoFile.build();
     }
 
-    private static FileCopy getFileCopy(Analysis analysis, File file, FilesRepository repository) {
+    private static FileCopy getFileCopy(Analysis analysis, File file, FileMetadataRepository repository) {
         val id = analysis.getAnalysisId();
         val fileId = file.getObjectId();
         val fileName = file.getFileName();

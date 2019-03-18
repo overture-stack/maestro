@@ -10,8 +10,12 @@ import java.io.InputStream;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @UtilityClass
-public class StringUtilities {
+public final class StringUtilities {
 
+    /**
+     * loads a string out of input stream.
+     */
+    // implemented here as this is faster than using 3rd party
     @SneakyThrows
     public static String inputStreamToString(InputStream inputStream) {
         try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
@@ -20,7 +24,6 @@ public class StringUtilities {
             while ((length = inputStream.read(buffer)) != -1) {
                 result.write(buffer, 0, length);
             }
-
             return result.toString(UTF_8);
         }
     }

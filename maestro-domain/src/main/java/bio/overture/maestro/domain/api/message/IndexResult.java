@@ -1,14 +1,13 @@
 package bio.overture.maestro.domain.api.message;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
-@Builder
 @Getter
-@EqualsAndHashCode
+@Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class IndexResult {
     private boolean successful;
 }

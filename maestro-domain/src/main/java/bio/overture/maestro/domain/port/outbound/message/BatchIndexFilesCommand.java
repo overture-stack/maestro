@@ -5,8 +5,11 @@ import lombok.*;
 
 import java.util.List;
 
-@Value
+@Getter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 public class BatchIndexFilesCommand {
     List<FileCentricDocument> files;

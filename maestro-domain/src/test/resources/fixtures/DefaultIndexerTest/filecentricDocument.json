@@ -29,7 +29,7 @@
         "lastModified": null,
         "repoCode": "TEST-REPO",
         "repoOrg": "org",
-        "repoName": null,
+        "repoName": "singer",
         "repoType": "S3",
         "repoCountry": "CA",
         "repoBaseUrl": "http://song.sing.sung",

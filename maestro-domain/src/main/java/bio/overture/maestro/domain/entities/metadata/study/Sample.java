@@ -1,16 +1,19 @@
-package bio.overture.maestro.domain.entities.studymetadata;
+package bio.overture.maestro.domain.entities.metadata.study;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Map;
 
-@Builder
+/**
+ * Many samples can belong to an Analysis, a sample represents
+ * a donor and a specimen composition.
+ */
 @Getter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Sample {
     private String sampleId;
     private String specimenId;

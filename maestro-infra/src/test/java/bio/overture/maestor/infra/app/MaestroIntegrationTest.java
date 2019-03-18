@@ -14,10 +14,17 @@ import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static bio.overture.maestro.infra.config.ApplicationProperties.ELASTIC_SEARCH_CLUSTER_NODES;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+/**
+ * Base class for full integration tests.
+ * it will create an elasticsearch container (using test containers).
+ *
+ * if you need a more light weight faster tests, avoid using this class, this is meant for full end to end.
+ */
 @SpringBootTest(classes = Maestro.class)
 //initializes the containers annotated with @Container
 @Testcontainers
@@ -36,10 +43,10 @@ public class MaestroIntegrationTest {
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            TestPropertyValues values = TestPropertyValues.of(
-                "spring.data.elasticsearch.cluster-nodes=" + container.getContainerIpAddress() + ":" + container.getMappedPort(9300)
-            );
-            values.applyTo(configurableApplicationContext);
+            TestPropertyValues.of(
+                ELASTIC_SEARCH_CLUSTER_NODES + "=" + container.getContainerIpAddress()
+                    + ":" + container.getMappedPort(9200)
+            ).applyTo(configurableApplicationContext);
         }
     }
 
@@ -49,5 +56,4 @@ public class MaestroIntegrationTest {
         assertTrue(container.isRunning());
         System.out.println(container);
     }
-
 }

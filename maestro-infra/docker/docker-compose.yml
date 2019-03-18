@@ -5,7 +5,6 @@ services:
     container_name: maestro.elasticsearch
     ports:
       - 9200:9200
-      - 9300:9300
     environment:
       - discovery.type=single-node
       - cluster.name=maestro.elasticsearch
