@@ -14,10 +14,12 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.elasticsearch.ElasticsearchException;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,20 +53,13 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexingAdap
             .subscribeOn(Schedulers.elastic());
     }
 
-    @PostConstruct
-    @SuppressWarnings("unused")
-    public void postConstruct() {
-        log.debug("initializing index {} ", this.alias);
-        this.initialize();
-        log.debug("initializing index finished {} ", this.alias);
-    }
-
-    /* *******************
-     *  Private methods
-     *********************/
-    private void initialize() {
+    @Retryable(
+        maxAttempts = 5,
+        backoff = @Backoff(value = 1000, multiplier=1.5)
+    )
+    public void initialize() {
         val indexExists = this.template.indexExists(this.alias);
-        log.debug("indexExists result: {} ", indexExists);
+        log.info("indexExists result: {} ", indexExists);
         if (!indexExists) {
             this.createIndex();
             template.putMapping(this.alias, this.alias, loadMappingMap(this.alias));
@@ -72,6 +67,14 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexingAdap
         }
     }
 
+    @Recover
+    public void recover(Throwable t) {
+        log.error("couldn't initialize the index");
+    }
+
+    /* *******************
+     *  Private methods
+     *********************/
     @SneakyThrows
     private void createIndex() {
         val indexSettings = inputStreamToString(this.indexSettings.getInputStream());

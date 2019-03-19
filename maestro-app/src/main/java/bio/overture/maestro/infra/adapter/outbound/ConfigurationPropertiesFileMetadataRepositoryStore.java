@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * Properties file backed repository store, reads the information by binding
- * to the application.properties file property: maestro.repositories
+ * to the application.config file property: maestro.repositories
  * the configurable attributes can be found here: {@link PropertiesFileRepository}
  *
  * this serves as a default in memory store, more sophisticated cases may create a DB backed store.

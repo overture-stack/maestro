@@ -1,0 +1,23 @@
+version: '3'
+services:
+  maestro:
+    image: overture/maestro:0.0.1-SNAPSHOT
+    container_name: maestro
+    ports:
+      - 11235:11235
+    environment:
+      - ELASTICSEARCH.CLUSTER.NODES=maestro.elasticsearch:9200
+      - ELASTICSEARCH.CLUSTER.NAME=maestro.elasticsearch
+      - logging.level.root=INFO
+      - prebuilt=false
+    depends_on:
+       - elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1
+    container_name: maestro.elasticsearch
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - cluster.name=maestro.elasticsearch
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
