@@ -7,10 +7,16 @@ import java.util.List;
 
 @Getter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BatchIndexFilesCommand {
-    List<FileCentricDocument> files;
+    @NonNull
+    private List<FileCentricDocument> files;
+
+    // avoid dumping all files info as that's too much
+    public String toString() {
+        val size = files == null ? "null" : String.valueOf(files.size());
+        return super.toString() + "[files = " + size + "]";
+    }
 }

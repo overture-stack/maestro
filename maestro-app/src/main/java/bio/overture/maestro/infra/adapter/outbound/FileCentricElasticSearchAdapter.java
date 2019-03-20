@@ -6,6 +6,7 @@ import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.FileDocumentIndexingAdapter;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
 import bio.overture.maestro.infra.config.ApplicationProperties;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -45,8 +46,8 @@ public class FileCentricElasticSearchAdapter implements FileDocumentIndexingAdap
     }
 
     @Override
-    public Mono<IndexResult> batchIndexFiles(BatchIndexFilesCommand batchIndexFilesCommand) {
-        log.trace("in batchIndexFiles, args: {} ", batchIndexFilesCommand);
+    public Mono<IndexResult> batchIndexFiles(@NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
+        log.debug("in batchIndexFiles, args: {} ", batchIndexFilesCommand.getFiles().size());
         return  Mono.fromSupplier(() -> this.bulkIndexFiles(batchIndexFilesCommand.getFiles()))
             .onErrorMap((e) -> e instanceof ElasticsearchException,
                 (e) -> new UpstreamServiceException("batch Index failed", e))

@@ -7,4 +7,5 @@ services:
       - '../maestro-app/src/main/resources/config:/app/config'
     environment:
       - logging.level.root=INFO
+      - logging.level.bio.overture=TRACE
       - isLocal=true

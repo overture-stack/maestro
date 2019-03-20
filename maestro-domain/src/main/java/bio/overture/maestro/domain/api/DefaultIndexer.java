@@ -27,7 +27,7 @@ import static reactor.core.publisher.Mono.error;
 public class DefaultIndexer implements Indexer {
 
     private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
-    private static final String EMPTY_STUDY_MSG = "Empty study {0}";
+    private static final String MSG_EMPTY_STUDY = "Empty study {0}";
     private final FileDocumentIndexingAdapter fileDocumentIndexingAdapter;
     private final bio.overture.maestro.domain.port.outbound.FileMetadataRepository fileMetadataRepository;
     private final FileMetadataRepositoryStore fileMetadataRepositoryStore;
@@ -47,7 +47,7 @@ public class DefaultIndexer implements Indexer {
         return this.fileMetadataRepositoryStore.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
             .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand))
-            .switchIfEmpty(error(badData(EMPTY_STUDY_MSG, indexStudyCommand.getStudyId())))
+            .switchIfEmpty(error(badData(MSG_EMPTY_STUDY, indexStudyCommand.getStudyId())))
             .flatMap(this::batchIndexFiles);
     }
 

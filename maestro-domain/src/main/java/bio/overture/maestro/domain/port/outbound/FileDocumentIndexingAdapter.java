@@ -3,6 +3,7 @@ package bio.overture.maestro.domain.port.outbound;
 
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
+import lombok.NonNull;
 import reactor.core.publisher.Mono;
 
 /**
@@ -16,5 +17,5 @@ public interface FileDocumentIndexingAdapter {
      * @param batchIndexFilesCommand contains the list of files to index
      * @return Result indicating whether the operation succeeded or not.
      */
-    Mono<IndexResult> batchIndexFiles(BatchIndexFilesCommand batchIndexFilesCommand);
+    Mono<IndexResult> batchIndexFiles(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
 }

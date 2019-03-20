@@ -1,6 +1,6 @@
 .ONESHELL:
 DOCKER_COMPOSE_LOCAL_DIR = ./run
-
+VERSION=0.0.1-SNAPSHOT
 boot-run:
 	cd maestro-app
 	../mvnw spring-boot:run
@@ -13,22 +13,27 @@ mvn-t:
 
 
 #doc stands for docker
+
 doc-login:
 	docker login
 
-doc-push: doc-login doc-img
+doc-push: doc-login doc-build
 	cd maestro-app
 	../mvnw dockerfile:push
 
-doc-build:
-	cd maestro-app
-	../mvnw clean install dockerfile:build -Dmaven.test.skip=true
+doc-push-directly:doc-build
+	docker push overture/maestro:$(VERSION)
 
+doc-build: mvn-i
+	cd maestro-app
+	../mvnw dockerfile:build
+
+# start using images only, don't build from code.
 doc-start-img:
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose -f docker-compose.yml up -d
 
-doc-start: doc-clean
+doc-start: mvn-i doc-clean
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose up --build -d
 

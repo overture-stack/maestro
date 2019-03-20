@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Setter
 @Getter
-@ConfigurationProperties(prefix = ApplicationProperties.MAESTRO_PREFIX, ignoreInvalidFields = true)
 @NoArgsConstructor
+@ConfigurationProperties(prefix = ApplicationProperties.MAESTRO_PREFIX, ignoreInvalidFields = true)
 public class ConfigurationPropertiesFileMetadataRepositoryStore implements FileMetadataRepositoryStore {
 
     private List<PropertiesFileRepository> repositories;

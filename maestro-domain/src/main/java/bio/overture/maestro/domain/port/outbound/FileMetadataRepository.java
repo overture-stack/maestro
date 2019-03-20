@@ -2,6 +2,7 @@ package bio.overture.maestro.domain.port.outbound;
 
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import lombok.NonNull;
 import reactor.core.publisher.Flux;
 
 /**
@@ -18,6 +19,6 @@ public interface FileMetadataRepository {
      * @throws bio.overture.maestro.domain.api.exception.NotFoundException
      *  in case the study wasn't found.
      */
-    Flux<Analysis> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand);
+    Flux<Analysis> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
 
 }

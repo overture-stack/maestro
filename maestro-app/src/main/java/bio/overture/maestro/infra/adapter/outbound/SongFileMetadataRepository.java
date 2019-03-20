@@ -37,7 +37,8 @@ public class SongFileMetadataRepository implements FileMetadataRepository {
                 .retrieve()
                 .onStatus(HttpStatus.NOT_FOUND::equals,
                     clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
-                .bodyToFlux(Analysis.class);
+                .bodyToFlux(Analysis.class)
+                .doOnComplete(() -> log.trace("getStudyAnalyses out, args: {}", getStudyAnalysesCommand));
     }
 
 }

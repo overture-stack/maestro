@@ -3,6 +3,7 @@ package bio.overture.maestro.infra.adapter.inbound.webapi;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 public class ManagementController {
 
@@ -32,6 +34,7 @@ public class ManagementController {
     @PostMapping("/index/repository/{repositoryId}/study/{studyId}")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryId) {
+        log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryId);
         return indexer.indexStudy(IndexStudyCommand.builder()
                 .repositoryCode(repositoryId)
                 .studyId(studyId)

@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class GetStudyAnalysesCommand {
-    private String studyId;
-    private String filesRepositoryBaseUrl;
+    @NonNull private String studyId;
+    @NonNull private String filesRepositoryBaseUrl;
 }

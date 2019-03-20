@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Date;
 
-@ControllerAdvice
 @Slf4j
+@ControllerAdvice
 public class GlobalWebExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorDetails resourceNotFoundException(NotFoundException ex, ServerHttpRequest request) {
-        log.error("resource not found exception", ex);
+        log.error("Resource not found exception", ex);
         return getErrorDetails(ex, request);
     }
 
@@ -28,7 +28,7 @@ public class GlobalWebExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorDetails globalExcpetionHandler(Exception ex, ServerHttpRequest request) {
-        log.error("unhandled exception", ex);
+        log.error("Unhandled exception", ex);
         return getErrorDetails(ex, request);
     }
 

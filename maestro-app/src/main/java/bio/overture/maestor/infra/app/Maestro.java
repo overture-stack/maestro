@@ -22,9 +22,6 @@ public class Maestro {
 
     @Bean
     CommandLineRunner commandLineRunner(FileCentricElasticSearchAdapter adapter) {
-        return (args) -> {
-            log.info("in commandLineRunner");
-            adapter.initialize();
-        };
+        return (args) -> adapter.initialize();
     }
 }
