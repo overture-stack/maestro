@@ -8,10 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class IndexFile {
-    private String objectId;
+public class File {
     private String name;
     private String format;
     private String md5sum;
     private Long size;
+    private Long lastModified;
+    private IndexFile indexFile;
 }

@@ -4,21 +4,17 @@ import lombok.*;
 
 import java.util.Map;
 
-@Builder
 @Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class FileCentricAnalysis {
-    @NonNull
+public class Specimen {
     private String id;
-    @NonNull
     private String type;
-    @NonNull
-    private String state;
-    @NonNull
-    private String study;
-    private Map<String, Object> experiment;
+    private String submittedId;
+    private Sample sample;
     private Map<String, Object> info;
 }
+

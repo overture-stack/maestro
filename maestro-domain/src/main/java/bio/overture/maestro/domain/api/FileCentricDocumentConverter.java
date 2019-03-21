@@ -3,7 +3,6 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.domain.api.exception.BadDataException;
 import bio.overture.maestro.domain.entities.indexer.*;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
-import bio.overture.maestro.domain.entities.metadata.study.File;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,47 +36,46 @@ final class FileCentricDocumentConverter {
             .collect(Collectors.toList());
     }
 
-    private static  FileCentricDocument convert(File file, Analysis analysis, FileMetadataRepository repository) {
+    private static  FileCentricDocument convert(bio.overture.maestro.domain.entities.metadata.study.File file,
+                                                Analysis analysis,
+                                                FileMetadataRepository repository) {
         val id = file.getObjectId();
+        val metadataPath = getMetadataPath(analysis);
         val repoFile = FileCentricDocument.builder()
             .objectId(id)
-            .study(List.of(file.getStudyId()))
+            .study(file.getStudyId())
             .access(file.getFileAccess())
             .analysis(FileCentricAnalysis.builder()
-                .analysisId(analysis.getAnalysisId())
-                .analysisState(analysis.getAnalysisState())
-                .analysisType(analysis.getAnalysisType())
+                .id(analysis.getAnalysisId())
+                .state(analysis.getAnalysisState())
+                .type(analysis.getAnalysisType())
                 .study(analysis.getStudy())
                 .experiment(analysis.getExperiment())
                 .build()
             )
-            .fileCopies(List.of(getFileCopy(analysis, file,repository)))
+            .file(getFile(analysis, file))
+            .repositories(List.of(Repository.builder()
+                .type(repository.getStorageType().name().toUpperCase())
+                .organization(repository.getOrganization())
+                .name(repository.getName())
+                .code(repository.getCode())
+                .country(repository.getCountry())
+                .baseUrl(repository.getBaseUrl())
+                .dataPath(repository.getDataPath())
+                .metadataPath(repository.getMetadataPath() + "/" + metadataPath)
+                .build()))
             .donors(getDonors(analysis));
         return repoFile.build();
     }
 
-    private static FileCopy getFileCopy(Analysis analysis, File file, FileMetadataRepository repository) {
-        val id = analysis.getAnalysisId();
-        val fileId = file.getObjectId();
+    private static File getFile(Analysis analysis, bio.overture.maestro.domain.entities.metadata.study.File file) {
         val fileName = file.getFileName();
         val indexFile = getIndexFile(analysis.getFile(), fileName);
-        val metadataPath = getMetadataPath(analysis);
-
-        return FileCopy.builder()
-            .fileName(fileName)
-            .fileFormat(file.getFileType())
-            .fileSize(file.getFileSize())
-            .fileMd5sum(file.getFileMd5sum())
-            .analysisId(id)
-            .fileId(fileId)
-            .repoType(repository.getStorageType().name().toUpperCase())
-            .repoOrg(repository.getOrganization())
-            .repoName(repository.getName())
-            .repoCode(repository.getCode())
-            .repoCountry(repository.getCountry())
-            .repoBaseUrl(repository.getBaseUrl())
-            .repoDataPath(repository.getDataPath() + "/" + fileId)
-            .repoMetadataPath(repository.getMetadataPath() + "/" + metadataPath)
+        return File.builder()
+            .name(fileName)
+            .format(file.getFileType())
+            .size(file.getFileSize())
+            .md5sum(file.getFileMd5sum())
             .indexFile(indexFile)
             .build();
     }
@@ -88,12 +86,11 @@ final class FileCentricDocumentConverter {
             .filter(f -> isXMLFile(f.getFileName()))
             .findFirst()
             .orElse(null);
-
         return xmlFile == null ? EMPTY_STRING : xmlFile.getObjectId();
     }
 
-    private static IndexFile getIndexFile(List<File> files, String fileName) {
-        Optional<File> sf = Optional.empty();
+    private static IndexFile getIndexFile(List<bio.overture.maestro.domain.entities.metadata.study.File> files, String fileName) {
+        Optional<bio.overture.maestro.domain.entities.metadata.study.File> sf = Optional.empty();
         if (hasExtension(fileName, BAM)) {
             sf = getSongIndexFile(files, fileName + BAI_EXT);
         } else if (hasExtension(fileName, VCF)) {
@@ -108,17 +105,17 @@ final class FileCentricDocumentConverter {
             .orElse(IndexFile.builder().build());
     }
 
-    private static IndexFile createIndexFile(File file) {
+    private static IndexFile createIndexFile(bio.overture.maestro.domain.entities.metadata.study.File file) {
         return IndexFile.builder()
             .objectId(file.getObjectId())
-            .fileName(file.getFileName())
-            .fileFormat(indexFileFormat(file.getFileName()))
-            .fileSize(file.getFileSize())
-            .fileMd5sum(file.getFileMd5sum())
+            .name(file.getFileName())
+            .format(indexFileFormat(file.getFileName()))
+            .size(file.getFileSize())
+            .md5sum(file.getFileMd5sum())
             .build();
     }
 
-    private static Optional<File> getSongIndexFile(List<File> files, String name) {
+    private static Optional<bio.overture.maestro.domain.entities.metadata.study.File> getSongIndexFile(List<bio.overture.maestro.domain.entities.metadata.study.File> files, String name) {
         return files.stream()
             .filter(f -> f.getFileName().equalsIgnoreCase(name))
             .findFirst();
@@ -129,7 +126,6 @@ final class FileCentricDocumentConverter {
     }
 
     private static FileCentricDonor getDonor(Analysis analysis) {
-        val studyId = analysis.getStudy();
         val sample = analysis.getSample()
             .stream()
             .findFirst()
@@ -137,19 +133,27 @@ final class FileCentricDocumentConverter {
         val donor = sample.getDonor();
         val specimen = sample.getSpecimen();
         return FileCentricDonor.builder()
-            .study(studyId)
             .primarySite("<ADD TO SONG>")
             .donorId(donor.getDonorId())
-            .specimenId(List.of(specimen.getSpecimenId()))
-            .specimenType(List.of(specimen.getSpecimenType()))
-            .sampleId(List.of(sample.getSampleId()))
-            .donorSubmitterId(donor.getDonorSubmitterId())
-            .specimenSubmitterId(List.of(specimen.getSpecimenSubmitterId()))
-            .sampleSubmitterId(List.of(sample.getSampleSubmitterId()))
+            .specimen(Specimen.builder()
+                .type(specimen.getSpecimenType())
+                .id(specimen.getSpecimenId())
+                .submittedId(specimen.getSpecimenSubmitterId())
+                .sample(Sample.builder()
+                    .id(sample.getSampleId())
+                    .submittedId(sample.getSampleSubmitterId())
+                    .type(sample.getSampleType())
+                    .info(sample.getInfo())
+                    .build()
+                )
+                .info(specimen.getInfo())
+                .build()
+            )
+            .donorSubmittedId(donor.getDonorSubmitterId())
             .build();
     }
 
-    private static boolean isDataFile(File f) {
+    private static boolean isDataFile(bio.overture.maestro.domain.entities.metadata.study.File f) {
         val name = f.getFileName();
         return !(isIndexFile(name) || isXMLFile(name));
     }

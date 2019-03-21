@@ -18,20 +18,18 @@ public class FileCentricDocument {
     private String objectId;
     @NonNull
     private String access;
-
     @NonNull
-    private List<String> study;
-
+    private String study;
     @NonNull
     private FileCentricAnalysis analysis;
-
     /**
      * Each file can be hosted in more than one files repository, this references the other repositories (locations)
      * where this file can be fetched from.
      */
     @NonNull
-    private List<FileCopy> fileCopies;
-
+    private File file;
+    @NonNull
+    private List<Repository> repositories;
     @NonNull
     private List<FileCentricDonor> donors;
 }

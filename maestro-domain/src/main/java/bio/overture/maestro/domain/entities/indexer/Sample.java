@@ -4,21 +4,19 @@ import lombok.*;
 
 import java.util.Map;
 
-@Builder
+/**
+ * Many samples can belong to an Analysis, a sample represents
+ * a donor and a specimen composition.
+ */
 @Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class FileCentricAnalysis {
-    @NonNull
+public class Sample {
     private String id;
-    @NonNull
+    private String submittedId;
     private String type;
-    @NonNull
-    private String state;
-    @NonNull
-    private String study;
-    private Map<String, Object> experiment;
     private Map<String, Object> info;
 }

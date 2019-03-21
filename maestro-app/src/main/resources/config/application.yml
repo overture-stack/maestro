@@ -7,7 +7,7 @@ maestro:
     cluster-nodes: ${ELASTICSEARCH.CLUSTER.NODES:localhost:9200, localhost:9201}
     indexes:
       file-centric:
-        alias: file-centric
+        alias: file_centric
   repositories:
     - code: collab
       url: https://song.cancercollaboratory.org
