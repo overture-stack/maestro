@@ -4,7 +4,7 @@ services:
     build: ../../maestro-app
     # this volume allows to change configs without rebuilding image / jar, just need to restart the container
     volumes:
-      - '../maestro-app/src/main/resources/config:/app/config'
+      - '../../maestro-app/src/main/resources/config:/app/config'
     environment:
       - logging.level.root=INFO
       - logging.level.bio.overture=TRACE
