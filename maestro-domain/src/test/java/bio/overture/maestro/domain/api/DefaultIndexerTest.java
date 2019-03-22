@@ -3,11 +3,12 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
-import bio.overture.maestro.domain.entities.indexer.FileMetadataRepository;
+import bio.overture.maestro.domain.entities.indexer.StudyRepository;
 import bio.overture.maestro.domain.entities.indexer.StorageType;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
-import bio.overture.maestro.domain.port.outbound.FileDocumentIndexingAdapter;
-import bio.overture.maestro.domain.port.outbound.FileMetadataRepositoryStore;
+import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
+import bio.overture.maestro.domain.port.outbound.StudyRepositoryDAO;
+import bio.overture.maestro.domain.port.outbound.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
 import lombok.SneakyThrows;
@@ -21,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -43,20 +43,20 @@ import static org.mockito.Mockito.times;
 class DefaultIndexerTest {
 
     @Mock
-    private FileMetadataRepositoryStore fileMetadataRepositoryStore;
+    private StudyRepositoryDAO studyRepositoryDao;
 
     @Mock
-    private bio.overture.maestro.domain.port.outbound.FileMetadataRepository fileMetadataRepository;
+    private StudyDAO studyDAO;
 
     @Mock
-    private FileDocumentIndexingAdapter indexServerAdapter;
+    private FileCentricIndexAdapter indexServerAdapter;
 
     private Indexer indexer;
 
     @BeforeEach
     void setUp() {
-        reset(fileMetadataRepositoryStore, fileMetadataRepository, indexServerAdapter);
-        this.indexer = new DefaultIndexer(indexServerAdapter, fileMetadataRepository, fileMetadataRepositoryStore);
+        reset(studyRepositoryDao, studyDAO, indexServerAdapter);
+        this.indexer = new DefaultIndexer(indexServerAdapter, studyDAO, studyRepositoryDao);
     }
 
     @AfterEach
@@ -74,7 +74,7 @@ class DefaultIndexerTest {
         val a1 = getAnalysis();
         val fileCentricDocuments = getExpectedFileCentricDocument();
         val fileRepo = Mono.just(getStubFilesRepository());
-        val studyAnalyses = Flux.just(a1);
+        val studyAnalyses = Mono.just(List.of(a1));
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
         val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
@@ -83,9 +83,9 @@ class DefaultIndexerTest {
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
 
-        given(fileMetadataRepositoryStore.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
-        given(fileMetadataRepository.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
-        given(indexServerAdapter.batchIndexFiles(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
+        given(indexServerAdapter.batchIndex(eq(batchIndexFilesCommand))).willReturn(monoResult);
 
         // When
         val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
@@ -100,9 +100,9 @@ class DefaultIndexerTest {
             .expectComplete()
             .verify();
 
-        then(fileMetadataRepositoryStore).should(times(1)).getFilesRepository(repoCode);
-        then(fileMetadataRepository).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
-        then(indexServerAdapter).should(times(1)).batchIndexFiles(eq(batchIndexFilesCommand));
+        then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
+        then(studyDAO).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
+        then(indexServerAdapter).should(times(1)).batchIndex(eq(batchIndexFilesCommand));
     }
 
     @SneakyThrows
@@ -115,8 +115,8 @@ class DefaultIndexerTest {
         return loadJsonFixture(getClass(), "analysis.json", Analysis.class);
     }
 
-    private FileMetadataRepository getStubFilesRepository() {
-        return FileMetadataRepository.builder()
+    private StudyRepository getStubFilesRepository() {
+        return StudyRepository.builder()
             .name("singer")
             .baseUrl("http://song.sing.sung")
             .code("TEST-REPO")

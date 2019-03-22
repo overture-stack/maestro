@@ -1,6 +1,7 @@
 .ONESHELL:
-DOCKER_COMPOSE_LOCAL_DIR = ./run
+DOCKER_COMPOSE_LOCAL_DIR = ./run/docker
 VERSION=0.0.1-SNAPSHOT
+
 boot-run:
 	cd maestro-app
 	../mvnw spring-boot:run
@@ -11,9 +12,7 @@ mvn-i:
 mvn-t:
 	./mvnw clean test
 
-
 #doc stands for docker
-
 doc-login:
 	docker login
 

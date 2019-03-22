@@ -24,11 +24,11 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class FileCentricDocumentConverter {
 
-    static List<FileCentricDocument> fromAnalysis(Analysis analysis, FileMetadataRepository repository) {
+    static List<FileCentricDocument> fromAnalysis(Analysis analysis, StudyRepository repository) {
         return convertFiles(analysis, repository);
     }
 
-    private static List<FileCentricDocument> convertFiles(Analysis analysis, FileMetadataRepository repository) {
+    private static List<FileCentricDocument> convertFiles(Analysis analysis, StudyRepository repository) {
         return analysis.getFile()
             .stream()
             .filter(FileCentricDocumentConverter::isDataFile)
@@ -38,7 +38,7 @@ final class FileCentricDocumentConverter {
 
     private static  FileCentricDocument convert(bio.overture.maestro.domain.entities.metadata.study.File file,
                                                 Analysis analysis,
-                                                FileMetadataRepository repository) {
+                                                StudyRepository repository) {
         val id = file.getObjectId();
         val metadataPath = getMetadataPath(analysis);
         val repoFile = FileCentricDocument.builder()
@@ -175,10 +175,7 @@ final class FileCentricDocumentConverter {
     }
 
     private static boolean isIndexFile(String filename) {
-        if (isBAIFile(filename) || isIDXFile(filename) || isTBIFile(filename)) {
-            return true;
-        }
-        return false;
+        return isBAIFile(filename) || isIDXFile(filename) || isTBIFile(filename);
     }
 
     private static String indexFileFormat(String fileName) {
