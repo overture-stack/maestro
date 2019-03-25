@@ -133,7 +133,6 @@ final class FileCentricDocumentConverter {
         val donor = sample.getDonor();
         val specimen = sample.getSpecimen();
         return FileCentricDonor.builder()
-            .primarySite("<ADD TO SONG>")
             .donorId(donor.getDonorId())
             .specimen(Specimen.builder()
                 .type(specimen.getSpecimenType())

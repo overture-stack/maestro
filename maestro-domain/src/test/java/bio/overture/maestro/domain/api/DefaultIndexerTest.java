@@ -63,7 +63,17 @@ class DefaultIndexerTest {
     void tearDown() {}
 
     @Test
-    void indexAll() {}
+    void indexStudyRepository() {
+        val repoCode = "TEST-REPO";
+        val filesRepository = getStubFilesRepository();
+        val a1 = getAnalysis();
+        val fileCentricDocuments = getExpectedFileCentricDocument();
+        val fileRepo = Mono.just(getStubFilesRepository());
+        val studyAnalyses = Mono.just(List.of(a1));
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.just(result);
+        val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+    }
 
     @Test
     void indexStudy() {

@@ -3,6 +3,7 @@ package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -31,21 +32,24 @@ public class ManagementController {
         return Mono.just(response);
     }
 
-    @PostMapping("/index/repository/{repositoryId}/study/{studyId}")
+    @PostMapping("/index/repository/{repositoryCode}/study/{studyId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryId) {
-        log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryId);
+    public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryCode) {
+        log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryCode);
         return indexer.indexStudy(IndexStudyCommand.builder()
-                .repositoryCode(repositoryId)
+                .repositoryCode(repositoryCode)
                 .studyId(studyId)
                 .build()
         );
     }
 
-    @PostMapping("/index/repository/{repositoryId}")
+    @PostMapping("/index/repository/{repositoryCode}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void indexRepository(@PathVariable String repositoryId) {
-        indexer.indexAll();
+    public Mono<IndexResult> indexRepository(@PathVariable String repositoryCode) {
+        return indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+            .repositoryCode(repositoryCode)
+            .build()
+        );
     }
 
 }

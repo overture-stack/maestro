@@ -19,5 +19,5 @@ public interface FileCentricIndexAdapter {
      * @return Result indicating whether the operation succeeded or not.
      */
     Mono<IndexResult> batchIndex(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
-
+    Mono<IndexResult> batchUpdate(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
 }
