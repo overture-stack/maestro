@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-public class IndexResult {
-    private boolean successful;
+public class IndexStudyRepositoryCommand {
+    @NonNull
+    private String repositoryCode;
 }

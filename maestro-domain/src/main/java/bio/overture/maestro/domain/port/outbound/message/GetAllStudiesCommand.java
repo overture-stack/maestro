@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-public class GetStudyAnalysesCommand {
-    @NonNull private String studyId;
-    @NonNull private String filesRepositoryBaseUrl;
+public class GetAllStudiesCommand {
+    @NonNull
+    private String filesRepositoryBaseUrl;
 }

@@ -25,7 +25,7 @@ public class Maestro {
      * indexes in elastic search server, can be extended as needed.
      */
     @Bean
-    CommandLineRunner bootstraper(FileCentricElasticSearchAdapter adapter) {
+    CommandLineRunner bootstrapper(FileCentricElasticSearchAdapter adapter) {
         return (args) -> adapter.initialize();
     }
 }

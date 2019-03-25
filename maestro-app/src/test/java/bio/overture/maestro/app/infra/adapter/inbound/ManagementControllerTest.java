@@ -123,5 +123,10 @@ class ManagementControllerTest extends MaestroIntegrationTest {
                 maxScore);
         }
 
+        @Override
+        public <T> T mapSearchHit(SearchHit searchHit, Class<T> type) {
+            return null;
+        }
+
     }
 }

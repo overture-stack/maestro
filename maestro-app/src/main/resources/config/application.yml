@@ -22,6 +22,9 @@ maestro:
       name: aws repo
       country: US
 
+logging.level.root: INFO
+logging.level.bio.overture: TRACE
+
 management:
   endpoints:
     web:

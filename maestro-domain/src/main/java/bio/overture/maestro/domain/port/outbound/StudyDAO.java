@@ -1,8 +1,11 @@
 package bio.overture.maestro.domain.port.outbound;
 
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.entities.metadata.study.Study;
+import bio.overture.maestro.domain.port.outbound.message.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
 import lombok.NonNull;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -21,5 +24,5 @@ public interface StudyDAO {
      *  in case the study wasn't found.
      */
     Mono<List<Analysis>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
-
+    Flux<Study> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
 }
