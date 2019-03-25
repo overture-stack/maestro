@@ -1,0 +1,23 @@
+maestro:
+  elasticsearch:
+    indexes:
+      file-centric:
+        alias: file-centric
+    cluster-name: docker-cluster
+    # testcontainers will override this property if you use MaestroIntegrationTest
+    cluster-nodes: localhost:9200
+
+  repositories:
+    - code: collab
+      url: https://song.cancercollaboratory.org
+      name: collaboratory
+      dataPath: /oicr.icgc/data
+      metadataPath: /oicr.icgc.meta/metadata
+      storageType: S3
+      organization: ICGC
+      country: CA
+    - code: aws
+      url: http://aws.amazon.com
+      name: aws repo
+      country: US
+

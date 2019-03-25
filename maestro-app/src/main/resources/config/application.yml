@@ -1,0 +1,32 @@
+server:
+  port: 11235
+
+maestro:
+  elasticsearch:
+    cluster-name: ${ELASTICSEARCH.CLUSTER.NAME:maestro.elasticsearch}
+    cluster-nodes: ${ELASTICSEARCH.CLUSTER.NODES:localhost:9200, localhost:9201}
+    indexes:
+      file-centric:
+        alias: file_centric
+  repositories:
+    - code: collab
+      url: https://song.cancercollaboratory.org
+      name: collaboratory
+      dataPath: /oicr.icgc/data
+      metadataPath: /oicr.icgc.meta/metadata
+      storageType: S3
+      organization: ICGC
+      country: CA
+    - code: aws
+      url: http://aws.amazon.com
+      name: aws repo
+      country: US
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+    show-details: ALWAYS
