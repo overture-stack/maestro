@@ -44,8 +44,8 @@
     ],
     "donors": [
       {
-        "donorId": "DO232978",
-        "donorSubmittedId": "MDT-AP-0749",
+        "id": "DO232978",
+        "submittedId": "MDT-AP-0749",
         "specimen": {
           "id": "SP201301",
           "type": "Primary tumour - solid tissue",

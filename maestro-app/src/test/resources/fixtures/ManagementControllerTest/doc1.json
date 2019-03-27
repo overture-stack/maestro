@@ -43,9 +43,8 @@
   ],
   "donors": [
     {
-      "donor_id": "DO232959",
-      "donor_submitted_id": "MDT-AP-0432",
-      "primary_site": "<ADD TO SONG>",
+      "id": "DO232959",
+      "submitted_id": "MDT-AP-0432",
       "specimen": {
         "id": "SP200947",
         "type": "Normal - blood derived",

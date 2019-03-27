@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class FileCentricDonor {
-    private String donorId;
-    private String donorSubmittedId;
+    private String id;
+    private String submittedId;
     private Specimen specimen;
 }

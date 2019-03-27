@@ -1,0 +1,188 @@
+[
+  {
+    "objectId": "316612a4-4c23-5434-976a-810f8cde06b7",
+    "access": "controlled",
+    "study": "MALY-DE",
+    "analysis": {
+      "id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+      "type": "variantCall",
+      "state": "PUBLISHED",
+      "study": "MALY-DE",
+      "experiment": {
+        "info": {},
+        "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+        "variantCallingTool": "MUSE variant call pipeline",
+        "matchedNormalSampleSubmitterId": "control_4128852"
+      },
+      "info": null
+    },
+    "file": {
+      "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
+      "format": "VCF",
+      "md5sum": "f83b0f9099e8594b589440819ab119cd",
+      "size": 273787,
+      "lastModified": null,
+      "indexFile": {
+        "objectId": "a9c47630-491b-5587-a58d-6736734d6163",
+        "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz.idx",
+        "format": "IDX",
+        "md5sum": "f5629a05fe5b8dd6a63381de259aa935",
+        "size": 146924
+      }
+    },
+    "repositories": [
+      {
+        "code": "TEST-REPO",
+        "organization": "org",
+        "name": "singer",
+        "type": "S3",
+        "country": "CA",
+        "baseUrl": "http://song.sing.sung",
+        "dataPath": "/p1/p2",
+        "metadataPath": "/m1/m2/95cbd8c1-1cb1-5c18-8c2d-6f54867d7b72"
+      }
+    ],
+    "donors": [
+      {
+        "id": "DO221129",
+        "submittedId": "4128852",
+        "specimen": {
+          "id": "SP124981",
+          "type": "Primary tumour - lymph node",
+          "submittedId": "tumor_4128852",
+          "sample": {
+            "id": "SA557689",
+            "submittedId": "tumor_4128852",
+            "type": "DNA",
+            "info": {}
+          },
+          "info": {}
+        }
+      }
+    ]
+  },
+  {
+    "objectId": "0bafbb56-728e-5e6c-bb87-88e7bb789dab",
+    "access": "controlled",
+    "study": "MALY-DE",
+    "analysis": {
+      "id": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+      "type": "variantCall",
+      "state": "PUBLISHED",
+      "study": "MALY-DE",
+      "experiment": {
+        "info": {},
+        "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+        "variantCallingTool": " PCAWG SNV-MNV callers",
+        "matchedNormalSampleSubmitterId": "control_4113191"
+      },
+      "info": null
+    },
+    "file": {
+      "name": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz",
+      "format": "VCF",
+      "md5sum": "02b4602861de0a5529e42d3e66eaa2a6",
+      "size": 188550,
+      "lastModified": null,
+      "indexFile": {
+        "objectId": "21126ff1-cd5e-5bb2-a55e-3c9f68b2ad14",
+        "name": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz.tbi",
+        "format": "TBI",
+        "md5sum": "c00c6672cb752c71dd2d1ef23ea559fa",
+        "size": 101608
+      }
+    },
+    "repositories": [
+      {
+        "code": "TEST-REPO",
+        "organization": "org",
+        "name": "singer",
+        "type": "S3",
+        "country": "CA",
+        "baseUrl": "http://song.sing.sung",
+        "dataPath": "/p1/p2",
+        "metadataPath": "/m1/m2/5d360754-ee81-581f-9b51-dfdd24f7a8d2"
+      }
+    ],
+    "donors": [
+      {
+        "id": "DO52693",
+        "submittedId": "4113191",
+        "specimen": {
+          "id": "SP116718",
+          "type": "Primary tumour - lymph node",
+          "submittedId": "tumor_4113191",
+          "sample": {
+            "id": "SA542152",
+            "submittedId": "tumor_4113191",
+            "type": "DNA",
+            "info": {}
+          },
+          "info": {}
+        }
+      }
+    ]
+  },
+  {
+    "objectId": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
+    "access": "controlled",
+    "study": "MALY-DE",
+    "analysis": {
+      "id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+      "type": "variantCall",
+      "state": "PUBLISHED",
+      "study": "MALY-DE",
+      "experiment": {
+        "info": {},
+        "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+        "variantCallingTool": "PCAWG InDel callers",
+        "matchedNormalSampleSubmitterId": "control_4166503"
+      },
+      "info": null
+    },
+    "file": {
+      "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
+      "format": "VCF",
+      "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
+      "size": 38671,
+      "lastModified": null,
+      "indexFile": {
+        "objectId": "4ba753ee-bbb7-5f57-9cda-6e15c519f834",
+        "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz.tbi",
+        "format": "TBI",
+        "md5sum": "7c606af5d37d3788850da1a5f1705feb",
+        "size": 19306
+      }
+    },
+    "repositories": [
+      {
+        "code": "TEST-REPO",
+        "organization": "org",
+        "name": "singer",
+        "type": "S3",
+        "country": "CA",
+        "baseUrl": "http://song.sing.sung",
+        "dataPath": "/p1/p2",
+        "metadataPath": "/m1/m2/46c2fec8-fd4a-5b62-8819-647bf23ac15c"
+      }
+    ],
+    "donors": [
+      {
+        "id": "DO52662",
+        "submittedId": "4166503",
+        "specimen": {
+          "id": "SP116638",
+          "type": "Primary tumour - lymph node",
+          "submittedId": "tumor_4166503",
+          "sample": {
+            "id": "SA542043",
+            "submittedId": "tumor_4166503",
+            "type": "DNA",
+            "info": {}
+          },
+          "info": {}
+        }
+      }
+    ]
+  }
+]
