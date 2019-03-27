@@ -13,9 +13,9 @@ import org.springframework.retry.annotation.EnableRetry;
 
 @Slf4j
 @EnableRetry
+@RefreshScope
 @SpringBootApplication
 @Import({RootConfiguration.class})
-@RefreshScope
 public class Maestro {
 
     public static void main(String[] args) {
