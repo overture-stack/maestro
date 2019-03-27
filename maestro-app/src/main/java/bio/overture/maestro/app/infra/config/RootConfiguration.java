@@ -8,18 +8,25 @@ import bio.overture.maestro.app.infra.adapter.outbound.SongStudyDAO;
 import bio.overture.maestro.domain.api.DefaultIndexer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.RestClients;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.codec.ServerCodecConfigurer;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.inject.Inject;
 import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.time.Duration;
@@ -75,8 +82,36 @@ class InfraConfig {
 @Import({
     GlobalWebExceptionHandler.class,
     ManagementController.class,
+    WebFluxConfig.class,
 })
-class WebConfig {}
+class WebConfig {
+    static final String DEFAULT_DOCUMENT_JSON_MAPPER = "DEFAULT_DOCUMENT_JSON_MAPPER" ;
+
+    @Primary
+    @Bean(name = DEFAULT_DOCUMENT_JSON_MAPPER)
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+}
+
+@Configuration
+@RequiredArgsConstructor
+class WebFluxConfig implements WebFluxConfigurer {
+
+    @Inject
+    @Qualifier(WebConfig.DEFAULT_DOCUMENT_JSON_MAPPER)
+    private ObjectMapper objectMapper;
+
+    public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
+        configurer.defaultCodecs().jackson2JsonEncoder(
+            new Jackson2JsonEncoder(objectMapper)
+        );
+
+        configurer.defaultCodecs().jackson2JsonDecoder(
+            new Jackson2JsonDecoder(objectMapper)
+        );
+    }
+}
 
 /**
  * Elasticsearch related configuration
@@ -87,8 +122,8 @@ class WebConfig {}
 })
 class ElasticSearchClientConfig {
 
-    @Autowired
-    ApplicationProperties properties;
+    @Inject
+    private ApplicationProperties properties;
 
     @Bean
     RestHighLevelClient client() {
