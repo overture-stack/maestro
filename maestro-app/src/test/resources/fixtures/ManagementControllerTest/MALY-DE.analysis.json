@@ -1,0 +1,218 @@
+[
+  {
+    "analysisType": "variantCall",
+    "info": {},
+    "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+    "study": "MALY-DE",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA557689",
+        "specimenId": "SP124981",
+        "sampleSubmitterId": "tumor_4128852",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP124981",
+          "donorId": "DO221129",
+          "specimenSubmitterId": "tumor_4128852",
+          "specimenClass": "Tumour",
+          "specimenType": "Primary tumour - lymph node"
+        },
+        "donor": {
+          "donorId": "DO221129",
+          "donorSubmitterId": "4128852",
+          "studyId": "MALY-DE",
+          "donorGender": "female",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "316612a4-4c23-5434-976a-810f8cde06b7",
+        "studyId": "MALY-DE",
+        "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+        "fileName": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
+        "fileSize": 273787,
+        "fileType": "VCF",
+        "fileMd5sum": "f83b0f9099e8594b589440819ab119cd",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "a9c47630-491b-5587-a58d-6736734d6163",
+        "studyId": "MALY-DE",
+        "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+        "fileName": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz.idx",
+        "fileSize": 146924,
+        "fileType": "IDX",
+        "fileMd5sum": "f5629a05fe5b8dd6a63381de259aa935",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "95cbd8c1-1cb1-5c18-8c2d-6f54867d7b72",
+        "studyId": "MALY-DE",
+        "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+        "fileName": "0a1df2a2-029d-48cc-839c-0a7c89ff972f.xml",
+        "fileSize": 36818,
+        "fileType": "XML",
+        "fileMd5sum": "7240205cac78b6e94a131d2db14de07b",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "info": {},
+      "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+      "variantCallingTool": "MUSE variant call pipeline",
+      "matchedNormalSampleSubmitterId": "control_4128852"
+    }
+  },
+  {
+    "analysisType": "variantCall",
+    "info": {},
+    "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+    "study": "MALY-DE",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA542152",
+        "specimenId": "SP116718",
+        "sampleSubmitterId": "tumor_4113191",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP116718",
+          "donorId": "DO52693",
+          "specimenSubmitterId": "tumor_4113191",
+          "specimenClass": "Tumour",
+          "specimenType": "Primary tumour - lymph node"
+        },
+        "donor": {
+          "donorId": "DO52693",
+          "donorSubmitterId": "4113191",
+          "studyId": "MALY-DE",
+          "donorGender": "female",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "5d360754-ee81-581f-9b51-dfdd24f7a8d2",
+        "studyId": "MALY-DE",
+        "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+        "fileName": "64e6f498-20ae-4c59-a5f5-36b18f81bd99.xml",
+        "fileSize": 31669,
+        "fileType": "XML",
+        "fileMd5sum": "8f6ef3b2f3904c523b811e9c5191e159",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "0bafbb56-728e-5e6c-bb87-88e7bb789dab",
+        "studyId": "MALY-DE",
+        "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+        "fileName": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz",
+        "fileSize": 188550,
+        "fileType": "VCF",
+        "fileMd5sum": "02b4602861de0a5529e42d3e66eaa2a6",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "21126ff1-cd5e-5bb2-a55e-3c9f68b2ad14",
+        "studyId": "MALY-DE",
+        "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+        "fileName": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz.tbi",
+        "fileSize": 101608,
+        "fileType": "TBI",
+        "fileMd5sum": "c00c6672cb752c71dd2d1ef23ea559fa",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "info": {},
+      "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
+      "variantCallingTool": " PCAWG SNV-MNV callers",
+      "matchedNormalSampleSubmitterId": "control_4113191"
+    }
+  },
+  {
+    "analysisType": "variantCall",
+    "info": {},
+    "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+    "study": "MALY-DE",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA542043",
+        "specimenId": "SP116638",
+        "sampleSubmitterId": "tumor_4166503",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP116638",
+          "donorId": "DO52662",
+          "specimenSubmitterId": "tumor_4166503",
+          "specimenClass": "Tumour",
+          "specimenType": "Primary tumour - lymph node"
+        },
+        "donor": {
+          "donorId": "DO52662",
+          "donorSubmitterId": "4166503",
+          "studyId": "MALY-DE",
+          "donorGender": "male",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "46c2fec8-fd4a-5b62-8819-647bf23ac15c",
+        "studyId": "MALY-DE",
+        "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+        "fileName": "327c74cd-ee0b-4885-bafd-741e17b8b163.xml",
+        "fileSize": 35287,
+        "fileType": "XML",
+        "fileMd5sum": "91733724f431b0d91b47e37778e6c20e",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
+        "studyId": "MALY-DE",
+        "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+        "fileName": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
+        "fileSize": 38671,
+        "fileType": "VCF",
+        "fileMd5sum": "020a444fb10ec02b40e141aa9cd0de87",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "4ba753ee-bbb7-5f57-9cda-6e15c519f834",
+        "studyId": "MALY-DE",
+        "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+        "fileName": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz.tbi",
+        "fileSize": 19306,
+        "fileType": "TBI",
+        "fileMd5sum": "7c606af5d37d3788850da1a5f1705feb",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "info": {},
+      "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+      "variantCallingTool": "PCAWG InDel callers",
+      "matchedNormalSampleSubmitterId": "control_4166503"
+    }
+  }
+]

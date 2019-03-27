@@ -22,6 +22,7 @@ import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.Exceptions.badData;
@@ -32,7 +33,6 @@ import static reactor.core.publisher.Mono.error;
 public class DefaultIndexer implements Indexer {
 
     private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
-    private static final String MSG_EMPTY_STUDY = "Empty study {0}";
     private static final String MSG_EMPTY_REPOSITORY = "Empty repository {0}";
     private final FileCentricIndexAdapter fileCentricIndexAdapter;
     private final StudyDAO studyDAO;
@@ -63,7 +63,8 @@ public class DefaultIndexer implements Indexer {
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyRepositoryCommand.getRepositoryCode())))
             .flatMapMany(this::getAllStudies)
             .flatMap(repoAndStudy ->
-                getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(), repoAndStudy.getStudy().getStudyId()))
+                getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
+                    repoAndStudy.getStudy().getStudyId()))
             .flatMap(this::batchIndexFiles)
             .then(Mono.just(IndexResult.builder().successful(true).build()));
     }
@@ -85,8 +86,7 @@ public class DefaultIndexer implements Indexer {
         );
     }
 
-    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo,
-                                                                              String studyId) {
+    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo, String studyId) {
         return getStudyAnalyses(repo.getBaseUrl(), studyId)
             .doOnNext(analyses -> log.debug("loaded {} analyses", analyses.size()))
             .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
@@ -116,6 +116,8 @@ public class DefaultIndexer implements Indexer {
         return this.fileCentricIndexAdapter.batchIndex(BatchIndexFilesCommand.builder()
             .files(files)
             .build()
+        ).doOnSuccess(
+            indexResult -> log.trace("finished batchIndexFiles, list size {}, hashcode {}", files.size(), Objects.hashCode(files))
         );
     }
 

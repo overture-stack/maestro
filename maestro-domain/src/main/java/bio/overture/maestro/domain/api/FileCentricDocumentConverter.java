@@ -133,7 +133,7 @@ final class FileCentricDocumentConverter {
         val donor = sample.getDonor();
         val specimen = sample.getSpecimen();
         return FileCentricDonor.builder()
-            .donorId(donor.getDonorId())
+            .id(donor.getDonorId())
             .specimen(Specimen.builder()
                 .type(specimen.getSpecimenType())
                 .id(specimen.getSpecimenId())
@@ -148,7 +148,7 @@ final class FileCentricDocumentConverter {
                 .info(specimen.getInfo())
                 .build()
             )
-            .donorSubmittedId(donor.getDonorSubmitterId())
+            .submittedId(donor.getDonorSubmitterId())
             .build();
     }
 

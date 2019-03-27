@@ -2,14 +2,17 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexer.StudyRepository;
 import bio.overture.maestro.domain.entities.indexer.StorageType;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.message.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -22,14 +25,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -64,30 +70,67 @@ class DefaultIndexerTest {
 
     @Test
     void indexStudyRepository() {
+
+        //Given
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
-        val a1 = getAnalysis();
-        val fileCentricDocuments = getExpectedFileCentricDocument();
+        val studies = getExpectedStudies();
+
         val fileRepo = Mono.just(getStubFilesRepository());
-        val studyAnalyses = Mono.just(List.of(a1));
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
-        val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+
+        val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
+
+        given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.fromIterable(studies));
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+
+        for(Study study: studies) {
+            val studyId = study.getStudyId();
+            val command = GetStudyAnalysesCommand.builder()
+                .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
+                .build();
+            val studyAnalyses = getStudyAnalyses(studyId);
+            val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
+            val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+
+            given(studyDAO.getStudyAnalyses(eq(command))).willReturn(Mono.just(studyAnalyses));
+            given(indexServerAdapter.batchIndex(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        }
+
+        // When
+        val indexResultMono = indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+            .repositoryCode("TEST-REPO")
+            .build());
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectNext(result)
+            .expectComplete()
+            .verify();
+
+        then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
+        then(studyDAO).should(times(3)).getStudyAnalyses(any());
+        then(indexServerAdapter).should(times(3)).batchIndex(any());
+
     }
+
 
     @Test
     void indexStudy() {
+
         // Given
         val studyId = "PEME-CA";
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
-        val a1 = getAnalysis();
-        val fileCentricDocuments = getExpectedFileCentricDocument();
+        val a1 = getStudyAnalyses(studyId);
+        val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
         val fileRepo = Mono.just(getStubFilesRepository());
-        val studyAnalyses = Mono.just(List.of(a1));
+        val studyAnalyses = Mono.just(a1);
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
         val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+
         val getStudyAnalysesCommand = GetStudyAnalysesCommand.builder()
             .studyId(studyId)
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
@@ -113,16 +156,22 @@ class DefaultIndexerTest {
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
         then(studyDAO).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
         then(indexServerAdapter).should(times(1)).batchIndex(eq(batchIndexFilesCommand));
+
     }
 
     @SneakyThrows
-    private List<FileCentricDocument> getExpectedFileCentricDocument() {
-        return Arrays.asList(loadJsonFixture(getClass(), "filecentricDocument.json", FileCentricDocument[].class));
+    private List<FileCentricDocument> getExpectedFileCentricDocument(String studyId) {
+        return Arrays.asList(loadJsonFixture(getClass(), studyId + ".files.json", FileCentricDocument[].class));
     }
 
-    @SneakyThrows
-    private Analysis getAnalysis() {
-        return loadJsonFixture(getClass(), "analysis.json", Analysis.class);
+    private List<Study> getExpectedStudies() {
+        return Arrays.stream(loadJsonFixture(getClass(), "studies.json", String[].class))
+            .map(s -> Study.builder().studyId(s).build())
+            .collect(Collectors.toList());
+    }
+
+    private List<Analysis> getStudyAnalyses(String studyId) {
+        return Arrays.asList(loadJsonFixture(getClass(), studyId +".analysis.json", Analysis[].class));
     }
 
     private StudyRepository getStubFilesRepository() {
