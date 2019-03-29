@@ -2,15 +2,15 @@ package bio.overture.maestro.app.infra.adapter.inbound;
 
 import bio.overture.maestro.app.MaestroIntegrationTest;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.ManagementController;
-import bio.overture.maestro.app.infra.config.ApplicationProperties;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
+import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
-import bio.overture.maestro.domain.port.outbound.StudyDAO;
-import bio.overture.maestro.domain.port.outbound.message.GetAllStudiesCommand;
-import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.masestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,7 +77,7 @@ class ManagementControllerTest extends MaestroIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        alias = applicationProperties.getFileCentricAlias();
+        alias = applicationProperties.fileCentricAlias();
         client = WebTestClient.bindToController(new ManagementController(indexer)).build();
     }
 
@@ -139,7 +139,7 @@ class ManagementControllerTest extends MaestroIntegrationTest {
     @Test
     void indexStudy() throws InterruptedException {
         // Given
-        val analyses = Mono.just(loadJsonFixture(this.getClass(), "study.json", new TypeReference<List<Analysis>>() {}));
+        val analyses = Mono.just(loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {}));
         val expectedDoc0 = loadJsonFixture(this.getClass(), "doc0.json", FileCentricDocument.class, elasticSearchJsonMapper);
         val expectedDoc1 = loadJsonFixture(this.getClass(), "doc1.json", FileCentricDocument.class, elasticSearchJsonMapper);
 
@@ -157,7 +157,6 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
             .withIndices(alias)
             .withTypes(alias)
-
             .build();
 
         val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
@@ -169,6 +168,67 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         assertEquals(expectedDoc0, docs.get(0));
     }
 
+
+    @Test
+    void indexStudy_updateFileRepository() throws InterruptedException {
+        // Given
+        val collabAnalyses = Mono.just(loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {}));
+        val awsStudyAnalyses = Mono.just(loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json", new TypeReference<List<Analysis>>() {}));
+        val expectedDoc0 = loadJsonFixture(this.getClass(), "doc0.json", FileCentricDocument.class, elasticSearchJsonMapper);
+        val expectedDoc1 = loadJsonFixture(this.getClass(), "doc1.json", FileCentricDocument.class, elasticSearchJsonMapper);
+        val multiRepoDoc = loadJsonFixture(this.getClass(), "doc2.json", FileCentricDocument.class, elasticSearchJsonMapper);
+
+        given(studyDAO.getStudyAnalyses(any(GetStudyAnalysesCommand.class)))
+            //first request
+            .willReturn(collabAnalyses)
+            //second request
+            .willReturn(awsStudyAnalyses);
+
+        // test
+        client.post()
+            .uri("/index/repository/collab/study/PEME-CA")
+            .exchange()
+            .expectStatus()
+            .isCreated();
+        Thread.sleep(2000);
+
+        // assertions
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+
+        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs = page.getContent();
+
+        assertNotNull(docs);
+        assertEquals(2L, page.getContent().size());
+        assertEquals(expectedDoc1, docs.get(1));
+        assertEquals(expectedDoc0, docs.get(0));
+
+        // index the same file in another repository:
+        // test
+        client.post()
+            .uri("/index/repository/aws/study/PEME-CA")
+            .exchange()
+            .expectStatus()
+            .isCreated();
+        Thread.sleep(2000);
+
+        // assertions
+        val query2 = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+
+        val page2 = elasticsearchTemplate.queryForPage(query2, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs2 = page.getContent();
+
+        assertNotNull(docs2);
+        assertEquals(2L, page2.getContent().size());
+        assertEquals(multiRepoDoc, docs.get(1));
+        assertEquals(expectedDoc0, docs.get(0));
+    }
 
     private List<Analysis> getStudyAnalyses(String studyId) {
         return Arrays.asList(loadJsonFixture(getClass(), studyId +".analysis.json", Analysis[].class));

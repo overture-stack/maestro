@@ -1,7 +1,8 @@
 package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.exception.BadDataException;
-import bio.overture.maestro.domain.entities.indexer.*;
+import bio.overture.maestro.domain.entities.indexing.*;
+import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
