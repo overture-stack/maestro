@@ -9,11 +9,14 @@ import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,8 +26,6 @@ import org.springframework.data.elasticsearch.ElasticsearchException;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.UpdateQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -44,21 +45,24 @@ import static java.util.Collections.singletonMap;
 @Slf4j
 public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
-    private final ElasticsearchRestTemplate template;
+    private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
     private final ResourceLoader resourceLoader;
+    private ElasticsearchRestTemplate template;
     private String alias;
-    private int documentsPerBulkRequest = 1000;
+    private int documentsPerBulkRequest;
     /**
      * we define a writer to save properties inferring at runtime for each object.
      */
     private ObjectWriter fileCentricJSONWriter;
 
     @Inject
-    public FileCentricElasticSearchAdapter(ElasticsearchRestTemplate template,
+    public FileCentricElasticSearchAdapter(CustomElasticSearchRestAdapter customElasticSearchRestAdapter,
+                                           ElasticsearchRestTemplate template,
                                            ResourceLoader resourceLoader,
                                            @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
                                            ApplicationProperties properties) {
+        this.customElasticSearchRestAdapter = customElasticSearchRestAdapter;
         this.template = template;
         this.alias = properties.getFileCentricAlias();
         this.documentsPerBulkRequest = properties.getDocsPerBulkMax();
@@ -78,7 +82,7 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
 
     @Override
     public Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
-        log.debug("in batchIndex, args: {} ", batchIndexFilesCommand.getFiles().size());
+        log.debug("in batchIbatchUpsertFileRepositoriesndex, args: {} ", batchIndexFilesCommand.getFiles().size());
         return  Mono.fromSupplier(() -> this.bulkUpsertFileRepositories(batchIndexFilesCommand.getFiles()))
             .onErrorMap((e) -> e instanceof ElasticsearchException,
                 (e) -> new UpstreamServiceException("batch Index failed", e))
@@ -149,7 +153,7 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
             .forEach((partNum, listPart)-> {
                 log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
                     Objects.hashCode(listPart), Objects.hashCode(filesList));
-                this.template.bulkUpdate(listPart.stream()
+                this.customElasticSearchRestAdapter.bulkUpdateRequest(listPart.stream()
                     .map(this::mapFileToUpsertRepositoryQuery)
                     .collect(Collectors.toList())
                 );
@@ -175,23 +179,28 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
     }
 
     @SneakyThrows
-    private UpdateQuery mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument){
-        Map<String, Object> parameters = singletonMap("repository", fileCentricDocument.getRepositories().get(0));
+    private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument){
+        ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        Map<String, Object> parameters = singletonMap("repository",
+            mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
+
         Script inline = new Script(ScriptType.INLINE,
             "painless",
-            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository)}",
+            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }",
             parameters
         );
 
-        return new UpdateQueryBuilder()
-            .withId(fileCentricDocument.getObjectId())
-            .withIndexName(this.alias)
-            .withType(this.alias)
-            .withUpdateRequest(new UpdateRequest()
-                .script(inline)
-                .upsert(fileCentricDocument)
-            )
-            .build();
+        return new UpdateRequest()
+            .id(fileCentricDocument.getObjectId())
+            .index(this.alias)
+            .type(this.alias)
+            .script(inline)
+            .upsert(new IndexRequest()
+                .index(this.alias)
+                .type(this.alias)
+                .id(fileCentricDocument.getObjectId())
+                .source(fileCentricJSONWriter.writeValueAsString(fileCentricDocument), XContentType.JSON)
+            );
     }
 
 }
