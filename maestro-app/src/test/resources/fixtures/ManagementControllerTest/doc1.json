@@ -13,13 +13,17 @@
       "libraryStrategy": "WGS",
       "info": {}
     },
-    "info": null
+    "info": {
+      "dcc_project_code": "PEME-CA",
+      "isPcawg": false
+    }
   },
   "file": {
     "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam",
     "format": "BAM",
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
     "size": 77675501639,
+    "info": {},
     "last_modified": null,
     "index_file": {
       "object_id": "6aa8d318-e168-520e-9d1e-cef127ee6b65",
@@ -45,6 +49,7 @@
     {
       "id": "DO232959",
       "submitted_id": "MDT-AP-0432",
+      "info": {},
       "specimen": {
         "id": "SP200947",
         "type": "Normal - blood derived",

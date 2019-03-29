@@ -36,6 +36,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
     }
 
     @Override
+    @NonNull
     public Mono<StudyRepository> getFilesRepository(@NonNull String code) {
         val repository = repositories.stream()
             .filter(propertiesFileRepository -> propertiesFileRepository.getCode().equalsIgnoreCase(code))
@@ -48,6 +49,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
     }
 
     @Override
+    @NonNull
     public Flux<StudyRepository> getAll() {
         return Flux.fromIterable(
             repositories.stream()

@@ -21,6 +21,6 @@ public interface StudyDAO {
      * @throws bio.overture.maestro.domain.api.exception.NotFoundException
      *  in case the study wasn't found.
      */
-    Mono<List<Analysis>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
-    Flux<Study> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
+    @NonNull Mono<List<Analysis>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
+    @NonNull Flux<Study> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
 }

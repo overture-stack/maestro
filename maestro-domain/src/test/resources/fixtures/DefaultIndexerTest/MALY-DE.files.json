@@ -14,7 +14,7 @@
         "variantCallingTool": "MUSE variant call pipeline",
         "matchedNormalSampleSubmitterId": "control_4128852"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
@@ -28,7 +28,8 @@
         "format": "IDX",
         "md5sum": "f5629a05fe5b8dd6a63381de259aa935",
         "size": 146924
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -57,7 +58,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -76,7 +78,7 @@
         "variantCallingTool": " PCAWG SNV-MNV callers",
         "matchedNormalSampleSubmitterId": "control_4113191"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz",
@@ -90,7 +92,8 @@
         "format": "TBI",
         "md5sum": "c00c6672cb752c71dd2d1ef23ea559fa",
         "size": 101608
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -119,7 +122,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -138,7 +142,7 @@
         "variantCallingTool": "PCAWG InDel callers",
         "matchedNormalSampleSubmitterId": "control_4166503"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
@@ -152,7 +156,8 @@
         "format": "TBI",
         "md5sum": "7c606af5d37d3788850da1a5f1705feb",
         "size": 19306
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -181,7 +186,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   }

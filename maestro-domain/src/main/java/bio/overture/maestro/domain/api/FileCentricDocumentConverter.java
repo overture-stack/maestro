@@ -66,9 +66,10 @@ final class FileCentricDocumentConverter {
                 .type(analysis.getAnalysisType())
                 .study(analysis.getStudy())
                 .experiment(analysis.getExperiment())
+                .info(analysis.getInfo())
                 .build()
             )
-            .file(buildPhysicalFileInfo(analysis, file))
+            .file(buildGenomeFileInfo(analysis, file))
             .repositories(List.of(Repository.builder()
                 .type(repository.getStorageType().name().toUpperCase())
                 .organization(repository.getOrganization())
@@ -83,11 +84,12 @@ final class FileCentricDocumentConverter {
         return repoFile.build();
     }
 
-    private static File buildPhysicalFileInfo(Analysis analysis,
-                                              bio.overture.maestro.domain.entities.metadata.study.File file) {
+    private static File buildGenomeFileInfo(Analysis analysis,
+                                            bio.overture.maestro.domain.entities.metadata.study.File file) {
         val fileName = file.getFileName();
         val indexFile = getIndexFile(analysis.getFile(), fileName);
         return File.builder()
+            .info(file.getInfo())
             .name(fileName)
             .format(file.getFileType())
             .size(file.getFileSize())
@@ -127,7 +129,7 @@ final class FileCentricDocumentConverter {
         }
         return sf
             .map(FileCentricDocumentConverter::createIndexFile)
-            .orElse(IndexFile.builder().build());
+            .orElse(null);
     }
 
     private static IndexFile createIndexFile(bio.overture.maestro.domain.entities.metadata.study.File file) {
@@ -176,6 +178,7 @@ final class FileCentricDocumentConverter {
                 .build()
             )
             .submittedId(donor.getDonorSubmitterId())
+            .info(donor.getInfo())
             .build();
     }
 

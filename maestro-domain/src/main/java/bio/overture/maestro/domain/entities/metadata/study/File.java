@@ -18,11 +18,17 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class File {
+    @NonNull
     private String objectId;
+    @NonNull
     private String studyId;
+    @NonNull
     private String analysisId;
+    @NonNull
     private String fileName;
+    @NonNull
     private String fileType;
+    @NonNull
     private String fileMd5sum;
     private String fileAccess;
     private long fileSize;

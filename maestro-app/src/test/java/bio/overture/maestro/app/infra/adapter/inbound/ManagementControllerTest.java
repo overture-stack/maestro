@@ -193,20 +193,18 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         Thread.sleep(2000);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+        var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
             .withIndices(alias)
             .withTypes(alias)
             .build();
-
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
-
+        var page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        var docs = page.getContent();
         assertNotNull(docs);
         assertEquals(2L, page.getContent().size());
         assertEquals(expectedDoc1, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
 
-        // index the same file in another repository:
+        // index the same file from another repository:
         // test
         client.post()
             .uri("/index/repository/aws/study/PEME-CA")
@@ -216,16 +214,14 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         Thread.sleep(2000);
 
         // assertions
-        val query2 = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+        query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
             .withIndices(alias)
             .withTypes(alias)
             .build();
-
-        val page2 = elasticsearchTemplate.queryForPage(query2, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs2 = page.getContent();
-
-        assertNotNull(docs2);
-        assertEquals(2L, page2.getContent().size());
+        page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        docs = page.getContent();
+        assertNotNull(docs);
+        assertEquals(2L, page.getContent().size());
         assertEquals(multiRepoDoc, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
     }

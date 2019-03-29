@@ -15,6 +15,6 @@ public interface StudyRepositoryDAO {
      * @param code the unique code of the repository
      * @return the repository or empty null if not found
      */
-    Mono<StudyRepository> getFilesRepository(@NonNull String code);
-    Flux<StudyRepository> getAll();
+    @NonNull Mono<StudyRepository> getFilesRepository(@NonNull String code);
+    @NonNull Flux<StudyRepository> getAll();
 }

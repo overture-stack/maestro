@@ -9,9 +9,13 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class IndexFile {
+    @NonNull
     private String objectId;
+    @NonNull
     private String name;
+    @NonNull
     private String format;
+    @NonNull
     private String md5sum;
     private Long size;
 }

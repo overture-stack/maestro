@@ -15,8 +15,11 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Sample {
+    @NonNull
     private String id;
+    @NonNull
     private String submittedId;
+    @NonNull
     private String type;
     private Map<String, Object> info;
 }

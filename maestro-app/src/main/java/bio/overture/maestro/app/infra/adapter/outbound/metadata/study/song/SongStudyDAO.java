@@ -36,6 +36,7 @@ class SongStudyDAO implements StudyDAO {
     }
 
     @Override
+    @NonNull
     public Mono<List<Analysis>> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getStudyAnalysesCommand);
         val repoBaseUrl = getStudyAnalysesCommand.getFilesRepositoryBaseUrl();
@@ -51,6 +52,7 @@ class SongStudyDAO implements StudyDAO {
     }
 
     @Override
+    @NonNull
     public Flux<Study> getStudies(@NonNull GetAllStudiesCommand getAllStudiesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getAllStudiesCommand);
         val repoBaseUrl = getAllStudiesCommand.getFilesRepositoryBaseUrl();
@@ -59,6 +61,8 @@ class SongStudyDAO implements StudyDAO {
             .uri(format(STUDIES_URL_TEMPLATE, repoBaseUrl))
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
+            // we need to first parse as mono then stream it as flux because of this :
+            // https://github.com/spring-projects/spring-framework/issues/22662
             .bodyToMono(StringListType)
             .flatMapMany(Flux::fromIterable)
             .map(id -> Study.builder().studyId(id).build());
