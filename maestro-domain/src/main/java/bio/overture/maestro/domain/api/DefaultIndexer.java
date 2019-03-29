@@ -53,7 +53,7 @@ public class DefaultIndexer implements Indexer {
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
             .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand.getStudyId()))
-            .flatMap(this::batchIndexFiles);
+            .flatMap(this::batchUpsert);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DefaultIndexer implements Indexer {
             .flatMap(repoAndStudy ->
                 getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
                     repoAndStudy.getStudy().getStudyId()))
-            .flatMap(this::batchIndexFiles)
+            .flatMap(this::batchUpsert)
             .then(Mono.just(IndexResult.builder().successful(true).build()));
     }
 
@@ -112,12 +112,12 @@ public class DefaultIndexer implements Indexer {
         return FileCentricDocumentConverter.fromAnalysis(analysis, repository);
     }
 
-    private Mono<IndexResult> batchIndexFiles(List<FileCentricDocument> files) {
-        return this.fileCentricIndexAdapter.batchIndex(BatchIndexFilesCommand.builder()
+    private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
+        return this.fileCentricIndexAdapter.batchUpsertFileRepositories(BatchIndexFilesCommand.builder()
             .files(files)
             .build()
         ).doOnSuccess(
-            indexResult -> log.trace("finished batchIndexFiles, list size {}, hashcode {}", files.size(), Objects.hashCode(files))
+            indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}", files.size(), Objects.hashCode(files))
         );
     }
 

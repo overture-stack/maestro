@@ -2,6 +2,7 @@ package bio.overture.maestro.app.infra.config;
 
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.GlobalWebExceptionHandler;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.ManagementController;
+import bio.overture.maestro.app.infra.adapter.outbound.CustomElasticSearchRestAdapter;
 import bio.overture.maestro.app.infra.adapter.outbound.FileCentricElasticSearchAdapter;
 import bio.overture.maestro.app.infra.adapter.outbound.PropertyFileStudyRepositoryDAO;
 import bio.overture.maestro.app.infra.adapter.outbound.SongStudyDAO;
@@ -57,6 +58,7 @@ class DomainConfig {}
 @Configuration
 @Import({
     ElasticSearchClientConfig.class,
+    CustomElasticSearchRestAdapter.class,
     WebConfig.class,
     SongStudyDAO.class,
     PropertyFileStudyRepositoryDAO.class,
@@ -133,12 +135,12 @@ class ElasticSearchClientConfig {
 
             @Override
             public Duration getConnectTimeout() {
-                return Duration.ofMinutes(1);
+                return Duration.ofSeconds(10);
             }
 
             @Override
             public Duration getSocketTimeout() {
-                return Duration.ofMinutes(1);
+                return Duration.ofMinutes(10);
             }
         }).rest();
     }
