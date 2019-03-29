@@ -33,10 +33,6 @@ maestro:
       storageType: S3
       organization: ICGC
       country: CA
-    - code: aws
-      url: http://aws.amazon.com
-      name: aws repo
-      country: US
 
 # logging & monitoring
 logging:

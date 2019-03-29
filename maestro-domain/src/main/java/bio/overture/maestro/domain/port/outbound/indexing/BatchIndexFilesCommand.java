@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BatchIndexFilesCommand {
+
     @NonNull
     private List<FileCentricDocument> files;
 
@@ -18,5 +19,12 @@ public class BatchIndexFilesCommand {
     public String toString() {
         val size = files == null ? "null" : String.valueOf(files.size());
         return super.toString() + "[files = " + size + "]";
+    }
+
+    /**
+     * Explicit method for verbose toString to avoid too much logging.
+     */
+    public String toStringVerbose() {
+        return super.toString() + "[files = " + files + "]";
     }
 }
