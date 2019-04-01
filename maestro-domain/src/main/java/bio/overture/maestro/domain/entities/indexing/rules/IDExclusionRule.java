@@ -30,6 +30,7 @@ public class IDExclusionRule extends ExclusionRule {
             return false;
         }
 
+        idExclusionField.setAccessible(true);
         val value = idExclusionField.get(instance);
         if (value == null) return false;
         return ids.contains(value);

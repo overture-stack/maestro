@@ -4,17 +4,20 @@ import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
-import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.indexing.StorageType;
+import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
+import bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule;
+import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.entities.metadata.study.Sample;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
-import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
-import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
-import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
-import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
+import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
+import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
@@ -32,6 +35,7 @@ import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
@@ -91,10 +95,16 @@ class DefaultIndexerTest {
             .studyId(studyId)
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
+        Mono<Map<Class<?>, List<? extends ExclusionRule>>> sampleExclusionRule = Mono.just(
+            Map.of(
+                Sample.class, List.of(new IDExclusionRule(Sample.class, List.of("SA520221")))
+            )
+        );
 
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        given(exclusionRulesDAO.getExclusionRules()).willReturn(sampleExclusionRule);
 
         // When
         val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
