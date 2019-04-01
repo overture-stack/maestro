@@ -1,10 +1,16 @@
 server:
   port: 11235
 
+spring:
+  application:
+    name: maestro
+
 maestro:
   elasticsearch:
     cluster-name: ${ELASTICSEARCH.CLUSTER.NAME:maestro.elasticsearch}
     cluster-nodes: ${ELASTICSEARCH.CLUSTER.NODES:localhost:9200, localhost:9201}
+    # this is to control the number of documents per bulk request in elastic search
+    docs-per-bulk-max: 5000
     indexes:
       file-centric:
         alias: file_centric
@@ -22,6 +28,10 @@ maestro:
       name: aws repo
       country: US
 
+logging.level.root: INFO
+logging.level.bio.overture: TRACE
+
+
 management:
   endpoints:
     web:
@@ -29,4 +39,4 @@ management:
         include: '*'
   endpoint:
     health:
-    show-details: ALWAYS
+      show-details: ALWAYS

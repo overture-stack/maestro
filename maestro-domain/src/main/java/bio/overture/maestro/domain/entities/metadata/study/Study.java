@@ -11,8 +11,4 @@ import lombok.*;
 public class Study {
     @NonNull
     private String studyId;
-    @NonNull
-    private String name;
-    @NonNull
-    private String organization;
 }

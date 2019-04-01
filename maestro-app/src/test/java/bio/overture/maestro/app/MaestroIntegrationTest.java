@@ -1,6 +1,5 @@
-package bio.overture.maestor.app;
+package bio.overture.maestro.app;
 
-import bio.overture.maestro.app.Maestro;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.app.infra.config.ApplicationProperties;
 import bio.overture.masestro.test.TestCategory;

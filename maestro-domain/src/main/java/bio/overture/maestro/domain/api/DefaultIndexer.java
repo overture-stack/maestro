@@ -1,22 +1,28 @@
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexer.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
-import bio.overture.maestro.domain.port.outbound.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.StudyDAO;
+import bio.overture.maestro.domain.port.outbound.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.message.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.Exceptions.badData;
@@ -27,7 +33,7 @@ import static reactor.core.publisher.Mono.error;
 public class DefaultIndexer implements Indexer {
 
     private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
-    private static final String MSG_EMPTY_STUDY = "Empty study {0}";
+    private static final String MSG_EMPTY_REPOSITORY = "Empty repository {0}";
     private final FileCentricIndexAdapter fileCentricIndexAdapter;
     private final StudyDAO studyDAO;
     private final StudyRepositoryDAO studyRepositoryDao;
@@ -46,33 +52,53 @@ public class DefaultIndexer implements Indexer {
         log.trace("in indexStudy, args: {} ", indexStudyCommand);
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
-            .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand))
-            .switchIfEmpty(error(badData(MSG_EMPTY_STUDY, indexStudyCommand.getStudyId())))
+            .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand.getStudyId()))
             .flatMap(this::batchIndexFiles);
     }
 
     @Override
-    public void indexAll() {
-        throw new IndexerException("Not implemented yet");
+    public Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand) {
+        log.trace("in indexStudyRepository, args: {} ", indexStudyRepositoryCommand);
+        return this.studyRepositoryDao.getFilesRepository(indexStudyRepositoryCommand.getRepositoryCode())
+            .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyRepositoryCommand.getRepositoryCode())))
+            .flatMapMany(this::getAllStudies)
+            .flatMap(repoAndStudy ->
+                getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
+                    repoAndStudy.getStudy().getStudyId()))
+            .flatMap(this::batchIndexFiles)
+            .then(Mono.just(IndexResult.builder().successful(true).build()));
     }
 
     /* ****************
      * Private Methods
      * ***************/
 
-    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo,
-                                                                              IndexStudyCommand indexStudyCommand) {
-        return getStudyAnalyses(repo, indexStudyCommand)
-            .doOnSuccess(analyses -> log.debug("loaded {} analyses", analyses.size()))
+    private Flux<StudyAndRepository> getAllStudies(StudyRepository studyRepository) {
+        return this.studyDAO.getStudies(GetAllStudiesCommand.builder()
+            .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
+            .build()
+        )
+        .switchIfEmpty(error(badData(MSG_EMPTY_REPOSITORY, studyRepository.getCode())))
+        .map(study -> StudyAndRepository.builder()
+            .study(study)
+            .studyRepository(studyRepository)
+            .build()
+        );
+    }
+
+    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo, String studyId) {
+        return getStudyAnalyses(repo.getBaseUrl(), studyId)
+            .doOnNext(analyses -> log.debug("loaded {} analyses", analyses.size()))
             .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
     }
 
-    private Mono<List<Analysis>> getStudyAnalyses(StudyRepository studyRepository, IndexStudyCommand command) {
+    private Mono<List<Analysis>> getStudyAnalyses(String studyRepositoryBaseUrl, String studyId) {
         return this.studyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
-            .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
-            .studyId(command.getStudyId())
+            .filesRepositoryBaseUrl(studyRepositoryBaseUrl)
+            .studyId(studyId)
             .build()
-        );
+        )
+        .filter(list -> list.size() > 0);
     }
 
     private List<FileCentricDocument> buildAnalysisFileDocuments(StudyRepository repo, List<Analysis> analyses) {
@@ -90,7 +116,15 @@ public class DefaultIndexer implements Indexer {
         return this.fileCentricIndexAdapter.batchIndex(BatchIndexFilesCommand.builder()
             .files(files)
             .build()
+        ).doOnSuccess(
+            indexResult -> log.trace("finished batchIndexFiles, list size {}, hashcode {}", files.size(), Objects.hashCode(files))
         );
     }
 
+    @Getter
+    @Builder
+    private static class StudyAndRepository {
+        StudyRepository studyRepository;
+        Study study;
+    }
 }

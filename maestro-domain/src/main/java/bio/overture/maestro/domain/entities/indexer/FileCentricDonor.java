@@ -6,11 +6,10 @@ import lombok.*;
 @Getter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
+@AllArgsConstructor
 public class FileCentricDonor {
-    private String donorId;
-    private String donorSubmittedId;
-    private String primarySite;
+    private String id;
+    private String submittedId;
     private Specimen specimen;
 }

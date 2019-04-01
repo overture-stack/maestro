@@ -1,24 +1,30 @@
 package bio.overture.maestro.app.infra.adapter.outbound;
 
+import bio.overture.maestro.app.infra.config.ApplicationProperties;
+import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.domain.api.exception.UpstreamServiceException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
-import bio.overture.maestro.app.infra.config.ApplicationProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.elasticsearch.ElasticsearchException;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
+import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -27,9 +33,13 @@ import reactor.core.scheduler.Schedulers;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static bio.overture.maestro.domain.utility.CollectionsUtil.partitionList;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
+import static java.util.Collections.singletonMap;
 
 @Slf4j
 public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
@@ -38,7 +48,7 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
     private final Resource indexSettings;
     private final ResourceLoader resourceLoader;
     private String alias;
-    private ObjectMapper objectMapper;
+    private int documentsPerBulkRequest = 1000;
     /**
      * we define a writer to save properties inferring at runtime for each object.
      */
@@ -47,21 +57,29 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
     @Inject
     public FileCentricElasticSearchAdapter(ElasticsearchRestTemplate template,
                                            ResourceLoader resourceLoader,
+                                           @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
                                            ApplicationProperties properties) {
         this.template = template;
         this.alias = properties.getFileCentricAlias();
+        this.documentsPerBulkRequest = properties.getDocsPerBulkMax();
         this.indexSettings = properties.getIndexSettings();
         this.resourceLoader = resourceLoader;
-        objectMapper = new ObjectMapper();
-        // this to adhere to elastic search best practice of snake case field names.
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        fileCentricJSONWriter = objectMapper.writerFor(FileCentricDocument.class);
+        this.fileCentricJSONWriter = objectMapper.writerFor(FileCentricDocument.class);
     }
 
     @Override
     public Mono<IndexResult> batchIndex(@NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
         log.debug("in batchIndex, args: {} ", batchIndexFilesCommand.getFiles().size());
         return  Mono.fromSupplier(() -> this.bulkIndexFiles(batchIndexFilesCommand.getFiles()))
+            .onErrorMap((e) -> e instanceof ElasticsearchException,
+                (e) -> new UpstreamServiceException("batch Index failed", e))
+            .subscribeOn(Schedulers.elastic());
+    }
+
+    @Override
+    public Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
+        log.debug("in batchIndex, args: {} ", batchIndexFilesCommand.getFiles().size());
+        return  Mono.fromSupplier(() -> this.bulkUpsertFileRepositories(batchIndexFilesCommand.getFiles()))
             .onErrorMap((e) -> e instanceof ElasticsearchException,
                 (e) -> new UpstreamServiceException("batch Index failed", e))
             .subscribeOn(Schedulers.elastic());
@@ -110,10 +128,32 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
     @SneakyThrows
     private IndexResult bulkIndexFiles(List<FileCentricDocument> filesList) {
         log.trace("in bulkIndexFiles, filesList count : {} ", filesList.size());
-        this.template.bulkIndex(filesList.stream()
-            .map(this::mapFileToIndexQuery)
-            .collect(Collectors.toList())
-        );
+        val size = this.documentsPerBulkRequest;
+        partitionList(filesList, size)
+            .forEach((partNum, listPart)-> {
+                log.trace("bulkIndexFiles, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
+                    Objects.hashCode(listPart), Objects.hashCode(filesList));
+                template.bulkIndex(listPart.stream()
+                    .map(this::mapFileToIndexQuery)
+                    .collect(Collectors.toList())
+                );
+            });
+        return IndexResult.builder().successful(true).build();
+    }
+
+    @SneakyThrows
+    private IndexResult bulkUpsertFileRepositories(List<FileCentricDocument> filesList) {
+        log.trace("in bulkUpsertFileRepositories, filesList count : {} ", filesList.size());
+        val size = this.documentsPerBulkRequest;
+        partitionList(filesList, size)
+            .forEach((partNum, listPart)-> {
+                log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
+                    Objects.hashCode(listPart), Objects.hashCode(filesList));
+                this.template.bulkUpdate(listPart.stream()
+                    .map(this::mapFileToUpsertRepositoryQuery)
+                    .collect(Collectors.toList())
+                );
+            });
         return IndexResult.builder().successful(true).build();
     }
 
@@ -131,6 +171,26 @@ public class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter 
             .withIndexName(this.alias)
             .withType(this.alias)
             .withSource(fileCentricJSONWriter.writeValueAsString(fileCentricDocument))
+            .build();
+    }
+
+    @SneakyThrows
+    private UpdateQuery mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument){
+        Map<String, Object> parameters = singletonMap("repository", fileCentricDocument.getRepositories().get(0));
+        Script inline = new Script(ScriptType.INLINE,
+            "painless",
+            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository)}",
+            parameters
+        );
+
+        return new UpdateQueryBuilder()
+            .withId(fileCentricDocument.getObjectId())
+            .withIndexName(this.alias)
+            .withType(this.alias)
+            .withUpdateRequest(new UpdateRequest()
+                .script(inline)
+                .upsert(fileCentricDocument)
+            )
             .build();
     }
 

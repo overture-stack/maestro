@@ -20,6 +20,9 @@ public class ApplicationProperties {
     @Value("${maestro.elasticsearch.indexes.file-centric.alias:file-centric}")
     private String fileCentricAlias;
 
+    @Value("${maestro.elasticsearch.docs-per-bulk-max:1000}")
+    private Integer docsPerBulkMax;
+
     @Value("classpath:index.settings.json")
     private Resource indexSettings;
 }

@@ -20,4 +20,11 @@ public interface FileCentricIndexAdapter {
      */
     Mono<IndexResult> batchIndex(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
 
+    /**
+     * Updates a fileDocument repositories field, or indexes the whole document if doesn't exist.
+     *
+     * @param batchIndexFilesCommand requires the full document to insert if doesn't exist.
+     * @return flag indicating if the operation was successful.
+     */
+    Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
 }

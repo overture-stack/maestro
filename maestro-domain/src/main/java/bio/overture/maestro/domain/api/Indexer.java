@@ -2,6 +2,7 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
 import lombok.NonNull;
 import reactor.core.publisher.Mono;
@@ -24,5 +25,5 @@ public interface Indexer {
      *          and cannot be used to produce list of {@link bio.overture.maestro.domain.entities.indexer.FileCentricDocument}
      */
     Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand);
-    void indexAll();
+    Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand);
 }
