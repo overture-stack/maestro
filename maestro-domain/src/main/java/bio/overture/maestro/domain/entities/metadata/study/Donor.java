@@ -1,5 +1,6 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
+import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
 import lombok.*;
 
 import java.util.Map;
@@ -19,6 +20,7 @@ public class Donor {
      * The id of this donor
      */
     @NonNull
+    @ExclusionId
     private String donorId;
 
     /**
