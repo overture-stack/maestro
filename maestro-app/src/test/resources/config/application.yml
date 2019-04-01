@@ -2,7 +2,7 @@ maestro:
   elasticsearch:
     indexes:
       file-centric:
-        alias: file-centric
+        alias: file_centric
     cluster-name: docker-cluster
     # testcontainers will override this property if you use MaestroIntegrationTest
     cluster-nodes: localhost:9200
