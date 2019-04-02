@@ -1,7 +1,7 @@
 package bio.overture.maestro.app;
 
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.app.infra.config.ApplicationProperties;
 import bio.overture.masestro.test.TestCategory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -18,7 +18,6 @@ import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static bio.overture.maestro.app.infra.config.ApplicationProperties.ELASTIC_SEARCH_CLUSTER_NODES;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,6 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(classes = Maestro.class, initializers = MaestroIntegrationTest.Initializer.class)
 @Tag(TestCategory.INT_TEST)
 public class MaestroIntegrationTest {
+
+    private final static String ELASTIC_SEARCH_CLUSTER_NODES = "maestro.elasticsearch.cluster-nodes";
 
     @Container
     private static ElasticsearchContainer container =
@@ -65,8 +66,8 @@ public class MaestroIntegrationTest {
     void tearDown() {
         // clean indexes after each test to keep tests isolated
         DeleteQuery query = new DeleteQuery();
-        query.setIndex(properties.getFileCentricAlias());
-        query.setType(properties.getFileCentricAlias());
+        query.setIndex(properties.fileCentricAlias());
+        query.setType(properties.fileCentricAlias());
         query.setQuery(matchAllQuery());
         elasticsearchRestTemplate.delete(query);
     }

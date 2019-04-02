@@ -3,17 +3,17 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
-import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
-import bio.overture.maestro.domain.entities.indexer.StudyRepository;
-import bio.overture.maestro.domain.entities.indexer.StorageType;
+import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
+import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
+import bio.overture.maestro.domain.entities.indexing.StorageType;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
-import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
-import bio.overture.maestro.domain.port.outbound.StudyRepositoryDAO;
-import bio.overture.maestro.domain.port.outbound.StudyDAO;
-import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
-import bio.overture.maestro.domain.port.outbound.message.GetAllStudiesCommand;
-import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
+import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
+import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
+import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.AfterEach;
@@ -95,7 +95,7 @@ class DefaultIndexerTest {
             val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
 
             given(studyDAO.getStudyAnalyses(eq(command))).willReturn(Mono.just(studyAnalyses));
-            given(indexServerAdapter.batchIndex(eq(batchIndexFilesCommand))).willReturn(monoResult);
+            given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
         }
 
         // When
@@ -111,7 +111,7 @@ class DefaultIndexerTest {
 
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
         then(studyDAO).should(times(3)).getStudyAnalyses(any());
-        then(indexServerAdapter).should(times(3)).batchIndex(any());
+        then(indexServerAdapter).should(times(3)).batchUpsertFileRepositories(any());
 
     }
 
@@ -138,7 +138,7 @@ class DefaultIndexerTest {
 
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
-        given(indexServerAdapter.batchIndex(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
 
         // When
         val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
@@ -155,7 +155,7 @@ class DefaultIndexerTest {
 
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
         then(studyDAO).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
-        then(indexServerAdapter).should(times(1)).batchIndex(eq(batchIndexFilesCommand));
+        then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
 
     }
 

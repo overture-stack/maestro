@@ -13,13 +13,17 @@
       "libraryStrategy": "WGS",
       "info": { }
     },
-    "info": null
+    "info": {
+      "dcc_project_code": "PEME-CA",
+      "isPcawg": false
+    }
   },
   "file": {
     "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
     "format": "BAM",
     "md5sum": "29ff9df727803d20834b9997bc17e970",
     "size": 88906416144,
+    "info": {},
     "last_modified": null,
     "index_file": {
       "object_id": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
@@ -45,6 +49,7 @@
     {
       "id": "DO232978",
       "submitted_id": "MDT-AP-0749",
+      "info": {},
       "specimen": {
         "id": "SP201301",
         "type": "Primary tumour - solid tissue",

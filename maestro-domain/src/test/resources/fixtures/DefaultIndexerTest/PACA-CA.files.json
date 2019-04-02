@@ -14,7 +14,10 @@
         "libraryStrategy": "WGS",
         "info": {}
       },
-      "info": null
+      "info": {
+        "dcc_project_code": "PEME-CA",
+        "isPcawg": false
+      }
     },
     "file": {
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
@@ -28,7 +31,8 @@
         "format": "BAI",
         "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
         "size": 8939816
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -57,7 +61,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -76,7 +81,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
@@ -90,7 +95,8 @@
         "format": "TBI",
         "md5sum": "99f0b87f5113494e2fc2284c91dc15e0",
         "size": 224729
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -119,7 +125,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -138,7 +145,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
@@ -152,7 +159,8 @@
         "format": "TBI",
         "md5sum": "1abed463bc92e0d8486699b37af73737",
         "size": 546153
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -181,7 +189,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -200,7 +209,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
@@ -214,7 +223,8 @@
         "format": "TBI",
         "md5sum": "a6113c54193fd7539dffd06f50f04779",
         "size": 1541330
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -243,7 +253,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -262,7 +273,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
@@ -276,7 +287,8 @@
         "format": "TBI",
         "md5sum": "156880f52b94b3119afa3ac6dd7b8ced",
         "size": 1502241
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -305,7 +317,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -324,7 +337,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
@@ -338,7 +351,8 @@
         "format": "TBI",
         "md5sum": "68d76af7c7b9b7c00fa0438101739798",
         "size": 10691
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -367,7 +381,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -386,7 +401,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
@@ -400,7 +415,8 @@
         "format": "TBI",
         "md5sum": "96b05a083d371ae8317651ceffb0f48b",
         "size": 6134
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -429,7 +445,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -448,7 +465,7 @@
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
@@ -462,7 +479,8 @@
         "format": "TBI",
         "md5sum": "cb856f2d5837c5f065c7c598dcd795b5",
         "size": 19769
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -491,7 +509,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -510,7 +529,7 @@
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
@@ -524,7 +543,8 @@
         "format": "TBI",
         "md5sum": "894fa70742c16ed7f845abd68609f20c",
         "size": 1524609
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -553,7 +573,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -572,7 +593,7 @@
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
@@ -586,7 +607,8 @@
         "format": "TBI",
         "md5sum": "1ba234eb0c457dba2942215d3fc4741a",
         "size": 2961
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -615,7 +637,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -634,7 +657,7 @@
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
@@ -648,7 +671,8 @@
         "format": "TBI",
         "md5sum": "725becdd11e63c371e57a987420846bd",
         "size": 4783
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -677,7 +701,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -696,7 +721,7 @@
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
@@ -710,7 +735,8 @@
         "format": "TBI",
         "md5sum": "91dece67c383a67123caae382a130cb9",
         "size": 303747
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -739,7 +765,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   },
@@ -758,7 +785,7 @@
         "variantCallingTool": "PCAWG InDel callers",
         "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"
       },
-      "info": null
+      "info": {}
     },
     "file": {
       "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz",
@@ -772,7 +799,8 @@
         "format": "TBI",
         "md5sum": "5b83369174136b88f16a08ab87bb67f7",
         "size": 148925
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -801,7 +829,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   }

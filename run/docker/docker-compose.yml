@@ -1,4 +1,5 @@
 version: '3'
+
 services:
   maestro:
     image: overture/maestro:0.0.1-SNAPSHOT
@@ -6,8 +7,8 @@ services:
     ports:
       - 11235:11235
     environment:
-      - ELASTICSEARCH.CLUSTER.NODES=maestro.elasticsearch:9200
-      - ELASTICSEARCH.CLUSTER.NAME=maestro.elasticsearch
+      - maestro.elasticsearch.cluster-nodes=maestro.elasticsearch:9200
+      - maestro.elasticsearch.cluster-name=maestro.elasticsearch
       - logging.level.root=INFO
       - spring.boot.admin.client.url=http://boot-admin:1122
       - management.health.elasticsearch.enabled=false

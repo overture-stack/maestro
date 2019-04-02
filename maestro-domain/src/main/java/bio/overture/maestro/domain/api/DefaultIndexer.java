@@ -3,16 +3,16 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
-import bio.overture.maestro.domain.entities.indexer.FileCentricDocument;
-import bio.overture.maestro.domain.entities.indexer.StudyRepository;
+import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
+import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
-import bio.overture.maestro.domain.port.outbound.FileCentricIndexAdapter;
-import bio.overture.maestro.domain.port.outbound.StudyDAO;
-import bio.overture.maestro.domain.port.outbound.StudyRepositoryDAO;
-import bio.overture.maestro.domain.port.outbound.message.BatchIndexFilesCommand;
-import bio.overture.maestro.domain.port.outbound.message.GetAllStudiesCommand;
-import bio.overture.maestro.domain.port.outbound.message.GetStudyAnalysesCommand;
+import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
+import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
+import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
+import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -53,7 +53,7 @@ public class DefaultIndexer implements Indexer {
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
             .flatMap(filesRepository -> getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand.getStudyId()))
-            .flatMap(this::batchIndexFiles);
+            .flatMap(this::batchUpsert);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DefaultIndexer implements Indexer {
             .flatMap(repoAndStudy ->
                 getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
                     repoAndStudy.getStudy().getStudyId()))
-            .flatMap(this::batchIndexFiles)
+            .flatMap(this::batchUpsert)
             .then(Mono.just(IndexResult.builder().successful(true).build()));
     }
 
@@ -112,12 +112,12 @@ public class DefaultIndexer implements Indexer {
         return FileCentricDocumentConverter.fromAnalysis(analysis, repository);
     }
 
-    private Mono<IndexResult> batchIndexFiles(List<FileCentricDocument> files) {
-        return this.fileCentricIndexAdapter.batchIndex(BatchIndexFilesCommand.builder()
+    private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
+        return this.fileCentricIndexAdapter.batchUpsertFileRepositories(BatchIndexFilesCommand.builder()
             .files(files)
             .build()
         ).doOnSuccess(
-            indexResult -> log.trace("finished batchIndexFiles, list size {}, hashcode {}", files.size(), Objects.hashCode(files))
+            indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}", files.size(), Objects.hashCode(files))
         );
     }
 

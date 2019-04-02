@@ -14,7 +14,10 @@
         "libraryStrategy": "WGS",
         "info": {}
       },
-      "info": null
+      "info": {
+        "dcc_project_code": "PEME-CA",
+        "isPcawg": false
+      }
     },
     "file": {
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
@@ -28,7 +31,8 @@
         "format": "BAI",
         "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
         "size": 8939816
-      }
+      },
+      "info": {}
     },
     "repositories": [
       {
@@ -57,7 +61,8 @@
             "info": {}
           },
           "info": {}
-        }
+        },
+        "info": {}
       }
     ]
   }
