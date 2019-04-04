@@ -1,4 +1,9 @@
+server.port:
+  50000
+
 maestro:
+  exclusion-rules:
+    file-name: exclusion-rules-test.yml
   elasticsearch:
     indexes:
       file-centric:
@@ -9,7 +14,7 @@ maestro:
 
   repositories:
     - code: collab
-      url: https://song.cancercollaboratory.org
+      url: http://localhost:${wiremock.server.port}/collab
       name: collaboratory
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
@@ -17,7 +22,7 @@ maestro:
       organization: ICGC
       country: CA
     - code: aws
-      url: http://aws.amazon.com
+      url: http://localhost:${wiremock.server.port}/aws
       name: aws repo
       organization: ICGC
       country: US

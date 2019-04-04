@@ -112,6 +112,7 @@ public class DefaultIndexer implements Indexer {
 
     private Mono<List<Analysis>> getExclusionRulesAndFilter(List<Analysis> analyses) {
         return this.exclusionRulesDAO.getExclusionRules()
+            .defaultIfEmpty(Map.of())
             .map(ruleMap -> AnalysisAndExclusions.builder()
                 .analyses(analyses)
                 .exclusionRulesMap(ruleMap)

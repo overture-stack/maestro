@@ -13,8 +13,8 @@ import java.util.Map;
 @Builder
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Sample {
     @ExclusionId
     private String sampleId;

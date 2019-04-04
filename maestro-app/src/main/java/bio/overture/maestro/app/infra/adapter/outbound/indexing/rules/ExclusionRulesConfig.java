@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({
-   StaticExclusionRulesDAO.class
+    ApplicationPropertiesExclusionRulesDAO.class
 })
 public class ExclusionRulesConfig { }

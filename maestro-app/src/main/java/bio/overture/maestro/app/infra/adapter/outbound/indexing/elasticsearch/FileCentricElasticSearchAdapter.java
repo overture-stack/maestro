@@ -5,8 +5,8 @@ import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.UpstreamServiceException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
-import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
+import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -21,7 +21,6 @@ import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.elasticsearch.ElasticsearchException;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -47,7 +46,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
-    private final ResourceLoader resourceLoader;
+    private final Resource fileCentricMapping;
     private ElasticsearchRestTemplate template;
     private String alias;
     private int documentsPerBulkRequest;
@@ -59,16 +58,17 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @Inject
     public FileCentricElasticSearchAdapter(CustomElasticSearchRestAdapter customElasticSearchRestAdapter,
                                            ElasticsearchRestTemplate template,
-                                           ResourceLoader resourceLoader,
                                            @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
                                            ApplicationProperties properties) {
+
         this.customElasticSearchRestAdapter = customElasticSearchRestAdapter;
+        this.fileCentricMapping = properties.fileCentricMapping();
         this.template = template;
         this.alias = properties.fileCentricAlias();
         this.documentsPerBulkRequest = properties.maxDocsPerBulkRequest();
         this.indexSettings = properties.indexSettings();
-        this.resourceLoader = resourceLoader;
         this.fileCentricJSONWriter = objectMapper.writerFor(FileCentricDocument.class);
+
     }
 
     @Override
@@ -93,7 +93,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         maxAttempts = 5,
         backoff = @Backoff(value = 1000, multiplier=1.5)
     )
-    public void initialize() {
+    void initialize() {
         try {
             val indexExists = this.template.indexExists(this.alias);
             val mappingExists = this.template.typeExists(this.alias, this.alias);
@@ -164,8 +164,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @SneakyThrows
     private String loadMappingMap(String typeName) {
         log.trace("in loadMappingMap: {}", typeName);
-        val mapping = this.resourceLoader.getResource("classpath:" + typeName + ".mapping.json");
-        return inputStreamToString(mapping.getInputStream());
+        return inputStreamToString(fileCentricMapping.getInputStream());
     }
 
     @SneakyThrows

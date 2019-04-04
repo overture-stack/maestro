@@ -141,6 +141,7 @@ class DefaultIndexerTest {
 
         given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.fromIterable(studies));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
         for(Study study: studies) {
             val studyId = study.getStudyId();
@@ -187,7 +188,6 @@ class DefaultIndexerTest {
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
         val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
-
         val getStudyAnalysesCommand = GetStudyAnalysesCommand.builder()
             .studyId(studyId)
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
@@ -196,6 +196,7 @@ class DefaultIndexerTest {
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
         // When
         val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()

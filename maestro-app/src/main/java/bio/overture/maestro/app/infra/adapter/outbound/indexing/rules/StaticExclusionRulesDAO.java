@@ -11,6 +11,9 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * static rules dao, good for testing
+ */
 public class StaticExclusionRulesDAO implements ExclusionRulesDAO {
 
     @SneakyThrows
