@@ -40,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Tag(TestCategory.INT_TEST)
 @AutoConfigureWebTestClient(timeout = "5000")
+@SuppressWarnings("all")
 class ManagementControllerTest extends MaestroIntegrationTest {
 
     @Autowired
@@ -159,12 +160,14 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         assertEquals(expectedDoc0, docs.get(0));
     }
 
-
     @Test
+
     void indexStudy_updateFileRepository() throws InterruptedException {
         // Given
-        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
-        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json", new TypeReference<List<Analysis>>() {});
+        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
+            new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json",
+            new TypeReference<List<Analysis>>() {});
 
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
