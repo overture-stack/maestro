@@ -95,6 +95,7 @@ class DefaultIndexerTest {
             .studyId(studyId)
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
+
         Mono<Map<Class<?>, List<? extends ExclusionRule>>> sampleExclusionRule = Mono.just(
             Map.of(
                 Sample.class, List.of(new IDExclusionRule(Sample.class, List.of("SA520221")))
@@ -172,7 +173,6 @@ class DefaultIndexerTest {
         then(indexServerAdapter).should(times(3)).batchUpsertFileRepositories(any());
 
     }
-
 
     @Test
     void shouldIndexSingleStudy() {

@@ -40,7 +40,7 @@
       "name": "collaboratory",
       "type": "S3",
       "country": "CA",
-      "base_url": "https://song.cancercollaboratory.org",
+      "base_url": "##COLLAB_REPO_URL##",
       "data_path": "/oicr.icgc/data",
       "metadata_path": "/oicr.icgc.meta/metadata/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
     }

@@ -6,13 +6,12 @@ spring:
     name: maestro
   output.ansi.enabled: ALWAYS
 
-
 maestro:
   exclusion-rules:
-    file-name: exlusion-rules.yml
+    # excl
+    file-name: exclusion-rules.yml
   # elastic search server & client props
   elasticsearch:
-    cluster-name: maestro.elasticsearch
     cluster-nodes: localhost:9200, localhost:9201
     indexes:
       file-centric:
@@ -41,10 +40,10 @@ maestro:
 # logging & monitoring
 logging:
   pattern:
-    console: "%clr(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}){blue} | %clr(%t){cyan} | %clr(${PID}){faint} | %clr(%p) | %clr(%logger){blue} | %clr(%m){faint}%n"
+    console: "%clr(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n"
   level:
-    root: INFO
-    bio.overture: TRACE
+    root: WARN
+    bio.overture: INFO
 
 # spring boot actuator endpoints
 management:

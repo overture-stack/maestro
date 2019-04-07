@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,28 +44,39 @@ public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO
     @PostConstruct
     public void init() throws Exception {
         val mapper = new ObjectMapper(new YAMLFactory());
-        val ruleConfig = mapper.readValue(this.exclusionRulesResource.getInputStream(), RuleConfig.class);
-
-        if (ruleConfig == null
-                || ruleConfig.getById() == null
-                || ruleConfig.getById().isEmpty()) {
-            this.exclusionRules = Map.of();
+        try {
+            this.exclusionRulesResource.getFile();
+        } catch (FileNotFoundException __) {
+            log.warn("No exclusion rules file with name {} found", this.exclusionRulesResource.getFilename());
             return;
         }
 
-        val rulesByEntity = new LinkedHashMap<Class<?>, List<? extends ExclusionRule>>();
-        ruleConfig.getById().forEach((entity, ids)-> {
-            if (ids.isEmpty()) return;
-            val entityClass = getClassFor(entity);
-            rulesByEntity.put(entityClass, List.of(IDExclusionRule.builder()
-                    .clazz(entityClass)
-                    .ids(ids)
-                    .build()
-                )
-            );
-        });
+        try {
+            val ruleConfig = mapper.readValue(this.exclusionRulesResource.getInputStream(), RuleConfig.class);
 
-        this.exclusionRules = Map.copyOf(rulesByEntity);
+            if (ruleConfig == null
+                || ruleConfig.getById() == null
+                || ruleConfig.getById().isEmpty()) {
+                this.exclusionRules = Map.of();
+                return;
+            }
+
+            val rulesByEntity = new LinkedHashMap<Class<?>, List<? extends ExclusionRule>>();
+            ruleConfig.getById().forEach((entity, ids) -> {
+                if (ids.isEmpty()) return;
+                val entityClass = getClassFor(entity);
+                rulesByEntity.put(entityClass, List.of(IDExclusionRule.builder()
+                        .clazz(entityClass)
+                        .ids(ids)
+                        .build()
+                    )
+                );
+            });
+
+            this.exclusionRules = Map.copyOf(rulesByEntity);
+        } catch (Exception e) {
+            log.error("failed to read exclusion rules", e);
+        }
     }
 
     private Class<?> getClassFor(String entity) {
@@ -83,6 +95,6 @@ public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO
     @NoArgsConstructor
     @AllArgsConstructor
     private static class RuleConfig {
-        private Map<String, List<Object>> byId;
+        private Map<String, List<String>> byId;
     }
 }

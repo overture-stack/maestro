@@ -1,8 +1,7 @@
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.exception.IndexerException;
+import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
@@ -75,7 +74,25 @@ public class DefaultIndexer implements Indexer {
                 getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
                     repoAndStudy.getStudy().getStudyId()))
             .flatMap(this::batchUpsert)
-            .then(Mono.just(IndexResult.builder().successful(true).build()));
+            .then(Mono.just(
+                    IndexResult.builder().successful(true).build()
+                )
+            );
+    }
+
+    @Override
+    public void addRule(AddRuleCommand addRuleCommand) {
+        throw new IndexerException("not implemented yet");
+    }
+
+    @Override
+    public void deleteRule(DeleteRuleCommand deleteRuleCommand) {
+        throw new IndexerException("not implemented yet");
+    }
+
+    @Override
+    public List<? extends ExclusionRule> getAllRules() {
+        throw new IndexerException("not implemented yet");
     }
 
     /* *****************

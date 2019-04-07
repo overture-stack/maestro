@@ -2,12 +2,17 @@ package bio.overture.masestro.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 
@@ -33,6 +38,37 @@ public class Fixture {
     @SneakyThrows
     public static <T> T loadJsonFixture(Class clazz, String fileName, TypeReference<T> type) {
         return loadJsonFixture(clazz, fileName, type, MAPPER);
+    }
+    /**
+     * this overload can be used to load json file and convert it to the target class using a custom mapper
+     *
+     * @param clazz will be used to obtain a class loader to get the resources for.
+     * @param fileName the fixture file we want to load
+     * @param targetClass the target java type we want to convert the json to
+     * @param customMapper in case you want to pre configure a mapper (property name case for example)
+     * @param <T> type parameter of the target class
+     * @param templateParams parameters map to be replaced in the json file
+     *                       use this if you have dynamic values that change each test run
+     *                       the placeholder should be ##key## and will be replaced with the value :
+     *                       templateParams.get(key)
+     *
+     * @return the converted json file as java type
+     *
+     */
+    @SneakyThrows
+    public static <T> T loadJsonFixture(Class clazz,
+                                        String fileName,
+                                        Class<T> targetClass,
+                                        ObjectMapper customMapper,
+                                        Map<String, String> templateParams) {
+        String json = loadJsonString(clazz, fileName);
+        TemplateResult replaceResult = new TemplateResult();
+        replaceResult.setResult(json);
+        templateParams.forEach((name, value) -> {
+            replaceResult.setResult(replaceResult.getResult().replaceAll(Pattern.quote("##" + name + "##"), value));
+        });
+
+        return customMapper.readValue(replaceResult.getResult(), targetClass);
     }
 
     /**
@@ -67,5 +103,12 @@ public class Fixture {
                 .orElseThrow()
                 .openStream()
         );
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    private static class TemplateResult {
+        private String result;
     }
 }

@@ -42,10 +42,10 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private Resource exclusionRules;
 
     @Value("${maestro.elasticsearch.client.connection-timeout:5000}")
-    private long getElasticSearchClientConnectionTimeout;
+    private long elasticSearchClientConnectionTimeout;
 
     @Value("${maestro.elasticsearch.client.socket-timeout:10000}")
-    private long getElasticSearchClientSocketTimeout;
+    private long elasticSearchClientSocketTimeout;
 
     private List<PropertiesFileRepository> repositories;
 
@@ -71,12 +71,12 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     @Override
     public long elasticSearchClientConnectionTimeout() {
-        return this.getElasticSearchClientConnectionTimeout;
+        return this.elasticSearchClientConnectionTimeout;
     }
 
     @Override
     public long elasticSearchClientSocketTimeout() {
-        return this.getElasticSearchClientSocketTimeout;
+        return this.elasticSearchClientSocketTimeout;
     }
 
     @Override

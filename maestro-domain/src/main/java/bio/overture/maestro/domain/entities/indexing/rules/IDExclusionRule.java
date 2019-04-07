@@ -24,14 +24,14 @@ import java.util.List;
 public class IDExclusionRule extends ExclusionRule {
 
     /**
-     * information about the class this rules applies to.
+     * the class this rules applies to.
      */
     private Class<?> clazz;
 
     /**
-     * the list of ids to consider as excluded.
+     * the list of ids to be excluded.
      */
-    private List<Object> ids = new ArrayList<>();
+    private List<String> ids = new ArrayList<>();
 
     @SneakyThrows
     public boolean applies(Object instance) {
@@ -55,8 +55,8 @@ public class IDExclusionRule extends ExclusionRule {
             return false;
         }
 
-        val excluded = ids.contains(value);
-        log.debug("ids contain the value {} ", value);
+        val excluded = ids.contains(String.valueOf(value));
+        log.debug("id exclusion rule fo value {} = {}", value, excluded);
         return excluded;
     }
 
