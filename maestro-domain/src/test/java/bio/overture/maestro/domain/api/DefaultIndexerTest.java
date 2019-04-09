@@ -1,5 +1,6 @@
 package bio.overture.maestro.domain.api;
 
+import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
@@ -65,16 +66,48 @@ class DefaultIndexerTest {
     @Mock
     private FileCentricIndexAdapter indexServerAdapter;
 
+    @Mock
     private Indexer indexer;
+
+    @Mock
+    private Notifier notifier;
 
     @BeforeEach
     void setUp() {
-        reset(studyRepositoryDao, studyDAO, indexServerAdapter);
-        this.indexer = new DefaultIndexer(indexServerAdapter, studyDAO, studyRepositoryDao, exclusionRulesDAO);
+        reset(studyRepositoryDao, studyDAO, indexServerAdapter, notifier);
+        this.indexer = new DefaultIndexer(indexServerAdapter, studyDAO, studyRepositoryDao, exclusionRulesDAO, notifier);
     }
 
     @AfterEach
     void tearDown() {}
+
+    @Test
+    void shouldNotifyOnStudyFetchError() {
+        val repoCode = "TEST-REPO";
+        val filesRepository = getStubFilesRepository();
+        val repositoryMono = Mono.just(filesRepository);
+        val monoError = Mono.<List<Analysis>>error(new IndexerException("failed to fetch study"));
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
+        given(studyDAO.getStudyAnalyses(any(GetStudyAnalysesCommand.class))).willReturn(monoError);
+
+        // When
+        val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
+            .studyId("anyStudy")
+            .repositoryCode(filesRepository.getCode())
+            .build()
+        );
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectComplete()
+            .verify();
+
+        then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
+        then(studyDAO).should(times(1)).getStudyAnalyses(any(GetStudyAnalysesCommand.class));
+        then(indexServerAdapter).should(times(0))
+            .batchUpsertFileRepositories(any());
+        then(notifier).should(times(1)).notify(any());
+    }
 
     @Test
     void shouldExcludeSampleIdFromIndexing() {
@@ -86,7 +119,7 @@ class DefaultIndexerTest {
         // load the fixture with
         val fileCentricDocuments = Arrays.asList(loadJsonFixture(getClass(),
             studyId + ".files.excluded.SA520221.json", FileCentricDocument[].class));
-        val fileRepo = Mono.just(getStubFilesRepository());
+        val repositoryMono = Mono.just(filesRepository);
         val studyAnalyses = Mono.just(a1);
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
@@ -102,7 +135,7 @@ class DefaultIndexerTest {
             )
         );
 
-        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
         given(exclusionRulesDAO.getExclusionRules()).willReturn(sampleExclusionRule);
@@ -122,7 +155,8 @@ class DefaultIndexerTest {
 
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
         then(studyDAO).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
-        then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
+        then(indexServerAdapter).should(times(1))
+            .batchUpsertFileRepositories(eq(batchIndexFilesCommand));
 
     }
 

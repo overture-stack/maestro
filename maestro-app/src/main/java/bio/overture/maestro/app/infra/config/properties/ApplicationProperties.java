@@ -18,4 +18,5 @@ public interface ApplicationProperties {
     List<PropertiesFileRepository> repositories();
     Resource fileCentricMapping();
     Resource exclusionRules();
+    int songMaxRetries();
 }

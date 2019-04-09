@@ -14,6 +14,7 @@ import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDA
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
+import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -29,10 +30,11 @@ import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.Exceptions.badData;
 import static bio.overture.maestro.domain.utility.Exceptions.notFound;
+import static java.text.MessageFormat.format;
 import static reactor.core.publisher.Mono.error;
 
 @Slf4j
-public class DefaultIndexer implements Indexer {
+class DefaultIndexer implements Indexer {
 
     private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
     private static final String MSG_EMPTY_REPOSITORY = "Empty repository {0}";
@@ -40,18 +42,20 @@ public class DefaultIndexer implements Indexer {
     private final StudyDAO studyDAO;
     private final StudyRepositoryDAO studyRepositoryDao;
     private final ExclusionRulesDAO exclusionRulesDAO;
+    private Notifier notifier;
 
     @Inject
     DefaultIndexer(FileCentricIndexAdapter fileCentricIndexAdapter,
                    StudyDAO studyDAO,
                    StudyRepositoryDAO studyRepositoryDao,
-                   ExclusionRulesDAO exclusionRulesDAO) {
+                   ExclusionRulesDAO exclusionRulesDAO,
+                   Notifier notifier) {
 
         this.fileCentricIndexAdapter = fileCentricIndexAdapter;
         this.studyDAO = studyDAO;
         this.studyRepositoryDao = studyRepositoryDao;
         this.exclusionRulesDAO = exclusionRulesDAO;
-
+        this.notifier = notifier;
     }
 
     @Override
@@ -124,7 +128,16 @@ public class DefaultIndexer implements Indexer {
             .studyId(studyId)
             .build()
         )
+        .onErrorResume((e) -> notifyStudyFetchingError(studyId, e.getMessage()))
         .filter(list -> list.size() > 0);
+    }
+
+    private Mono<List<Analysis>> notifyStudyFetchingError(String studyId, String excMsg) {
+        notifier.notify(IndexerNotification.builder()
+            .content(format("error fetching study {0}, error msg: {1} ", studyId, excMsg))
+            .build()
+        );
+        return Mono.empty();
     }
 
     private Mono<List<Analysis>> getExclusionRulesAndFilter(List<Analysis> analyses) {
@@ -138,7 +151,8 @@ public class DefaultIndexer implements Indexer {
             .map(analysisAndExclusions -> filterExcludedAnalyses(analyses, analysisAndExclusions));
     }
 
-    private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses, AnalysisAndExclusions analysisAndExclusions) {
+    private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses,
+                                                  AnalysisAndExclusions analysisAndExclusions) {
         return analyses.stream()
             .filter(analysis ->
                 !ExclusionRulesEvaluator.shouldExcludeAnalysis(analysis, analysisAndExclusions.getExclusionRulesMap()))

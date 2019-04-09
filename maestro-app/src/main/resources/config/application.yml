@@ -7,8 +7,10 @@ spring:
   output.ansi.enabled: ALWAYS
 
 maestro:
+  song:
+    max-retries: 3
   exclusion-rules:
-    # excl
+    # exclusion rules file name
     file-name: exclusion-rules.yml
   # elastic search server & client props
   elasticsearch:
@@ -36,14 +38,24 @@ maestro:
       storageType: S3
       organization: ICGC
       country: CA
+    - code: aws
+      url: https://virginia.song.icgc.org
+      name: aws virginia
+      metadataPath: /oicr.icgc.meta/metadata
+      # optional
+      storageType: S3
+      organization: ICGC
+      country: US
 
 # logging & monitoring
 logging:
   pattern:
-    console: "%clr(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n"
+    console: "%clr(%d{yyyy-MM-dd}){blue} | %clr(%d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n"
   level:
     root: WARN
-    bio.overture: INFO
+    bio.overture: TRACE
+    # very verbose class, only enable lower level when necessary
+    bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
 
 # spring boot actuator endpoints
 management:

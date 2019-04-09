@@ -32,6 +32,9 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.elasticsearch.client.docs-per-bulk-req-max:1000}")
     private Integer docsPerBulkReqMax;
 
+    @Value("${maestro.song.max-retries:3}")
+    private Integer songMaxRetries;
+
     @Value("classpath:index.settings.json")
     private Resource indexSettings;
 
@@ -92,6 +95,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Override
     public Resource exclusionRules() {
         return exclusionRules;
+    }
+
+    @Override
+    public int songMaxRetries() {
+        return songMaxRetries;
     }
 
     @Data

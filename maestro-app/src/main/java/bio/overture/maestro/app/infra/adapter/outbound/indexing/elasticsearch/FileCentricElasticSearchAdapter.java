@@ -132,8 +132,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @SneakyThrows
     private IndexResult bulkIndexFiles(List<FileCentricDocument> filesList) {
         log.trace("in bulkIndexFiles, filesList count : {} ", filesList.size());
-        val size = this.documentsPerBulkRequest;
-        partitionList(filesList, size)
+        partitionList(filesList, this.documentsPerBulkRequest)
             .forEach((partNum, listPart)-> {
                 log.trace("bulkIndexFiles, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
                     Objects.hashCode(listPart), Objects.hashCode(filesList));
@@ -179,7 +178,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
     @SneakyThrows
     private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument){
-        ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         Map<String, Object> parameters = singletonMap("repository",
             mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
 
