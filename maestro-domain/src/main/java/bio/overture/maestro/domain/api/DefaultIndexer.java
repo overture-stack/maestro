@@ -1,5 +1,6 @@
 package bio.overture.maestro.domain.api;
 
+import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
@@ -9,8 +10,8 @@ import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
-import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
+import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
@@ -19,10 +20,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,7 +45,7 @@ class DefaultIndexer implements Indexer {
     private final StudyDAO studyDAO;
     private final StudyRepositoryDAO studyRepositoryDao;
     private final ExclusionRulesDAO exclusionRulesDAO;
-    private Notifier notifier;
+    private final Notifier notifier;
 
     @Inject
     DefaultIndexer(FileCentricIndexAdapter fileCentricIndexAdapter,
@@ -56,6 +59,7 @@ class DefaultIndexer implements Indexer {
         this.studyRepositoryDao = studyRepositoryDao;
         this.exclusionRulesDAO = exclusionRulesDAO;
         this.notifier = notifier;
+
     }
 
     @Override
@@ -78,10 +82,23 @@ class DefaultIndexer implements Indexer {
                 getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
                     repoAndStudy.getStudy().getStudyId()))
             .flatMap(this::batchUpsert)
-            .then(Mono.just(
-                    IndexResult.builder().successful(true).build()
-                )
-            );
+            .reduce((accumlatedResult, newResult) -> {
+                log.info("in reduce");
+                val both = new ArrayList<FailureData>();
+
+                if (!accumlatedResult.isSuccessful()) {
+                    both.addAll(accumlatedResult.getFailures());
+                }
+
+                if (!newResult.isSuccessful()) {
+                    both.addAll(newResult.getFailures());
+                }
+
+                return IndexResult.builder()
+                    .failures(both)
+                    .successful(both.isEmpty())
+                    .build();
+            });
     }
 
     @Override
@@ -102,11 +119,16 @@ class DefaultIndexer implements Indexer {
     /* *****************
      * Private Methods *
      * *****************/
+
     private Flux<StudyAndRepository> getAllStudies(StudyRepository studyRepository) {
         return this.studyDAO.getStudies(GetAllStudiesCommand.builder()
             .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
             .build()
         )
+        .onErrorMap((e) -> {
+            notifyFailedToFetchStudies(studyRepository.getCode(), e.getMessage());
+            return new IndexerException(format("failed to index repository {0}", studyRepository));
+        })
         .switchIfEmpty(error(badData(MSG_EMPTY_REPOSITORY, studyRepository.getCode())))
         .map(study -> StudyAndRepository.builder()
             .study(study)
@@ -115,29 +137,17 @@ class DefaultIndexer implements Indexer {
         );
     }
 
-    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo, String studyId) {
-        return getStudyAnalyses(repo.getBaseUrl(), studyId)
-            .doOnNext(analyses -> log.debug("loaded {} analyses", analyses.size()))
-            .flatMap(this::getExclusionRulesAndFilter)
-            .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
-    }
-
     private Mono<List<Analysis>> getStudyAnalyses(String studyRepositoryBaseUrl, String studyId) {
         return this.studyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
             .filesRepositoryBaseUrl(studyRepositoryBaseUrl)
             .studyId(studyId)
             .build()
         )
-        .onErrorResume((e) -> notifyStudyFetchingError(studyId, e.getMessage()))
+        .doOnError((e) -> {
+            log.error("failed to get study analyses: {}", e.getMessage(), getRootCause(e));
+            notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
+        })
         .filter(list -> list.size() > 0);
-    }
-
-    private Mono<List<Analysis>> notifyStudyFetchingError(String studyId, String excMsg) {
-        notifier.notify(IndexerNotification.builder()
-            .content(format("error fetching study {0}, error msg: {1} ", studyId, excMsg))
-            .build()
-        );
-        return Mono.empty();
     }
 
     private Mono<List<Analysis>> getExclusionRulesAndFilter(List<Analysis> analyses) {
@@ -167,7 +177,21 @@ class DefaultIndexer implements Indexer {
     }
 
     private List<FileCentricDocument> buildFileDocuments(Analysis analysis, StudyRepository repository) {
-        return FileCentricDocumentConverter.fromAnalysis(analysis, repository);
+        try {
+            return FileCentricDocumentConverter.fromAnalysis(analysis, repository);
+        } catch (Exception e) {
+            notifier.notify(
+                new IndexerNotification(
+                    NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
+                    Map.of(
+                        "analysisId", analysis.getAnalysisId(),
+                        "repoCode", repository.getCode(),
+                        "err", e.getMessage()
+                    )
+                )
+            );
+            return List.of();
+        }
     }
 
     private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
@@ -177,7 +201,45 @@ class DefaultIndexer implements Indexer {
         ).doOnSuccess(
             indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}",
                 files.size(), Objects.hashCode(files))
-        );
+        ).onErrorResume((e) -> {
+            val failure = e instanceof IndexerException ? ((IndexerException) e).getFailureData() : null;
+            val fails = failure == null ? List.<FailureData>of() : List.of(failure);
+            log.info("in errorResume, fails {} ", fails);
+            return Mono.just(IndexResult.builder()
+                .successful(false)
+                .failures(fails)
+                .build()
+            );
+        });
+    }
+
+    private void notifyFailedToFetchStudies(String code, String message) {
+        val attrs = Map.<String, Object>of("repoCode", code, "err", message);
+        IndexerNotification notification =
+            new IndexerNotification(NotificationName.FETCH_REPO_STUDIES_FAILED, attrs);
+        notifier.notify(notification);
+    }
+
+    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo, String studyId) {
+        return getStudyAnalyses(repo.getBaseUrl(), studyId)
+            .doOnNext(analyses -> log.debug("loaded {} analyses", analyses.size()))
+            .flatMap(this::getExclusionRulesAndFilter)
+            .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
+    }
+
+    private void notifyStudyFetchingError(String studyId, String repoUrl, String excMsg) {
+        val attrs = Map.<String, Object>of("studyId", studyId, "repoUrl", repoUrl, "err", excMsg);
+        IndexerNotification notification =
+            new IndexerNotification(NotificationName.STUDY_ANALYSES_FETCH_FAILED, attrs);
+        notifier.notify(notification);
+    }
+
+    private Throwable getRootCause(Throwable throwable) {
+        Throwable ex = throwable;
+        while (ex.getCause() != null) {
+            ex = ex.getCause();
+        }
+        return ex;
     }
 
     @Getter

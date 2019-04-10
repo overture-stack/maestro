@@ -9,9 +9,12 @@ spring:
 maestro:
   song:
     max-retries: 3
+    timeout-sec: 10 # some studies take really long +30 secs to be downloaded
+
   exclusion-rules:
     # exclusion rules file name
     file-name: exclusion-rules.yml
+
   # elastic search server & client props
   elasticsearch:
     cluster-nodes: localhost:9200, localhost:9201
@@ -47,13 +50,17 @@ maestro:
       organization: ICGC
       country: US
 
+  # last resort fallback file system log in case of retries exhaustion.
+  failure-log:
+    enabled: true
+    dir: /tmp/maestro
+
 # logging & monitoring
 logging:
-  pattern:
-    console: "%clr(%d{yyyy-MM-dd}){blue} | %clr(%d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n"
   level:
     root: WARN
     bio.overture: TRACE
+
     # very verbose class, only enable lower level when necessary
     bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
 

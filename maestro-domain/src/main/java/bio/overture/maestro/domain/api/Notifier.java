@@ -19,8 +19,8 @@ class Notifier {
     void notify(IndexerNotification notification) {
         notificationChannels.stream()
             .filter(notificationChannel ->
-                notificationChannel.subscriptions().contains(NotificationType.ALL)
-                    || notificationChannel.subscriptions().contains(notification.getType()))
+                notificationChannel.subscriptions().contains(NotificationName.ALL)
+                    || notificationChannel.subscriptions().contains(notification.getNotificationName()))
             .forEach(notificationChannel -> {
                 try {
                     notificationChannel.send(notification);

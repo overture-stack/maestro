@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    LoggingNotificationChannel.class
+    LoggingNotificationChannel.class,
+    FileBasedFailuresLogger.class,
 })
 public class NotificationConfig {}

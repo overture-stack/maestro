@@ -10,5 +10,5 @@ import java.util.Set;
  */
 public interface NotificationChannel {
     void send(IndexerNotification notification);
-    Set<NotificationType> subscriptions();
+    Set<NotificationName> subscriptions();
 }

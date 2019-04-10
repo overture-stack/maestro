@@ -35,6 +35,9 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.song.max-retries:3}")
     private Integer songMaxRetries;
 
+    @Value("${maestro.song.timeout-sec:10}")
+    private Integer songTimeoutSeconds;
+
     @Value("classpath:index.settings.json")
     private Resource indexSettings;
 
@@ -73,12 +76,12 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public long elasticSearchClientConnectionTimeout() {
+    public long elasticSearchClientConnectionTimeoutMillis() {
         return this.elasticSearchClientConnectionTimeout;
     }
 
     @Override
-    public long elasticSearchClientSocketTimeout() {
+    public long elasticSearchClientSocketTimeoutMillis() {
         return this.elasticSearchClientSocketTimeout;
     }
 
@@ -102,6 +105,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         return songMaxRetries;
     }
 
+    @Override
+    public int songTimeoutSeconds() {
+        return songTimeoutSeconds;
+    }
+
     @Data
     @ToString
     @EqualsAndHashCode
@@ -118,6 +126,5 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private StorageType storageType = StorageType.S3;
 
     }
-
 
 }

@@ -75,12 +75,12 @@ public class ElasticSearchConfig {
 
             @Override
             public Duration getConnectTimeout() {
-                return Duration.ofSeconds(properties.elasticSearchClientConnectionTimeout());
+                return Duration.ofSeconds(properties.elasticSearchClientConnectionTimeoutMillis());
             }
 
             @Override
             public Duration getSocketTimeout() {
-                return Duration.ofMinutes(properties.elasticSearchClientSocketTimeout());
+                return Duration.ofMinutes(properties.elasticSearchClientSocketTimeoutMillis());
             }
         }).rest();
     }

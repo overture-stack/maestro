@@ -13,10 +13,11 @@ public interface ApplicationProperties {
     String fileCentricAlias();
     int maxDocsPerBulkRequest();
     Resource indexSettings();
-    long elasticSearchClientConnectionTimeout();
-    long elasticSearchClientSocketTimeout();
+    long elasticSearchClientConnectionTimeoutMillis();
+    long elasticSearchClientSocketTimeoutMillis();
     List<PropertiesFileRepository> repositories();
     Resource fileCentricMapping();
     Resource exclusionRules();
     int songMaxRetries();
+    int songTimeoutSeconds();
 }

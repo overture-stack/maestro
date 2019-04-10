@@ -40,24 +40,6 @@ import static org.mockito.Mockito.when;
 @AutoConfigureWireMock(port = 0)
 class SongStudyDAOTest {
 
-    @Import({
-        SongConfig.class
-    })
-    @Configuration
-    static class Config {
-        @Bean
-        WebClient webClient() {
-            return WebClient.builder().build();
-        }
-
-        @Bean
-        ApplicationProperties properties() {
-            ApplicationProperties properties = mock(ApplicationProperties.class);
-            when(properties.songMaxRetries()).thenReturn(3);
-            return properties;
-        }
-    }
-
     @Value("${wiremock.server.port}")
     private int wiremockPort;
 
@@ -122,6 +104,25 @@ class SongStudyDAOTest {
         StepVerifier.create(analysesMono)
             .expectError(IndexerException.class)
             .verify();
+    }
+
+
+    @Import({
+        SongConfig.class
+    })
+    @Configuration
+    static class Config {
+        @Bean
+        WebClient webClient() {
+            return WebClient.builder().build();
+        }
+
+        @Bean
+        ApplicationProperties properties() {
+            ApplicationProperties properties = mock(ApplicationProperties.class);
+            when(properties.songMaxRetries()).thenReturn(3);
+            return properties;
+        }
     }
 
 }
