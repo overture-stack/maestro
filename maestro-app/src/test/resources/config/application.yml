@@ -1,15 +1,22 @@
+server.port:
+  50000
+
+spring:
+  output.ansi.enabled: ALWAYS
+
 maestro:
+  exclusion-rules:
+    file-name: exclusion-rules-test.yml
   elasticsearch:
     indexes:
       file-centric:
         alias: file_centric
-    cluster-name: docker-cluster
-    # testcontainers will override this property if you use MaestroIntegrationTest
-    cluster-nodes: localhost:9200
-
+    # port injected by the embedded-elasticsearch library
+    cluster-nodes: localhost:${embedded.elasticsearch.httpPort}
   repositories:
     - code: collab
-      url: https://song.cancercollaboratory.org
+      # port is injected by @AutoConfigureWireMock in the MaestroIntegrationTest
+      url: http://localhost:${wiremock.server.port}/collab
       name: collaboratory
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
@@ -17,8 +24,15 @@ maestro:
       organization: ICGC
       country: CA
     - code: aws
-      url: http://aws.amazon.com
+      url: http://localhost:${wiremock.server.port}/aws
       name: aws repo
       organization: ICGC
       country: US
 
+# logging & monitoring
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n"
+  level:
+    root: WARN
+    bio.overture: TRACE

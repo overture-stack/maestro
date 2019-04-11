@@ -35,11 +35,17 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("classpath:index.settings.json")
     private Resource indexSettings;
 
+    @Value("classpath:file_centric.mapping.json")
+    private Resource fileCentricMapping;
+
+    @Value("classpath:${maestro.exclusion-rules.file-name:exclusion-rules.yml}")
+    private Resource exclusionRules;
+
     @Value("${maestro.elasticsearch.client.connection-timeout:5000}")
-    private long getElasticSearchClientConnectionTimeout;
+    private long elasticSearchClientConnectionTimeout;
 
     @Value("${maestro.elasticsearch.client.socket-timeout:10000}")
-    private long getElasticSearchClientSocketTimeout;
+    private long elasticSearchClientSocketTimeout;
 
     private List<PropertiesFileRepository> repositories;
 
@@ -65,17 +71,27 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     @Override
     public long elasticSearchClientConnectionTimeout() {
-        return this.getElasticSearchClientConnectionTimeout;
+        return this.elasticSearchClientConnectionTimeout;
     }
 
     @Override
     public long elasticSearchClientSocketTimeout() {
-        return this.getElasticSearchClientSocketTimeout;
+        return this.elasticSearchClientSocketTimeout;
     }
 
     @Override
     public List<bio.overture.maestro.app.infra.config.properties.PropertiesFileRepository> repositories() {
         return List.copyOf(this.repositories);
+    }
+
+    @Override
+    public Resource fileCentricMapping() {
+        return fileCentricMapping;
+    }
+
+    @Override
+    public Resource exclusionRules() {
+        return exclusionRules;
     }
 
     @Data
@@ -92,6 +108,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private String organization;
         private String country;
         private StorageType storageType = StorageType.S3;
+
     }
+
 
 }

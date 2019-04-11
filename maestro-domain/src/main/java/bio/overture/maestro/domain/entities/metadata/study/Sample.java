@@ -1,5 +1,6 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
+import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
 import lombok.*;
 
 import java.util.Map;
@@ -12,9 +13,10 @@ import java.util.Map;
 @Builder
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Sample {
+    @ExclusionId
     private String sampleId;
     private String specimenId;
     private String sampleSubmitterId;

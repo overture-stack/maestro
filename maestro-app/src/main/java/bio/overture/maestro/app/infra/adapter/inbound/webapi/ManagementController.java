@@ -4,6 +4,7 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -52,4 +54,18 @@ public class ManagementController {
         );
     }
 
+    @GetMapping("/rules/")
+    public List<? extends ExclusionRule> getRules() {
+        return indexer.getAllRules();
+    }
+
+    @PostMapping("/rules/byId/{type}")
+    public void addExclusionRule(@RequestBody List<String> ids) {
+        indexer.addRule(null);
+    }
+
+    @DeleteMapping("/rules/byId/{type}")
+    public void deleteExclusionRule(@RequestParam List<String> ids) {
+        indexer.deleteRule(null);
+    }
 }

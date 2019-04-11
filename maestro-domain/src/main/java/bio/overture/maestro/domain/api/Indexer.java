@@ -1,11 +1,12 @@
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.message.*;
+import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
 import lombok.NonNull;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 /**
  * Main entry point for the Indexer API
@@ -26,4 +27,8 @@ public interface Indexer {
      */
     Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand);
     Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand);
+
+    void addRule(AddRuleCommand addRuleCommand);
+    void deleteRule(DeleteRuleCommand deleteRuleCommand);
+    List<? extends ExclusionRule> getAllRules();
 }

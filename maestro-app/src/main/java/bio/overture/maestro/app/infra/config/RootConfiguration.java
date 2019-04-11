@@ -3,6 +3,7 @@ package bio.overture.maestro.app.infra.config;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.GlobalWebExceptionHandler;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.ManagementController;
 import bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.ElasticSearchConfig;
+import bio.overture.maestro.app.infra.adapter.outbound.indexing.rules.ExclusionRulesConfig;
 import bio.overture.maestro.app.infra.adapter.outbound.metadata.repostiory.RepositoryConfig;
 import bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song.SongConfig;
 import bio.overture.maestro.app.infra.config.properties.PropertiesConfig;
@@ -33,6 +34,7 @@ public class RootConfiguration {
 @Import({
     DefaultIndexer.class,
     ElasticSearchConfig.class,
+    ExclusionRulesConfig.class,
     SongConfig.class,
     RepositoryConfig.class,
 })

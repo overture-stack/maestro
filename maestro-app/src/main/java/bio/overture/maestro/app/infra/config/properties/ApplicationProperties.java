@@ -16,4 +16,6 @@ public interface ApplicationProperties {
     long elasticSearchClientConnectionTimeout();
     long elasticSearchClientSocketTimeout();
     List<PropertiesFileRepository> repositories();
+    Resource fileCentricMapping();
+    Resource exclusionRules();
 }

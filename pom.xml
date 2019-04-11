@@ -114,8 +114,6 @@
                 <version>${spring-boot-admin-starter-client.version}</version>
             </dependency>
 
-
-
             <!-- ********** Testing  ************* -->
             <!-- junit 5 -->
             <dependency>
@@ -161,6 +159,14 @@
                 <version>${testcontainers.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.playtika.testcontainers</groupId>
+                <artifactId>embedded-elasticsearch</artifactId>
+                <version>${embedded-elasticsearch.version}</version>
+                <scope>test</scope>
+            </dependency>
+
             <!-- /testcontainers -->
 
             <dependency>
@@ -188,6 +194,12 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson-databind.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson-dataformat-yaml.version}</version>
             </dependency>
 
             <dependency>
@@ -222,6 +234,9 @@
         <mockito-core.version>2.21.0</mockito-core.version>
         <junit-platform.version>1.4.0</junit-platform.version>
         <spring-boot-admin-starter-client.version>2.1.3</spring-boot-admin-starter-client.version>
+        <jackson-dataformat-yaml.version>2.3.0</jackson-dataformat-yaml.version>
+        <wiremock-jre8.version>2.22.0</wiremock-jre8.version>
+        <embedded-elasticsearch.version>1.19</embedded-elasticsearch.version>
     </properties>
 
     <repositories>
@@ -264,6 +279,8 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <!-- up until now this is the latest working version
+                     see https://stackoverflow.com/questions/46772420/junit-5-test-case-not-executed -->
                     <version>2.19.1</version>
                     <dependencies>
                         <dependency>
@@ -271,7 +288,15 @@
                             <artifactId>junit-platform-surefire-provider</artifactId>
                             <version>1.0.1</version>
                         </dependency>
+                        <dependency>
+                            <groupId>org.junit.jupiter</groupId>
+                            <artifactId>junit-jupiter-engine</artifactId>
+                            <version>${junit5.version}</version>
+                        </dependency>
                     </dependencies>
+                    <configuration>
+                        <argLine>${argLine}</argLine>
+                    </configuration>
                 </plugin>
 
 

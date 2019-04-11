@@ -54,7 +54,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
         return Flux.fromIterable(
             repositories.stream()
                 .map(this::toFilesRepository)
-                .collect(Collectors.toList())
+                .collect(Collectors.toUnmodifiableList())
         );
     }
 

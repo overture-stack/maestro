@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <dependency>
@@ -54,10 +54,6 @@
             <artifactId>elasticsearch-rest-client</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -125,6 +121,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.playtika.testcontainers</groupId>
+            <artifactId>embedded-elasticsearch</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -135,6 +143,7 @@
     <properties>
         <docker.repository>overture</docker.repository>
     </properties>
+
     <build>
         <plugins>
 
@@ -153,7 +162,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- this plugin unpacks spring boot uber jar to maker startup faster, see: https://spring.io/guides/gs/spring-boot-docker/ -->
+            <!-- this plugin unpacks spring boot uber jar to maker startup faster,
+            see: https://spring.io/guides/gs/spring-boot-docker/ -->
             <!-- tag::unpack[] -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

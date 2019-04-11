@@ -1,0 +1,13 @@
+#byId:
+#  study:
+#    - "study-xyz"
+#  analysis:
+#    - "analysisId"
+#  file:
+#    - "fileId"
+#  sample:
+#    - "sampleId"
+#  specimen:
+#    - "specimenId"
+#  donor:
+#    - "DO00000"
