@@ -16,6 +16,7 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCom
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import io.vavr.control.Either;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -33,7 +34,6 @@ import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.Exceptions.badData;
 import static bio.overture.maestro.domain.utility.Exceptions.notFound;
-import static java.text.MessageFormat.format;
 import static reactor.core.publisher.Mono.error;
 
 @Slf4j
@@ -68,7 +68,7 @@ class DefaultIndexer implements Indexer {
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
             .flatMap(filesRepository ->
-                getStudyAnalysesAndBuildDocuments(filesRepository, indexStudyCommand.getStudyId()))
+                getFilteredAnalyses(filesRepository, indexStudyCommand.getStudyId()))
             .flatMap(this::batchUpsert);
     }
 
@@ -78,16 +78,32 @@ class DefaultIndexer implements Indexer {
         return this.studyRepositoryDao.getFilesRepository(indexStudyRepositoryCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyRepositoryCommand.getRepositoryCode())))
             .flatMapMany(this::getAllStudies)
-            .flatMap(repoAndStudy ->
-                getStudyAnalysesAndBuildDocuments(repoAndStudy.getStudyRepository(),
-                    repoAndStudy.getStudy().getStudyId()))
+            .flatMap(repoAndStudyEither -> {
+                if (repoAndStudyEither.isLeft()) {
+                    return Mono.just(Either.<IndexerException, List<FileCentricDocument>>left(repoAndStudyEither.getLeft()));
+                }
+                val sr = repoAndStudyEither.right().get();
+                return getFilteredAnalyses(
+                        sr.getStudyRepository(),
+                        sr.getStudy().getStudyId()
+                    ).map((analyses) -> {
+                        if (analyses.isLeft()) {
+                            return Mono.just(Either.<IndexerException, List<FileCentricDocument>>left(repoAndStudyEither.getLeft()));
+                        }
+                        return Mono.just(
+                                Either.<IndexerException, List<FileCentricDocument>>right(
+                                    buildAnalysisFileDocuments(sr.getStudyRepository(), analyses.right().get())
+                            )
+                        );
+                    });
+            })
             .flatMap(this::batchUpsert)
-            .reduce((accumlatedResult, newResult) -> {
+            .reduce((accumulatedResult, newResult) -> {
                 log.info("in reduce");
                 val both = new ArrayList<FailureData>();
 
-                if (!accumlatedResult.isSuccessful()) {
-                    both.addAll(accumlatedResult.getFailures());
+                if (!accumulatedResult.isSuccessful()) {
+                    both.addAll(accumulatedResult.getFailures());
                 }
 
                 if (!newResult.isSuccessful()) {
@@ -95,9 +111,9 @@ class DefaultIndexer implements Indexer {
                 }
 
                 return IndexResult.builder()
-                    .failures(both)
-                    .successful(both.isEmpty())
-                    .build();
+                        .failures(both)
+                        .successful(both.isEmpty())
+                        .build();
             });
     }
 
@@ -119,35 +135,54 @@ class DefaultIndexer implements Indexer {
     /* *****************
      * Private Methods *
      * *****************/
-
-    private Flux<StudyAndRepository> getAllStudies(StudyRepository studyRepository) {
+    private Flux<Either<IndexerException, StudyAndRepository>> getAllStudies(StudyRepository studyRepository) {
         return this.studyDAO.getStudies(GetAllStudiesCommand.builder()
             .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
             .build()
         )
-        .onErrorMap((e) -> {
-            notifyFailedToFetchStudies(studyRepository.getCode(), e.getMessage());
-            return new IndexerException(format("failed to index repository {0}", studyRepository));
+        .map((exceptionStudyEither) -> {
+            if (exceptionStudyEither.isLeft()) {
+                notifyFailedToFetchStudies(studyRepository.getCode(), exceptionStudyEither.left().get().getMessage());
+            }
+            return exceptionStudyEither;
         })
         .switchIfEmpty(error(badData(MSG_EMPTY_REPOSITORY, studyRepository.getCode())))
-        .map(study -> StudyAndRepository.builder()
-            .study(study)
-            .studyRepository(studyRepository)
-            .build()
-        );
+        .map(studyEither -> {
+            if (studyEither.isLeft()) {
+                return Either.left(studyEither.getLeft());
+            }
+            return studyEither.right().map(st -> StudyAndRepository.builder()
+                    .study(st)
+                    .studyRepository(studyRepository)
+                    .build()
+            ).toEither();
+        });
     }
 
-    private Mono<List<Analysis>> getStudyAnalyses(String studyRepositoryBaseUrl, String studyId) {
+    private Mono<Either<IndexerException, List<Analysis>>> getFilteredAnalyses(StudyRepository repo, String studyId) {
+
+        return fetchAnalyses(repo.getBaseUrl(), studyId)
+            .flatMap((analysesEither) -> {
+                if (analysesEither.isLeft()) {
+                    return Mono.just(analysesEither);
+                }
+                return this.getExclusionRulesAndFilter(analysesEither.right().get())
+                        .map(Either::right);
+            });
+    }
+
+    private Mono<Either<IndexerException, List<Analysis>>> fetchAnalyses(String studyRepositoryBaseUrl, String studyId) {
         return this.studyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
             .filesRepositoryBaseUrl(studyRepositoryBaseUrl)
             .studyId(studyId)
             .build()
         )
-        .doOnError((e) -> {
-            log.error("failed to get study analyses: {}", e.getMessage(), getRootCause(e));
-            notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
-        })
-        .filter(list -> list.size() > 0);
+        .map((analysesEither) -> {
+            if (analysesEither.isLeft()) {
+                notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, analysesEither.left().get().getMessage());
+            }
+            return analysesEither;
+        });
     }
 
     private Mono<List<Analysis>> getExclusionRulesAndFilter(List<Analysis> analyses) {
@@ -220,12 +255,7 @@ class DefaultIndexer implements Indexer {
         notifier.notify(notification);
     }
 
-    private Mono<List<FileCentricDocument>> getStudyAnalysesAndBuildDocuments(StudyRepository repo, String studyId) {
-        return getStudyAnalyses(repo.getBaseUrl(), studyId)
-            .doOnNext(analyses -> log.debug("loaded {} analyses", analyses.size()))
-            .flatMap(this::getExclusionRulesAndFilter)
-            .map(analyses -> buildAnalysisFileDocuments(repo, analyses));
-    }
+
 
     private void notifyStudyFetchingError(String studyId, String repoUrl, String excMsg) {
         val attrs = Map.<String, Object>of("studyId", studyId, "repoUrl", repoUrl, "err", excMsg);

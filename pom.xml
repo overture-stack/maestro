@@ -47,6 +47,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -62,6 +67,12 @@
                 <groupId>io.projectreactor.addons</groupId>
                 <artifactId>reactor-extra</artifactId>
                 <version>3.2.2.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>0.9.3</version>
             </dependency>
 
             <!-- resilience4j -->

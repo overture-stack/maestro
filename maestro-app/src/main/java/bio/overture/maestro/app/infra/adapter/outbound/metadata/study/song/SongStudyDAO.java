@@ -2,12 +2,14 @@ package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
 
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
+import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.exception.NotFoundException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
+import io.vavr.control.Either;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -50,7 +52,7 @@ class SongStudyDAO implements StudyDAO {
 
     @Override
     @NonNull
-    public Mono<List<Analysis>> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
+    public Mono<Either<IndexerException, List<Analysis>>> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getStudyAnalysesCommand);
         val repoBaseUrl = getStudyAnalysesCommand.getFilesRepositoryBaseUrl();
         val studyId = getStudyAnalysesCommand.getStudyId();
@@ -61,31 +63,31 @@ class SongStudyDAO implements StudyDAO {
             .exponentialBackoff(Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
         return this.webClient.get()
-                .uri(format(STUDY_ANALYSES_URL_TEMPLATE, repoBaseUrl, studyId))
-                .retrieve()
-                .onStatus(HttpStatus.NOT_FOUND::equals,
-                    clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
-                .bodyToMono(analysisListType)
-                .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.songTimeout)))
-                .doOnSuccess((list) -> log.trace("getStudyAnalyses out, analyses count {} args: {}",
-                    list.size(), getStudyAnalysesCommand))
-                .onErrorMap((e) ->
-                    !(e instanceof NotFoundException),
-                    (e) ->
-                        wrapWithIndexerException(e,
-                            format("failed fetching study analysis, command: {0}, retries exhausted",
-                                getStudyAnalysesCommand),
-                            FailureData.builder()
-                                .ids(List.of(studyId))
-                                .idType("study")
-                                .build()
-                        )
+            .uri(format(STUDY_ANALYSES_URL_TEMPLATE, repoBaseUrl, studyId))
+            .retrieve()
+            .onStatus(HttpStatus.NOT_FOUND::equals,
+                clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
+            .bodyToMono(analysisListType)
+            .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.songTimeout)))
+            .doOnSuccess((list) -> log.trace("getStudyAnalyses out, analyses count {} args: {}",
+                list.size(), getStudyAnalysesCommand))
+            .map(Either::<IndexerException, List<Analysis>>right)
+            .onErrorResume((e) -> {
+                val ex = wrapWithIndexerException(e,
+                    format("failed fetching study analysis, command: {0}, retries exhausted",
+                        getStudyAnalysesCommand),
+                    FailureData.builder()
+                        .ids(List.of(studyId))
+                        .idType("study")
+                        .build()
                 );
+                return Mono.just(Either.left(ex));
+            });
     }
 
     @Override
     @NonNull
-    public Flux<Study> getStudies(@NonNull GetAllStudiesCommand getAllStudiesCommand) {
+    public Flux<Either<IndexerException, Study>> getStudies(@NonNull GetAllStudiesCommand getAllStudiesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getAllStudiesCommand);
         val repoBaseUrl = getAllStudiesCommand.getFilesRepositoryBaseUrl();
         val StringListType = new ParameterizedTypeReference<List<String>>(){};
@@ -103,18 +105,18 @@ class SongStudyDAO implements StudyDAO {
             .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.songTimeout)))
             .flatMapMany(Flux::fromIterable)
             .map(id -> Study.builder().studyId(id).build())
-            .onErrorMap((e) ->
-                true, // catch all
-                (e) ->
-                    wrapWithIndexerException(e,
-                        format("failed fetching study analysis, command: {0}, retries exhausted",
-                            getAllStudiesCommand),
-                        FailureData.builder()
-                            .ids(List.of(getAllStudiesCommand.getFilesRepositoryBaseUrl()))
-                            .idType("repository")
-                            .build()
-                )
-            );
+            .map(Either::<IndexerException, Study>right)
+            .onErrorResume((e) -> {
+                val ex = wrapWithIndexerException(e,
+                    format("failed fetching study analysis, command: {0}, retries exhausted",
+                        getAllStudiesCommand),
+                    FailureData.builder()
+                        .ids(List.of(getAllStudiesCommand.getFilesRepositoryBaseUrl()))
+                        .idType("repository")
+                        .build()
+                );
+                return Flux.just(Either.left(ex));
+            });
     }
 
     private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(Retry<Object> retry, Duration timeout) {

@@ -13,7 +13,7 @@ COPY ${DEPENDENCY}/BOOT-INF/classes /app
 VOLUME /app/config
 
 # needed for the failure log
-VOLUME /logs
+VOLUME /logs/maestro
 
 # maestro web api port
 EXPOSE 11235

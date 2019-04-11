@@ -19,8 +19,8 @@ public final class Exceptions {
         return new BadDataException(format(msg, args));
     }
 
-    public static Throwable wrapWithIndexerException(Throwable e, String message, FailureData failureData) {
-        if (e instanceof IndexerException) return e;
+    public static IndexerException wrapWithIndexerException(Throwable e, String message, FailureData failureData) {
+        if (e instanceof IndexerException) return (IndexerException) e;
         return new IndexerException(message, e, failureData);
     }
 }
