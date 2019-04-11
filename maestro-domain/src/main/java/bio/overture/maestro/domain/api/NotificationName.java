@@ -16,4 +16,5 @@ public enum NotificationName {
     NotificationName(NotificationCategory category) {
         this.category = category;
     }
+
 }

@@ -31,10 +31,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -45,6 +42,7 @@ import static java.util.Collections.singletonMap;
 @Slf4j
 class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
+    private static final String ANALYSIS_ID = "analysisId";
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
     private final Resource fileCentricMapping;
@@ -145,7 +143,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private IndexResult bulkUpsertFileRepositories(List<FileCentricDocument> filesList) {
         log.trace("in bulkUpsertFileRepositories, filesList count : {} ", filesList.size());
         val size = this.documentsPerBulkRequest;
-        val failingIds = new ArrayList<String>();
+        val failingIds = Collections.<String>synchronizedSet(new HashSet<>());
         val successful = new AtomicBoolean(true);
 
         partitionList(filesList, size).forEach(
@@ -154,22 +152,22 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
                     doRequestForPart(partNum, listPart, filesList);
                 } catch (Exception e) {
                     successful.set(false);
-                    failingIds.addAll(listPart.stream()
-                        .map(fileCentricDocument -> fileCentricDocument
-                            .getAnalysis().getId()).collect(Collectors.toList())
+                    failingIds.addAll(
+                        listPart.stream()
+                            .map(fileCentricDocument -> fileCentricDocument
+                                .getAnalysis().getId()
+                            ).collect(Collectors.toUnmodifiableSet())
                     );
                 }
             }
         );
 
-        val fails = List.of(FailureData.builder()
-            .ids(failingIds)
-            .idType("analysis")
-            .build()
-        );
+        val fails = FailureData.builder()
+            .failingIds(Map.of(ANALYSIS_ID, failingIds))
+            .build();
 
         return IndexResult.builder()
-            .failures(fails)
+            .failureData(fails)
             .successful(successful.get())
             .build();
     }
@@ -179,6 +177,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
                                   List<FileCentricDocument> filesList) {
         log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
             Objects.hashCode(listPart), Objects.hashCode(filesList));
+
 
         this.customElasticSearchRestAdapter.bulkUpdateRequest(
             listPart.stream()

@@ -4,6 +4,7 @@ import bio.overture.maestro.domain.api.NotificationChannel;
 import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.core.annotation.Order;
 
 import java.util.Set;
@@ -15,15 +16,16 @@ public class LoggingNotificationChannel implements NotificationChannel {
 
     @Override
     public void send(IndexerNotification notification) {
+        val notificationString = notification.toString().substring(0, 1024);
         switch (notification.getNotificationName().getCategory()) {
             case ERROR:
-                log.error("{}", notification);
+                log.error("{}", notificationString);
                 break;
             case WARN:
-                log.warn("{}", notification);
+                log.warn("{}", notificationString);
                 break;
             default:
-                log.info("{}", notification);
+                log.info("{}", notificationString);
         }
     }
 

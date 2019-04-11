@@ -13,6 +13,7 @@ import io.vavr.control.Either;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,10 +21,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
+import reactor.retry.RetryExhaustedException;
 
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import static bio.overture.maestro.domain.utility.Exceptions.notFound;
@@ -37,6 +41,8 @@ class SongStudyDAO implements StudyDAO {
     private static final String STUDY_ANALYSES_URL_TEMPLATE = "{0}/studies/{1}/analysis";
     private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
     private static final String MSG_STUDY_DOES_NOT_EXIST = "study {0} doesn't exist in the specified repository";
+    public static final String STUDY_ID = "studyId";
+    public static final String REPOSITORY = "repository";
     private final WebClient webClient;
     private int songMaxRetries;
     private int minBackoffSec = 1;
@@ -72,17 +78,9 @@ class SongStudyDAO implements StudyDAO {
             .doOnSuccess((list) -> log.trace("getStudyAnalyses out, analyses count {} args: {}",
                 list.size(), getStudyAnalysesCommand))
             .map(Either::<IndexerException, List<Analysis>>right)
-            .onErrorResume((e) -> {
-                val ex = wrapWithIndexerException(e,
-                    format("failed fetching study analysis, command: {0}, retries exhausted",
-                        getStudyAnalysesCommand),
-                    FailureData.builder()
-                        .ids(List.of(studyId))
-                        .idType("study")
-                        .build()
-                );
-                return Mono.just(Either.left(ex));
-            });
+            .onErrorResume(
+                (e) -> e instanceof RetryExhaustedException,
+                (e) -> handleGetAnalysesFailure(getStudyAnalysesCommand, studyId, e));
     }
 
     @Override
@@ -93,6 +91,7 @@ class SongStudyDAO implements StudyDAO {
         val StringListType = new ParameterizedTypeReference<List<String>>(){};
         val retryConfig = Retry.allBut(NotFoundException.class)
             .retryMax(this.songMaxRetries)
+            .doOnRetry(retryCtx -> log.debug("retrying  {}", getAllStudiesCommand))
             .exponentialBackoff(Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
         return this.webClient.get()
@@ -106,21 +105,47 @@ class SongStudyDAO implements StudyDAO {
             .flatMapMany(Flux::fromIterable)
             .map(id -> Study.builder().studyId(id).build())
             .map(Either::<IndexerException, Study>right)
-            .onErrorResume((e) -> {
-                val ex = wrapWithIndexerException(e,
-                    format("failed fetching study analysis, command: {0}, retries exhausted",
-                        getAllStudiesCommand),
-                    FailureData.builder()
-                        .ids(List.of(getAllStudiesCommand.getFilesRepositoryBaseUrl()))
-                        .idType("repository")
-                        .build()
-                );
-                return Flux.just(Either.left(ex));
-            });
+            .onErrorResume(
+                // wait for retries to finish, if we catch all it wont retry
+                (e) -> e instanceof RetryExhaustedException,
+                (e) -> handleGetStudiesFailure(getAllStudiesCommand, e)
+            );
+    }
+
+    @NotNull
+    private Mono<Either<IndexerException, List<Analysis>>>
+        handleGetAnalysesFailure(GetStudyAnalysesCommand getStudyAnalysesCommand,
+                                 @NonNull String studyId, Throwable e) {
+
+        val rootCause = e.getCause() == null ? e : e.getCause();
+        val ex = wrapWithIndexerException(rootCause,
+            format("failed fetching study analysis, command: {0}, retries exhausted",
+                getStudyAnalysesCommand),
+            FailureData.builder()
+                .failingIds(Map.of(STUDY_ID, Set.of(studyId)))
+                .build()
+        );
+        return Mono.just(Either.left(ex));
+    }
+
+    @NotNull
+    private Flux<Either<IndexerException, Study>>
+        handleGetStudiesFailure(@NonNull GetAllStudiesCommand getAllStudiesCommand, Throwable e) {
+
+        val rootCause = e.getCause() == null ? e : e.getCause();
+        val ex = wrapWithIndexerException(rootCause,
+        format("failed fetching study analysis, command: {0}, retries exhausted",
+            getAllStudiesCommand),
+        FailureData.builder()
+            .failingIds(Map.of(REPOSITORY,
+                Set.of(getAllStudiesCommand.getFilesRepositoryBaseUrl())))
+            .build()
+        );
+        return Flux.just(Either.left(ex));
     }
 
     private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(Retry<Object> retry, Duration timeout) {
-        return (in) -> in.retryWhen(retry)
-            .timeout(timeout);
+        // order is important here timeouts should be retried.
+        return (in) -> in.timeout(timeout).retryWhen(retry);
     }
 }

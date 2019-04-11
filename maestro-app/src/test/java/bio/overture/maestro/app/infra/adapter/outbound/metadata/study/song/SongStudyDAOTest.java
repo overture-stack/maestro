@@ -9,6 +9,7 @@ import bio.overture.masestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import io.vavr.control.Either;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Tag;
@@ -50,6 +51,7 @@ class SongStudyDAOTest {
     void shouldRetryOnFailure() {
         val analyses = loadJsonFixture(this.getClass(),
             "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
+        val analysesEither = Either.<IndexerException, List<Analysis>>right(analyses);
 
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis"))
@@ -77,7 +79,7 @@ class SongStudyDAOTest {
         );
 
         StepVerifier.create(analysesMono)
-            .expectNext(analyses)
+            .expectNext(analysesEither)
             .verifyComplete();
     }
 
