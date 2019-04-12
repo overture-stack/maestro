@@ -16,16 +16,17 @@ public class LoggingNotificationChannel implements NotificationChannel {
 
     @Override
     public void send(IndexerNotification notification) {
-        val notificationString = notification.toString().substring(0, 1024);
+        val notificationString = notification.toString();
+        val notificationStringTruncated = notificationString.substring(0, Math.min(notificationString.length(), 1024));
         switch (notification.getNotificationName().getCategory()) {
             case ERROR:
-                log.error("{}", notificationString);
+                log.error("{}", notificationStringTruncated);
                 break;
             case WARN:
-                log.warn("{}", notificationString);
+                log.warn("{}", notificationStringTruncated);
                 break;
             default:
-                log.info("{}", notificationString);
+                log.info("{}", notificationStringTruncated);
         }
     }
 

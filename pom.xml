@@ -21,6 +21,8 @@
     </parent>
 
     <dependencies>
+
+
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -34,6 +36,13 @@
         <dependency>
             <groupId>io.projectreactor.addons</groupId>
             <artifactId>reactor-logback</artifactId>
+            <!-- https://github.com/reactor/reactor-addons/issues/124 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.java</groupId>
+                    <artifactId>tools</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -66,30 +75,30 @@
             <dependency>
                 <groupId>io.projectreactor.addons</groupId>
                 <artifactId>reactor-extra</artifactId>
-                <version>3.2.2.RELEASE</version>
+                <version>${reactor-extra.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.vavr</groupId>
                 <artifactId>vavr</artifactId>
-                <version>0.9.3</version>
+                <version>${vavr.version}</version>
             </dependency>
 
             <!-- resilience4j -->
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-circuitbreaker</artifactId>
-                <version>0.14.1</version>
+                <version>${resilience4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-retry</artifactId>
-                <version>0.14.1</version>
+                <version>${resilience4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-bulkhead</artifactId>
-                <version>0.14.1</version>
+                <version>${resilience4j.version}</version>
             </dependency>
             <!-- /resilence4j -->
 
@@ -145,7 +154,7 @@
             <dependency>
                 <groupId>io.projectreactor.addons</groupId>
                 <artifactId>reactor-logback</artifactId>
-                <version>3.2.2.RELEASE</version>
+                <version>${reactor-logback.version}</version>
             </dependency>
 
 
@@ -285,7 +294,10 @@
         <spring-boot-admin-starter-client.version>2.1.3</spring-boot-admin-starter-client.version>
         <jackson-dataformat-yaml.version>2.3.0</jackson-dataformat-yaml.version>
         <embedded-elasticsearch.version>1.19</embedded-elasticsearch.version>
-        <reactor-logback.version>2.0.8.RELEASE</reactor-logback.version>
+        <reactor-logback.version>${reactor-extra.version}</reactor-logback.version>
+        <resilience4j.version>0.14.1</resilience4j.version>
+        <reactor-extra.version>3.2.2.RELEASE</reactor-extra.version>
+        <vavr.version>0.9.3</vavr.version>
     </properties>
 
     <repositories>

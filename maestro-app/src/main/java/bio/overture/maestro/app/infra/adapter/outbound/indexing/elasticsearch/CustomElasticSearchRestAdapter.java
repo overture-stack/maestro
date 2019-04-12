@@ -28,16 +28,12 @@ class CustomElasticSearchRestAdapter {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
     }
 
-    void bulkUpdateRequest(List<UpdateRequest> requests) {
+    void bulkUpdateRequest(List<UpdateRequest> requests) throws IOException {
         val bulkRequest = new BulkRequest();
         for (UpdateRequest query : requests) {
             bulkRequest.add(prepareUpdate(query));
         }
-        try {
-            checkForBulkUpdateFailure(this.elasticsearchRestTemplate.getClient().bulk(bulkRequest, RequestOptions.DEFAULT));
-        } catch (IOException e) {
-            throw new ElasticsearchException("Error while bulk for request: " + bulkRequest.toString(), e);
-        }
+        checkForBulkUpdateFailure(this.elasticsearchRestTemplate.getClient().bulk(bulkRequest, RequestOptions.DEFAULT));
     }
 
     private UpdateRequest prepareUpdate(UpdateRequest req) {

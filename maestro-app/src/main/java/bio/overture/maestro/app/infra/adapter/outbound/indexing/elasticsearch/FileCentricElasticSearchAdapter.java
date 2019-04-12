@@ -10,6 +10,9 @@ import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapte
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
+import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -31,8 +35,12 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import javax.inject.Inject;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.CollectionsUtil.partitionList;
@@ -111,7 +119,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     }
 
     @Recover
-    public void recover(Throwable t) {
+    void recover(Throwable t) {
         log.error("couldn't initialize the index", t);
     }
 
@@ -143,42 +151,54 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private IndexResult bulkUpsertFileRepositories(List<FileCentricDocument> filesList) {
         log.trace("in bulkUpsertFileRepositories, filesList count : {} ", filesList.size());
         val size = this.documentsPerBulkRequest;
-        val failingIds = Collections.<String>synchronizedSet(new HashSet<>());
-        val successful = new AtomicBoolean(true);
-
-        partitionList(filesList, size).forEach(
-            (partNum, listPart)-> {
-                try {
-                    doRequestForPart(partNum, listPart, filesList);
-                } catch (Exception e) {
-                    successful.set(false);
-                    failingIds.addAll(
-                        listPart.stream()
-                            .map(fileCentricDocument -> fileCentricDocument
-                                .getAnalysis().getId()
-                            ).collect(Collectors.toUnmodifiableSet())
-                    );
-                }
-            }
-        );
+        val failures = partitionList(filesList, size)
+            .entrySet()
+            .stream()
+            .map((entry)-> tryBulkUpsertRequestForPart(filesList, entry))
+            .flatMap(Set::stream)
+            .collect(Collectors.toUnmodifiableSet());
 
         val fails = FailureData.builder()
-            .failingIds(Map.of(ANALYSIS_ID, failingIds))
+            .failingIds(Map.of(ANALYSIS_ID, failures))
             .build();
 
         return IndexResult.builder()
             .failureData(fails)
-            .successful(successful.get())
+            .successful(failures.isEmpty())
             .build();
     }
 
-    private void doRequestForPart(int partNum,
-                                  List<FileCentricDocument> listPart,
-                                  List<FileCentricDocument> filesList) {
-        log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
-            Objects.hashCode(listPart), Objects.hashCode(filesList));
+    @NotNull
+    private Set<String> tryBulkUpsertRequestForPart(List<FileCentricDocument> filesList,
+                                                    Map.Entry<Integer, List<FileCentricDocument>> entry) {
+        val partNum = entry.getKey();
+        val listPart = entry.getValue();
+        val listParthHash = Objects.hashCode(listPart);
+        val fileListHash =  Objects.hashCode(filesList);
+        val retryConfig = RetryConfig.custom()
+            .maxAttempts(3)
+            .retryExceptions(IOException.class)
+            .waitDuration(Duration.ofMillis(500))
+            .build();
+        val retry = Retry.of("bulkUpsertFileRepositoriesRetry", retryConfig);
+        val decorated = Retry.decorateCheckedSupplier(retry, () -> {
+            log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
+                listParthHash, fileListHash);
+            doRequestForPart(listPart);
+            return Set.<String>of();
+        });
+        val result = Try.of(decorated)
+            .recover((t) -> {
+                log.error("failed sending request for: part#: {}, hash: {} for filesList hash: {} to elastic search," +
+                    " gathering failed Ids.", partNum, listParthHash, fileListHash, t);
+                return listPart.stream()
+                    .map(fileCentricDocument -> fileCentricDocument.getAnalysis().getId())
+                    .collect(Collectors.toUnmodifiableSet());
+            });
+        return result.get();
+    }
 
-
+    private void doRequestForPart(List<FileCentricDocument> listPart) throws IOException {
         this.customElasticSearchRestAdapter.bulkUpdateRequest(
             listPart.stream()
                 .map(this::mapFileToUpsertRepositoryQuery)
