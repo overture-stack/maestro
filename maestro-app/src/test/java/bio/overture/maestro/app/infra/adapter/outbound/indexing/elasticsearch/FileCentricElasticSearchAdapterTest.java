@@ -41,9 +41,11 @@ import static org.mockito.Mockito.doThrow;
 class FileCentricElasticSearchAdapterTest {
 
     @Autowired
+    private
     RestHighLevelClient client;
 
     @Autowired
+    private
     FileCentricElasticSearchAdapter adapter;
 
     @Test
