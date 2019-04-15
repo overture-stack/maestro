@@ -1,12 +1,10 @@
 server:
   port: 11235
 
-spring:
-  application:
-    name: maestro
-  output.ansi.enabled: ALWAYS
-
 maestro:
+  kafka:
+    host: maestro.kafka:9092
+
   song:
     max-retries: 3
     timeout-sec: 100 # some studies take really long, +30 secs, to be downloaded
@@ -72,3 +70,18 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+
+spring:
+  application:
+    name: maestro
+  output.ansi.enabled: ALWAYS
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${maestro.kafka.host}
+      bindings:
+        maestro-index-requests:
+          destination: maestro-index-requests
+          contentType: application/json

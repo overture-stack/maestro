@@ -127,7 +127,6 @@ class SongStudyDAOTest {
             .verify();
     }
 
-
     @Import({
         SongConfig.class
     })
