@@ -46,13 +46,13 @@ class SongStudyDAO implements StudyDAO {
     private static final int FALLBACK_SONG_MAX_RETRY = 0;
     private static final String REPOSITORY = "repository";
     private final WebClient webClient;
-    private int songMaxRetries;
-    private int minBackoffSec = 1;
-    private int maxBackoffSec = 5;
+    private final int songMaxRetries;
+    private final int minBackoffSec = 1;
+    private final int maxBackoffSec = 5;
     /**
      * must be bigger than 0 or all calls will fail
      */
-    private int songTimeout;
+    private final int songTimeout;
 
     @Inject
     public SongStudyDAO(@NonNull WebClient webClient, @NonNull ApplicationProperties applicationProperties) {

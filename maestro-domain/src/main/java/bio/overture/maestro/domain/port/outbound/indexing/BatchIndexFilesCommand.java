@@ -20,11 +20,4 @@ public class BatchIndexFilesCommand {
         val size = files == null ? "null" : String.valueOf(files.size());
         return super.toString() + "[files = " + size + "]";
     }
-
-    /**
-     * Explicit method for verbose toString to avoid too much logging.
-     */
-    public String toStringVerbose() {
-        return super.toString() + "[files = " + files + "]";
-    }
 }

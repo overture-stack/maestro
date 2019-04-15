@@ -54,13 +54,13 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
     private final Resource fileCentricMapping;
-    private ElasticsearchRestTemplate template;
-    private String alias;
-    private int documentsPerBulkRequest;
+    private final ElasticsearchRestTemplate template;
+    private final String alias;
+    private final int documentsPerBulkRequest;
     /**
      * we define a writer to save properties inferring at runtime for each object.
      */
-    private ObjectWriter fileCentricJSONWriter;
+    private final ObjectWriter fileCentricJSONWriter;
 
     @Inject
     public FileCentricElasticSearchAdapter(CustomElasticSearchRestAdapter customElasticSearchRestAdapter,

@@ -64,9 +64,8 @@ public class Fixture {
         String json = loadJsonString(clazz, fileName);
         TemplateResult replaceResult = new TemplateResult();
         replaceResult.setResult(json);
-        templateParams.forEach((name, value) -> {
-            replaceResult.setResult(replaceResult.getResult().replaceAll(Pattern.quote("##" + name + "##"), value));
-        });
+        templateParams.forEach((name, value) -> replaceResult.setResult(replaceResult.getResult()
+            .replaceAll(Pattern.quote("##" + name + "##"), value)));
 
         return customMapper.readValue(replaceResult.getResult(), targetClass);
     }

@@ -53,7 +53,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.elasticsearch.client.socket-timeout:10000}")
     private long elasticSearchClientSocketTimeout;
 
-    private List<PropertiesFileRepository> repositories;
+    private List<DefaultPropertiesFileRepository> repositories;
 
     @Override
     public List<String> elasticSearchClusterNodes() {
@@ -86,7 +86,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public List<bio.overture.maestro.app.infra.config.properties.PropertiesFileRepository> repositories() {
+    public List<PropertiesFileRepository> repositories() {
         return List.copyOf(this.repositories);
     }
 
@@ -113,8 +113,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Data
     @ToString
     @EqualsAndHashCode
-    private static class PropertiesFileRepository
-        implements bio.overture.maestro.app.infra.config.properties.PropertiesFileRepository {
+    private static class DefaultPropertiesFileRepository
+        implements PropertiesFileRepository {
 
         private String name;
         private String code;

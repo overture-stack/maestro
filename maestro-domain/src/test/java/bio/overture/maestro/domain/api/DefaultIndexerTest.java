@@ -23,7 +23,6 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import io.vavr.control.Either;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
@@ -77,9 +79,6 @@ class DefaultIndexerTest {
         reset(studyRepositoryDao, studyDAO, indexServerAdapter, notifier);
         this.indexer = new DefaultIndexer(indexServerAdapter, studyDAO, studyRepositoryDao, exclusionRulesDAO, notifier);
     }
-
-    @AfterEach
-    void tearDown() {}
 
     @Test
     void indexStudyshouldNotifyOnStudyFetchError() {

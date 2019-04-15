@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,9 +53,6 @@ class SongStudyDAOTest {
 
     @Autowired
     private StudyDAO songStudyDAO;
-
-    @SpyBean
-    WebClient webClient;
 
     @Test
     void shouldRetryOnFailure() {
@@ -124,7 +120,9 @@ class SongStudyDAOTest {
 
         //then
         StepVerifier.create(analysesMono)
-            .expectNext(expectedResult)
+            .expectNextMatches(actual -> actual.isLeft()
+                && actual.left().get().getMessage().equals(expectedException.getMessage())
+                && actual.left().get().getFailureData().equals(expectedException.getFailureData()))
             .expectComplete()
             .verify();
     }

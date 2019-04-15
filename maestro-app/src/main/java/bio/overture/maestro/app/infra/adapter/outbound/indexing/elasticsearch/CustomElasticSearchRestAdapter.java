@@ -22,7 +22,7 @@ import java.util.List;
  */
 class CustomElasticSearchRestAdapter {
 
-    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     public CustomElasticSearchRestAdapter(ElasticsearchRestTemplate elasticsearchRestTemplate) {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;

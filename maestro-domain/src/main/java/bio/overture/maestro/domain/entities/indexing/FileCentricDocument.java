@@ -3,7 +3,6 @@ package bio.overture.maestro.domain.entities.indexing;
 import lombok.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Represents the structure of the index document that corresponds to an analysis "File".

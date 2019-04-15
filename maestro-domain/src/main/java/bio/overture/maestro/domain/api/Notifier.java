@@ -9,7 +9,7 @@ import java.util.Set;
 @Slf4j
 class Notifier {
 
-    private Set<NotificationChannel> notificationChannels;
+    private final Set<NotificationChannel> notificationChannels;
 
     @Inject
     public Notifier(Set<NotificationChannel> notificationChannels) {

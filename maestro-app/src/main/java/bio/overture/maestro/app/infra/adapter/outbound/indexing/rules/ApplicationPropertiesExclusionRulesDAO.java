@@ -28,7 +28,7 @@ import static java.text.MessageFormat.format;
 @Slf4j
 public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO {
 
-    private Resource exclusionRulesResource;
+    private final Resource exclusionRulesResource;
     private Map<Class<?>, List<? extends ExclusionRule>> exclusionRules;
 
     @Inject

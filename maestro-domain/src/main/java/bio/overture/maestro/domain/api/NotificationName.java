@@ -11,7 +11,7 @@ public enum NotificationName {
     ALL(null),
     ;
 
-    private NotificationCategory category;
+    private final NotificationCategory category;
 
     NotificationName(NotificationCategory category) {
         this.category = category;
