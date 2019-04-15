@@ -35,4 +35,4 @@ logging:
     console: "%clr(%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n"
   level:
     root: INFO
-    bio.overture: TRACE
+    bio.overture: INFO

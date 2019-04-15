@@ -23,7 +23,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -205,17 +204,18 @@ class DefaultIndexer implements Indexer {
     buildAnalysisFileDocuments(StudyRepository repo, List<Analysis> analyses) {
         return analyses.stream()
             .map(analysis -> buildFileDocuments(analysis, repo))
-            .reduce((newEither, current) -> newEither.fold(
-                (e) -> current.left()
-                    .map((newException) -> {
-                        e.getFailureData().addFailures(newException.getFailureData());
-                        return e;
-                    }).toEither(),
-                (newList) -> current.right().map(currentCombinedList -> {
-                    val combined = new ArrayList<>(currentCombinedList);
-                    combined.addAll(newList);
-                    return List.copyOf(combined);
-                }).toEither()
+            .reduce((current, newEither) ->
+                newEither.fold(
+                    (e) -> current.left()
+                        .map((newException) -> {
+                            e.getFailureData().addFailures(newException.getFailureData());
+                            return e;
+                        }).toEither(),
+                    (newList) -> current.right().map(currentCombinedList -> {
+                        val combined = new ArrayList<>(currentCombinedList);
+                        combined.addAll(newList);
+                        return List.copyOf(combined);
+                    }).toEither()
             ))
             .orElseGet(() -> Either.right(List.of()));
     }

@@ -38,22 +38,29 @@ import static reactor.core.publisher.Mono.error;
 @Slf4j
 class SongStudyDAO implements StudyDAO {
 
+    static final String STUDY_ID = "studyId";
     private static final String STUDY_ANALYSES_URL_TEMPLATE = "{0}/studies/{1}/analysis";
     private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
     private static final String MSG_STUDY_DOES_NOT_EXIST = "study {0} doesn't exist in the specified repository";
-    public static final String STUDY_ID = "studyId";
-    public static final String REPOSITORY = "repository";
+    private static final int FALLBACK_SONG_TIMEOUT = 60;
+    private static final int FALLBACK_SONG_MAX_RETRY = 0;
+    private static final String REPOSITORY = "repository";
     private final WebClient webClient;
     private int songMaxRetries;
     private int minBackoffSec = 1;
     private int maxBackoffSec = 5;
+    /**
+     * must be bigger than 0 or all calls will fail
+     */
     private int songTimeout;
 
     @Inject
-    public SongStudyDAO(WebClient webClient, ApplicationProperties applicationProperties) {
+    public SongStudyDAO(@NonNull WebClient webClient, @NonNull ApplicationProperties applicationProperties) {
         this.webClient = webClient;
-        this.songMaxRetries = applicationProperties.songMaxRetries();
-        this.songTimeout = applicationProperties.songTimeoutSeconds();
+        this.songMaxRetries = applicationProperties.songMaxRetries() >= 0 ? applicationProperties.songMaxRetries()
+            : FALLBACK_SONG_MAX_RETRY;
+        this.songTimeout = applicationProperties.songTimeoutSeconds() > 0 ? applicationProperties.songTimeoutSeconds()
+            : FALLBACK_SONG_TIMEOUT;
     }
 
     @Override

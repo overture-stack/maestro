@@ -10,6 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class IndexResult {
-    private FailureData failureData;
+    @Builder.Default
+    private FailureData failureData = FailureData.builder().build();
     private boolean successful;
 }

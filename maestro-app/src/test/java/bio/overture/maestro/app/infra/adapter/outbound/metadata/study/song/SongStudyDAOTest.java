@@ -1,6 +1,7 @@
 package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
 
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
+import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
@@ -17,18 +18,25 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.retry.RetryExhaustedException;
 import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import static bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song.SongStudyDAO.STUDY_ID;
+import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerException;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static java.text.MessageFormat.format;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +54,9 @@ class SongStudyDAOTest {
 
     @Autowired
     private StudyDAO songStudyDAO;
+
+    @SpyBean
+    WebClient webClient;
 
     @Test
     void shouldRetryOnFailure() {
@@ -81,13 +92,24 @@ class SongStudyDAOTest {
         StepVerifier.create(analysesMono)
             .expectNext(analysesEither)
             .verifyComplete();
+
     }
 
     @Test
     void shouldReturnErrorIfRetriedExahustedFailure() {
-        val analyses = loadJsonFixture(this.getClass(),
-            "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
-
+        //given
+        val command = GetStudyAnalysesCommand.builder()
+            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
+            .studyId("PEME-CA")
+            .build();
+        val expectedException = wrapWithIndexerException(new RetryExhaustedException(),
+            format("failed fetching study analysis, command: {0}, retries exhausted",
+                command),
+            FailureData.builder()
+                .failingIds(Map.of(STUDY_ID, Set.of("PEME-CA")))
+                .build()
+        );
+        val expectedResult = Either.<IndexerException, List<Analysis>>left(expectedException);
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis"))
                 .willReturn(aResponse()
@@ -97,14 +119,13 @@ class SongStudyDAOTest {
                 )
         );
 
-        val analysesMono = songStudyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
-            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
-            .studyId("PEME-CA")
-            .build()
-        );
+        //when
+        val analysesMono = songStudyDAO.getStudyAnalyses(command);
 
+        //then
         StepVerifier.create(analysesMono)
-            .expectError(IndexerException.class)
+            .expectNext(expectedResult)
+            .expectComplete()
             .verify();
     }
 
@@ -123,6 +144,7 @@ class SongStudyDAOTest {
         ApplicationProperties properties() {
             ApplicationProperties properties = mock(ApplicationProperties.class);
             when(properties.songMaxRetries()).thenReturn(3);
+            when(properties.songTimeoutSeconds()).thenReturn(20);
             return properties;
         }
     }

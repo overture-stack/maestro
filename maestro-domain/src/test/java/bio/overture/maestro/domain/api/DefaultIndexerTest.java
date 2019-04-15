@@ -130,8 +130,8 @@ class DefaultIndexerTest {
         val fileRepo = Mono.just(getStubFilesRepository());
         val failure = FailureData.builder()
             .failingIds(Map.of("study", Set.of("PACA-CA"))).build();
-        val result = IndexResult.builder().failureData(failure).successful(false).build();
-        val monoResult =  Mono.just(result);
+        val failedIndexResult = IndexResult.builder().failureData(failure).successful(false).build();
+        val successfulResult = IndexResult.builder().successful(true).build();
         val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
 
         given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.fromIterable(studiesEither));
@@ -154,7 +154,8 @@ class DefaultIndexerTest {
                 val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
 
                 given(studyDAO.getStudyAnalyses(eq(command))).willReturn(Mono.just(studyAnalyses));
-                given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+                given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand)))
+                    .willReturn(Mono.just(successfulResult));
             }
         }
 
@@ -165,7 +166,7 @@ class DefaultIndexerTest {
 
         // Then
         StepVerifier.create(indexResultMono)
-            .expectNext(result)
+            .expectNext(failedIndexResult)
             .expectComplete()
             .verify();
 

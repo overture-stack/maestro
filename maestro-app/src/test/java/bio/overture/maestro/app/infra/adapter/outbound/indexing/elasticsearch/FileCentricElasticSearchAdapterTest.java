@@ -16,8 +16,6 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -32,17 +30,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
 import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @Slf4j
 @Tag(TestCategory.INT_TEST)
@@ -53,12 +48,10 @@ import static org.mockito.Mockito.*;
 class FileCentricElasticSearchAdapterTest {
 
     @SpyBean
-    private
-    RestHighLevelClient client;
+    private RestHighLevelClient client;
 
     @Autowired
-    private
-    FileCentricElasticSearchAdapter adapter;
+    private FileCentricElasticSearchAdapter adapter;
 
     @Test
     void shouldRetryOnIOException() throws IOException {

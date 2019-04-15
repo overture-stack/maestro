@@ -1,12 +1,12 @@
 package bio.overture.maestro.domain.api.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class IndexerException extends RuntimeException {
     protected FailureData failureData;
     public IndexerException(String message) {
