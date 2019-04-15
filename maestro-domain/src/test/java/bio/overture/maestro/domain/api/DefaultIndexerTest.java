@@ -36,10 +36,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
@@ -188,6 +185,7 @@ class DefaultIndexerTest {
         // load the fixture with
         val fileCentricDocuments = Arrays.asList(loadJsonFixture(getClass(),
             studyId + ".files.excluded.SA520221.json", FileCentricDocument[].class));
+//            .sort(Comparator.comparing(FileCentricDocument::getObjectId));
         val repositoryMono = Mono.just(filesRepository);
         val studyAnalyses = Mono.just(a1);
         val result = IndexResult.builder().successful(true).build();

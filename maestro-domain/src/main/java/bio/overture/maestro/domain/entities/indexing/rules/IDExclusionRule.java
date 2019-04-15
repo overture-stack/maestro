@@ -31,6 +31,7 @@ public class IDExclusionRule extends ExclusionRule {
     /**
      * the list of ids to be excluded.
      */
+    @Builder.Default
     private List<String> ids = new ArrayList<>();
 
     @SneakyThrows

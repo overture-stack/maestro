@@ -13,7 +13,7 @@ import java.util.Set;
  * it uses logback loggers to do the write operation instead of manually
  * writing to files.
  *
- * the logs go to saparete log file see logback-spring.xml for the configs.
+ * the logs go to separate log file. see logback-spring.xml for the configs.
  */
 @Slf4j
 @ConditionalOnProperty(value = "maestro.failure-log.enabled", havingValue = "true")
@@ -29,6 +29,7 @@ public class FileBasedFailuresLogger implements NotificationChannel {
         return Set.of(
             NotificationName.STUDY_ANALYSES_FETCH_FAILED,
             NotificationName.FETCH_REPO_STUDIES_FAILED,
+            NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
             NotificationName.INDEX_REQ_FAILED
         );
     }

@@ -9,7 +9,7 @@ spring:
 maestro:
   song:
     max-retries: 3
-    timeout-sec: 10 # some studies take really long +30 secs to be downloaded
+    timeout-sec: 100 # some studies take really long, +30 secs, to be downloaded
 
   exclusion-rules:
     # exclusion rules file name
@@ -60,7 +60,6 @@ logging:
   level:
     root: WARN
     bio.overture: TRACE
-
     # very verbose class, only enable lower level when necessary
     bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
 

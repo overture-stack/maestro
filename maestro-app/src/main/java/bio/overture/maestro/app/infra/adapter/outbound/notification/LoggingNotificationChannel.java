@@ -10,6 +10,11 @@ import org.springframework.core.annotation.Order;
 import java.util.Set;
 
 
+/**
+ * This channel is to log the failures to the standard logger (console).
+ * it's different than the FileBasedFailuresLogger in the fact that this is
+ * not persistent or for failures review.
+ */
 @Slf4j
 @Order(1)
 public class LoggingNotificationChannel implements NotificationChannel {

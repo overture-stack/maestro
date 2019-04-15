@@ -18,10 +18,10 @@ public class StaticExclusionRulesDAO implements ExclusionRulesDAO {
 
     @SneakyThrows
     public Mono<Map<Class<?>, List<? extends ExclusionRule>>> getExclusionRules() {
-        val clzz = Sample.class;
+        val clazz = Sample.class;
         return Mono.just(
             Map.of(
-                clzz, List.of(new IDExclusionRule(clzz, List.of("SA520221")))
+                clazz, List.of(new IDExclusionRule(clazz, List.of("SA520221")))
             )
         );
     }

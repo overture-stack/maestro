@@ -40,7 +40,6 @@ import static reactor.core.publisher.Mono.error;
 class DefaultIndexer implements Indexer {
 
     private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
-    private static final String MSG_EMPTY_REPOSITORY = "Empty repository {0}";
     private static final String STUDY_ID = "studyId";
     private static final String REPO_URL = "repoUrl";
     private static final String ERR = "err";
@@ -59,13 +58,11 @@ class DefaultIndexer implements Indexer {
                    StudyRepositoryDAO studyRepositoryDao,
                    ExclusionRulesDAO exclusionRulesDAO,
                    Notifier notifier) {
-
         this.fileCentricIndexAdapter = fileCentricIndexAdapter;
         this.studyDAO = studyDAO;
         this.studyRepositoryDao = studyRepositoryDao;
         this.exclusionRulesDAO = exclusionRulesDAO;
         this.notifier = notifier;
-
     }
 
     @Override
@@ -73,7 +70,8 @@ class DefaultIndexer implements Indexer {
         log.trace("in indexStudy, args: {} ", indexStudyCommand);
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
-            .flatMap(filesRepository -> getAnalysesDocuments(filesRepository, indexStudyCommand.getStudyId()))
+            .map(filesRepository -> toStudyAndRepositoryEither(indexStudyCommand, filesRepository))
+            .flatMap(this::getStudyAnalysesDocuments)
             .flatMap(this::batchUpsertFiles);
     }
 
@@ -103,14 +101,16 @@ class DefaultIndexer implements Indexer {
         throw new IndexerException("not implemented yet");
     }
 
-    /* *****************
-     * Private Methods *
-     * *****************/
-
-    private Mono<Either<IndexerException, List<FileCentricDocument>>>
-    getAnalysesDocuments(StudyRepository filesRepository, String studyId) {
-        return getFilteredAnalyses(filesRepository, studyId)
-            .map((analyses) -> getFilesForAnalyses(analyses, filesRepository));
+    /* **************** *
+     * Private Methods  *
+     * **************** */
+    private Either<IndexerException, StudyAndRepository>
+    toStudyAndRepositoryEither(@NonNull IndexStudyCommand indexStudyCommand, StudyRepository filesRepository) {
+        return Either.right(
+            StudyAndRepository.builder()
+                .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
+                .studyRepository(filesRepository).build()
+        );
     }
 
     private Flux<Either<IndexerException, StudyAndRepository>>
@@ -187,8 +187,6 @@ class DefaultIndexer implements Indexer {
             .collect(Collectors.toList());
     }
 
-
-
     private Mono<Either<IndexerException, List<FileCentricDocument>>>
     getStudyAnalysesDocuments(Either<IndexerException, StudyAndRepository> repoAndStudyEither) {
         return repoAndStudyEither.fold(
@@ -203,20 +201,23 @@ class DefaultIndexer implements Indexer {
         return analyses.flatMap(analysesList -> buildAnalysisFileDocuments(studyRepository, analysesList));
     }
 
-    private Either<IndexerException, List<FileCentricDocument>> buildAnalysisFileDocuments(StudyRepository repo, List<Analysis> analyses) {
+    private Either<IndexerException, List<FileCentricDocument>>
+    buildAnalysisFileDocuments(StudyRepository repo, List<Analysis> analyses) {
         return analyses.stream()
             .map(analysis -> buildFileDocuments(analysis, repo))
             .reduce((newEither, current) -> newEither.fold(
-                // TODO: combine errors here
-                (e) -> current.left().map((e1) -> e).toEither(),
+                (e) -> current.left()
+                    .map((newException) -> {
+                        e.getFailureData().addFailures(newException.getFailureData());
+                        return e;
+                    }).toEither(),
                 (newList) -> current.right().map(currentCombinedList -> {
-                    List<FileCentricDocument> combined = new ArrayList<>(currentCombinedList);
+                    val combined = new ArrayList<>(currentCombinedList);
                     combined.addAll(newList);
                     return List.copyOf(combined);
                 }).toEither()
             ))
-            .orElseGet(() -> Either.right(List.of()))
-            ;
+            .orElseGet(() -> Either.right(List.of()));
     }
 
     private Either<IndexerException, List<FileCentricDocument>>
@@ -229,8 +230,8 @@ class DefaultIndexer implements Indexer {
             .toEither();
     }
 
-    private IndexerException wrapBuildDocumentException(Analysis analysis, Throwable t) {
-        return wrapWithIndexerException(t,
+    private IndexerException wrapBuildDocumentException(Analysis analysis, Throwable throwable) {
+        return wrapWithIndexerException(throwable,
             format("buildFileDocuments failed for analysis : {0}, study: {1}",
                 analysis.getAnalysisId(), analysis.getStudy()),
             FailureData.builder()
@@ -253,18 +254,18 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<IndexResult> batchUpsertFiles(Either<IndexerException, List<FileCentricDocument>> fileDocsEither) {
-        if (fileDocsEither.isLeft()) {
-            val ex = fileDocsEither.left().get();
-            val failure = ex != null ? ex.getFailureData() : null;
-            log.debug("in errorResume, fails {} ", failure);
-            return Mono.just(
+        return fileDocsEither.fold(
+            (ex) -> {
+                val failure = ex != null ? ex.getFailureData() : null;
+                return Mono.just(
                     IndexResult.builder()
-                    .successful(false)
-                    .failureData(failure)
-                    .build()
+                        .successful(false)
+                        .failureData(failure)
+                        .build()
                 );
-        }
-        return this.batchUpsert(fileDocsEither.get());
+            },
+            (fileCentricDocuments) -> this.batchUpsert(fileDocsEither.get())
+        );
     }
 
     private IndexResult reduceFinalResult(IndexResult accumulatedResult, IndexResult newResult) {
