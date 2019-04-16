@@ -10,7 +10,6 @@ import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.handler.annotation.Payload;
 import reactor.core.publisher.Flux;
 
-@EnableBinding(Sink.class)
 public class IndexingMessagesStreamListener {
 
     private Indexer indexer;
@@ -23,7 +22,7 @@ public class IndexingMessagesStreamListener {
     }
 
     @StreamListener
-    public void handleIndexStudyMessage(@Input(Processor.INPUT) Flux<IndexStudyMessage> indexStudyMessageFlux) {
+    public void handleIndexStudyMessage(@Input(Sink.INPUT) Flux<IndexStudyMessage> indexStudyMessageFlux) {
         indexStudyMessageFlux.doOnNext(
             msg -> indexer.indexStudy(IndexStudyCommand.builder()
                 .studyId(msg.getStudyId())
@@ -32,7 +31,7 @@ public class IndexingMessagesStreamListener {
             ));
     }
 
-    public void handleIndexRepositoryMessage(@Input(Processor.INPUT) Flux<IndexRepositoryMessage> indexRepoMessageFlux) {
+    public void handleIndexRepositoryMessage(@Input(Sink.INPUT) Flux<IndexRepositoryMessage> indexRepoMessageFlux) {
         indexRepoMessageFlux.doOnNext(
             msg -> indexer.indexStudy(IndexStudyCommand.builder()
                 .repositoryCode(msg.getRepositoryCode())

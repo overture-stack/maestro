@@ -3,7 +3,7 @@ server:
 
 maestro:
   kafka:
-    host: maestro.kafka:9092
+    host: localhost:9092
 
   song:
     max-retries: 3
@@ -56,10 +56,11 @@ maestro:
 # logging & monitoring
 logging:
   level:
-    root: WARN
+    root: INFO
     bio.overture: TRACE
     # very verbose class, only enable lower level when necessary
     bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
+    org.apache.kafka.clients: WARN
 
 # spring boot actuator endpoints
 management:
@@ -82,6 +83,6 @@ spring:
         binder:
           brokers: ${maestro.kafka.host}
       bindings:
-        maestro-index-requests:
+        input:
           destination: maestro-index-requests
           contentType: application/json
