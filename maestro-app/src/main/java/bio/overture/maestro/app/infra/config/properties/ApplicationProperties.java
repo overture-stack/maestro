@@ -20,4 +20,6 @@ public interface ApplicationProperties {
     Resource exclusionRules();
     int songMaxRetries();
     int songTimeoutSeconds();
+    long elasticSearchRetryWaitDurationMillis();
+    int elasticSearchRetryMaxAttempts();
 }

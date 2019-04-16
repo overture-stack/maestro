@@ -51,12 +51,16 @@ import static java.util.Collections.singletonMap;
 class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
     private static final String ANALYSIS_ID = "analysisId";
+    private static final int FALL_BACK_WAIT_DURATION = 100;
+    private static final int FALLBACK_MAX_RETRY_ATTEMPTS = 0;
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
     private final Resource fileCentricMapping;
     private final ElasticsearchRestTemplate template;
     private final String alias;
     private final int documentsPerBulkRequest;
+    private final int maxRetriesAttempts;
+    private final long retriesWaitDuration;
     /**
      * we define a writer to save properties inferring at runtime for each object.
      */
@@ -75,7 +79,10 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         this.documentsPerBulkRequest = properties.maxDocsPerBulkRequest();
         this.indexSettings = properties.indexSettings();
         this.fileCentricJSONWriter = objectMapper.writerFor(FileCentricDocument.class);
-
+        this.retriesWaitDuration = properties.elasticSearchRetryWaitDurationMillis() > 0 ?
+            properties.elasticSearchRetryWaitDurationMillis() : FALL_BACK_WAIT_DURATION;
+        this.maxRetriesAttempts = properties.elasticSearchRetryMaxAttempts() >= 0 ?
+            properties.elasticSearchRetryMaxAttempts() : FALLBACK_MAX_RETRY_ATTEMPTS;
     }
 
     @Override
@@ -176,9 +183,9 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         val listParthHash = Objects.hashCode(listPart);
         val fileListHash =  Objects.hashCode(filesList);
         val retryConfig = RetryConfig.custom()
-            .maxAttempts(3)
+            .maxAttempts(this.maxRetriesAttempts)
             .retryExceptions(IOException.class)
-            .waitDuration(Duration.ofMillis(500))
+            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
             .build();
         val retry = Retry.of("bulkUpsertFileRepositoriesRetry", retryConfig);
         val decorated = Retry.decorateCheckedSupplier(retry, () -> {

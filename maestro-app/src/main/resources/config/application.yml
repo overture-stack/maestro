@@ -3,8 +3,8 @@ server:
 
 maestro:
   kafka:
-    host: localhost:9092
-
+    broker: localhost:9092
+    indexing-topic: maestro-index-requests
   song:
     max-retries: 3
     timeout-sec: 100 # some studies take really long, +30 secs, to be downloaded
@@ -26,6 +26,9 @@ maestro:
       connection-timeout: 5000
       # max time to wait on idle connection (no data flow)
       socket-timeout: 10000
+      retry:
+        max-attempts: 3
+        wait-duration-millis: 500
 
   # Genome file repositories props
   repositories:
@@ -72,7 +75,6 @@ management:
     health:
       show-details: ALWAYS
 
-
 spring:
   application:
     name: maestro
@@ -81,8 +83,8 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: ${maestro.kafka.host}
+          brokers: ${maestro.kafka.broker}
       bindings:
         input:
-          destination: maestro-index-requests
-          contentType: application/json
+          # we don't specify content type because @StreamListener will handle that
+          destination: ${maestro.kafka.indexing-topic}

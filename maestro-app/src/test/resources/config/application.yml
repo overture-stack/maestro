@@ -28,7 +28,9 @@ maestro:
       name: aws repo
       organization: ICGC
       country: US
-
+  failure-log:
+    enabled: true
+    dir: /tmp/logs/maestro
 # logging & monitoring
 logging:
   pattern:

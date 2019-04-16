@@ -1,10 +1,9 @@
 package bio.overture.maestro.app.infra.adapter.inbound.messaging;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
-@Getter
+@Value
+@ToString
 @AllArgsConstructor
 class IndexRepositoryMessage {
     @NonNull
