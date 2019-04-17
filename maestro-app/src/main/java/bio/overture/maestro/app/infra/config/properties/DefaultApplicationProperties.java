@@ -32,6 +32,12 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.elasticsearch.client.docs-per-bulk-req-max:1000}")
     private Integer docsPerBulkReqMax;
 
+    @Value("${maestro.song.max-retries:3}")
+    private Integer songMaxRetries;
+
+    @Value("${maestro.song.timeout-sec:10}")
+    private Integer songTimeoutSeconds;
+
     @Value("classpath:index.settings.json")
     private Resource indexSettings;
 
@@ -47,7 +53,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.elasticsearch.client.socket-timeout:10000}")
     private long elasticSearchClientSocketTimeout;
 
-    private List<PropertiesFileRepository> repositories;
+    private List<DefaultPropertiesFileRepository> repositories;
 
     @Override
     public List<String> elasticSearchClusterNodes() {
@@ -70,17 +76,17 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public long elasticSearchClientConnectionTimeout() {
+    public long elasticSearchClientConnectionTimeoutMillis() {
         return this.elasticSearchClientConnectionTimeout;
     }
 
     @Override
-    public long elasticSearchClientSocketTimeout() {
+    public long elasticSearchClientSocketTimeoutMillis() {
         return this.elasticSearchClientSocketTimeout;
     }
 
     @Override
-    public List<bio.overture.maestro.app.infra.config.properties.PropertiesFileRepository> repositories() {
+    public List<PropertiesFileRepository> repositories() {
         return List.copyOf(this.repositories);
     }
 
@@ -94,11 +100,21 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         return exclusionRules;
     }
 
+    @Override
+    public int songMaxRetries() {
+        return songMaxRetries;
+    }
+
+    @Override
+    public int songTimeoutSeconds() {
+        return songTimeoutSeconds;
+    }
+
     @Data
     @ToString
     @EqualsAndHashCode
-    private static class PropertiesFileRepository
-        implements bio.overture.maestro.app.infra.config.properties.PropertiesFileRepository {
+    private static class DefaultPropertiesFileRepository
+        implements PropertiesFileRepository {
 
         private String name;
         private String code;
@@ -110,6 +126,5 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private StorageType storageType = StorageType.S3;
 
     }
-
 
 }

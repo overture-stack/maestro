@@ -9,12 +9,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
@@ -28,8 +26,7 @@
         "format": "TBI",
         "md5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
         "size": 1458418
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -54,12 +51,9 @@
           "sample": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -73,12 +67,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
@@ -92,8 +84,7 @@
         "format": "TBI",
         "md5sum": "9ce7cdedb7450a05c03e419235ed56a6",
         "size": 1756
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -118,12 +109,9 @@
           "sample": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -137,12 +125,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
@@ -156,8 +142,7 @@
         "format": "TBI",
         "md5sum": "acdf137ad635f95ee93412fa9153d066",
         "size": 5539
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -182,12 +167,9 @@
           "sample": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -201,12 +183,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
@@ -220,8 +200,7 @@
         "format": "TBI",
         "md5sum": "2233fb90872d759d279395b1a7ad3461",
         "size": 236926
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -246,12 +225,9 @@
           "sample": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -265,12 +241,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
@@ -284,8 +258,7 @@
         "format": "IDX",
         "md5sum": "8269ee64b80e6ec66e590767f697d37b",
         "size": 1031078
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -310,12 +283,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -329,12 +299,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
@@ -348,8 +316,7 @@
         "format": "IDX",
         "md5sum": "fdb961feac82a7912bf657450e02c44d",
         "size": 11325
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -374,12 +341,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -393,12 +357,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
@@ -412,8 +374,7 @@
         "format": "IDX",
         "md5sum": "5aeb4749609bd0a4d81ecffd673a36e1",
         "size": 10447
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -438,12 +399,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -457,12 +415,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
@@ -476,8 +432,7 @@
         "format": "IDX",
         "md5sum": "ade5449b588c81496e4e7d2b0b49e3d0",
         "size": 61514
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -502,12 +457,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -521,12 +473,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
@@ -540,8 +490,7 @@
         "format": "IDX",
         "md5sum": "8cae7bbcd28b6a78ad5c53642ae9695c",
         "size": 14606
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -566,12 +515,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -585,12 +531,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
@@ -604,8 +548,7 @@
         "format": "IDX",
         "md5sum": "139ce5f29fc0e877d5ae5a5d5e03c3f0",
         "size": 4212
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -630,12 +573,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -649,12 +589,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
@@ -668,8 +606,7 @@
         "format": "IDX",
         "md5sum": "797e4ef5c348d4a23e9e83790812d857",
         "size": 151104
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -694,12 +631,9 @@
           "sample": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -713,12 +647,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
@@ -732,8 +664,7 @@
         "format": "IDX",
         "md5sum": "3ed262dbc3b1c427177bdd5af5ef5633",
         "size": 27885
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -758,12 +689,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -777,12 +705,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
@@ -796,8 +722,7 @@
         "format": "IDX",
         "md5sum": "a7cf0d572f1649c8791cda7892c7be55",
         "size": 67312
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -822,12 +747,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -841,12 +763,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
@@ -860,8 +780,7 @@
         "format": "IDX",
         "md5sum": "78b2dd0696a1f2ea8ac8e25a77c4e239",
         "size": 1032907
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -886,12 +805,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -905,12 +821,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
@@ -924,8 +838,7 @@
         "format": "IDX",
         "md5sum": "130e37274d3c7bebcb41d027eea9148d",
         "size": 27877
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -950,12 +863,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -969,12 +879,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
@@ -988,8 +896,7 @@
         "format": "IDX",
         "md5sum": "941a7d48a3250de6edcbbde1cbb4b7e1",
         "size": 12044
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -1014,12 +921,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -1033,12 +937,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
@@ -1052,8 +954,7 @@
         "format": "IDX",
         "md5sum": "de502cd9a25efe6f868f3156e8fd302e",
         "size": 1336
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -1078,12 +979,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   },
@@ -1097,12 +995,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
@@ -1116,8 +1012,7 @@
         "format": "IDX",
         "md5sum": "9029f92d2d1ea6d76b3a88795756aacc",
         "size": 160972
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -1142,12 +1037,9 @@
           "sample": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
-        },
-        "info": {}
+            "type": "DNA"
+          }
+        }
       }
     ]
   }

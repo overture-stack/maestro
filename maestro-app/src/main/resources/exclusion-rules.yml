@@ -1,13 +1,13 @@
-#byId:
-#  study:
-#    - "study-xyz"
+byId:
+ study:
+    - "xxy"
 #  analysis:
 #    - "analysisId"
 #  file:
-#    - "fileId"
+#    - 41ba4fb3-9428-50b5-af6c-d779cd59b04d
 #  sample:
 #    - "sampleId"
 #  specimen:
 #    - "specimenId"
 #  donor:
-#    - "DO00000"
+#    - DO232991

@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,8 +67,7 @@ final class FileCentricDocumentConverter {
                 .state(analysis.getAnalysisState())
                 .type(analysis.getAnalysisType())
                 .study(analysis.getStudy())
-                .experiment(analysis.getExperiment())
-                .info(analysis.getInfo())
+                .experiment(getExpirement(analysis))
                 .build()
             )
             .file(buildGenomeFileInfo(analysis, file))
@@ -84,12 +85,25 @@ final class FileCentricDocumentConverter {
         return repoFile.build();
     }
 
+    /**
+     * we remove the info from the experiment map to avoid possible bad data
+     * that could break indexing (similar fields names with different type
+     */
+    private static Map<String, Object> getExpirement(Analysis a) {
+        val experiment = a.getExperiment();
+        if (experiment != null && experiment.containsKey("info")){
+            val newExp = new HashMap<String, Object>(experiment);
+            newExp.remove("info");
+            return Map.copyOf(newExp);
+        }
+        return experiment;
+    }
+
     private static File buildGenomeFileInfo(Analysis analysis,
                                             bio.overture.maestro.domain.entities.metadata.study.File file) {
         val fileName = file.getFileName();
         val indexFile = getIndexFile(analysis.getFile(), fileName);
         return File.builder()
-            .info(file.getInfo())
             .name(fileName)
             .format(file.getFileType())
             .size(file.getFileSize())
@@ -171,14 +185,11 @@ final class FileCentricDocumentConverter {
                     .id(sample.getSampleId())
                     .submittedId(sample.getSampleSubmitterId())
                     .type(sample.getSampleType())
-                    .info(sample.getInfo())
                     .build()
                 )
-                .info(specimen.getInfo())
                 .build()
             )
             .submittedId(donor.getDonorSubmitterId())
-            .info(donor.getInfo())
             .build();
     }
 

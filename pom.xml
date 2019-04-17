@@ -21,6 +21,7 @@
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -29,6 +30,18 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor.addons</groupId>
+            <artifactId>reactor-logback</artifactId>
+            <!-- https://github.com/reactor/reactor-addons/issues/124 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.java</groupId>
+                    <artifactId>tools</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -42,6 +55,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -52,6 +70,36 @@
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.projectreactor.addons</groupId>
+                <artifactId>reactor-extra</artifactId>
+                <version>${reactor-extra.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>${vavr.version}</version>
+            </dependency>
+
+            <!-- resilience4j -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-circuitbreaker</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-retry</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-bulkhead</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <!-- /resilence4j -->
 
 
             <!-- elasticsearch -->
@@ -101,11 +149,20 @@
                 <version>${logback.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/io.projectreactor.addons/reactor-logback -->
+            <dependency>
+                <groupId>io.projectreactor.addons</groupId>
+                <artifactId>reactor-logback</artifactId>
+                <version>${reactor-logback.version}</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
 
             <!-- https://codecentric.github.io/spring-boot-admin/current/ -->
             <dependency>
@@ -226,7 +283,7 @@
         <junit5.version>5.4.0</junit5.version>
         <slf4j.version>1.7.16</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <reactor.version>3.2.6.RELEASE</reactor.version>
+        <reactor.version>3.2.8.RELEASE</reactor.version>
         <spring-data-elasticsearch.version>3.2.0.M2</spring-data-elasticsearch.version>
         <elasticsearch.version>6.6.1</elasticsearch.version>
         <mockito-junit-jupiter.version>2.23.4</mockito-junit-jupiter.version>
@@ -235,8 +292,11 @@
         <junit-platform.version>1.4.0</junit-platform.version>
         <spring-boot-admin-starter-client.version>2.1.3</spring-boot-admin-starter-client.version>
         <jackson-dataformat-yaml.version>2.3.0</jackson-dataformat-yaml.version>
-        <wiremock-jre8.version>2.22.0</wiremock-jre8.version>
         <embedded-elasticsearch.version>1.19</embedded-elasticsearch.version>
+        <reactor-logback.version>${reactor-extra.version}</reactor-logback.version>
+        <resilience4j.version>0.14.1</resilience4j.version>
+        <reactor-extra.version>3.2.2.RELEASE</reactor-extra.version>
+        <vavr.version>0.9.3</vavr.version>
     </properties>
 
     <repositories>
@@ -294,9 +354,6 @@
                             <version>${junit5.version}</version>
                         </dependency>
                     </dependencies>
-                    <configuration>
-                        <argLine>${argLine}</argLine>
-                    </configuration>
                 </plugin>
 
 

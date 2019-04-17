@@ -8,7 +8,14 @@ ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /app
+
+# for development config changes no need to mount in prod.
 VOLUME /app/config
+
+# needed for the failure log
+VOLUME /logs/maestro
+
+# maestro web api port
 EXPOSE 11235
 
 ENTRYPOINT ["java","-cp","app:app/lib/*","bio.overture.maestro.app.Maestro"]

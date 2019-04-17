@@ -2,8 +2,6 @@ package bio.overture.maestro.domain.entities.indexing;
 
 import lombok.*;
 
-import java.util.Map;
-
 @Builder
 @Getter
 @ToString
@@ -19,6 +17,4 @@ public class FileCentricDonor {
 
     @NonNull
     private Specimen specimen;
-
-    private Map<String, Object> info;
 }

@@ -48,16 +48,6 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
         return Mono.justOrEmpty(repository);
     }
 
-    @Override
-    @NonNull
-    public Flux<StudyRepository> getAll() {
-        return Flux.fromIterable(
-            repositories.stream()
-                .map(this::toFilesRepository)
-                .collect(Collectors.toUnmodifiableList())
-        );
-    }
-
     private StudyRepository toFilesRepository(PropertiesFileRepository propertiesFileRepository) {
         log.trace("Converting : {} to StudyRepository ", propertiesFileRepository);
         return StudyRepository.builder()

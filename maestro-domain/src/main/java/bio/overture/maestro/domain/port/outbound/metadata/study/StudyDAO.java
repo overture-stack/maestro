@@ -1,7 +1,9 @@
 package bio.overture.maestro.domain.port.outbound.metadata.study;
 
+import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
+import io.vavr.control.Either;
 import lombok.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,6 +23,6 @@ public interface StudyDAO {
      * @throws bio.overture.maestro.domain.api.exception.NotFoundException
      *  in case the study wasn't found.
      */
-    @NonNull Mono<List<Analysis>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
-    @NonNull Flux<Study> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
+    @NonNull Mono<Either<IndexerException, List<Analysis>>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
+    @NonNull Flux<Either<IndexerException, Study>> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
 }

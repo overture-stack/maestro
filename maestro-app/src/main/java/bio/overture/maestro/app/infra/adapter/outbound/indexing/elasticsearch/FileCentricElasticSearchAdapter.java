@@ -2,7 +2,7 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
-import bio.overture.maestro.domain.api.exception.UpstreamServiceException;
+import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
@@ -10,6 +10,9 @@ import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapte
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
+import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +22,9 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
-import org.springframework.data.elasticsearch.ElasticsearchException;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
@@ -32,9 +35,12 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.CollectionsUtil.partitionList;
@@ -44,16 +50,17 @@ import static java.util.Collections.singletonMap;
 @Slf4j
 class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
+    private static final String ANALYSIS_ID = "analysisId";
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
     private final Resource fileCentricMapping;
-    private ElasticsearchRestTemplate template;
-    private String alias;
-    private int documentsPerBulkRequest;
+    private final ElasticsearchRestTemplate template;
+    private final String alias;
+    private final int documentsPerBulkRequest;
     /**
      * we define a writer to save properties inferring at runtime for each object.
      */
-    private ObjectWriter fileCentricJSONWriter;
+    private final ObjectWriter fileCentricJSONWriter;
 
     @Inject
     public FileCentricElasticSearchAdapter(CustomElasticSearchRestAdapter customElasticSearchRestAdapter,
@@ -75,8 +82,6 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     public Mono<IndexResult> batchIndex(@NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
         log.debug("in batchIndex, args: {} ", batchIndexFilesCommand.getFiles().size());
         return  Mono.fromSupplier(() -> this.bulkIndexFiles(batchIndexFilesCommand.getFiles()))
-            .onErrorMap((e) -> e instanceof ElasticsearchException,
-                (e) -> new UpstreamServiceException("batch Index failed", e))
             .subscribeOn(Schedulers.elastic());
     }
 
@@ -84,8 +89,6 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     public Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
         log.debug("in batchIbatchUpsertFileRepositoriesndex, args: {} ", batchIndexFilesCommand.getFiles().size());
         return  Mono.fromSupplier(() -> this.bulkUpsertFileRepositories(batchIndexFilesCommand.getFiles()))
-            .onErrorMap((e) -> e instanceof ElasticsearchException,
-                (e) -> new UpstreamServiceException("batch Index failed", e))
             .subscribeOn(Schedulers.elastic());
     }
 
@@ -116,7 +119,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     }
 
     @Recover
-    public void recover(Throwable t) {
+    void recover(Throwable t) {
         log.error("couldn't initialize the index", t);
     }
 
@@ -132,8 +135,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @SneakyThrows
     private IndexResult bulkIndexFiles(List<FileCentricDocument> filesList) {
         log.trace("in bulkIndexFiles, filesList count : {} ", filesList.size());
-        val size = this.documentsPerBulkRequest;
-        partitionList(filesList, size)
+        partitionList(filesList, this.documentsPerBulkRequest)
             .forEach((partNum, listPart)-> {
                 log.trace("bulkIndexFiles, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
                     Objects.hashCode(listPart), Objects.hashCode(filesList));
@@ -149,16 +151,59 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private IndexResult bulkUpsertFileRepositories(List<FileCentricDocument> filesList) {
         log.trace("in bulkUpsertFileRepositories, filesList count : {} ", filesList.size());
         val size = this.documentsPerBulkRequest;
-        partitionList(filesList, size)
-            .forEach((partNum, listPart)-> {
-                log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
-                    Objects.hashCode(listPart), Objects.hashCode(filesList));
-                this.customElasticSearchRestAdapter.bulkUpdateRequest(listPart.stream()
-                    .map(this::mapFileToUpsertRepositoryQuery)
-                    .collect(Collectors.toList())
-                );
+        val failures = partitionList(filesList, size)
+            .entrySet()
+            .stream()
+            .map((entry)-> tryBulkUpsertRequestForPart(filesList, entry))
+            .flatMap(Set::stream)
+            .collect(Collectors.toUnmodifiableSet());
+
+        val fails = FailureData.builder()
+            .failingIds(Map.of(ANALYSIS_ID, failures))
+            .build();
+
+        return IndexResult.builder()
+            .failureData(fails)
+            .successful(failures.isEmpty())
+            .build();
+    }
+
+    @NotNull
+    private Set<String> tryBulkUpsertRequestForPart(List<FileCentricDocument> filesList,
+                                                    Map.Entry<Integer, List<FileCentricDocument>> entry) {
+        val partNum = entry.getKey();
+        val listPart = entry.getValue();
+        val listParthHash = Objects.hashCode(listPart);
+        val fileListHash =  Objects.hashCode(filesList);
+        val retryConfig = RetryConfig.custom()
+            .maxAttempts(3)
+            .retryExceptions(IOException.class)
+            .waitDuration(Duration.ofMillis(500))
+            .build();
+        val retry = Retry.of("bulkUpsertFileRepositoriesRetry", retryConfig);
+        val decorated = Retry.decorateCheckedSupplier(retry, () -> {
+            log.trace("bulkUpsertFileRepositories, sending part#: {}, hash: {} for filesList hash: {} ", partNum,
+                listParthHash, fileListHash);
+            doRequestForPart(listPart);
+            return Set.<String>of();
+        });
+        val result = Try.of(decorated)
+            .recover((t) -> {
+                log.error("failed sending request for: part#: {}, hash: {} for filesList hash: {} to elastic search," +
+                    " gathering failed Ids.", partNum, listParthHash, fileListHash, t);
+                return listPart.stream()
+                    .map(fileCentricDocument -> fileCentricDocument.getAnalysis().getId())
+                    .collect(Collectors.toUnmodifiableSet());
             });
-        return IndexResult.builder().successful(true).build();
+        return result.get();
+    }
+
+    private void doRequestForPart(List<FileCentricDocument> listPart) throws IOException {
+        this.customElasticSearchRestAdapter.bulkUpdateRequest(
+            listPart.stream()
+                .map(this::mapFileToUpsertRepositoryQuery)
+                .collect(Collectors.toList())
+        );
     }
 
     @SneakyThrows
@@ -179,7 +224,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
     @SneakyThrows
     private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument){
-        ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         Map<String, Object> parameters = singletonMap("repository",
             mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
 

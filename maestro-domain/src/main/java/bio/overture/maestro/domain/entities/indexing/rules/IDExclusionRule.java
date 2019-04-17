@@ -31,11 +31,12 @@ public class IDExclusionRule extends ExclusionRule {
     /**
      * the list of ids to be excluded.
      */
+    @Builder.Default
     private List<String> ids = new ArrayList<>();
 
     @SneakyThrows
     public boolean applies(Object instance) {
-        log.debug("checking rule against : {}", instance);
+        log.trace("checking rule against : {}", instance);
         if (ids.isEmpty() || !instance.getClass().equals(clazz)) return false;
 
         val idExclusionField = Arrays.stream(instance.getClass().getDeclaredFields())
@@ -56,7 +57,11 @@ public class IDExclusionRule extends ExclusionRule {
         }
 
         val excluded = ids.contains(String.valueOf(value));
-        log.debug("id exclusion rule fo value {} = {}", value, excluded);
+        log.trace("id exclusion rule for value {} = {}", value, excluded);
+
+        if (excluded) {
+            log.info("id {} was excluded according to the rules", value);
+        }
         return excluded;
     }
 

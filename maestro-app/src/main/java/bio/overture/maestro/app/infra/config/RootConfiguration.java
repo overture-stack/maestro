@@ -6,8 +6,9 @@ import bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.El
 import bio.overture.maestro.app.infra.adapter.outbound.indexing.rules.ExclusionRulesConfig;
 import bio.overture.maestro.app.infra.adapter.outbound.metadata.repostiory.RepositoryConfig;
 import bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song.SongConfig;
+import bio.overture.maestro.app.infra.adapter.outbound.notification.NotificationConfig;
 import bio.overture.maestro.app.infra.config.properties.PropertiesConfig;
-import bio.overture.maestro.domain.api.DefaultIndexer;
+import bio.overture.maestro.domain.api.DomainApiConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,8 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @Configuration
 @Import({
-    DomainConfig.class,
+    DomainApiConfig.class,
+    PortsConfig.class,
     InfraConfig.class,
 })
 public class RootConfiguration {
@@ -32,13 +34,13 @@ public class RootConfiguration {
  */
 @Configuration
 @Import({
-    DefaultIndexer.class,
     ElasticSearchConfig.class,
     ExclusionRulesConfig.class,
     SongConfig.class,
     RepositoryConfig.class,
+    NotificationConfig.class,
 })
-class DomainConfig {}
+class PortsConfig {}
 
 /**
  * Aggregator for all configurations related to

@@ -19,6 +19,6 @@ public class FileCentricAnalysis {
     private String state;
     @NonNull
     private String study;
+
     private Map<String, Object> experiment;
-    private Map<String, Object> info;
 }

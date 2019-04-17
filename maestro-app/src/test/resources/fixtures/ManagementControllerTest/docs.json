@@ -9,12 +9,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
@@ -28,8 +26,7 @@
         "format": "TBI",
         "md5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
         "size": 1458418
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -47,7 +44,6 @@
       {
         "id": "DO48736",
         "submitted_id": "RK202",
-        "info": {},
         "specimen": {
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
@@ -55,10 +51,8 @@
           "sample": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -73,12 +67,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
@@ -86,7 +78,6 @@
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
       "size": 11431,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "e14e73a5-a869-5b9a-a89c-be77fa54135e",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz.tbi",
@@ -111,7 +102,6 @@
       {
         "id": "DO48736",
         "submitted_id": "RK202",
-        "info": {},
         "specimen": {
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
@@ -119,10 +109,8 @@
           "sample": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -137,12 +125,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
@@ -156,8 +142,7 @@
         "format": "TBI",
         "md5sum": "acdf137ad635f95ee93412fa9153d066",
         "size": 5539
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -175,7 +160,6 @@
       {
         "id": "DO48736",
         "submitted_id": "RK202",
-        "info": {},
         "specimen": {
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
@@ -183,10 +167,8 @@
           "sample": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -201,18 +183,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
-      "info": {},
       "size": 1418099,
       "last_modified": null,
       "index_file": {
@@ -239,7 +218,6 @@
       {
         "id": "DO48736",
         "submitted_id": "RK202",
-        "info": {},
         "specimen": {
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
@@ -247,10 +225,8 @@
           "sample": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -265,12 +241,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
@@ -284,8 +258,7 @@
         "format": "IDX",
         "md5sum": "8269ee64b80e6ec66e590767f697d37b",
         "size": 1031078
-      },
-      "info": {}
+      }
     },
     "repositories": [
       {
@@ -302,7 +275,6 @@
     "donors": [
       {
         "id": "DO23549",
-        "info": {},
         "submitted_id": "RK156",
         "specimen": {
           "id": "SP50179",
@@ -311,10 +283,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -329,12 +299,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info":{}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
@@ -342,7 +310,6 @@
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
       "size": 59633,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "14e94abe-1fd1-5a85-8d26-a7291edd80ef",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz.idx",
@@ -367,7 +334,6 @@
       {
         "id": "DO23549",
         "submitted_id": "RK156",
-        "info": {},
         "specimen": {
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
@@ -375,10 +341,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -393,12 +357,10 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
@@ -406,7 +368,6 @@
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
       "size": 51548,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "c5496778-0d72-5cc6-aac4-98777cfbc0c2",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz.idx",
@@ -430,7 +391,6 @@
     "donors": [
       {
         "id": "DO23549",
-        "info": {},
         "submitted_id": "RK156",
         "specimen": {
           "id": "SP50179",
@@ -439,10 +399,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -457,18 +415,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
-      "info": {},
       "size": 1710383,
       "last_modified": null,
       "index_file": {
@@ -495,7 +450,6 @@
       {
         "id": "DO23549",
         "submitted_id": "RK156",
-        "info": {},
         "specimen": {
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
@@ -503,10 +457,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -521,19 +473,16 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
       "size": 31242,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "55283d00-b1a2-521c-99e1-e9d8d88c660d",
@@ -559,7 +508,6 @@
       {
         "id": "DO23549",
         "submitted_id": "RK156",
-        "info": {},
         "specimen": {
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
@@ -567,10 +515,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -585,17 +531,14 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
-      "info": {},
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
       "size": 10191,
       "last_modified": null,
@@ -623,7 +566,6 @@
       {
         "id": "DO23549",
         "submitted_id": "RK156",
-        "info": {},
         "specimen": {
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
@@ -631,10 +573,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -649,18 +589,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
-      "info": {},
       "size": 382815,
       "last_modified": null,
       "index_file": {
@@ -687,7 +624,6 @@
       {
         "id": "DO23549",
         "submitted_id": "RK156",
-        "info": {},
         "specimen": {
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
@@ -695,10 +631,8 @@
           "sample": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -713,18 +647,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "33b96c263be31852de8d5d15775561c9",
-      "info": {},
       "size": 404406,
       "last_modified": null,
       "index_file": {
@@ -750,7 +681,6 @@
     "donors": [
       {
         "id": "DO45211",
-        "info": {},
         "submitted_id": "RK091",
         "specimen": {
           "id": "SP99145",
@@ -759,10 +689,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -777,19 +705,16 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
       "size": 1853889,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "9abe4aad-9d35-5d4f-955c-8bceb559827e",
@@ -815,7 +740,6 @@
       {
         "id": "DO45211",
         "submitted_id": "RK091",
-        "info": {},
         "specimen": {
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
@@ -823,10 +747,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -841,19 +763,16 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
       "size": 10429379,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "ad68b7cb-e91c-506e-acae-812ae2ea7678",
@@ -879,7 +798,6 @@
       {
         "id": "DO45211",
         "submitted_id": "RK091",
-        "info": {},
         "specimen": {
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
@@ -887,10 +805,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -905,18 +821,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
-      "info": {},
       "size": 400597,
       "last_modified": null,
       "index_file": {
@@ -943,7 +856,6 @@
       {
         "id": "DO45211",
         "submitted_id": "RK091",
-        "info": {},
         "specimen": {
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
@@ -951,10 +863,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -969,18 +879,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
-      "info": {},
       "size": 25270,
       "last_modified": null,
       "index_file": {
@@ -1007,7 +914,6 @@
       {
         "id": "DO45211",
         "submitted_id": "RK091",
-        "info": {},
         "specimen": {
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
@@ -1015,10 +921,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1033,18 +937,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
-      "info": {},
       "size": 2540,
       "last_modified": null,
       "index_file": {
@@ -1071,7 +972,6 @@
       {
         "id": "DO45211",
         "submitted_id": "RK091",
-        "info": {},
         "specimen": {
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
@@ -1079,10 +979,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1097,18 +995,15 @@
       "state": "PUBLISHED",
       "study": "LIRI-JP",
       "experiment": {
-        "info": {},
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
-      "info": {},
       "size": 422502,
       "last_modified": null,
       "index_file": {
@@ -1135,7 +1030,6 @@
       {
         "id": "DO45211",
         "submitted_id": "RK091",
-        "info": {},
         "specimen": {
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
@@ -1143,10 +1037,8 @@
           "sample": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1161,18 +1053,15 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "14ded2a7342f9124421ace5aa920510d",
-      "info": {},
       "size": 543337,
       "last_modified": null,
       "index_file": {
@@ -1199,7 +1088,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1207,10 +1095,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1225,12 +1111,10 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
@@ -1238,7 +1122,6 @@
       "md5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
       "size": 5565355,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "2910e07c-268b-57a5-877a-0cec35298319",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz.tbi",
@@ -1263,7 +1146,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1271,10 +1153,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1289,19 +1169,16 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
       "size": 101384873,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "425898fd-35d3-5ee2-ac00-50dfd724f4c6",
@@ -1327,7 +1204,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1335,10 +1211,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1353,18 +1227,15 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
-      "info": {},
       "size": 72850649,
       "last_modified": null,
       "index_file": {
@@ -1391,7 +1262,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1399,10 +1269,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1417,18 +1285,15 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "93b219c94687e12b5fda564399fa3319",
-      "info": {},
       "size": 23763,
       "last_modified": null,
       "index_file": {
@@ -1455,7 +1320,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1463,10 +1327,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1481,12 +1343,10 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
@@ -1494,7 +1354,6 @@
       "md5sum": "6ebd4aa8a821da40955d7fcb879be82a",
       "size": 18226,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "e5d387a1-3b51-5526-ae22-270df2e1fd2f",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz.tbi",
@@ -1519,7 +1378,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1527,10 +1385,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1545,12 +1401,10 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
@@ -1558,7 +1412,6 @@
       "md5sum": "f3a99bd737b3b416aa34e131b939b2a0",
       "size": 161511,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "e8569e7c-6ae4-5aeb-ae50-b94366aae5df",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz.tbi",
@@ -1583,7 +1436,6 @@
       {
         "id": "DO51523",
         "submitted_id": "PCSI_0233",
-        "info": {},
         "specimen": {
           "id": "SP125730",
           "type": "Primary tumour - other",
@@ -1591,10 +1443,8 @@
           "sample": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1609,19 +1459,16 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
       "size": 58091383,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "b26a535c-3531-55ad-8725-17aa6afb22c2",
@@ -1647,7 +1494,6 @@
       {
         "id": "DO51498",
         "submitted_id": "PCSI_0450",
-        "info": {},
         "specimen": {
           "id": "SP125791",
           "type": "Primary tumour - other",
@@ -1655,10 +1501,8 @@
           "sample": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1673,19 +1517,16 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
       "size": 59407,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "b9800f14-13d5-55cf-9383-a65b5446116a",
@@ -1711,7 +1552,6 @@
       {
         "id": "DO51498",
         "submitted_id": "PCSI_0450",
-        "info": {},
         "specimen": {
           "id": "SP125791",
           "type": "Primary tumour - other",
@@ -1719,10 +1559,8 @@
           "sample": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1737,19 +1575,16 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "bafebb1c613c348c696dc8f940ce1039",
       "size": 2964,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "52db8e51-5b3e-56ce-b939-0a96b4dfbce3",
@@ -1775,7 +1610,6 @@
       {
         "id": "DO51498",
         "submitted_id": "PCSI_0450",
-        "info": {},
         "specimen": {
           "id": "SP125791",
           "type": "Primary tumour - other",
@@ -1783,10 +1617,8 @@
           "sample": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1801,19 +1633,16 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "37ee70b282788eb0660f7d965f355898",
       "size": 1704966,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "6b32cfec-e82c-5528-b908-8e00ae927578",
@@ -1839,7 +1668,6 @@
       {
         "id": "DO51498",
         "submitted_id": "PCSI_0450",
-        "info": {},
         "specimen": {
           "id": "SP125791",
           "type": "Primary tumour - other",
@@ -1847,10 +1675,8 @@
           "sample": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1865,19 +1691,16 @@
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
-        "info": {},
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
         "variantCallingTool": "PCAWG InDel callers",
         "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "01e54034c70b85812e9aac58f2525594",
       "size": 329863,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "08519ab5-8665-58dc-8476-1c40cae5b789",
@@ -1903,7 +1726,6 @@
       {
         "id": "DO35442",
         "submitted_id": "PCSI_0083",
-        "info": {},
         "specimen": {
           "id": "SP125732",
           "type": "Primary tumour - other",
@@ -1911,10 +1733,8 @@
           "sample": {
             "id": "SA520221",
             "submitted_id": "PCSI_0083_Pa_P_526",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1929,12 +1749,10 @@
       "state": "PUBLISHED",
       "study": "MALY-DE",
       "experiment": {
-        "info": {},
         "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
         "variantCallingTool": "MUSE variant call pipeline",
         "matchedNormalSampleSubmitterId": "control_4128852"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
@@ -1942,7 +1760,6 @@
       "md5sum": "f83b0f9099e8594b589440819ab119cd",
       "size": 273787,
       "last_modified": null,
-      "info": {},
       "index_file": {
         "object_id": "a9c47630-491b-5587-a58d-6736734d6163",
         "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz.idx",
@@ -1967,7 +1784,6 @@
       {
         "id": "DO221129",
         "submitted_id": "4128852",
-        "info": {},
         "specimen": {
           "id": "SP124981",
           "type": "Primary tumour - lymph node",
@@ -1975,10 +1791,8 @@
           "sample": {
             "id": "SA557689",
             "submitted_id": "tumor_4128852",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]
@@ -1993,19 +1807,16 @@
       "state": "PUBLISHED",
       "study": "MALY-DE",
       "experiment": {
-        "info": {},
         "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
         "variantCallingTool": "PCAWG InDel callers",
         "matchedNormalSampleSubmitterId": "control_4166503"
-      },
-      "info": {}
+      }
     },
     "file": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
       "size": 38671,
-      "info": {},
       "last_modified": null,
       "index_file": {
         "object_id": "4ba753ee-bbb7-5f57-9cda-6e15c519f834",
@@ -2031,7 +1842,6 @@
       {
         "id": "DO52662",
         "submitted_id": "4166503",
-        "info": {},
         "specimen": {
           "id": "SP116638",
           "type": "Primary tumour - lymph node",
@@ -2039,10 +1849,8 @@
           "sample": {
             "id": "SA542043",
             "submitted_id": "tumor_4166503",
-            "type": "DNA",
-            "info": {}
-          },
-          "info": {}
+            "type": "DNA"
+          }
         }
       }
     ]

@@ -2,7 +2,6 @@ package bio.overture.maestro.domain.port.outbound.metadata.repository;
 
 import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import lombok.NonNull;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -16,5 +15,4 @@ public interface StudyRepositoryDAO {
      * @return the repository or empty null if not found
      */
     @NonNull Mono<StudyRepository> getFilesRepository(@NonNull String code);
-    @NonNull Flux<StudyRepository> getAll();
 }

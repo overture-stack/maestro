@@ -10,18 +10,12 @@
     "experiment": {
       "analysisId": "EGAZ00001254247",
       "aligned": true,
-      "libraryStrategy": "WGS",
-      "info": {}
-    },
-    "info": {
-      "dcc_project_code": "PEME-CA",
-      "isPcawg": false
+      "libraryStrategy": "WGS"
     }
   },
   "file": {
     "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam",
     "format": "BAM",
-    "info": {},
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
     "size": 77675501639,
     "last_modified": null,
@@ -58,7 +52,6 @@
   "donors": [
     {
       "id": "DO232959",
-      "info": {},
       "submitted_id": "MDT-AP-0432",
       "specimen": {
         "id": "SP200947",
@@ -67,11 +60,7 @@
         "sample": {
           "id": "SA604905",
           "submitted_id": "MDT-AP-0432_control",
-          "type": "DNA",
-          "info": {
-          }
-        },
-        "info": {
+          "type": "DNA"
         }
       }
     }

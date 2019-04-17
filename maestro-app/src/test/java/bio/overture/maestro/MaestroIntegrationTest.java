@@ -6,7 +6,6 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.masestro.test.TestCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,18 +30,11 @@ import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 @SpringBootTest(classes = {Maestro.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class MaestroIntegrationTest {
 
-    // @inject doesn't work
-    @Autowired
-    private Indexer indexer;
-
     @Autowired
     private ApplicationProperties properties;
 
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
-
-    @BeforeEach
-    void before() { }
 
     @AfterEach
     void tearDown() {

@@ -2,8 +2,6 @@ package bio.overture.maestro.domain.entities.indexing;
 
 import lombok.*;
 
-import java.util.Map;
-
 /**
  * Many samples can belong to an Analysis, a sample represents
  * a donor and a specimen composition.
@@ -21,5 +19,4 @@ public class Sample {
     private String submittedId;
     @NonNull
     private String type;
-    private Map<String, Object> info;
 }
