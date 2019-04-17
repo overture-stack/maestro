@@ -50,11 +50,11 @@ The project is following the ports/adapters archeticture, where the domain is co
 and frameworks.
 - Two maven modules:
     - maestro domain
-      the core features logic, framework independent portable that contains the main indexing, rules, notifications
+      - the core features logic, framework independent portable that contains the main indexing, rules, notifications
       logic as specified by the business features. has packages like:
-      - entities : contains pojos and entities
-      - api: the logic that fullfills the business features
-      - ports: contains the interfaces needed by the api to communicate with anything outside the indexing context.
+          - entities : contains pojos and entities
+          - api: the logic that fullfills the business features
+          - ports: contains the interfaces needed by the api to communicate with anything outside the indexing context.
 
     - mastro app:
        - The main runnable (spring boot app)
@@ -72,7 +72,7 @@ Note: if you don't/can't use the Makefile, look inside it for the shell commands
             - kafka
             - elastic search
             - other helper tools if you want like kafka rest proxy
-        - `maek boot-run`: start maestro (Maestro.java) from the IDE/cmd as a java application
+        - `make boot-run`: start maestro (Maestro.java) from the IDE/cmd as a java application
     - Demo:
         - `make doc-start` starts meastro from a docker image along with all needed infrastructure
 
