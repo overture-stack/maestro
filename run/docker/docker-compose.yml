@@ -1,20 +1,20 @@
 version: '3'
 
 services:
-  maestro:
-    image: overture/maestro:0.0.1-SNAPSHOT
-    container_name: maestro
-    ports:
-      - 11235:11235
-    environment:
-      - maestro.elasticsearch.cluster-nodes=maestro.elasticsearch.local:9200
-      - maestro.kafka.broker=maestro.kafka.local:9092
-      - spring.boot.admin.client.url=http://boot-admin:1122
-      - management.health.elasticsearch.enabled=false
-      - management.security.enabled=false
-    depends_on:
-       - elasticsearch
-       - broker
+#  maestro:
+#    image: overture/maestro:0.0.1-SNAPSHOT
+#    container_name: maestro
+#    ports:
+#      - 11235:11235
+#    environment:
+#      - maestro.elasticsearch.cluster-nodes=elasticsearch.maestro.local:9200
+#      - maestro.kafka.broker=kafka.maestro.local:9092
+#      - spring.boot.admin.client.url=http://boot-admin:1122
+#      - management.health.elasticsearch.enabled=false
+#      - management.security.enabled=false
+#    depends_on:
+#       - elasticsearch
+#       - broker
   admin:
     image: basharlabadi/vanilla-admin-boot:0.0.2
     environment:
@@ -29,7 +29,7 @@ services:
     container_name: boot-admin
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1
-    container_name: maestro.elasticsearch.local
+    container_name: elasticsearch.maestro.local
     ports:
       - 9200:9200
     environment:
@@ -43,8 +43,8 @@ services:
   # see : https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html#ce-docker-quickstart
   broker:
     image: confluentinc/cp-kafka:5.2.1
-    hostname: maestro.kafka.local
-    container_name: maestro.kafka.local
+    hostname: kafka.maestro.local
+    container_name: kafka.maestro.local
     depends_on:
       - zookeeper
     ports:
@@ -54,10 +54,10 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://maestro.kafka.local:29092,PLAINTEXT_HOST://maestro.kafka.local:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka.maestro.local:29092,PLAINTEXT_HOST://kafka.maestro.local:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: maestro.kafka.local:29092
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka.maestro.local:29092
       CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
@@ -74,6 +74,5 @@ services:
     container_name: rest-proxy
     environment:
       KAFKA_REST_HOST_NAME: rest-proxy
-      KAFKA_REST_BOOTSTRAP_SERVERS: maestro.kafka.local:29092
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka.maestro.local:29092
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
-#      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'

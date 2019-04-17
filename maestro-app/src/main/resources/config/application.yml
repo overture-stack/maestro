@@ -54,7 +54,7 @@ maestro:
   # last resort fallback file system log in case of retries exhaustion.
   failure-log:
     enabled: true
-    dir: ${user.home}/logs/maestro
+    dir: /tmp/logs/maestro
 
 # logging & monitoring
 logging:
