@@ -35,7 +35,7 @@ spec:
                     }
                     // the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
                     // container)
-                    sh "docker --network=host build . -t overture/maestro:${commit}"
+                    sh "docker  build --network=host . -t overture/maestro:${commit}"
                 }
             }
         }
