@@ -9,11 +9,6 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: java
-    image: openjdk:11-jdk-slim
-    command:
-    - cat
-    tty: true
   - name: docker
     image: docker:18-git
     tty: true
@@ -38,7 +33,9 @@ spec:
                     script {
                         commit = sh(returnStdout: true, script: 'git describe --always').trim()
                     }
-                    sh "docker build --network=host -f Dockerfile.release . -t overture/maestro:${commit}"
+                    sh "docker build -f Dockerfile.test . -t maestro-src:latest"
+                    sh "docker run -v /var/run/docker.sock:/var/run/docker.sock maestro-src:latest /src/mvnw test"
+                    // sh "docker build --network=host -f Dockerfile.release . -t overture/maestro:${commit}"
                 }
             }
         }
