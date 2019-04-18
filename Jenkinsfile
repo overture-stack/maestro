@@ -33,7 +33,9 @@ spec:
                     script {
                         commit = sh(returnStdout: true, script: 'git describe --always').trim()
                     }
-                    sh "docker build . -t overture/maestro:${commit}"
+                    # the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
+                    # container)
+                    sh "docker --network=host build . -t overture/maestro:${commit}"
                 }
             }
         }
