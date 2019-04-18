@@ -1,0 +1,6 @@
+# This docker file is needed to enable a docker based CI/CD environments from getting an image with the code
+# since we use testcontainers in our tests we can't use a multistage build with tests part of it because
+# that
+FROM openjdk:11-jdk
+WORKDIR /src
+ADD .. .
