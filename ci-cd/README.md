@@ -57,6 +57,7 @@ CMD ["java", "-jar", "/usr/bin/maestro-app.jar"]
 EXPOSE 11235
 ```
 
-
 ## Solution
 
+ - run the tests first
+    - ex   
