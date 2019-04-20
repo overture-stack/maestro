@@ -12,7 +12,7 @@ maestro:
       file-centric:
         alias: file_centric
     # port injected by the embedded-elasticsearch library
-    cluster-nodes: localhost:${embedded.elasticsearch.httpPort}
+    cluster-nodes: ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}
   repositories:
     - code: collab
       # port is injected by @AutoConfigureWireMock in the MaestroIntegrationTest
