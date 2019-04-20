@@ -2,8 +2,6 @@
 FROM openjdk:11-jdk as builder
 WORKDIR /usr/src/app
 ADD . .
-# tests to be executed outside of dockerfile because we use testcontainers
-# needs access to docker socket
 RUN ./mvnw install -Dmaven.test.skip=true
 
 FROM openjdk:11-jre-slim

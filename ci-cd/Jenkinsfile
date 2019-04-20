@@ -1,5 +1,5 @@
 def commit = "UNKNOWN"
-
+def version="UNKNOWN"
 pipeline {
     agent {
         kubernetes {
@@ -30,35 +30,90 @@ spec:
         }
     }
     stages {
-        stage('Build') {
+
+        // get the commit and version number for current release
+        stage('prepare') {
             steps {
-                container('jdk') {
-                    sh "./mvnw test"
+                script {
+                    commit = sh(returnStdout: true, script: 'git describe --always').trim()
+                }
+                script {
+                    version = sh(returnStdout: true, script: 'cat ./.mvn/maven.config | grep revision | cut -d '=' -f2').trim()
                 }
             }
         }
-        stage('publish artifacts') {
+
+        // run tests and package
+        stage('Test') {
+            steps {
+                container('jdk') {
+                    // remove the snapshot and append the commit (the hyphen in sha1 is intentional)
+                    sh "./mvnw -Dsha1=-${commit} -Dchangelist= test package"
+                }
+            }
+        }
+
+        // publish the edge tag
+        stage('Publish Develop') {
             //when {
             //    branch "develop"
-            //}
+            //1}
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                     sh 'docker login -u $USERNAME -p $PASSWORD'
-                    }
-
-                    script {
-                        commit = sh(returnStdout: true, script: 'git describe --always').trim()
+                        sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
 
                     // the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
                     // container)
-                    sh "docker  build --network=host -f ci-cd/develop/Dockerfile . -t overture/maestro:edge -t overture/maestro:${commit}"
+                    sh "docker  build --network=host -f ci-cd/develop/Dockerfile . -t overture/maestro:edge -t overture/maestro:${version}-${commit}"
                     sh "docker push overture/maestro:edge"
                }
             }
         }
+
+        stage('Release') {
+            when {
+                branch "master"
+            }
+            steps {
+                container('jdk') {
+                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests deploy"
+                }
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    }
+                    sh "docker  build --network=host -f ci-cd/release/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
+                    sh "docker push overture/maestro:${verison}"
+                    sh "docker push overture/maestro:latest"
+               }
+            }
+
+        }
+
+        /*
+        * Delivery
+        */
+        stage('Deploy QA') {
+            when {
+                branch "develop"
+            }
+            steps {
+                sh "echo kubectl magic again"
+            }
+        }
+
+        stage('Deploy Production') {
+            when {
+                branch "master"
+            }
+            steps {
+                sh "echo kubectl dark magic"
+            }
+        }
     }
+
     post {
         always {
             junit "**/TEST-*.xml"
