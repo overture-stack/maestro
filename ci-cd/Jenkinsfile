@@ -11,7 +11,7 @@ spec:
   containers:
   - name: jdk
     tty: true
-    image: openjdk:11-jdk-slim
+    image: openjdk:11-jdk
     volumeMounts:
     - mountPath: /var/run/docker.sock
       name: docker-sock
@@ -33,14 +33,13 @@ spec:
         stage('Build') {
             steps {
                 container('jdk') {
-                    sh 'ls'
-                    sh './mvnw test'
+                    sh "./mvnw test"
                 }
             }
         }
         stage('publish artifacts') {
             //when {
-            //    branch 'develop'
+            //    branch "develop"
             //}
             steps {
                 container('docker') {
