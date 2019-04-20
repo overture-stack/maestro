@@ -10,6 +10,7 @@ kind: Pod
 spec:
   containers:
   - name: jdk
+    tty: true
     image: openjdk:11-jdk-slim
     volumeMounts:
     - mountPath: /var/run/docker.sock
