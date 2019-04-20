@@ -9,6 +9,14 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
+  - name: java
+    image: openjdk:11-jdk-slim
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/docker.sock
+      name: docker-sock
   - name: docker
     image: docker:18-git
     tty: true
@@ -26,18 +34,32 @@ spec:
     stages {
         stage('Build') {
             steps {
+                container('java') {
+                    sh 'ls'
+                    sh './mvnw test'
+                }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
+
                     script {
                         commit = sh(returnStdout: true, script: 'git describe --always').trim()
                     }
+
                     // the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
                     // container)
-                    sh "docker  build --network=host . -t overture/maestro:${commit}"
+                    sh "docker  build --network=host -f Dockerfile ../../. -t overture/maestro:edge"
+
+                    // should change to have a release version instead of commit# as tag
+                    sh "docker push overture/maestro:edge"
                 }
             }
+        }
+    }
+    post {
+        always {
+            junit "**/TEST-*.xml"
         }
     }
 }
