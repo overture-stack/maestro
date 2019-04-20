@@ -1,5 +1,5 @@
 def commit = "UNKNOWN"
-def version="UNKNOWN"
+def version = "UNKNOWN"
 pipeline {
     agent {
         kubernetes {
@@ -101,7 +101,6 @@ spec:
                     sh "docker push overture/maestro:latest"
                }
             }
-
         }
 
         stage('Deploy Production') {
