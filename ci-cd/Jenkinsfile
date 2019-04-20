@@ -38,7 +38,7 @@ spec:
                     commit = sh(returnStdout: true, script: 'git describe --always').trim()
                 }
                 script {
-                    version = sh(returnStdout: true, script: 'cat ./.mvn/maven.config | grep revision | cut -d '=' -f2').trim()
+                    version = sh(returnStdout: true, script: "cat ./.mvn/maven.config | grep revision | cut -d '=' -f2").trim()
                 }
             }
         }
