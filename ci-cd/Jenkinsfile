@@ -32,7 +32,7 @@ spec:
     stages {
 
         // get the commit and version number for current release
-        stage('prepare') {
+        stage('Prepare') {
             steps {
                 script {
                     commit = sh(returnStdout: true, script: 'git describe --always').trim()
@@ -55,9 +55,9 @@ spec:
 
         // publish the edge tag
         stage('Publish Develop') {
-            //when {
-            //    branch "develop"
-            //1}
+            when {
+                branch "develop"
+            }
             steps {
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -69,6 +69,18 @@ spec:
                     sh "docker  build --network=host -f ci-cd/develop/Dockerfile . -t overture/maestro:edge -t overture/maestro:${version}-${commit}"
                     sh "docker push overture/maestro:edge"
                }
+            }
+        }
+
+       /*
+        * Release & Delivery
+        */
+        stage('Deploy QA') {
+            when {
+                branch "develop"
+            }
+            steps {
+                sh "echo kubectl magic again"
             }
         }
 
@@ -90,18 +102,6 @@ spec:
                }
             }
 
-        }
-
-        /*
-        * Delivery
-        */
-        stage('Deploy QA') {
-            when {
-                branch "develop"
-            }
-            steps {
-                sh "echo kubectl magic again"
-            }
         }
 
         stage('Deploy Production') {
