@@ -1,6 +1,6 @@
 # Maestro
 
-The indexer component of genomic studies metadata
+The indexer component of genomic studies metadata.
 
 ## Intro
 Meastro was created to enable genomic researchers to enhance their Overture SONGs by building indexes, elastic search
