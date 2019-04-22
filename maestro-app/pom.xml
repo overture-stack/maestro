@@ -5,7 +5,7 @@
     <parent>
         <artifactId>maestro</artifactId>
         <groupId>bio.overture</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}${sha1}${changelist}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>bio.overture</groupId>
             <artifactId>maestro-domain</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

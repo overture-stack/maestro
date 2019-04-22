@@ -24,7 +24,7 @@ by default, that makes searching Analyses and Studies much more powerful and eas
 
 ## Technologies & libraries:
 - Java 11 - OpenJDK 11
-- Maven 3
+- Maven 3 (YOU NEED MAVEN 3.5+, if you don't want to use the wrapper or your IDE points to older version)
 - lombok
 - Spring boot 2
     - Spring webflux & project reactor
