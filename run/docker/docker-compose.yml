@@ -1,20 +1,20 @@
 version: '3'
 
 services:
-#  maestro:
-#    image: overture/maestro:0.0.1-SNAPSHOT
-#    container_name: maestro
-#    ports:
-#      - 11235:11235
-#    environment:
-#      - maestro.elasticsearch.cluster-nodes=elasticsearch.maestro.local:9200
-#      - maestro.kafka.broker=kafka.maestro.local:9092
-#      - spring.boot.admin.client.url=http://boot-admin:1122
-#      - management.health.elasticsearch.enabled=false
-#      - management.security.enabled=false
-#    depends_on:
-#       - elasticsearch
-#       - broker
+  maestro:
+    image: overture/maestro:0.0.1-SNAPSHOT
+    container_name: maestro
+    ports:
+      - 11235:11235
+    environment:
+      - maestro.elasticsearch.cluster-nodes=elasticsearch.maestro.local:9200
+      - maestro.kafka.broker=kafka.maestro.local:9092
+      - spring.boot.admin.client.url=http://boot-admin:1122
+      - management.health.elasticsearch.enabled=false
+      - management.security.enabled=false
+    depends_on:
+       - elasticsearch
+       - broker
   admin:
     image: basharlabadi/vanilla-admin-boot:0.0.2
     environment:
@@ -27,6 +27,7 @@ services:
       timeout: 60s
       retries: 120
     container_name: boot-admin
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1
     container_name: elasticsearch.maestro.local

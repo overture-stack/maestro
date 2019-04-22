@@ -22,7 +22,7 @@ by default, that makes searching Analyses and Studies much more powerful and eas
 - Runtime configurability
 - Extendable: separate domain from infrastructure & configuration
 
-## Tecnologies & libraries:
+## Technologies & libraries:
 - Java 11 - OpenJDK 11
 - Maven 3
 - lombok
@@ -34,7 +34,7 @@ by default, that makes searching Analyses and Studies much more powerful and eas
         - Streams (for Kafak integration)
         - config client
     - Spring boot admin + client
-- Elasticsearch 6.6.1
+- Elasticsearch 6+
 - Apache Kafka
 - resilience4j:
     - retry module
@@ -50,8 +50,8 @@ The project is following the ports/adapters archeticture, where the domain is co
 and frameworks.
 - Two maven modules:
     - maestro domain
-      - the core features logic, framework independent portable that contains the main indexing, rules, notifications
-      logic as specified by the business features. has packages like:
+      - the core features and framework independent logic that is portable and contains the main indexing, rules, notifications
+      logic as specified by the business features. Has packages like:
           - entities : contains pojos and entities
           - api: the logic that fullfills the business features
           - ports: contains the interfaces needed by the api to communicate with anything outside the indexing context.
@@ -60,7 +60,7 @@ and frameworks.
        - The main runnable (spring boot app)
        - Contains the infrastructure and adapters (ports implementations) that is needed to connect the domain
          with the outside world like elastic search, song web clients, configuration files etc.
-         it also has the spring framework configurations here to keep technologies outside of the domain.
+         It also has the Spring framework configurations here to keep technologies outside of the domain.
 
 ## How to:
 Note: if you don't/can't use the Makefile, look inside it for the shell commands and replicate them.
