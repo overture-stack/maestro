@@ -27,14 +27,10 @@ doc-build: mvn-i
 	cd maestro-app
 	../mvnw dockerfile:build
 
-# start using images only, don't build from code.
-doc-start-img:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose -f docker-compose.yml up -d
-
+# use this when you want to run maestro as container
 doc-start: mvn-i doc-clean
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose up --build -d
+	docker-compose up -d
 
 doc-stop:
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
@@ -43,6 +39,12 @@ doc-stop:
 doc-restart-app: mvn-i
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose up --build -d maestro
+
+# only starts the infrastructure containers needed by maestro
+# use this when you run maestro from the ide (not as a container)
+doc-start-dev:
+	cd $(DOCKER_COMPOSE_LOCAL_DIR);
+	docker-compose -f docker-compose.dev.yml up -d
 
 doc-clean:
 	docker system prune

@@ -53,6 +53,12 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.elasticsearch.client.socket-timeout:10000}")
     private long elasticSearchClientSocketTimeout;
 
+    @Value("${maestro.elasticsearch.client.retry.max-attempts:3}")
+    private int elasticSearchRetryMaxAttempts;
+
+    @Value("${maestro.elasticsearch.client.retry.wait-duration-millis:100}")
+    private long elasticSearchRetryWaitDurationMillis;
+
     private List<DefaultPropertiesFileRepository> repositories;
 
     @Override
@@ -108,6 +114,16 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Override
     public int songTimeoutSeconds() {
         return songTimeoutSeconds;
+    }
+
+    @Override
+    public long elasticSearchRetryWaitDurationMillis() {
+        return elasticSearchRetryWaitDurationMillis;
+    }
+
+    @Override
+    public int elasticSearchRetryMaxAttempts() {
+        return elasticSearchRetryMaxAttempts;
     }
 
     @Data

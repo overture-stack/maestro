@@ -1,5 +1,6 @@
 package bio.overture.maestro.app.infra.config;
 
+import bio.overture.maestro.app.infra.adapter.inbound.messaging.MessagingConfig;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.GlobalWebExceptionHandler;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.ManagementController;
 import bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.ElasticSearchConfig;
@@ -36,6 +37,8 @@ public class RootConfiguration {
 @Import({
     ElasticSearchConfig.class,
     ExclusionRulesConfig.class,
+    MessagingConfig.class,
+    WebConfig.class,
     SongConfig.class,
     RepositoryConfig.class,
     NotificationConfig.class,
@@ -48,8 +51,6 @@ class PortsConfig {}
  */
 @Configuration
 @Import({
-    ElasticSearchConfig.class,
-    WebConfig.class,
     PropertiesConfig.class,
 })
 class InfraConfig {

@@ -1,12 +1,10 @@
 server:
   port: 11235
 
-spring:
-  application:
-    name: maestro
-  output.ansi.enabled: ALWAYS
-
 maestro:
+  kafka:
+    broker: localhost:9092
+    indexing-topic: maestro-index-requests
   song:
     max-retries: 3
     timeout-sec: 100 # some studies take really long, +30 secs, to be downloaded
@@ -28,6 +26,9 @@ maestro:
       connection-timeout: 5000
       # max time to wait on idle connection (no data flow)
       socket-timeout: 10000
+      retry:
+        max-attempts: 3
+        wait-duration-millis: 500
 
   # Genome file repositories props
   repositories:
@@ -53,15 +54,16 @@ maestro:
   # last resort fallback file system log in case of retries exhaustion.
   failure-log:
     enabled: true
-    dir: ${user.home}/logs/maestro
+    dir: /tmp/logs/maestro
 
 # logging & monitoring
 logging:
   level:
-    root: WARN
+    root: INFO
     bio.overture: TRACE
     # very verbose class, only enable lower level when necessary
     bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
+    org.apache.kafka.clients: WARN
 
 # spring boot actuator endpoints
 management:
@@ -72,3 +74,17 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+spring:
+  application:
+    name: maestro
+  output.ansi.enabled: ALWAYS
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${maestro.kafka.broker}
+      bindings:
+        input:
+          # we don't specify content type because @StreamListener will handle that
+          destination: ${maestro.kafka.indexing-topic}
