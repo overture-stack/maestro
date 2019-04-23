@@ -21,7 +21,7 @@ pipeline {
                     version = sh(returnStdout: true, script: "cat ./.mvn/maven.config | grep revision | cut -d '=' -f2").trim()
                 }
                 sh "git checkout -b rc/${version}-${commit}"
-                sh "git push -u origin rc/${version}-${commit}"
+                sh "git push --set-upstream origin rc/${version}-${commit}"
             }
         }
     }
