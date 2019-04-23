@@ -1,5 +1,6 @@
-def commit = "UNKNOWN"
-def version = "UNKNOWN"
+def commit=""
+def version=""
+
 pipeline {
     agent {
         kubernetes {
