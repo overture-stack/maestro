@@ -1,6 +1,6 @@
 FROM openjdk:11-jdk as builder
 WORKDIR /usr/src/app
-ADD develop .
+ADD . .
 # tests to be executed outside of dockerfile because we use testcontainers
 # needs access to docker socket
 RUN ./mvnw clean package -DskipTests
