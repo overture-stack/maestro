@@ -147,9 +147,9 @@ spec:
         }
     }
 
-    post {
-        always {
-            junit "**/TEST-*.xml"
-        }
-    }
+//    post {
+//        always {
+//            junit "**/TEST-*.xml"
+//        }
+//    }
 }
