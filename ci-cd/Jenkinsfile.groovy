@@ -58,7 +58,8 @@ spec:
                 container('jdk') {
                     // remove the snapshot and append the commit (the dot before ${commit} is intentional)
                     // this does NOT publish to artifactory store
-                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-${BUILD_NUMBER} test package"
+                    //TODO restore next line
+                    //sh "./mvnw -Dsha1=.${commit} -Dchangelist=-${BUILD_NUMBER} test package"
                 }
             }
         }
@@ -77,7 +78,7 @@ spec:
                     // the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
                     // container)
                     // TODO: pass jar name to the docker file to avoid rebuilding.
-                    sh "docker  build --network=host -f ci-cd/develop/Dockerfile . -t overture/maestro:edge"
+                    sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:edge"
                     sh "docker push overture/maestro:edge"
                }
             }
@@ -92,14 +93,14 @@ spec:
             steps {
                 container('jdk') {
                     // publish the jar to the artifacts store <Version>.<commitId>-RC
-                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-RC -DskipTests deploy"
+                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-RC -DskipTests package"
                 }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
                     // TODO: pass jar name to the docker file to avoid rebuilding.
-                    sh "docker  build --network=host -f ci-cd/develop/Dockerfile . -t overture/maestro:${version}.${commit}-RC"
+                    sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:${version}.${commit}-RC"
                     sh "docker push overture/maestro:${version}.${commit}-RC"
                }
             }
@@ -123,14 +124,13 @@ spec:
             }
             steps {
                 container('jdk') {
-                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests deploy"
+                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests package"
                 }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    sh "docker  build --network=host -f ci-cd/release/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
-
+                    sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
                     sh "docker push overture/maestro:${verison}"
                     sh "docker push overture/maestro:latest"
                }
