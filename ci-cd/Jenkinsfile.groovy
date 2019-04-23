@@ -91,10 +91,10 @@ spec:
                 branch "rc/${version}-${commit}"
             }
             steps {
-                container('jdk') {
-                    // publish the jar to the artifacts store <Version>.<commitId>-RC
-                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-RC -DskipTests package"
-                }
+//                container('jdk') {
+//                    // publish the jar to the artifacts store <Version>.<commitId>-RC
+//                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-RC -DskipTests deploy"
+//                }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
@@ -123,9 +123,9 @@ spec:
                 branch "master"
             }
             steps {
-                container('jdk') {
-                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests package"
-                }
+//                container('jdk') {
+//                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests deploy"
+//                }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
