@@ -87,7 +87,7 @@ spec:
         // to create a release candidate branch see tasks folder under ci-cd
         stage('Publish Release Candidate') {
             when {
-                branch "rc-${version}-${commit}"
+                branch "rc/${version}-${commit}"
             }
             steps {
                 container('jdk') {
