@@ -58,8 +58,7 @@ spec:
                 container('jdk') {
                     // remove the snapshot and append the commit (the dot before ${commit} is intentional)
                     // this does NOT publish to artifactory store
-                    //TODO restore next line
-                    //sh "./mvnw -Dsha1=.${commit} -Dchangelist=-${BUILD_NUMBER} test package"
+//                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-${BUILD_NUMBER} test package"
                 }
             }
         }
@@ -102,6 +101,11 @@ spec:
                     // TODO: pass jar name to the docker file to avoid rebuilding.
                     sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:${version}.${commit}-RC"
                     sh "docker push overture/maestro:${version}.${commit}-RC"
+                    // for testing
+                    withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git tag ${version}.${commit}-RC"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
+                    }
                }
             }
         }
@@ -133,6 +137,10 @@ spec:
                     sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
                     sh "docker push overture/maestro:${verison}"
                     sh "docker push overture/maestro:latest"
+                    withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git tag ${version}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
+                    }
                }
             }
         }
@@ -147,9 +155,9 @@ spec:
         }
     }
 
-//    post {
-//        always {
-//            junit "**/TEST-*.xml"
-//        }
-//    }
+    post {
+        always {
+            junit "**/TEST-*.xml"
+        }
+    }
 }
