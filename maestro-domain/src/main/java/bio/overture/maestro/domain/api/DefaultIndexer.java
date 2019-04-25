@@ -287,7 +287,12 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
-        return this.fileCentricIndexAdapter.batchUpsertFileRepositories(BatchIndexFilesCommand.builder()
+        Mono<List<FileCentricDocument>> storedFiles = Mono.just(List.of());
+        storedFiles.
+        ConflictsCheckResult r = checkConflicts(files, storedFiles);
+
+
+        this.fileCentricIndexAdapter.batchUpsertFileRepositories(BatchIndexFilesCommand.builder()
             .files(files)
             .build()
         )
@@ -310,6 +315,21 @@ class DefaultIndexer implements Indexer {
         );
     }
 
+    private ConflictsCheckResult checkConflicts(List<FileCentricDocument> filesToIndex, List<FileCentricDocument> storedFiles) {
+        List<FileCentricDocument> validFiles = filesToIndex.stream().filter(
+            fileToIndex -> storedFiles.stream()
+                .filter(storedFile -> storedFile.getObjectId().equals(fileToIndex.getObjectId()))
+                .anyMatch(f -> f.isValidReplica(fileToIndex))
+        ).collect(Collectors.toList());
+
+        return ConflictsCheckResult.builder()
+            .conflictingFiles(
+                filesToIndex.stream()
+                    .filter(file -> !validFiles.contains(file))
+                    .collect(Collectors.toList())
+            ).build();
+    }
+
     private void notifyFailedToFetchStudies(String code, String message) {
         val attrs = Map.<String, Object>of(REPO_CODE, code, ERR, message);
         val notification =
@@ -322,6 +342,12 @@ class DefaultIndexer implements Indexer {
         val notification =
             new IndexerNotification(NotificationName.STUDY_ANALYSES_FETCH_FAILED, attrs);
         notifier.notify(notification);
+    }
+
+    @Getter
+    @Builder
+    private static class ConflictsCheckResult {
+        private List<FileCentricDocument> conflictingFiles;
     }
 
     @Getter

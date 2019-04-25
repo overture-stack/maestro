@@ -2,7 +2,9 @@ package bio.overture.maestro.domain.port.outbound.indexing;
 
 
 import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import lombok.NonNull;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -26,4 +28,11 @@ public interface FileCentricIndexAdapter {
      * @return flag indicating if the operation was successful.
      */
     Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    Flux<FileCentricDocument> fetchById(String id);
 }
