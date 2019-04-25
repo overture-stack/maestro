@@ -12,7 +12,7 @@ import java.util.Map;
 @EqualsAndHashCode
 public class FileCentricAnalysis {
     @NonNull
-    private String id;
+    private String analysisId;
     @NonNull
     private String type;
     @NonNull

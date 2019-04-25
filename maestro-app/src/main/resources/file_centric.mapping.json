@@ -51,7 +51,7 @@
       },
       "analysis" : {
         "properties" : {
-          "id" : {
+          "analysis_id" : {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"
@@ -83,9 +83,6 @@
       },
       "file": {
         "properties": {
-          "id": {
-            "type": "keyword"
-          },
           "format": {
             "type": "keyword"
           },
@@ -106,7 +103,7 @@
           },
           "auxiliary_file": {
             "properties": {
-              "id": {
+              "auxiliary_file_id": {
                 "type": "keyword"
               },
               "format": {
@@ -147,7 +144,7 @@
       "donors": {
         "type": "nested",
         "properties": {
-          "id": {
+          "donor_id": {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"
@@ -162,7 +159,7 @@
           "specimen": {
             "type": "nested",
             "properties": {
-              "id": {
+              "specimen_id": {
                 "type": "keyword",
                 "copy_to": [
                   "file_autocomplete"
@@ -183,7 +180,7 @@
               "sample": {
                 "type": "nested",
                 "properties": {
-                  "id": {
+                  "sample_id": {
                     "type": "keyword",
                     "copy_to": [
                       "file_autocomplete"

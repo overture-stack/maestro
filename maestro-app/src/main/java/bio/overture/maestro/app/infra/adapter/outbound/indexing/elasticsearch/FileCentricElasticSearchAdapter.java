@@ -199,7 +199,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
                 log.error("failed sending request for: part#: {}, hash: {} for filesList hash: {} to elastic search," +
                     " gathering failed Ids.", partNum, listParthHash, fileListHash, t);
                 return listPart.stream()
-                    .map(fileCentricDocument -> fileCentricDocument.getAnalysis().getId())
+                    .map(fileCentricDocument -> fileCentricDocument.getAnalysis().getAnalysisId())
                     .collect(Collectors.toUnmodifiableSet());
             });
         return result.get();

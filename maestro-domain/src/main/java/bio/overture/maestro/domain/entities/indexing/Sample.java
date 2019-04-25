@@ -14,7 +14,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class Sample {
     @NonNull
-    private String id;
+    private String sampleId;
     @NonNull
     private String submittedId;
     @NonNull

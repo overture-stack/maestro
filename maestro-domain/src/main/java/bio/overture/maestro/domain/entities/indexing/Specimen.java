@@ -10,7 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class Specimen {
     @NonNull
-    private String id;
+    private String specimenId;
     @NonNull
     private String type;
     @NonNull
