@@ -4,8 +4,9 @@ package bio.overture.maestro.domain.port.outbound.indexing;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import lombok.NonNull;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 /**
  * Adapter for the indexing server client, this provides the indexer with needed APIs
@@ -34,5 +35,8 @@ public interface FileCentricIndexAdapter {
      * @param id
      * @return
      */
-    Flux<FileCentricDocument> fetchById(String id);
+    Mono<List<FileCentricDocument>> fetchById(List<String> id);
+
+
+    Mono<IndexResult> removeFiles(List<FileCentricDocument> conflictingFiles);
 }

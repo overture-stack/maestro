@@ -28,6 +28,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -55,6 +56,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private static final int FALLBACK_MAX_RETRY_ATTEMPTS = 0;
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
+    private CustomSearchResultMapper searchResultMapper;
     private final Resource fileCentricMapping;
     private final ElasticsearchRestTemplate template;
     private final String alias;
@@ -70,9 +72,11 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     public FileCentricElasticSearchAdapter(CustomElasticSearchRestAdapter customElasticSearchRestAdapter,
                                            ElasticsearchRestTemplate template,
                                            @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
+                                           CustomSearchResultMapper searchResultMapper,
                                            ApplicationProperties properties) {
 
         this.customElasticSearchRestAdapter = customElasticSearchRestAdapter;
+        this.searchResultMapper = searchResultMapper;
         this.fileCentricMapping = properties.fileCentricMapping();
         this.template = template;
         this.alias = properties.fileCentricAlias();
@@ -99,6 +103,30 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             .subscribeOn(Schedulers.elastic());
     }
 
+    @Override
+    public Mono<List<FileCentricDocument>> fetchById(List<String> ids) {
+        log.debug("in fetchById, args: {} ", ids);
+        return  Mono.fromSupplier(() -> this.fetch(ids))
+            .subscribeOn(Schedulers.elastic());
+    }
+
+    private List<FileCentricDocument> fetch(List<String> ids) {
+        val query = new NativeSearchQueryBuilder()
+            .withIds(ids)
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+
+        return this.template
+            .queryForPage(query, FileCentricDocument.class, this.searchResultMapper)
+            .getContent();
+    }
+
+    @Override
+    public Mono<IndexResult> removeFiles(List<FileCentricDocument> conflictingFiles) {
+        return null;
+    }
+
     @Retryable(
         maxAttempts = 5,
         backoff = @Backoff(value = 1000, multiplier=1.5)
@@ -111,7 +139,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             log.info("indexExists result: {} ", indexExists);
             if (!indexExists) {
                 this.createIndex();
-                log.info("index {} have been created", this.alias, this.alias);
+                log.info("index {} have been created", this.alias);
             }
             if (!mappingExists) {
                 template.putMapping(this.alias, this.alias, loadMappingMap(this.alias));
@@ -157,8 +185,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @SneakyThrows
     private IndexResult bulkUpsertFileRepositories(List<FileCentricDocument> filesList) {
         log.trace("in bulkUpsertFileRepositories, filesList count : {} ", filesList.size());
-        val size = this.documentsPerBulkRequest;
-        val failures = partitionList(filesList, size)
+        val failures = partitionList(filesList, this.documentsPerBulkRequest)
             .entrySet()
             .stream()
             .map((entry)-> tryBulkUpsertRequestForPart(filesList, entry))

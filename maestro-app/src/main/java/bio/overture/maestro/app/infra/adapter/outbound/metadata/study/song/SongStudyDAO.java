@@ -39,7 +39,7 @@ import static reactor.core.publisher.Mono.error;
 class SongStudyDAO implements StudyDAO {
 
     static final String STUDY_ID = "studyId";
-    private static final String STUDY_ANALYSES_URL_TEMPLATE = "{0}/studies/{1}/analysis";
+    private static final String STUDY_ANALYSES_URL_TEMPLATE = "{0}/studies/{1}/analysis?analysisStates={2}";
     private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
     private static final String MSG_STUDY_DOES_NOT_EXIST = "study {0} doesn't exist in the specified repository";
     private static final int FALLBACK_SONG_TIMEOUT = 60;
@@ -49,6 +49,7 @@ class SongStudyDAO implements StudyDAO {
     private final int songMaxRetries;
     private final int minBackoffSec = 1;
     private final int maxBackoffSec = 5;
+    private final String indexableStudyStatuses;
     /**
      * must be bigger than 0 or all calls will fail
      */
@@ -57,6 +58,7 @@ class SongStudyDAO implements StudyDAO {
     @Inject
     public SongStudyDAO(@NonNull WebClient webClient, @NonNull ApplicationProperties applicationProperties) {
         this.webClient = webClient;
+        this.indexableStudyStatuses = applicationProperties.indexableStudyStatuses();
         this.songMaxRetries = applicationProperties.songMaxRetries() >= 0 ? applicationProperties.songMaxRetries()
             : FALLBACK_SONG_MAX_RETRY;
         this.songTimeout = applicationProperties.songTimeoutSeconds() > 0 ? applicationProperties.songTimeoutSeconds()
@@ -76,7 +78,7 @@ class SongStudyDAO implements StudyDAO {
             .exponentialBackoff(Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
         return this.webClient.get()
-            .uri(format(STUDY_ANALYSES_URL_TEMPLATE, repoBaseUrl, studyId))
+            .uri(format(STUDY_ANALYSES_URL_TEMPLATE, repoBaseUrl, studyId, this.indexableStudyStatuses))
             .retrieve()
             .onStatus(HttpStatus.NOT_FOUND::equals,
                 clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
