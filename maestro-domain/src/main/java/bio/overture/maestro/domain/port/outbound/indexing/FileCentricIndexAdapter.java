@@ -1,6 +1,7 @@
 package bio.overture.maestro.domain.port.outbound.indexing;
 
 
+import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import lombok.NonNull;
@@ -35,8 +36,8 @@ public interface FileCentricIndexAdapter {
      * @param id
      * @return
      */
-    Mono<List<FileCentricDocument>> fetchById(List<String> id);
+    Mono<List<FileCentricDocument>> fetchByIds(List<String> id);
 
 
-    Mono<IndexResult> removeFiles(List<FileCentricDocument> conflictingFiles);
+    Mono<IndexerException> removeFiles(List<FileCentricDocument> conflictingFiles);
 }

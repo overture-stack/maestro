@@ -15,11 +15,12 @@ import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPa
 import java.util.ArrayList;
 
 
-class CustomSearchResultMapper implements SearchResultMapper {
+class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper {
 
     private ObjectMapper objectMapper;
 
-    public CustomSearchResultMapper(@Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper) {
+    public SnakeCaseJacksonSearchResultMapper(@Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
+                                                  ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -40,8 +41,10 @@ class CustomSearchResultMapper implements SearchResultMapper {
     }
 
     @Override
+    @SneakyThrows
     public <T> T mapSearchHit(SearchHit searchHit, Class<T> type) {
-        return null;
+        String source = searchHit.getSourceAsString();
+        return objectMapper.readValue(source, type);
     }
 
 }

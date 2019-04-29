@@ -2,7 +2,6 @@ package bio.overture.maestro;
 
 import bio.overture.maestro.app.Maestro;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
-import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.masestro.test.TestCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -37,13 +36,14 @@ public abstract class MaestroIntegrationTest {
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws InterruptedException {
         // clean indexes after each test to keep tests isolated
         DeleteQuery query = new DeleteQuery();
         query.setIndex(properties.fileCentricAlias());
         query.setType(properties.fileCentricAlias());
         query.setQuery(matchAllQuery());
         elasticsearchRestTemplate.delete(query);
+        Thread.sleep(1000);
     }
 
 }

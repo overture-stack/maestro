@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -289,19 +290,46 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
-        return fileCentricIndexAdapter.fetchById(files.stream()
-                .map(FileCentricDocument::getObjectId)
-                .collect(Collectors.toList())
-            )
+        return getAlreadyIndexed(files)
             .map(storedFilesList -> findConflicts(files, storedFilesList))
-            .map(this::handleConflicts)
-            .flatMap(cr -> this.fileCentricIndexAdapter.batchUpsertFileRepositories(BatchIndexFilesCommand.builder()
-                .files(files)
-                .build())
-            )
+            .flatMap(conflictsCheckResult -> this.handleConflicts(conflictsCheckResult).then(Mono.just(conflictsCheckResult)))
+            .map(conflictsCheckResult -> removeConflictingFromInputFilesList(files, conflictsCheckResult))
+            .flatMap(this::callBatchUpsert)
             .doOnNext(this::notifyIndexRequestFailures)
             .doOnSuccess(indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}", files.size(),
                 Objects.hashCode(files))
+            );
+    }
+
+    private Mono<List<FileCentricDocument>> getAlreadyIndexed(List<FileCentricDocument> files) {
+        return fileCentricIndexAdapter.fetchByIds(files.stream()
+                .map(FileCentricDocument::getObjectId)
+                .collect(Collectors.toList())
+            );
+    }
+
+    private Mono<IndexResult> callBatchUpsert(List<FileCentricDocument> conflictFreeFilesList) {
+        return this.fileCentricIndexAdapter.batchUpsertFileRepositories(
+            BatchIndexFilesCommand.builder().files(conflictFreeFilesList).build()
+        );
+    }
+
+    @NotNull
+    private List<FileCentricDocument> removeConflictingFromInputFilesList(List<FileCentricDocument> files,
+                                                                          ConflictsCheckResult conflictsCheckResult) {
+        return files.stream()
+            .filter(fileCentricDocument -> !isInConflictsList(conflictsCheckResult, fileCentricDocument))
+            .collect(Collectors.toUnmodifiableList());
+    }
+
+    private boolean isInConflictsList(ConflictsCheckResult conflictsCheckResult,
+                                      FileCentricDocument fileCentricDocument) {
+        return conflictsCheckResult.getConflictingFiles()
+            .stream()
+            .map(Tuple2::_1)
+            .anyMatch(conflictingFile -> conflictingFile
+                .getObjectId()
+                .equals(fileCentricDocument.getObjectId())
             );
     }
 
@@ -322,55 +350,75 @@ class DefaultIndexer implements Indexer {
         val filesToRemove = conflictingFiles.getConflictingFiles().stream()
             .map(Tuple2::_1)
             .collect(Collectors.toUnmodifiableList());
+
+        if (filesToRemove.isEmpty()) {
+            return Mono.just(Either.right(IndexResult.builder().successful(true).build()));
+        }
+
         return this.fileCentricIndexAdapter.removeFiles(filesToRemove)
-            .map(Either::<IndexerException, IndexResult>right)
+            .map(this::convertRemoveResultToEither)
             .map(indexResults -> {
                 notifyConflicts(conflictingFiles);
                 return indexResults;
-            });
+            }).switchIfEmpty(
+                Mono.just(Either.right(IndexResult.builder().successful(true).build()))
+            );
+    }
+
+    @NotNull
+    private Either<IndexerException, IndexResult> convertRemoveResultToEither(IndexerException e) {
+        if (e != null) {
+            return Either.left(e);
+        }
+        return Either.right(IndexResult.builder().successful(true).build());
     }
 
     private void notifyConflicts(ConflictsCheckResult conflictsCheckResult) {
         val conflictingFileList = conflictsCheckResult.getConflictingFiles()
             .stream()
-            .map(tuple ->
-                tuple.apply((f1, f2) ->
-                    FileConflict.builder()
-                        .newFile(ConflictingFile.builder()
-                            .objectId(f1.getObjectId())
-                            .analysisId(f1.getAnalysis().getId())
-                            .studyId(f1.getStudy())
-                            .repoCode(f1.getRepositories().stream()
-                                .map(Repository::getCode).collect(Collectors.toUnmodifiableList())
-                            ).build()
-                        ).indexedFile(ConflictingFile.builder()
-                            .objectId(f2.getObjectId())
-                            .analysisId(f2.getAnalysis().getId())
-                            .studyId(f2.getStudy())
-                            .repoCode(f2.getRepositories().stream().map(Repository::getCode)
-                                .collect(Collectors.toUnmodifiableList())
-                            ).build()
-                    ).build()
-                )
-            ).collect(Collectors.toUnmodifiableList());
+            .map(tuple -> tuple.apply(this::toFileConflict))
+            .collect(Collectors.toUnmodifiableList());
         this.notifier.notify(new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
             Map.of(CONFLICTS, conflictingFileList)));
     }
 
+    private FileConflict toFileConflict(FileCentricDocument f1, FileCentricDocument f2) {
+        return FileConflict.builder()
+            .newFile(ConflictingFile.builder()
+                .objectId(f1.getObjectId())
+                .analysisId(f1.getAnalysis().getId())
+                .studyId(f1.getStudy())
+                .repoCode(f1.getRepositories().stream()
+                    .map(Repository::getCode).collect(Collectors.toUnmodifiableList())
+                ).build()
+            ).indexedFile(ConflictingFile.builder()
+                .objectId(f2.getObjectId())
+                .analysisId(f2.getAnalysis().getId())
+                .studyId(f2.getStudy())
+                .repoCode(f2.getRepositories().stream().map(Repository::getCode)
+                    .collect(Collectors.toUnmodifiableList())
+                ).build()
+        ).build();
+    }
+
     private ConflictsCheckResult findConflicts(List<FileCentricDocument> filesToIndex, List<FileCentricDocument> storedFiles) {
         val conflictingPairs = filesToIndex.stream()
-            .map(fileToIndex -> storedFiles.stream()
-                .filter(storedFile -> storedFile.getObjectId().equals(fileToIndex.getObjectId()))
-                .filter(f -> !f.isValidReplica(fileToIndex))
-                .findFirst()
-                .map(storedFile -> new Tuple2<>(fileToIndex, storedFile))
-                .orElse(null)
-            ).filter(Objects::nonNull)
+            .map(fileToIndex -> findIfAnyStoredFileConflicts(storedFiles, fileToIndex))
+            .filter(Objects::nonNull)
             .collect(Collectors.toList());
 
         return ConflictsCheckResult.builder()
             .conflictingFiles(conflictingPairs)
             .build();
+    }
+
+    private Tuple2<FileCentricDocument, FileCentricDocument> findIfAnyStoredFileConflicts(List<FileCentricDocument> storedFiles, FileCentricDocument fileToIndex) {
+        return storedFiles.stream()
+            .filter(storedFile -> storedFile.getObjectId().equals(fileToIndex.getObjectId()))
+            .filter(f -> !f.isValidReplica(fileToIndex))
+            .findFirst()
+            .map(storedFile -> new Tuple2<>(fileToIndex, storedFile))
+            .orElse(null);
     }
 
     private void notifyFailedToFetchStudies(String code, String message) {

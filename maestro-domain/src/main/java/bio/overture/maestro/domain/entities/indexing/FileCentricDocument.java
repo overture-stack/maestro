@@ -61,7 +61,6 @@ public class FileCentricDocument {
             && this.donors.equals(fileCentricDocument.getDonors())
             && this.analysis.equals(fileCentricDocument.getAnalysis())
             && this.file.equals(fileCentricDocument.getFile());
-
     }
 }
 

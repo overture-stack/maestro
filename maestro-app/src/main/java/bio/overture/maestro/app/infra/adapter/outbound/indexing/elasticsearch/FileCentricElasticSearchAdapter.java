@@ -3,6 +3,7 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
+import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
@@ -20,12 +21,14 @@ import lombok.val;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
@@ -45,6 +48,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.utility.CollectionsUtil.partitionList;
+import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerException;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 import static java.util.Collections.singletonMap;
 
@@ -56,7 +60,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private static final int FALLBACK_MAX_RETRY_ATTEMPTS = 0;
     private final CustomElasticSearchRestAdapter customElasticSearchRestAdapter;
     private final Resource indexSettings;
-    private CustomSearchResultMapper searchResultMapper;
+    private SnakeCaseJacksonSearchResultMapper searchResultMapper;
     private final Resource fileCentricMapping;
     private final ElasticsearchRestTemplate template;
     private final String alias;
@@ -72,7 +76,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     public FileCentricElasticSearchAdapter(CustomElasticSearchRestAdapter customElasticSearchRestAdapter,
                                            ElasticsearchRestTemplate template,
                                            @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
-                                           CustomSearchResultMapper searchResultMapper,
+                                           SnakeCaseJacksonSearchResultMapper searchResultMapper,
                                            ApplicationProperties properties) {
 
         this.customElasticSearchRestAdapter = customElasticSearchRestAdapter;
@@ -104,8 +108,8 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     }
 
     @Override
-    public Mono<List<FileCentricDocument>> fetchById(List<String> ids) {
-        log.debug("in fetchById, args: {} ", ids);
+    public Mono<List<FileCentricDocument>> fetchByIds(List<String> ids) {
+        log.debug("in fetchByIds, args: {} ", ids);
         return  Mono.fromSupplier(() -> this.fetch(ids))
             .subscribeOn(Schedulers.elastic());
     }
@@ -116,15 +120,70 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             .withIndices(alias)
             .withTypes(alias)
             .build();
+        val retryConfig = RetryConfig.custom()
+            .maxAttempts(this.maxRetriesAttempts)
+            .retryExceptions(IOException.class)
+            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
+            .build();
+        val retry = Retry.of("fetch", retryConfig);
+        val decorated = Retry.decorateCheckedSupplier(retry, () -> {
+            log.trace("fetch called ids {} ", ids);
+            return this.template
+                .queryForPage(query, FileCentricDocument.class, this.searchResultMapper)
+                .getContent();
+        });
 
-        return this.template
-            .queryForPage(query, FileCentricDocument.class, this.searchResultMapper)
-            .getContent();
+        return Try.of(decorated).recover(
+            (t) -> {
+                log.error("error sending fetch", t);
+                return List.of();
+            }
+        ).get();
     }
 
     @Override
-    public Mono<IndexResult> removeFiles(List<FileCentricDocument> conflictingFiles) {
-        return null;
+    public Mono<IndexerException> removeFiles(List<FileCentricDocument> conflictingFiles) {
+        val ids = conflictingFiles.stream()
+            .map(FileCentricDocument::getObjectId)
+            .collect(Collectors.toUnmodifiableSet());
+        log.debug("in removeFiles, args: {} ", ids);
+        if (ids.isEmpty()) {
+            return Mono.empty();
+        }
+        return Mono.fromSupplier(() -> this.deleteByIds(ids)).subscribeOn(Schedulers.elastic());
+    }
+
+    private IndexerException deleteByIds(Set<String> ids) {
+        val deleteQuery = new DeleteQuery();
+        deleteQuery.setQuery(QueryBuilders
+            .idsQuery(this.alias)
+            .addIds(ids.toArray(new String[]{}))
+        );
+        deleteQuery.setType(this.alias);
+        deleteQuery.setIndex(this.alias);
+
+        val retryConfig = RetryConfig.custom()
+            .maxAttempts(this.maxRetriesAttempts)
+            .retryExceptions(IOException.class)
+            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
+            .build();
+        val retry = Retry.of("deleteByIds", retryConfig);
+        val decorated = Retry.<IndexerException>decorateCheckedSupplier(retry, () -> {
+            log.trace("deleteByIds called, ids {} ", ids);
+            template.delete(deleteQuery);
+            return null;
+        });
+        return Try.of(decorated).recover((t) -> handleDeleteFailure(ids, t)).get();
+    }
+
+    @NotNull
+    private IndexerException handleDeleteFailure(Set<String> ids, Throwable t) {
+        log.error("error sending fetch", t);
+        return wrapWithIndexerException(
+            t, "failed to deleteByIds", FailureData.builder()
+                .failingIds(Map.of("Files", ids))
+                .build()
+       );
     }
 
     @Retryable(
@@ -192,7 +251,8 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             .flatMap(Set::stream)
             .collect(Collectors.toUnmodifiableSet());
 
-        val fails = FailureData.builder()
+
+        val fails = failures.isEmpty() ? FailureData.builder().build() : FailureData.builder()
             .failingIds(Map.of(ANALYSIS_ID, failures))
             .build();
 
@@ -261,8 +321,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         Map<String, Object> parameters = singletonMap("repository",
             mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
-
-        Script inline = new Script(ScriptType.INLINE,
+        val inline = new Script(ScriptType.INLINE,
             "painless",
             "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }",
             parameters

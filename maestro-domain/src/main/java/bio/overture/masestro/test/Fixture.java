@@ -98,10 +98,8 @@ public class Fixture {
         return inputStreamToString(
             Optional.ofNullable(clazz.getClassLoader()
                 .getResource(BASE_PATH + clazz.getSimpleName() + File.separator + fileName)
-            )
-                .orElseThrow()
-                .openStream()
-        );
+            ).orElseThrow(() -> new RuntimeException("fixture not found. make sure you created the correct " +
+            "folder if this is a new class or if you renamed the class")).openStream());
     }
 
     @Getter

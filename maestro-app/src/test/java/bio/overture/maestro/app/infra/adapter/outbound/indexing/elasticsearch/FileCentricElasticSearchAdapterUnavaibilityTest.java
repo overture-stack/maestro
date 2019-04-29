@@ -44,8 +44,8 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest(properties = {
     "embedded.elasticsearch.enabled=false"
 })
-@ContextConfiguration(classes = {FileCentricElasticSearchAdapterTest.Config.class})
-class FileCentricElasticSearchAdapterTest {
+@ContextConfiguration(classes = {FileCentricElasticSearchAdapterUnavaibilityTest.Config.class})
+class FileCentricElasticSearchAdapterUnavaibilityTest {
 
     @SpyBean
     private RestHighLevelClient client;
@@ -54,7 +54,7 @@ class FileCentricElasticSearchAdapterTest {
     private FileCentricElasticSearchAdapter adapter;
 
     @Test
-    void shouldRetryOnIOException() throws IOException {
+    void shouldRetryUpsertOnIOException() throws IOException {
         // given
         val files = Arrays.asList(Fixture.loadJsonFixture(
             this.getClass(), "PEME-CA.files.json", FileCentricDocument[].class));
@@ -84,6 +84,7 @@ class FileCentricElasticSearchAdapterTest {
     @Import({
         CustomElasticSearchRestAdapter.class,
         FileCentricElasticSearchAdapter.class,
+        SnakeCaseJacksonSearchResultMapper.class,
         PropertiesConfig.class
     })
     @Configuration
