@@ -43,7 +43,7 @@ public abstract class MaestroIntegrationTest {
         query.setType(properties.fileCentricAlias());
         query.setQuery(matchAllQuery());
         elasticsearchRestTemplate.delete(query);
-        Thread.sleep(1000);
+        Thread.sleep(2500);
     }
 
 }

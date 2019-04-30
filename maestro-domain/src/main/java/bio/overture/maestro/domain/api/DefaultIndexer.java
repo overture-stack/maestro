@@ -301,7 +301,7 @@ class DefaultIndexer implements Indexer {
             );
     }
 
-    private Mono<List<FileCentricDocument>> getAlreadyIndexed(List<FileCentricDocument> files) {
+    private Mono<Map<String, FileCentricDocument>> getAlreadyIndexed(List<FileCentricDocument> files) {
         return fileCentricIndexAdapter.fetchByIds(files.stream()
                 .map(FileCentricDocument::getObjectId)
                 .collect(Collectors.toList())
@@ -401,7 +401,8 @@ class DefaultIndexer implements Indexer {
         ).build();
     }
 
-    private ConflictsCheckResult findConflicts(List<FileCentricDocument> filesToIndex, List<FileCentricDocument> storedFiles) {
+    private ConflictsCheckResult findConflicts(List<FileCentricDocument> filesToIndex,
+                                               Map<String, FileCentricDocument> storedFiles) {
         val conflictingPairs = filesToIndex.stream()
             .map(fileToIndex -> findIfAnyStoredFileConflicts(storedFiles, fileToIndex))
             .filter(Objects::nonNull)
@@ -412,13 +413,13 @@ class DefaultIndexer implements Indexer {
             .build();
     }
 
-    private Tuple2<FileCentricDocument, FileCentricDocument> findIfAnyStoredFileConflicts(List<FileCentricDocument> storedFiles, FileCentricDocument fileToIndex) {
-        return storedFiles.stream()
-            .filter(storedFile -> storedFile.getObjectId().equals(fileToIndex.getObjectId()))
-            .filter(f -> !f.isValidReplica(fileToIndex))
-            .findFirst()
-            .map(storedFile -> new Tuple2<>(fileToIndex, storedFile))
-            .orElse(null);
+    private Tuple2<FileCentricDocument, FileCentricDocument>
+    findIfAnyStoredFileConflicts(Map<String, FileCentricDocument> storedFiles, FileCentricDocument fileToIndex) {
+        if (storedFiles.containsKey(fileToIndex.getObjectId())) {
+            return new Tuple2<>(fileToIndex, storedFiles.get(fileToIndex.getObjectId()));
+        } else {
+            return null;
+        }
     }
 
     private void notifyFailedToFetchStudies(String code, String message) {

@@ -92,7 +92,7 @@ class DefaultIndexerTest {
             .failureData(failure)
             .successful(false)
             .build();
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(Map.of()));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
         given(studyDAO.getStudyAnalyses(any(GetStudyAnalysesCommand.class))).willReturn(Mono.just(either));
 
@@ -132,7 +132,7 @@ class DefaultIndexerTest {
         val successfulResult = IndexResult.builder().successful(true).build();
         val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
 
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(Map.of()));
         given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.fromIterable(studiesEither));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
@@ -202,7 +202,7 @@ class DefaultIndexerTest {
             )
         );
 
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(Map.of()));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
@@ -245,7 +245,7 @@ class DefaultIndexerTest {
 
         val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
 
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(Map.of()));
         given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.fromIterable(studiesEither));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
@@ -299,7 +299,8 @@ class DefaultIndexerTest {
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
 
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of(fileCentricDocuments.get(0))));
+        given(indexServerAdapter.fetchByIds(anyList()))
+            .willReturn(Mono.just(Map.of(fileCentricDocuments.get(0).getObjectId(), fileCentricDocuments.get(0))));
         given(indexServerAdapter.removeFiles(eq(List.of(fileCentricDocuments.get(0)))))
             .willReturn(Mono.empty());
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
@@ -345,7 +346,7 @@ class DefaultIndexerTest {
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
 
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(Map.of()));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);

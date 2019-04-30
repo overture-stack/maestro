@@ -98,7 +98,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // assertions
         val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -150,7 +150,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // assertions
         val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -212,7 +212,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // assertions
         var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -236,7 +236,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // assertions
         query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -285,7 +285,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // assertions
         var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())

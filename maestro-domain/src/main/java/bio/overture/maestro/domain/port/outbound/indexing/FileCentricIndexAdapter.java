@@ -8,6 +8,7 @@ import lombok.NonNull;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Adapter for the indexing server client, this provides the indexer with needed APIs
@@ -32,12 +33,20 @@ public interface FileCentricIndexAdapter {
     Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
 
     /**
+     * Returns a map of the ids and the corresponding files, it's a map for performance optimization
+     * so that the Indexer can get quicker access since this method is needed for conflict detection
+     * and the main usage will be to check if a file exists or not on elastic search.
      *
-     * @param id
-     * @return
+     * @param ids a list of ids to fetch documents by from elastic search.
+     * @return map contains each id and the found document.
      */
-    Mono<List<FileCentricDocument>> fetchByIds(List<String> id);
+    Mono<Map<String, FileCentricDocument>> fetchByIds(List<String> ids);
 
-
-    Mono<IndexerException> removeFiles(List<FileCentricDocument> conflictingFiles);
+    /**
+     * Method to delete file documents from the file centric index
+     *
+     * @param fileCentricDocuments the list of file to delete
+     * @return indexer exception instance contains the list of failures.
+     */
+    Mono<IndexerException> removeFiles(List<FileCentricDocument> fileCentricDocuments);
 }

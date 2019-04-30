@@ -4,18 +4,22 @@ import bio.overture.maestro.app.infra.config.RootConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.val;
+import org.elasticsearch.action.get.MultiGetItemResponse;
+import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.MultiGetResultMapper;
 import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
-class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper {
+class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGetResultMapper {
 
     private ObjectMapper objectMapper;
 
@@ -47,4 +51,16 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper {
         return objectMapper.readValue(source, type);
     }
 
+    @Override
+    @SneakyThrows
+    public <T> LinkedList<T> mapResults(MultiGetResponse responses, Class<T> clazz) {
+        LinkedList<T> list = new LinkedList<>();
+        for (MultiGetItemResponse response : responses.getResponses()) {
+            if (!response.isFailed() && response.getResponse().isExists()) {
+                T result = objectMapper.readValue(response.getResponse().getSourceAsString(), clazz);
+                list.add(result);
+            }
+        }
+        return list;
+    }
 }

@@ -54,7 +54,7 @@ public class FileCentricDocument {
      */
     public boolean isValidReplica(FileCentricDocument fileCentricDocument) {
         if (fileCentricDocument == null) return false;
-        if (this.equals(fileCentricDocument)) return false;
+        if (this.equals(fileCentricDocument)) return true;
         return this.objectId.equals(fileCentricDocument.getObjectId())
             && this.access.equals(fileCentricDocument.getAccess())
             && this.study.equals(fileCentricDocument.getStudy())

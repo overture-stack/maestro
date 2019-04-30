@@ -12,7 +12,7 @@
     </appender>
 
     <appender name="failureLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${failure-log-path}/failures.log</file>
+        <file>${failure-log-path:-/tmp/maestro}/failures.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <fileNamePattern>failures.%d{yyyy-MM-dd}.log</fileNamePattern>
