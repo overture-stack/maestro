@@ -416,6 +416,10 @@ class DefaultIndexer implements Indexer {
     private Tuple2<FileCentricDocument, FileCentricDocument>
     findIfAnyStoredFileConflicts(Map<String, FileCentricDocument> storedFiles, FileCentricDocument fileToIndex) {
         if (storedFiles.containsKey(fileToIndex.getObjectId())) {
+            val storedFile = storedFiles.get(fileToIndex.getObjectId());
+            if (fileToIndex.isValidReplica(storedFile)) {
+                return null;
+            }
             return new Tuple2<>(fileToIndex, storedFiles.get(fileToIndex.getObjectId()));
         } else {
             return null;
