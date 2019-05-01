@@ -1,6 +1,7 @@
 package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 
 import bio.overture.maestro.domain.api.Indexer;
+import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
@@ -32,6 +33,18 @@ public class ManagementController {
         val response = new HashMap<String, String>();
         response.put("status", "up");
         return Mono.just(response);
+    }
+
+    @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<IndexResult> indexAnalysis(@PathVariable String analysisId, @PathVariable String studyId, @PathVariable String repositoryCode) {
+        log.debug("in indexAnalysis, args studyId {}, repoId: {}, analysisId : {}", studyId, repositoryCode, analysisId);
+        return indexer.indexAnalysis(IndexAnalysisCommand.builder()
+            .repositoryCode(repositoryCode)
+            .analysisId(analysisId)
+            .studyId(studyId)
+            .build()
+        );
     }
 
     @PostMapping("/index/repository/{repositoryCode}/study/{studyId}")

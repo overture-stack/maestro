@@ -14,6 +14,7 @@ import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapte
 import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
 import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
@@ -65,11 +66,27 @@ class DefaultIndexer implements Indexer {
     }
 
     @Override
+    public Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
+        return this.studyRepositoryDao.getFilesRepository(indexAnalysisCommand.getRepositoryCode())
+            .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexAnalysisCommand.getRepositoryCode())))
+            .map(filesRepository -> StudyAnalysisRepositoryTuple.builder()
+                .analysisId(indexAnalysisCommand.getAnalysisId())
+                .study(Study.builder().studyId(indexAnalysisCommand.getStudyId()).build())
+                .studyRepository(filesRepository)
+                .build()
+            )
+            .flatMap(this::getStudyAnalysisDocuments)
+            .flatMap(this::batchUpsertFiles);
+
+    }
+
+    @Override
     public Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand) {
         log.trace("in indexStudy, args: {} ", indexStudyCommand);
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
-            .map(filesRepository -> toStudyAndRepositoryEither(indexStudyCommand, filesRepository))
+            .map(filesRepository -> toStudyAndRepositoryTuple(indexStudyCommand, filesRepository))
+            .map(Either::<IndexerException, StudyAndRepository>right)
             .flatMap(this::getStudyAnalysesDocuments)
             .flatMap(this::batchUpsertFiles);
     }
@@ -103,13 +120,11 @@ class DefaultIndexer implements Indexer {
     /* **************** *
      * Private Methods  *
      * **************** */
-    private Either<IndexerException, StudyAndRepository>
-        toStudyAndRepositoryEither(@NonNull IndexStudyCommand indexStudyCommand, StudyRepository filesRepository) {
-            return Either.right(
-                StudyAndRepository.builder()
-                    .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
-                    .studyRepository(filesRepository).build()
-            );
+    private  StudyAndRepository
+    toStudyAndRepositoryTuple(@NonNull IndexStudyCommand indexStudyCommand, StudyRepository filesRepository) {
+            return StudyAndRepository.builder()
+                .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
+                .studyRepository(filesRepository).build();
     }
 
     private Flux<Either<IndexerException, StudyAndRepository>>
@@ -184,6 +199,19 @@ class DefaultIndexer implements Indexer {
             .filter(analysis ->
                 !ExclusionRulesEvaluator.shouldExcludeAnalysis(analysis, analysisAndExclusions.getExclusionRulesMap()))
             .collect(Collectors.toList());
+    }
+
+    private Mono<Either<IndexerException, List<FileCentricDocument>>>
+        getStudyAnalysisDocuments(StudyAnalysisRepositoryTuple tuple) {
+
+        return this.studyDAO.getAnalysis(GetAnalysisCommand.builder()
+                .analysisId(tuple.getAnalysisId())
+                .filesRepositoryBaseUrl(tuple.getStudyRepository().getBaseUrl())
+                .studyId(tuple.getStudy().getStudyId())
+                .build()
+            ).map(List::of)
+            .flatMap(this::getExclusionRulesAndFilter)
+            .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
     }
 
     private Mono<Either<IndexerException, List<FileCentricDocument>>>
@@ -464,6 +492,16 @@ class DefaultIndexer implements Indexer {
     @EqualsAndHashCode
     private static class ConflictsCheckResult {
         private List<Tuple2<FileCentricDocument, FileCentricDocument>> conflictingFiles;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    @EqualsAndHashCode
+    private static class StudyAnalysisRepositoryTuple {
+        private StudyRepository studyRepository;
+        private Study study;
+        private String analysisId;
     }
 
     @Getter
