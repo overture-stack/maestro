@@ -29,6 +29,7 @@ public class FileBasedFailuresLogger implements NotificationChannel {
         return Set.of(
             NotificationName.STUDY_ANALYSES_FETCH_FAILED,
             NotificationName.FETCH_REPO_STUDIES_FAILED,
+            NotificationName.INDEX_FILE_CONFLICT,
             NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
             NotificationName.INDEX_REQ_FAILED
         );

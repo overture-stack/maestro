@@ -1,14 +1,13 @@
 package bio.overture.maestro.domain.port.outbound.indexing;
 
 
-import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import lombok.NonNull;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * Adapter for the indexing server client, this provides the indexer with needed APIs
@@ -33,20 +32,17 @@ public interface FileCentricIndexAdapter {
     Mono<IndexResult> batchUpsertFileRepositories(@NonNull BatchIndexFilesCommand batchIndexFilesCommand);
 
     /**
-     * Returns a map of the ids and the corresponding files, it's a map for performance optimization
-     * so that the Indexer can get quicker access since this method is needed for conflict detection
-     * and the main usage will be to check if a file exists or not on elastic search.
-     *
+     * Batch fetch documents from the index by the specified ids.
      * @param ids a list of ids to fetch documents by from elastic search.
-     * @return map contains each id and the found document.
+     * @return List contains found documents.
      */
-    Mono<Map<String, FileCentricDocument>> fetchByIds(List<String> ids);
+    Mono<List<FileCentricDocument>> fetchByIds(List<String> ids);
 
     /**
      * Method to delete file documents from the file centric index
      *
-     * @param fileCentricDocuments the list of file to delete
+     * @param fileCentricDocumentIds the list of file to delete
      * @return indexer exception instance contains the list of failures.
      */
-    Mono<IndexerException> removeFiles(List<FileCentricDocument> fileCentricDocuments);
+    Mono<Void> removeFiles(Set<String> fileCentricDocumentIds);
 }

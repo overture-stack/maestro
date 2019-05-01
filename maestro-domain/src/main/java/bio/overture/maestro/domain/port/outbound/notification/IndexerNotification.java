@@ -3,6 +3,7 @@ package bio.overture.maestro.domain.port.outbound.notification;
 
 import bio.overture.maestro.domain.api.NotificationName;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
 import static java.text.MessageFormat.format;
 
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 public class IndexerNotification {
     private final NotificationName notificationName;
