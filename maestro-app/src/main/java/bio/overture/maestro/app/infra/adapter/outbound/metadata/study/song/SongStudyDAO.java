@@ -22,7 +22,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
-import reactor.retry.RetryExhaustedException;
 
 import javax.inject.Inject;
 import java.time.Duration;
@@ -74,7 +73,7 @@ class SongStudyDAO implements StudyDAO {
 
     @Override
     @NonNull
-    public Mono<Either<IndexerException, List<Analysis>>> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
+    public Mono<List<Analysis>> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getStudyAnalysesCommand);
         val repoBaseUrl = getStudyAnalysesCommand.getFilesRepositoryBaseUrl();
         val studyId = getStudyAnalysesCommand.getStudyId();
@@ -92,16 +91,12 @@ class SongStudyDAO implements StudyDAO {
             .bodyToMono(analysisListType)
             .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)))
             .doOnSuccess((list) -> log.trace("getStudyAnalyses out, analyses count {} args: {}",
-                list.size(), getStudyAnalysesCommand))
-            .map(Either::<IndexerException, List<Analysis>>right)
-            .onErrorResume(
-                (e) -> e instanceof RetryExhaustedException,
-                (e) -> handleGetAnalysesFailure(getStudyAnalysesCommand, studyId, e));
+                list.size(), getStudyAnalysesCommand));
     }
 
     @Override
     @NonNull
-    public Flux<Either<IndexerException, Study>> getStudies(@NonNull GetAllStudiesCommand getAllStudiesCommand) {
+    public Flux<Study> getStudies(@NonNull GetAllStudiesCommand getAllStudiesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getAllStudiesCommand);
         val repoBaseUrl = getAllStudiesCommand.getFilesRepositoryBaseUrl();
         val StringListType = new ParameterizedTypeReference<List<String>>(){};
@@ -119,13 +114,7 @@ class SongStudyDAO implements StudyDAO {
             .bodyToMono(StringListType)
             .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)))
             .flatMapMany(Flux::fromIterable)
-            .map(id -> Study.builder().studyId(id).build())
-            .map(Either::<IndexerException, Study>right)
-            .onErrorResume(
-                // wait for retries to finish, if we catch all it wont retry
-                (e) -> e instanceof RetryExhaustedException,
-                (e) -> handleGetStudiesFailure(getAllStudiesCommand, e)
-            );
+            .map(id -> Study.builder().studyId(id).build());
     }
 
     @Override

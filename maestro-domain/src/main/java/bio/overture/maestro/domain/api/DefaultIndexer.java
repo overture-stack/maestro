@@ -23,6 +23,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -38,12 +39,12 @@ import static reactor.core.publisher.Mono.error;
 @Slf4j
 class DefaultIndexer implements Indexer {
 
-    private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
     static final String STUDY_ID = "studyId";
     static final String REPO_URL = "repoUrl";
     static final String ERR = "err";
     static final String REPO_CODE = "repoCode";
     static final String ANALYSIS_ID = "analysisId";
+    private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
     private static final String FAILURE_DATA = "failure_data";
     private static final String CONFLICTS = "conflicts";
     private final FileCentricIndexAdapter fileCentricIndexAdapter;
@@ -69,38 +70,10 @@ class DefaultIndexer implements Indexer {
     public Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
         return this.studyRepositoryDao.getFilesRepository(indexAnalysisCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexAnalysisCommand.getRepositoryCode())))
-            .map(filesRepository -> StudyAnalysisRepositoryTuple.builder()
-                .analysisId(indexAnalysisCommand.getAnalysisId())
-                .study(Study.builder().studyId(indexAnalysisCommand.getStudyId()).build())
-                .studyRepository(filesRepository)
-                .build()
-            )
+            .map(filesRepository -> buildStudyAnalysisRepoTuple(indexAnalysisCommand, filesRepository))
             .flatMap(this::getStudyAnalysisDocuments)
-            .flatMap(this::batchUpsertFiles)
-            .onErrorResume(
-                (e) -> e instanceof IndexerException,
-                (e) -> Mono.just(IndexResult.builder()
-                    .failureData(IndexerException.class.cast(e).getFailureData())
-                    .successful(false)
-                    .build()
-                )
-            )
-            .onErrorResume(
-                (e) -> Mono.just(IndexResult.builder()
-                    .failureData(
-                        FailureData.builder()
-                            .failingIds(
-                                Map.of(
-                                    ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()),
-                                    STUDY_ID, Set.of(indexAnalysisCommand.getStudyId()),
-                                    REPO_CODE, Set.of(indexAnalysisCommand.getRepositoryCode())
-                                )
-                            ).build()
-                    ).successful(false)
-                    .build()
-                )
-            );
-
+            .flatMap(this::batchUpsertFilesAndCollectFailures)
+            .onErrorResume((e) -> handleIndexAnalysisError(indexAnalysisCommand));
     }
 
     @Override
@@ -109,9 +82,9 @@ class DefaultIndexer implements Indexer {
         return this.studyRepositoryDao.getFilesRepository(indexStudyCommand.getRepositoryCode())
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyCommand.getRepositoryCode())))
             .map(filesRepository -> toStudyAndRepositoryTuple(indexStudyCommand, filesRepository))
-            .map(Either::<IndexerException, StudyAndRepository>right)
             .flatMap(this::getStudyAnalysesDocuments)
-            .flatMap(this::batchUpsertFiles);
+            .flatMap(this::batchUpsertFilesAndCollectFailures)
+            .onErrorResume(IndexerException.class, this::convertIndexerExceptionToIndexResult);
     }
 
     @Override
@@ -121,8 +94,9 @@ class DefaultIndexer implements Indexer {
             .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexStudyRepositoryCommand.getRepositoryCode())))
             .flatMapMany(this::getAllStudies)
             .flatMap(this::getStudyAnalysesDocuments)
-            .flatMap(this::batchUpsertFiles)
-            .reduce(this::reduceFinalResult);
+            .flatMap(this::batchUpsertFilesAndCollectFailures)
+            .onErrorResume(IndexerException.class, this::convertIndexerExceptionToIndexResult)
+            .reduce(this::reduceIndexResult);
     }
 
     @Override
@@ -143,66 +117,134 @@ class DefaultIndexer implements Indexer {
     /* **************** *
      * Private Methods  *
      * **************** */
-    private  StudyAndRepository
-        toStudyAndRepositoryTuple(@NonNull IndexStudyCommand indexStudyCommand, StudyRepository filesRepository) {
-            return StudyAndRepository.builder()
-                .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
-                .studyRepository(filesRepository).build();
+
+    private Flux<StudyAndRepository> getAllStudies(StudyRepository studyRepository) {
+        return this.studyDAO.getStudies(GetAllStudiesCommand.builder()
+            .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
+            .build()
+        ).onErrorMap((e) -> {
+            notifyFailedToFetchStudies(studyRepository.getCode(), e.getMessage());
+            return wrapWithIndexerException(e, "fetch studies failed", FailureData.builder()
+                .failingIds(Map.of(REPO_CODE, Set.of(studyRepository.getCode())))
+                .build());
+        }).map(study -> toStudyAndRepository(studyRepository, study));
     }
 
-    private Flux<Either<IndexerException, StudyAndRepository>>
-        getAllStudies(StudyRepository studyRepository) {
-            return this.studyDAO.getStudies(GetAllStudiesCommand.builder()
-                .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
-                .build()
-            )
-            .map(studies -> checkToNotify(studyRepository, studies))
-            .map(studyEither -> toStudyAndRepository(studyRepository, studyEither));
+    private void notifyFailedToFetchStudies(String code, String message) {
+        val attrs = Map.<String, Object>of(REPO_CODE, code, ERR, message);
+        val notification =
+            new IndexerNotification(NotificationName.FETCH_REPO_STUDIES_FAILED, attrs);
+        notifier.notify(notification);
     }
 
-    private Either<IndexerException, Study>
-        checkToNotify(StudyRepository studyRepository, Either<IndexerException, Study> exceptionStudyEither) {
-            if (exceptionStudyEither.isLeft()) {
-                notifyFailedToFetchStudies(studyRepository.getCode(), exceptionStudyEither.left().get().getMessage());
-            }
-            return exceptionStudyEither;
+    private StudyAndRepository toStudyAndRepository(StudyRepository studyRepository, Study studyEither) {
+        return StudyAndRepository.builder()
+            .study(studyEither)
+            .studyRepository(studyRepository)
+            .build();
     }
 
-    private Either<IndexerException, StudyAndRepository>
-        toStudyAndRepository(StudyRepository studyRepository, Either<IndexerException, Study> studyEither) {
-            return studyEither.map(st -> StudyAndRepository.builder()
-                    .study(st)
-                    .studyRepository(studyRepository)
-                    .build()
-            );
+    private StudyAndRepository toStudyAndRepositoryTuple(@NonNull IndexStudyCommand indexStudyCommand,
+                                                         StudyRepository filesRepository) {
+        return StudyAndRepository.builder()
+            .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
+            .studyRepository(filesRepository).build();
     }
 
-    private Mono<Either<IndexerException, List<Analysis>>>
-        getFilteredAnalyses(StudyRepository repo, String studyId) {
-            return fetchAnalyses(repo.getBaseUrl(), studyId)
-                .flatMap((analysesEither) ->
-                    analysesEither.fold(
-                        (e) -> Mono.just(Either.left(e)),
-                        (analyses) -> this.getExclusionRulesAndFilter(analyses).map(Either::right)
-                    )
+    private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
+        getStudyAnalysesDocuments(StudyAndRepository repoAndStudyEither) {
+
+        val studyId = repoAndStudyEither.getStudy().getStudyId();
+        val repoUrl = repoAndStudyEither.getStudyRepository().getBaseUrl();
+        return getFilteredAnalyses(repoUrl, studyId)
+            .map((analyses) -> buildAnalysisFileDocuments(repoAndStudyEither.getStudyRepository(), analyses));
+    }
+
+    private Mono<List<Analysis>> getFilteredAnalyses(String repoBaseUrl, String studyId) {
+        return fetchAnalyses(repoBaseUrl, studyId)
+            .flatMap(this::getExclusionRulesAndFilter);
+    }
+
+    private Mono<List<Analysis>> fetchAnalyses(String studyRepositoryBaseUrl, String studyId) {
+        val command = GetStudyAnalysesCommand.builder()
+            .filesRepositoryBaseUrl(studyRepositoryBaseUrl)
+            .studyId(studyId)
+            .build();
+
+        return this.studyDAO
+            .getStudyAnalyses(command)
+            .onErrorMap(e -> {
+                notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
+                return wrapWithIndexerException(e,
+                    format("failed fetching study analysis, command: {0}, retries exhausted", command),
+                    FailureData.builder()
+                        .failingIds(Map.of(STUDY_ID, Set.of(studyId)))
+                        .build()
                 );
-    }
-
-    private Mono<Either<IndexerException, List<Analysis>>>
-        fetchAnalyses(String studyRepositoryBaseUrl, String studyId) {
-            return this.studyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
-                .filesRepositoryBaseUrl(studyRepositoryBaseUrl)
-                .studyId(studyId)
-                .build()
-            ).map((analysesEither) -> {
-                analysesEither.left().map(
-                    e -> {
-                        notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
-                        return e;
-                    }
-                );
-                return analysesEither;
             });
+    }
+
+    private void notifyStudyFetchingError(String studyId, String repoUrl, String excMsg) {
+        val attrs = Map.<String, Object>of(STUDY_ID, studyId, REPO_URL, repoUrl, ERR, excMsg);
+        val notification =
+            new IndexerNotification(NotificationName.STUDY_ANALYSES_FETCH_FAILED, attrs);
+        notifier.notify(notification);
+    }
+
+    private StudyAnalysisRepositoryTuple buildStudyAnalysisRepoTuple(@NonNull IndexAnalysisCommand indexAnalysisCommand,
+                                                                     StudyRepository filesRepository) {
+       return StudyAnalysisRepositoryTuple.builder()
+            .analysisId(indexAnalysisCommand.getAnalysisId())
+            .study(Study.builder().studyId(indexAnalysisCommand.getStudyId()).build())
+            .studyRepository(filesRepository)
+            .build();
+    }
+
+    private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
+        getStudyAnalysisDocuments(StudyAnalysisRepositoryTuple tuple) {
+
+        return this.studyDAO.getAnalysis(GetAnalysisCommand.builder()
+            .analysisId(tuple.getAnalysisId())
+            .filesRepositoryBaseUrl(tuple.getStudyRepository().getBaseUrl())
+            .studyId(tuple.getStudy().getStudyId())
+            .build()
+        ).map(List::of)
+        .onErrorMap((e) -> wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
+                .failingIds(
+                    Map.of(
+                        ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
+                        STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
+                        REPO_CODE, Set.of(tuple.studyRepository.getCode())
+                    )
+                ).build()
+            )
+        ).flatMap(this::getExclusionRulesAndFilter)
+        .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
+    }
+
+    private Mono<? extends IndexResult> convertIndexerExceptionToIndexResult(IndexerException e) {
+        return Mono.just(IndexResult.builder()
+            .failureData(e.getFailureData())
+            .successful(false)
+            .build()
+        );
+    }
+
+    @NotNull
+    private Mono<IndexResult> handleIndexAnalysisError(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
+        return Mono.just(IndexResult.builder()
+            .failureData(
+                FailureData.builder()
+                    .failingIds(
+                        Map.of(
+                            ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()),
+                            STUDY_ID, Set.of(indexAnalysisCommand.getStudyId()),
+                            REPO_CODE, Set.of(indexAnalysisCommand.getRepositoryCode())
+                        )
+                    ).build()
+            ).successful(false)
+            .build()
+        );
     }
 
     private Mono<List<Analysis>> getExclusionRulesAndFilter(List<Analysis> analyses) {
@@ -216,128 +258,21 @@ class DefaultIndexer implements Indexer {
             .map(analysisAndExclusions -> filterExcludedAnalyses(analyses, analysisAndExclusions));
     }
 
-    private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses,
-                                                  AnalysisAndExclusions analysisAndExclusions) {
-        return analyses.stream()
-            .filter(analysis ->
-                !ExclusionRulesEvaluator.shouldExcludeAnalysis(analysis, analysisAndExclusions.getExclusionRulesMap()))
-            .collect(Collectors.toList());
-    }
-
-    private Mono<Either<IndexerException, List<FileCentricDocument>>>
-        getStudyAnalysisDocuments(StudyAnalysisRepositoryTuple tuple) {
-
-        return this.studyDAO.getAnalysis(GetAnalysisCommand.builder()
-                .analysisId(tuple.getAnalysisId())
-                .filesRepositoryBaseUrl(tuple.getStudyRepository().getBaseUrl())
-                .studyId(tuple.getStudy().getStudyId())
-                .build()
-            ).map(List::of)
-            .onErrorMap((e) -> wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
-                    .failingIds(
-                        Map.of(
-                            ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
-                            STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
-                            REPO_CODE, Set.of(tuple.studyRepository.getCode())
-                        )
-                    ).build()
-                )
-            ).flatMap(this::getExclusionRulesAndFilter)
-            .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
-    }
-
-    private Mono<Either<IndexerException, List<FileCentricDocument>>>
-        getStudyAnalysesDocuments(Either<IndexerException, StudyAndRepository> repoAndStudyEither) {
-            return repoAndStudyEither.fold(
-                (e) -> Mono.just(Either.left(e)),
-                (r) -> getFilteredAnalyses(r.getStudyRepository(), r.getStudy().getStudyId())
-                    .map((analyses) -> getFilesForAnalyses(analyses, r.getStudyRepository()))
-            );
-    }
-
-    private Either<IndexerException, List<FileCentricDocument>>
-        getFilesForAnalyses(Either<IndexerException, List<Analysis>> analyses, StudyRepository studyRepository) {
-            return analyses.flatMap(analysesList -> buildAnalysisFileDocuments(studyRepository, analysesList));
-    }
-
-    private Either<IndexerException, List<FileCentricDocument>>
+    private Tuple2<FailureData, List<FileCentricDocument>>
         buildAnalysisFileDocuments(StudyRepository repo, List<Analysis> analyses) {
-            return analyses.stream()
-                .map(analysis -> buildFileDocuments(analysis, repo))
-                .reduce((accumulated, newEither) ->
-                    newEither.fold((e) -> accumulated.left().map((newException) -> {
-                                e.getFailureData().addFailures(newException.getFailureData());
-                                return e;
-                            }).toEither(),
-                        (newList) -> accumulated.right().map(currentCombinedList -> {
-                            val combined = new ArrayList<>(currentCombinedList);
-                            combined.addAll(newList);
-                            return Collections.unmodifiableList(combined);
-                        }).toEither()
-                )).orElseGet(() -> Either.right(List.of()));
-    }
 
-    private Either<IndexerException, List<FileCentricDocument>>
-        buildFileDocuments(Analysis analysis, StudyRepository repository) {
-            return Try.of(() -> FileCentricDocumentConverter.fromAnalysis(analysis, repository))
-                .onFailure((e) -> notifyBuildDocumentFailure(analysis, repository, e))
-                .toEither()
-                .left()
-                .map((t) -> wrapBuildDocumentException(analysis, t))
-                .toEither();
-    }
-
-    private IndexerException wrapBuildDocumentException(Analysis analysis, Throwable throwable) {
-        return wrapWithIndexerException(throwable,
-            format("buildFileDocuments failed for analysis : {0}, study: {1}",
-                analysis.getAnalysisId(), analysis.getStudy()),
-            FailureData.builder()
-                .failingIds(Map.of(ANALYSIS_ID, Set.of(analysis.getAnalysisId())))
-                .build());
-    }
-
-    private void notifyBuildDocumentFailure(Analysis analysis, StudyRepository repository, Throwable e) {
-        notifier.notify(
-           new IndexerNotification(
-               NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
-               Map.of(
-                   ANALYSIS_ID, analysis.getAnalysisId(),
-                   STUDY_ID, analysis.getStudy(),
-                   REPO_CODE, repository.getCode(),
-                   ERR, e.getMessage()
-               )
-           )
-       );
-    }
-
-    private Mono<IndexResult> batchUpsertFiles(Either<IndexerException, List<FileCentricDocument>> fileDocsEither) {
-        return fileDocsEither.fold(
-            (ex) -> {
-                val failure = ex != null ? ex.getFailureData() : null;
-                return Mono.just(
-                    IndexResult.builder()
-                        .successful(false)
-                        .failureData(failure)
-                        .build()
-                );
-            },
-            (fileCentricDocuments) -> this.batchUpsert(fileDocsEither.get())
-        );
-    }
-
-    private IndexResult reduceFinalResult(IndexResult accumulatedResult, IndexResult newResult) {
-        log.trace("In reduceFinalResult, newResult {} ", newResult);
-        val both = FailureData.builder().build();
-        if (!accumulatedResult.isSuccessful()) {
-            both.addFailures(accumulatedResult.getFailureData());
-        }
-        if (!newResult.isSuccessful()) {
-            both.addFailures(newResult.getFailureData());
-        }
-        return IndexResult.builder()
-            .failureData(both)
-            .successful(both.getFailingIds().isEmpty())
-            .build();
+        return analyses.stream()
+            .map(analysis -> buildFileDocuments(analysis, repo))
+            .map(newEither -> newEither.fold(
+                    (left) -> new Tuple2<>(left.getFailureData(), List.<FileCentricDocument>of()),
+                    (right) -> new Tuple2<>(FailureData.builder().build(), right)
+                )
+            ).reduce((accumulated, current) -> {
+                accumulated._1().addFailures(current._1());
+                val combined = new ArrayList<>(accumulated._2());
+                combined.addAll(current._2());
+                return new Tuple2<>(accumulated._1(), Collections.unmodifiableList(combined));
+            }).orElseGet(() -> new Tuple2<>(FailureData.builder().build(), List.of()));
     }
 
     private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
@@ -353,12 +288,31 @@ class DefaultIndexer implements Indexer {
                 (ex) -> ex instanceof IndexerException,
                 (ex) -> Mono.just(IndexResult.builder()
                     .successful(false)
-                    .failureData(IndexerException.class.cast(ex).getFailureData())
+                    .failureData(((IndexerException) ex).getFailureData())
                     .build())
             )
             .doOnSuccess(indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}", files.size(),
                 Objects.hashCode(files))
             );
+    }
+
+    private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses,
+                                                  AnalysisAndExclusions analysisAndExclusions) {
+        return analyses.stream()
+            .filter(analysis ->
+                !ExclusionRulesEvaluator.shouldExcludeAnalysis(analysis, analysisAndExclusions.getExclusionRulesMap()))
+            .collect(Collectors.toList());
+    }
+
+    private Either<IndexerException, List<FileCentricDocument>>
+        buildFileDocuments(Analysis analysis, StudyRepository repository) {
+
+        return Try.of(() -> FileCentricDocumentConverter.fromAnalysis(analysis, repository))
+            .onFailure((e) -> notifyBuildDocumentFailure(analysis, repository, e))
+            .toEither()
+            .left()
+            .map((t) -> wrapBuildDocumentException(analysis, t))
+            .toEither();
     }
 
     private Mono<Map<String, FileCentricDocument>> getAlreadyIndexed(List<FileCentricDocument> files) {
@@ -374,10 +328,35 @@ class DefaultIndexer implements Indexer {
         );
     }
 
-    private Mono<IndexResult> callBatchUpsert(List<FileCentricDocument> conflictFreeFilesList) {
-        return this.fileCentricIndexAdapter.batchUpsertFileRepositories(
-            BatchIndexFilesCommand.builder().files(conflictFreeFilesList).build()
-        );
+    private ConflictsCheckResult findConflicts(List<FileCentricDocument> filesToIndex,
+                                               Map<String, FileCentricDocument> storedFiles) {
+        val conflictingPairs = filesToIndex.stream()
+            .map(fileToIndex -> findIfAnyStoredFileConflicts(storedFiles, fileToIndex))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+
+        return ConflictsCheckResult.builder()
+            .conflictingFiles(conflictingPairs)
+            .build();
+    }
+
+    private Mono<Void> handleConflicts(ConflictsCheckResult conflictingFiles) {
+        val filesToRemove = conflictingFiles.getConflictingFiles().stream()
+            .map(Tuple2::_1)
+            .collect(Collectors.toUnmodifiableList());
+        if (filesToRemove.isEmpty()) {
+            return Mono.fromSupplier(() -> null);
+        }
+
+        val ids = filesToRemove.stream()
+            .map(FileCentricDocument::getObjectId)
+            .collect(Collectors.toUnmodifiableSet());
+        this.notifyConflicts(conflictingFiles);
+        return this.fileCentricIndexAdapter
+            .removeFiles(ids)
+            .onErrorMap((ex) -> wrapWithIndexerException(ex, "failed to remove files",
+                FailureData.builder().failingIds(Map.of("ids", new HashSet<>(ids))).build())
+            );
     }
 
     private List<FileCentricDocument> removeConflictingFromInputFilesList(List<FileCentricDocument> files,
@@ -387,15 +366,10 @@ class DefaultIndexer implements Indexer {
             .collect(Collectors.toUnmodifiableList());
     }
 
-    private boolean isInConflictsList(ConflictsCheckResult conflictsCheckResult,
-                                      FileCentricDocument fileCentricDocument) {
-        return conflictsCheckResult.getConflictingFiles()
-            .stream()
-            .map(Tuple2::_1)
-            .anyMatch(conflictingFile -> conflictingFile
-                .getObjectId()
-                .equals(fileCentricDocument.getObjectId())
-            );
+    private Mono<IndexResult> callBatchUpsert(List<FileCentricDocument> conflictFreeFilesList) {
+        return this.fileCentricIndexAdapter.batchUpsertFileRepositories(
+            BatchIndexFilesCommand.builder().files(conflictFreeFilesList).build()
+        );
     }
 
     private void notifyIndexRequestFailures(IndexResult indexResult) {
@@ -411,23 +385,40 @@ class DefaultIndexer implements Indexer {
         }
     }
 
-    private Mono<Void> handleConflicts(ConflictsCheckResult conflictingFiles) {
-        val filesToRemove = conflictingFiles.getConflictingFiles().stream()
-            .map(Tuple2::_1)
-            .collect(Collectors.toUnmodifiableList());
-        if (filesToRemove.isEmpty()) {
-            return Mono.fromSupplier(() ->  null);
-        }
+    private void notifyBuildDocumentFailure(Analysis analysis, StudyRepository repository, Throwable e) {
+        notifier.notify(
+            new IndexerNotification(
+                NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
+                Map.of(
+                    ANALYSIS_ID, analysis.getAnalysisId(),
+                    STUDY_ID, analysis.getStudy(),
+                    REPO_CODE, repository.getCode(),
+                    ERR, e.getMessage()
+                )
+            )
+        );
+    }
 
-        val ids = filesToRemove.stream()
-            .map(FileCentricDocument::getObjectId)
-            .collect(Collectors.toUnmodifiableSet());
-        this.notifyConflicts(conflictingFiles);
-        return this.fileCentricIndexAdapter
-            .removeFiles(ids)
-            .onErrorMap((ex) -> wrapWithIndexerException(ex, "failed to remove files",
-                FailureData.builder().failingIds(Map.of("ids", new HashSet<>(ids))).build())
-            );
+    private IndexerException wrapBuildDocumentException(Analysis analysis, Throwable throwable) {
+        return wrapWithIndexerException(throwable,
+            format("buildFileDocuments failed for analysis : {0}, study: {1}",
+                analysis.getAnalysisId(), analysis.getStudy()),
+            FailureData.builder()
+                .failingIds(Map.of(ANALYSIS_ID, Set.of(analysis.getAnalysisId())))
+                .build());
+    }
+
+    private Tuple2<FileCentricDocument, FileCentricDocument>
+    findIfAnyStoredFileConflicts(Map<String, FileCentricDocument> storedFiles, FileCentricDocument fileToIndex) {
+        if (storedFiles.containsKey(fileToIndex.getObjectId())) {
+            val storedFile = storedFiles.get(fileToIndex.getObjectId());
+            if (fileToIndex.isValidReplica(storedFile)) {
+                return null;
+            }
+            return new Tuple2<>(fileToIndex, storedFiles.get(fileToIndex.getObjectId()));
+        } else {
+            return null;
+        }
     }
 
     private void notifyConflicts(ConflictsCheckResult conflictsCheckResult) {
@@ -438,6 +429,17 @@ class DefaultIndexer implements Indexer {
         val notif = new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
             Map.of(CONFLICTS, conflictingFileList));
         this.notifier.notify(notif);
+    }
+
+    private boolean isInConflictsList(ConflictsCheckResult conflictsCheckResult,
+                                      FileCentricDocument fileCentricDocument) {
+        return conflictsCheckResult.getConflictingFiles()
+            .stream()
+            .map(Tuple2::_1)
+            .anyMatch(conflictingFile -> conflictingFile
+                .getObjectId()
+                .equals(fileCentricDocument.getObjectId())
+            );
     }
 
     private FileConflict toFileConflict(FileCentricDocument f1, FileCentricDocument f2) {
@@ -456,46 +458,31 @@ class DefaultIndexer implements Indexer {
                 .repoCode(f2.getRepositories().stream().map(Repository::getCode)
                     .collect(Collectors.toUnmodifiableList())
                 ).build()
-        ).build();
+            ).build();
     }
 
-    private ConflictsCheckResult findConflicts(List<FileCentricDocument> filesToIndex,
-                                               Map<String, FileCentricDocument> storedFiles) {
-        val conflictingPairs = filesToIndex.stream()
-            .map(fileToIndex -> findIfAnyStoredFileConflicts(storedFiles, fileToIndex))
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+    private Mono<IndexResult>
+        batchUpsertFilesAndCollectFailures(Tuple2<FailureData, List<FileCentricDocument>> failureDataAndFileListTuple) {
+        return this.batchUpsert((failureDataAndFileListTuple._2()))
+            .map(upsertResult -> reduceIndexResult(IndexResult.builder()
+                .failureData(failureDataAndFileListTuple._1())
+                .build(), upsertResult)
+            );
+    }
 
-        return ConflictsCheckResult.builder()
-            .conflictingFiles(conflictingPairs)
+    private IndexResult reduceIndexResult(IndexResult accumulatedResult, IndexResult newResult) {
+        log.trace("In reduceIndexResult, newResult {} ", newResult);
+        val both = FailureData.builder().build();
+        if (!accumulatedResult.isSuccessful()) {
+            both.addFailures(accumulatedResult.getFailureData());
+        }
+        if (!newResult.isSuccessful()) {
+            both.addFailures(newResult.getFailureData());
+        }
+        return IndexResult.builder()
+            .failureData(both)
+            .successful(both.getFailingIds().isEmpty())
             .build();
-    }
-
-    private Tuple2<FileCentricDocument, FileCentricDocument>
-        findIfAnyStoredFileConflicts(Map<String, FileCentricDocument> storedFiles, FileCentricDocument fileToIndex) {
-            if (storedFiles.containsKey(fileToIndex.getObjectId())) {
-                val storedFile = storedFiles.get(fileToIndex.getObjectId());
-                if (fileToIndex.isValidReplica(storedFile)) {
-                    return null;
-                }
-                return new Tuple2<>(fileToIndex, storedFiles.get(fileToIndex.getObjectId()));
-            } else {
-                return null;
-            }
-    }
-
-    private void notifyFailedToFetchStudies(String code, String message) {
-        val attrs = Map.<String, Object>of(REPO_CODE, code, ERR, message);
-        val notification =
-            new IndexerNotification(NotificationName.FETCH_REPO_STUDIES_FAILED, attrs);
-        notifier.notify(notification);
-    }
-
-    private void notifyStudyFetchingError(String studyId, String repoUrl, String excMsg) {
-        val attrs = Map.<String, Object>of(STUDY_ID, studyId, REPO_URL, repoUrl, ERR, excMsg);
-        val notification =
-            new IndexerNotification(NotificationName.STUDY_ANALYSES_FETCH_FAILED, attrs);
-        notifier.notify(notification);
     }
 
     @Getter

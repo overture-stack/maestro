@@ -37,7 +37,7 @@ import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerExce
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.text.MessageFormat.format;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -135,7 +135,6 @@ class SongStudyDAOTest {
     void shouldRetryFetchingStudyAnalysesOnFailure() {
         val analyses = loadJsonFixture(this.getClass(),
             "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
-        val analysesEither = Either.<IndexerException, List<Analysis>>right(analyses);
 
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
@@ -163,13 +162,13 @@ class SongStudyDAOTest {
         );
 
         StepVerifier.create(analysesMono)
-            .expectNext(analysesEither)
+            .expectNext(analyses)
             .verifyComplete();
 
     }
 
     @Test
-    void fetchingStudyAnalysesShouldReturnErrorIfRetriedExahusted() {
+    void fetchingStudyAnalysesShouldReturnRetryExhaustedException() {
         //given
         val command = GetStudyAnalysesCommand.builder()
             .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
@@ -197,10 +196,7 @@ class SongStudyDAOTest {
 
         //then
         StepVerifier.create(analysesMono)
-            .expectNextMatches(actual -> actual.isLeft()
-                && actual.left().get().getMessage().equals(expectedException.getMessage())
-                && actual.left().get().getFailureData().equals(expectedException.getFailureData()))
-            .expectComplete()
+            .expectError(RetryExhaustedException.class)
             .verify();
     }
 
