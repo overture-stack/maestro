@@ -1,0 +1,75 @@
+{
+  "analysisType": "sequencingRead",
+  "info": {
+    "dcc_project_code": "PEME-CA",
+    "isPcawg": false
+  },
+  "analysisId": "EGAZ00001254368",
+  "study": "PEME-CA",
+  "analysisState": "PUBLISHED",
+  "sample": [
+    {
+      "info": {},
+      "sampleId": "SA604924",
+      "specimenId": "SP201301",
+      "sampleSubmitterId": "MDT-AP-0749_tumor",
+      "sampleType": "DNA",
+      "specimen": {
+        "info": {},
+        "specimenId": "SP201301",
+        "donorId": "DO232978",
+        "specimenSubmitterId": "MDT-AP-0749_tumor_specimen",
+        "specimenClass": "Tumour",
+        "specimenType": "Primary tumour - solid tissue"
+      },
+      "donor": {
+        "donorId": "DO232978",
+        "donorSubmitterId": "MDT-AP-0749",
+        "studyId": "PEME-CA",
+        "donorGender": "female",
+        "info": {}
+      }
+    }
+  ],
+  "file": [
+    {
+      "info": {},
+      "objectId": "41ba4fb3-9428-50b5-af6c-d779cd59b04d",
+      "studyId": "PEME-CA",
+      "analysisId": "EGAZ00001254368",
+      "fileName": "bundle.EGAZ00001254368.xml",
+      "fileSize": 6342,
+      "fileType": "XML",
+      "fileMd5sum": "fb157ece007dc31b3d34add273efedcb",
+      "fileAccess": "open"
+    },
+    {
+      "info": {},
+      "objectId": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
+      "studyId": "PEME-CA",
+      "analysisId": "EGAZ00001254368",
+      "fileName": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
+      "fileSize": 8939816,
+      "fileType": "BAI",
+      "fileMd5sum": "e2a83668aa4cfe4f4048e75212d44f19",
+      "fileAccess": "controlled"
+    },
+    {
+      "info": {},
+      "objectId": "43d29864-6756-51f0-bb2a-ba7cff860778",
+      "studyId": "PEME-CA",
+      "analysisId": "EGAZ00001254368",
+      "fileName": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
+      "fileSize": 88906416144,
+      "fileType": "BAM",
+      "fileMd5sum": "29ff9df727803d20834b9997bc17e970",
+      "fileAccess": "controlled"
+    }
+  ],
+  "experiment": {
+    "analysisId": "EGAZ00001254368",
+    "aligned": true,
+    "libraryStrategy": "WGS",
+    "info": {}
+  }
+}

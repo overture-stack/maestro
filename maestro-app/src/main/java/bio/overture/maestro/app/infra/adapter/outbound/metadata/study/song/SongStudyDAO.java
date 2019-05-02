@@ -129,7 +129,8 @@ class SongStudyDAO implements StudyDAO {
     }
 
     @Override
-    public Mono<Analysis> getAnalysis(GetAnalysisCommand command) {
+    @NonNull
+    public Mono<Analysis> getAnalysis(@NonNull GetAnalysisCommand command) {
         log.trace("in getAnalysis, args: {} ", command);
         val repoBaseUrl = command.getFilesRepositoryBaseUrl();
         val analysisId = command.getAnalysisId();

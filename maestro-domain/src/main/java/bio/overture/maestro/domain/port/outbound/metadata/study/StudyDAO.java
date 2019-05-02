@@ -25,5 +25,5 @@ public interface StudyDAO {
      */
     @NonNull Mono<Either<IndexerException, List<Analysis>>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
     @NonNull Flux<Either<IndexerException, Study>> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
-    Mono<Analysis> getAnalysis(GetAnalysisCommand command);
+    @NonNull Mono<Analysis> getAnalysis(@NonNull GetAnalysisCommand command);
 }

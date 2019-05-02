@@ -2,6 +2,7 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
+import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
@@ -19,6 +20,7 @@ import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapte
 import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
 import bio.overture.maestro.domain.port.outbound.metadata.repository.StudyRepositoryDAO;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
@@ -353,6 +355,104 @@ class DefaultIndexerTest {
                     .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode).collect(Collectors.toList()))
                     .build()
             ).build()));
+    }
+
+    @Test
+    void shouldIndexSingleAnalysis() {
+        // Given
+        val studyId = "PEME-CA";
+        val repoCode = "TEST-REPO";
+        val analysisId = "EGAZ00001254368";
+        val filesRepository = getStubFilesRepository();
+        val a1 = loadJsonFixture(getClass(), studyId +".analysis.EGAZ00001254368.json", Analysis.class);
+        val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
+        val fileRepo = Mono.just(getStubFilesRepository());
+        val studyAnalysis = Mono.just(a1);
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.just(result);
+        val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+        val getStudyAnalysesCommand = GetAnalysisCommand.builder()
+            .studyId(studyId)
+            .analysisId(analysisId)
+            .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
+            .build();
+
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(studyDAO.getAnalysis(eq(getStudyAnalysesCommand))).willReturn(studyAnalysis);
+        given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
+
+        // When
+        val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+            .studyId(studyId)
+            .analysisId(analysisId)
+            .repositoryCode(filesRepository.getCode())
+            .build()
+        );
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectNext(result)
+            .expectComplete()
+            .verify();
+
+        then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
+        then(studyDAO).should(times(1)).getAnalysis(eq(getStudyAnalysesCommand));
+        then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
+
+    }
+
+    @Test
+    void shouldNotIndexAnalysisIfExcludedByRule() {
+        // Given
+        val studyId = "PEME-CA";
+        val repoCode = "TEST-REPO";
+        val analysisId = "EGAZ00001254368";
+        val filesRepository = getStubFilesRepository();
+        val a1 = loadJsonFixture(getClass(), studyId +".analysis.EGAZ00001254368.json", Analysis.class);
+        val fileCentricDocuments = List.<FileCentricDocument>of();
+        val fileRepoMono = Mono.just(getStubFilesRepository());
+        val studyAnalysis = Mono.just(a1);
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.just(result);
+        val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+        val getStudyAnalysesCommand = GetAnalysisCommand.builder()
+            .studyId(studyId)
+            .analysisId(analysisId)
+            .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
+            .build();
+        val sampleExclusionRule = Mono.just(
+            Map.<Class<?>, List<? extends ExclusionRule>>of(
+                Analysis.class, List.of(new IDExclusionRule(Analysis.class, List.of("EGAZ00001254368")))
+            )
+        );
+
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepoMono);
+        given(studyDAO.getAnalysis(eq(getStudyAnalysesCommand))).willReturn(studyAnalysis);
+        given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        given(exclusionRulesDAO.getExclusionRules()).willReturn(sampleExclusionRule);
+
+        // When
+        val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+            .studyId(studyId)
+            .analysisId(analysisId)
+            .repositoryCode(filesRepository.getCode())
+            .build()
+        );
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectNext(result)
+            .expectComplete()
+            .verify();
+
+        then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
+        then(studyDAO).should(times(1)).getAnalysis(eq(getStudyAnalysesCommand));
+        then(indexServerAdapter).should(times(1))
+            .batchUpsertFileRepositories(eq(batchIndexFilesCommand));
+
     }
 
     @Test

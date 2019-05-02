@@ -3,6 +3,8 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.MaestroIntegrationTest;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
+import bio.overture.maestro.domain.api.exception.FailureData;
+import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
@@ -34,6 +36,7 @@ import reactor.test.StepVerifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static bio.overture.maestro.domain.api.DefaultIndexer.*;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
@@ -63,6 +66,89 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void setUp() {
         alias = applicationProperties.fileCentricAlias();
     }
+
+    @Test
+    void shouldHandleErrorsIfStudyDaoThrowException() throws InterruptedException {
+        // Given
+        val analyses = loadJsonFixture(this.getClass(), "PEME-CA.analysis.json", Analysis.class);
+        val expectedDoc0 = loadJsonFixture(this.getClass(),
+            "doc0.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+
+        stubFor(
+            request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254368"))
+                .willReturn(aResponse()
+                    .withStatus(500)
+                    .withBody("<p> Some wierd unexpected text </p>")
+                    .withHeader("content-type", "text/html")
+                )
+        );
+
+        // test
+        val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+            .analysisId("EGAZ00001254368")
+            .studyId("PEME-CA")
+            .repositoryCode("collab")
+            .build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder()
+                .failureData(
+                    FailureData.builder()
+                        .failingIds(
+                            Map.of(
+                                ANALYSIS_ID, Set.of("EGAZ00001254368"),
+                                STUDY_ID, Set.of("PEME-CA"),
+                                REPO_CODE, Set.of("collab")
+                            )
+                        ).build()
+                )
+                .successful(false).build())
+            .verifyComplete();
+    }
+
+    @Test
+    void shouldIndexAnalysis() throws InterruptedException {
+        // Given
+        val analyses = loadJsonFixture(this.getClass(), "PEME-CA.analysis.json", Analysis.class);
+        val expectedDoc0 = loadJsonFixture(this.getClass(),
+            "doc0.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+
+        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254368"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(analyses)));
+
+        // test
+        val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+            .analysisId("EGAZ00001254368")
+            .studyId("PEME-CA")
+            .repositoryCode("collab")
+            .build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(2000);
+
+        // assertions
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+
+        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs = page.getContent();
+
+        assertNotNull(docs);
+        assertEquals(1L, page.getContent().size());
+        assertEquals(expectedDoc0, docs.get(0));
+    }
+
 
     @Test
     void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException {

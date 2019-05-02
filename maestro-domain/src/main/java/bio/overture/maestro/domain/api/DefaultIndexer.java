@@ -39,11 +39,11 @@ import static reactor.core.publisher.Mono.error;
 class DefaultIndexer implements Indexer {
 
     private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
-    private static final String STUDY_ID = "studyId";
-    private static final String REPO_URL = "repoUrl";
-    private static final String ERR = "err";
-    private static final String REPO_CODE = "repoCode";
-    private static final String ANALYSIS_ID = "analysisId";
+    static final String STUDY_ID = "studyId";
+    static final String REPO_URL = "repoUrl";
+    static final String ERR = "err";
+    static final String REPO_CODE = "repoCode";
+    static final String ANALYSIS_ID = "analysisId";
     private static final String FAILURE_DATA = "failure_data";
     private static final String CONFLICTS = "conflicts";
     private final FileCentricIndexAdapter fileCentricIndexAdapter;
@@ -76,7 +76,30 @@ class DefaultIndexer implements Indexer {
                 .build()
             )
             .flatMap(this::getStudyAnalysisDocuments)
-            .flatMap(this::batchUpsertFiles);
+            .flatMap(this::batchUpsertFiles)
+            .onErrorResume(
+                (e) -> e instanceof IndexerException,
+                (e) -> Mono.just(IndexResult.builder()
+                    .failureData(IndexerException.class.cast(e).getFailureData())
+                    .successful(false)
+                    .build()
+                )
+            )
+            .onErrorResume(
+                (e) -> Mono.just(IndexResult.builder()
+                    .failureData(
+                        FailureData.builder()
+                            .failingIds(
+                                Map.of(
+                                    ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()),
+                                    STUDY_ID, Set.of(indexAnalysisCommand.getStudyId()),
+                                    REPO_CODE, Set.of(indexAnalysisCommand.getRepositoryCode())
+                                )
+                            ).build()
+                    ).successful(false)
+                    .build()
+                )
+            );
 
     }
 
@@ -121,7 +144,7 @@ class DefaultIndexer implements Indexer {
      * Private Methods  *
      * **************** */
     private  StudyAndRepository
-    toStudyAndRepositoryTuple(@NonNull IndexStudyCommand indexStudyCommand, StudyRepository filesRepository) {
+        toStudyAndRepositoryTuple(@NonNull IndexStudyCommand indexStudyCommand, StudyRepository filesRepository) {
             return StudyAndRepository.builder()
                 .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
                 .studyRepository(filesRepository).build();
@@ -210,7 +233,16 @@ class DefaultIndexer implements Indexer {
                 .studyId(tuple.getStudy().getStudyId())
                 .build()
             ).map(List::of)
-            .flatMap(this::getExclusionRulesAndFilter)
+            .onErrorMap((e) -> wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
+                    .failingIds(
+                        Map.of(
+                            ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
+                            STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
+                            REPO_CODE, Set.of(tuple.studyRepository.getCode())
+                        )
+                    ).build()
+                )
+            ).flatMap(this::getExclusionRulesAndFilter)
             .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
     }
 
