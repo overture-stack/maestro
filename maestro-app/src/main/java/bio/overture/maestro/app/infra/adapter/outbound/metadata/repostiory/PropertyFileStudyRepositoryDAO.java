@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static bio.overture.maestro.domain.utility.Exceptions.notFound;
 
 /**
  * Properties file backed repository store, reads the information by binding
@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
 
+    private static final String MSG_REPO_NOT_FOUND = "Repository {0} not found";
     private List<PropertiesFileRepository> repositories;
 
     @Inject
@@ -44,8 +45,11 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
             .map(this::toFilesRepository)
             .findFirst()
             .orElse(null);
+        if (repository == null) {
+            return Mono.error(notFound(MSG_REPO_NOT_FOUND, code));
+        }
         log.debug("loaded repository : {}", repository);
-        return Mono.justOrEmpty(repository);
+        return Mono.just(repository);
     }
 
     private StudyRepository toFilesRepository(PropertiesFileRepository propertiesFileRepository) {

@@ -94,7 +94,7 @@ class DefaultIndexerTest {
             .failureData(failure)
             .successful(false)
             .build();
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
         given(studyDAO.getStudyAnalyses(any(GetStudyAnalysesCommand.class)))
             .willReturn(Mono.error(new IndexerException("failed", new RuntimeException(""), failure)));
@@ -161,9 +161,6 @@ class DefaultIndexerTest {
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
         val studies = getExpectedStudies();
-        val studiesEither = studies.stream()
-            .map(Either::<IndexerException, Study>right)
-            .collect(Collectors.toUnmodifiableList());
         val fileRepo = Mono.just(getStubFilesRepository());
         val failure = FailureData.builder()
             .failingIds(Map.of("study", Set.of("PACA-CA"))).build();
@@ -208,8 +205,14 @@ class DefaultIndexerTest {
             .verify();
 
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
-        then(studyDAO).should(times(2)).getStudyAnalyses(any());
-        then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(any());
+        for(Study study: studies) {
+            val studyId = study.getStudyId();
+            val command = GetStudyAnalysesCommand.builder()
+                .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
+                .build();
+            then(studyDAO).should(times(1)).getStudyAnalyses(eq(command));
+        }
+        then(indexServerAdapter).should(times(2)).batchUpsertFileRepositories(any());
         then(notifier).should(times(1)).notify(any());
     }
 
