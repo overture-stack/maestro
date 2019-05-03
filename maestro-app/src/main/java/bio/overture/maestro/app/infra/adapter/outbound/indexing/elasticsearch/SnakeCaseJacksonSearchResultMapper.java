@@ -14,8 +14,9 @@ import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 
 class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGetResultMapper {
@@ -30,14 +31,16 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGet
     @Override
     @SneakyThrows
     public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
-        val docs = new ArrayList<T>();
-        for(val hit : response.getHits().getHits()) {
-            val source = hit.getSourceAsString();
-            val doc = objectMapper.readValue(source, clazz);
-            docs.add(doc);
-        }
         val maxScore = response.getHits().getMaxScore();
-        return new AggregatedPageImpl<>(docs, pageable, response.getHits().getTotalHits(),
+        val docs = Arrays.stream(response.getHits().getHits())
+            .map(hit -> {
+                val source = hit.getSourceAsString();
+                return objectMapper.readValue(source, clazz);
+            }).collect(Collectors.toUnmodifiableList());
+
+        return new AggregatedPageImpl<>(docs,
+            pageable,
+            response.getHits().getTotalHits(),
             response.getAggregations(),
             response.getScrollId(),
             maxScore);
@@ -54,12 +57,12 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGet
     @SneakyThrows
     public <T> LinkedList<T> mapResults(MultiGetResponse responses, Class<T> clazz) {
         val list = new LinkedList<T>();
-        for (val response : responses.getResponses()) {
-            if (!response.isFailed() && response.getResponse().isExists()) {
+        Arrays.stream(responses.getResponses())
+            .filter((response) -> !response.isFailed() && response.getResponse().isExists())
+            .forEach((response) -> {
                 T result = objectMapper.readValue(response.getResponse().getSourceAsString(), clazz);
                 list.add(result);
-            }
-        }
+            });
         return list;
     }
 }
