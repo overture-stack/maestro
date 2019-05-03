@@ -1,10 +1,7 @@
 package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -40,9 +37,13 @@ public class ManagementController {
     public Mono<IndexResult> indexAnalysis(@PathVariable String analysisId, @PathVariable String studyId, @PathVariable String repositoryCode) {
         log.debug("in indexAnalysis, args studyId {}, repoId: {}, analysisId : {}", studyId, repositoryCode, analysisId);
         return indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .repositoryCode(repositoryCode)
-            .analysisId(analysisId)
-            .studyId(studyId)
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .repositoryCode(repositoryCode)
+                    .analysisId(analysisId)
+                    .studyId(studyId)
+                    .build()
+            )
             .build()
         );
     }

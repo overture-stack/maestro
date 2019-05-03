@@ -16,6 +16,7 @@ import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPa
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -32,11 +33,9 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGet
     @SneakyThrows
     public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
         val maxScore = response.getHits().getMaxScore();
-        val docs = Arrays.stream(response.getHits().getHits())
-            .map(hit -> {
-                val source = hit.getSourceAsString();
-                return objectMapper.readValue(source, clazz);
-            }).collect(Collectors.toUnmodifiableList());
+        List<T> docs = Arrays.stream(response.getHits().getHits())
+            .map(hit -> convertSourceToObject(clazz, hit.getSourceAsString()))
+            .collect(Collectors.toUnmodifiableList());
 
         return new AggregatedPageImpl<>(docs,
             pageable,
@@ -60,9 +59,14 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGet
         Arrays.stream(responses.getResponses())
             .filter((response) -> !response.isFailed() && response.getResponse().isExists())
             .forEach((response) -> {
-                T result = objectMapper.readValue(response.getResponse().getSourceAsString(), clazz);
+                T result = convertSourceToObject(clazz, response.getResponse().getSourceAsString());
                 list.add(result);
             });
         return list;
+    }
+
+    @SneakyThrows
+    private <T> T convertSourceToObject(Class<T> clazz, String source) {
+        return objectMapper.readValue(source, clazz);
     }
 }

@@ -10,6 +10,7 @@ public enum NotificationName {
     CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED(NotificationCategory.ERROR),
     INDEX_FILE_CONFLICT(NotificationCategory.WARN),
     ALL(null),
+    FAILED_TO_FETCH_ANALYSIS(NotificationCategory.ERROR),
     ;
 
     private final NotificationCategory category;

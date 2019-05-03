@@ -30,6 +30,7 @@ import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 @SpringBootTest(classes = {Maestro.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class MaestroIntegrationTest {
 
+    /** wait time for elastic search to update */
     @Value("${maestro.test.elasticsearch.sleep_millis:2500}")
     protected int sleepMillis;
 

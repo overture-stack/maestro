@@ -8,7 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-public class IndexAnalysisCommand {
+public class AnalysisIdentifier {
     @NonNull
-    private AnalysisIdentifier analysisIdentifier;
+    private String analysisId;
+    @NonNull
+    private String studyId;
+    @NonNull
+    private String repositoryCode;
 }

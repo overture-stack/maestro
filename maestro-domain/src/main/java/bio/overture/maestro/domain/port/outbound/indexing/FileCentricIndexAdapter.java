@@ -45,4 +45,10 @@ public interface FileCentricIndexAdapter {
      * @return indexer exception instance contains the list of failures.
      */
     Mono<Void> removeFiles(Set<String> fileCentricDocumentIds);
+
+    /**
+     * Remove all file documents related to the specified analysisId
+     */
+    Mono<Void> removeAnalysisFiles(String analysisId);
+
 }

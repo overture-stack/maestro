@@ -122,6 +122,32 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         return Mono.fromSupplier(() -> this.deleteByIds(ids)).subscribeOn(Schedulers.elastic());
     }
 
+    @Override
+    public Mono<Void> removeAnalysisFiles(String analysisId) {
+        return Mono.fromSupplier(() -> this.delelteByAnalysiId(analysisId)).subscribeOn(Schedulers.elastic());
+    }
+
+    private Void delelteByAnalysiId(String analysisId) {
+        val deleteQuery = new DeleteQuery();
+        deleteQuery.setQuery(QueryBuilders.boolQuery()
+            .must(QueryBuilders.termQuery("analysis.id", analysisId))
+        );
+        deleteQuery.setType(this.alias);
+        deleteQuery.setIndex(this.alias);
+        val retryConfig = RetryConfig.custom()
+            .maxAttempts(this.maxRetriesAttempts)
+            .retryExceptions(IOException.class)
+            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
+            .build();
+        val retry = Retry.of("delelteByAnalysiId", retryConfig);
+        val decorated = Retry.decorateRunnable(retry, () -> {
+            log.trace("delelteByAnalysiId called, analysisId {} ", analysisId);
+            template.delete(deleteQuery);
+        });
+        decorated.run();
+        return null;
+    }
+
     @Retryable(
         maxAttempts = 5,
         backoff = @Backoff(value = 1000, multiplier=1.5)

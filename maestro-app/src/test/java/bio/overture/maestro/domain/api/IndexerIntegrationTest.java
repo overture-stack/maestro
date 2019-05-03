@@ -4,10 +4,7 @@ import bio.overture.maestro.MaestroIntegrationTest;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
-import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
@@ -88,10 +85,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
         // test
         val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .analysisId("EGAZ00001254368")
-            .studyId("PEME-CA")
-            .repositoryCode("collab")
-            .build());
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .analysisId("EGAZ00001254368")
+                .studyId("PEME-CA")
+                .repositoryCode("collab")
+                .build()
+            ).build());
 
         StepVerifier.create(result)
             .expectNext(IndexResult.builder()
@@ -124,10 +123,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
         // test
         val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .analysisId("EGAZ00001254368")
-            .studyId("PEME-CA")
-            .repositoryCode("collab")
-            .build());
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .analysisId("EGAZ00001254368")
+                .studyId("PEME-CA")
+                .repositoryCode("collab")
+                .build()
+            ).build());
 
         StepVerifier.create(result)
             .expectNext(IndexResult.builder().successful(true).build())
@@ -254,6 +255,66 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     }
 
     @Test
+    void shouldDeleteSingleAnalysis() throws InterruptedException {
+        // Given
+        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
+            new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json",
+            new TypeReference<List<Analysis>>() {});
+        val expectedDoc0 = loadJsonFixture(this.getClass(),
+            "doc0.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+        val expectedDoc1 = loadJsonFixture(this.getClass(), "doc1.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+        val multiRepoDoc = loadJsonFixture(this.getClass(),
+            "doc2.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of(
+                "COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl(),
+                "AWS_REPO_URL", applicationProperties.repositories().get(1).getUrl()
+            )
+        );
+        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
+        stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
+
+        populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
+
+        // test
+        val result = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .analysisId("EGAZ00001254247")
+                    .studyId("PEME-CA")
+                    .repositoryCode("aws")
+                    .build()
+            ).build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+        Thread.sleep(sleepMillis);
+
+        // assertions
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs = page.getContent();
+        assertNotNull(docs);
+        assertEquals(1L, page.getContent().size());
+        assertEquals(expectedDoc0, docs.get(0));
+
+    }
+
+    @Test
     void shouldUpdateExistingFileDocRepository() throws InterruptedException {
         // Given
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
@@ -281,61 +342,40 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                 "AWS_REPO_URL", applicationProperties.repositories().get(1).getUrl()
             )
         );
-
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
 
-
         // test
-        val result = indexer.indexStudy(IndexStudyCommand.builder()
-            .repositoryCode("COLLAB")
-            .studyId("PEME-CA")
-            .build());
+        // step 1
+        populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
-        StepVerifier.create(result)
-            .expectNext(IndexResult.builder().successful(true).build())
-            .verifyComplete();
-
-        Thread.sleep(sleepMillis);
-
-        // assertions
-        var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-        var page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        var docs = page.getContent();
-        assertNotNull(docs);
-        assertEquals(2L, page.getContent().size());
-        assertEquals(expectedDoc1, docs.get(1));
-        assertEquals(expectedDoc0, docs.get(0));
-
-        // index the same file from another repository:
-        // test
+        // step 2 index the same file from another repository:
         val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("aws")
             .studyId("PEME-CA")
             .build());
+
         StepVerifier.create(secondResult)
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
-
         Thread.sleep(sleepMillis);
 
         // assertions
-        query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
             .withIndices(alias)
             .withTypes(alias)
             .build();
-        page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        docs = page.getContent();
+        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs = page.getContent();
         assertNotNull(docs);
         assertEquals(2L, page.getContent().size());
         assertEquals(multiRepoDoc, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
     }
+
+
 
     @Test
     void shouldRemoveConflictingDocuments() throws InterruptedException {
@@ -360,30 +400,8 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
 
-
         // test
-        val result = indexer.indexStudy(IndexStudyCommand.builder()
-            .repositoryCode("COLLAB")
-            .studyId("PEME-CA")
-            .build());
-
-        StepVerifier.create(result)
-            .expectNext(IndexResult.builder().successful(true).build())
-            .verifyComplete();
-
-        Thread.sleep(sleepMillis);
-
-        // assertions
-        var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-        var page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        var docs = page.getContent();
-        assertNotNull(docs);
-        assertEquals(2L, page.getContent().size());
-        assertEquals(expectedDoc1, docs.get(1));
-        assertEquals(expectedDoc0, docs.get(0));
+        populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
         // index the same file from another repository:
         // test
@@ -398,15 +416,40 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
             .withIndices(alias)
             .withTypes(alias)
             .build();
-        page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        docs = page.getContent();
+        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs = page.getContent();
         assertNotNull(docs);
         // confirm that now the index only has one document, since the conflicted file was deleted.
         assertEquals(1L, page.getContent().size());
+        assertEquals(expectedDoc0, docs.get(0));
+    }
+
+    private void populateIndexWithCollabStudy(FileCentricDocument expectedDoc0, FileCentricDocument expectedDoc1) throws InterruptedException {
+        val result = indexer.indexStudy(IndexStudyCommand.builder()
+            .repositoryCode("COLLAB")
+            .studyId("PEME-CA")
+            .build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
+
+        // assertions
+        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        val docs = page.getContent();
+        assertNotNull(docs);
+        assertEquals(2L, page.getContent().size());
+        assertEquals(expectedDoc1, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
     }
 

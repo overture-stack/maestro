@@ -2,10 +2,7 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
-import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import bio.overture.maestro.domain.entities.indexing.StorageType;
@@ -421,10 +418,12 @@ class DefaultIndexerTest {
 
         // When
         val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .studyId(studyId)
-            .analysisId(analysisId)
-            .repositoryCode(filesRepository.getCode())
-            .build()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .studyId(studyId)
+                .analysisId(analysisId)
+                .repositoryCode(filesRepository.getCode())
+                .build()
+            ).build()
         );
 
         // Then
@@ -436,6 +435,39 @@ class DefaultIndexerTest {
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
         then(studyDAO).should(times(1)).getAnalysis(eq(getStudyAnalysesCommand));
         then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
+
+    }
+
+    @Test
+    void shouldRemoveSingleAnalysis() {
+        // Given
+        val studyId = "PEME-CA";
+        val repoCode = "TEST-REPO";
+        val analysisId = "EGAZ00001254368";
+        val filesRepository = getStubFilesRepository();
+        val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.<Void>fromSupplier(() -> null);
+
+        given(indexServerAdapter.removeAnalysisFiles(eq(analysisId))).willReturn(monoResult);
+
+        // When
+        val indexResultMono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .studyId(studyId)
+                .analysisId(analysisId)
+                .repositoryCode(filesRepository.getCode())
+                .build()
+            ).build()
+        );
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectNext(result)
+            .expectComplete()
+            .verify();
+
+        then(indexServerAdapter).should(times(1)).removeAnalysisFiles(eq(analysisId));
 
     }
 
@@ -472,10 +504,12 @@ class DefaultIndexerTest {
 
         // When
         val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .studyId(studyId)
-            .analysisId(analysisId)
-            .repositoryCode(filesRepository.getCode())
-            .build()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .studyId(studyId)
+                .analysisId(analysisId)
+                .repositoryCode(filesRepository.getCode())
+                .build()
+            ).build()
         );
 
         // Then

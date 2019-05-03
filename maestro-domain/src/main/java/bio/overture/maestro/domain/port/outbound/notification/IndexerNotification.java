@@ -15,7 +15,7 @@ import static java.text.MessageFormat.format;
 @AllArgsConstructor
 public class IndexerNotification {
     private final NotificationName notificationName;
-    private final Map<String, Object> attributes;
+    private final Map<String, ? extends Object> attributes;
 
     public String toString() {
         return format("{0} | {1}", notificationName.name().toUpperCase(), attributes);

@@ -68,12 +68,27 @@ class DefaultIndexer implements Indexer {
 
     @Override
     public Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
-        return this.studyRepositoryDao.getFilesRepository(indexAnalysisCommand.getRepositoryCode())
-            .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, indexAnalysisCommand.getRepositoryCode())))
-            .map(filesRepository -> buildStudyAnalysisRepoTuple(indexAnalysisCommand, filesRepository))
+        val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
+        return this.studyRepositoryDao.getFilesRepository(analysisIdentifier.getRepositoryCode())
+            .switchIfEmpty(error(notFound(MSG_REPO_NOT_FOUND, analysisIdentifier.getRepositoryCode())))
+            .map(filesRepository -> buildStudyAnalysisRepoTuple(analysisIdentifier, filesRepository))
             .flatMap(this::getStudyAnalysisDocuments)
             .flatMap(this::batchUpsertFilesAndCollectFailures)
-            .onErrorResume((e) -> handleIndexAnalysisError(indexAnalysisCommand));
+            .onErrorResume((e) -> handleIndexAnalysisError(analysisIdentifier));
+    }
+
+    @Override
+    public Mono<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand) {
+        val analysisIdentifier = removeAnalysisCommand.getAnalysisIdentifier();
+        return this.fileCentricIndexAdapter.removeAnalysisFiles(analysisIdentifier.getAnalysisId())
+            .thenReturn(IndexResult.builder().successful(true).build())
+            .onErrorReturn(IndexResult.builder()
+                .failureData(
+                    FailureData.builder().failingIds(
+                        Map.of(ANALYSIS_ID, Set.of(analysisIdentifier.getAnalysisId()))
+                    ).build()
+                ).build()
+            );
     }
 
     @Override
@@ -191,7 +206,7 @@ class DefaultIndexer implements Indexer {
         notifier.notify(notification);
     }
 
-    private StudyAnalysisRepositoryTuple buildStudyAnalysisRepoTuple(@NonNull IndexAnalysisCommand indexAnalysisCommand,
+    private StudyAnalysisRepositoryTuple buildStudyAnalysisRepoTuple(@NonNull AnalysisIdentifier indexAnalysisCommand,
                                                                      StudyRepository filesRepository) {
        return StudyAnalysisRepositoryTuple.builder()
             .analysisId(indexAnalysisCommand.getAnalysisId())
@@ -202,24 +217,32 @@ class DefaultIndexer implements Indexer {
 
     private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
         getStudyAnalysisDocuments(StudyAnalysisRepositoryTuple tuple) {
+        return tryFetchAnalysis(tuple)
+        .flatMap(this::getExclusionRulesAndFilter)
+        .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
+    }
 
+    @NotNull
+    private Mono<List<Analysis>> tryFetchAnalysis(StudyAnalysisRepositoryTuple tuple) {
         return this.studyDAO.getAnalysis(GetAnalysisCommand.builder()
             .analysisId(tuple.getAnalysisId())
             .filesRepositoryBaseUrl(tuple.getStudyRepository().getBaseUrl())
             .studyId(tuple.getStudy().getStudyId())
             .build()
         ).map(List::of)
-        .onErrorMap((e) -> wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
-                .failingIds(
-                    Map.of(
-                        ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
-                        STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
-                        REPO_CODE, Set.of(tuple.studyRepository.getCode())
-                    )
-                ).build()
-            )
-        ).flatMap(this::getExclusionRulesAndFilter)
-        .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
+        .onErrorMap((e) -> {
+            val failureInfo = Map.of(
+                ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
+                STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
+                REPO_CODE, Set.of(tuple.studyRepository.getCode())
+            );
+            notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_ANALYSIS, failureInfo));
+            return wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
+                    .failingIds(
+                        failureInfo
+                    ).build()
+                );
+        });
     }
 
     private Mono<? extends IndexResult> convertIndexerExceptionToIndexResult(IndexerException e) {
@@ -231,7 +254,7 @@ class DefaultIndexer implements Indexer {
     }
 
     @NotNull
-    private Mono<IndexResult> handleIndexAnalysisError(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
+    private Mono<IndexResult> handleIndexAnalysisError(@NonNull AnalysisIdentifier indexAnalysisCommand) {
         return Mono.just(IndexResult.builder()
             .failureData(
                 FailureData.builder()

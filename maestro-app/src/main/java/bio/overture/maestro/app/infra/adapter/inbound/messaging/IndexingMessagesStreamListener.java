@@ -1,6 +1,7 @@
 package bio.overture.maestro.app.infra.adapter.inbound.messaging;
 
 import bio.overture.maestro.domain.api.Indexer;
+import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
 import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
@@ -27,10 +28,12 @@ public class IndexingMessagesStreamListener {
         indexAnalysisMessageFlux.subscribe( msg -> {
             try {
                 indexer.indexAnalysis(IndexAnalysisCommand.builder()
-                    .studyId(msg.getStudyId())
-                    .analysisId(msg.getAnalysisId())
-                    .repositoryCode(msg.getRepositoryCode())
-                    .build()
+                    .analysisIdentifier(AnalysisIdentifier.builder()
+                        .studyId(msg.getStudyId())
+                        .analysisId(msg.getAnalysisId())
+                        .repositoryCode(msg.getRepositoryCode())
+                        .build()
+                    ).build()
                 ).onErrorResume((e) -> {
                     log.error("failed reading message: {} ", msg, e);
                     return Mono.empty();
