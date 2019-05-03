@@ -1,8 +1,11 @@
-package bio.overture.maestro.app.infra.adapter.inbound;
+package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.MaestroIntegrationTest;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
+import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
@@ -19,7 +22,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -27,7 +29,7 @@ import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.test.StepVerifier;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,12 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Tag(TestCategory.INT_TEST)
-@AutoConfigureWebTestClient(timeout = "5000")
 @SuppressWarnings("all")
-class ManagementControllerTest extends MaestroIntegrationTest {
-
-    @Autowired
-    private WebTestClient client;
+class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     @Autowired
     private ElasticsearchRestTemplate elasticsearchTemplate;
@@ -58,13 +56,16 @@ class ManagementControllerTest extends MaestroIntegrationTest {
 
     private String alias;
 
+    @Autowired
+    private Indexer indexer;
+
     @BeforeEach
     void setUp() {
         alias = applicationProperties.fileCentricAlias();
     }
 
     @Test
-    void indexStudyRepository() throws InterruptedException {
+    void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException {
         // Given
         val studiesArray = loadJsonFixture(this.getClass(), "studies.json", String[].class);
         val studies = Arrays.stream(studiesArray)
@@ -81,7 +82,7 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         for (Study study: studies) {
             val studyId = study.getStudyId();
             val studyAnalyses = getStudyAnalyses(studyId);
-            stubFor(request("GET", urlEqualTo("/collab/studies/" + studyId + "/analysis"))
+            stubFor(request("GET", urlEqualTo("/collab/studies/" + studyId + "/analysis?analysisStates=PUBLISHED"))
                 .willReturn(ResponseDefinitionBuilder.okForJson(studyAnalyses)));
         }
 
@@ -89,13 +90,15 @@ class ManagementControllerTest extends MaestroIntegrationTest {
             .willReturn(ResponseDefinitionBuilder.okForJson(studiesArray)));
 
         // test
-        client.post()
-            .uri("/index/repository/collab")
-            .exchange()
-            .expectStatus()
-            .isCreated();
+        val result = indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+            .repositoryCode("collab")
+            .build());
 
-        Thread.sleep(5000);
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
 
         // assertions
         val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -120,7 +123,7 @@ class ManagementControllerTest extends MaestroIntegrationTest {
     }
 
     @Test
-    void indexStudy() throws InterruptedException {
+    void shouldIndexStudyWithExclusionsApplied() throws InterruptedException {
         // Given
         val analyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),
@@ -134,16 +137,20 @@ class ManagementControllerTest extends MaestroIntegrationTest {
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
-        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis"))
+        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(analyses)));
 
         // test
-        client.post()
-            .uri("/index/repository/collab/study/PEME-CA")
-            .exchange()
-            .expectStatus()
-                .isCreated();
-        Thread.sleep(2000);
+        val result = indexer.indexStudy(IndexStudyCommand.builder()
+            .repositoryCode("collab")
+            .studyId("PEME-CA")
+            .build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
 
         // assertions
         val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -161,8 +168,7 @@ class ManagementControllerTest extends MaestroIntegrationTest {
     }
 
     @Test
-
-    void indexStudy_updateFileRepository() throws InterruptedException {
+    void shouldUpdateExistingFileDocRepository() throws InterruptedException {
         // Given
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
             new TypeReference<List<Analysis>>() {});
@@ -190,19 +196,23 @@ class ManagementControllerTest extends MaestroIntegrationTest {
             )
         );
 
-        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis"))
+        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
-        stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis"))
+        stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
 
 
         // test
-        client.post()
-            .uri("/index/repository/collab/study/PEME-CA")
-            .exchange()
-            .expectStatus()
-            .isCreated();
-        Thread.sleep(2000);
+        val result = indexer.indexStudy(IndexStudyCommand.builder()
+            .repositoryCode("COLLAB")
+            .studyId("PEME-CA")
+            .build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
 
         // assertions
         var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -218,12 +228,15 @@ class ManagementControllerTest extends MaestroIntegrationTest {
 
         // index the same file from another repository:
         // test
-        client.post()
-            .uri("/index/repository/aws/study/PEME-CA")
-            .exchange()
-            .expectStatus()
-            .isCreated();
-        Thread.sleep(2000);
+        val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
+            .repositoryCode("aws")
+            .studyId("PEME-CA")
+            .build());
+        StepVerifier.create(secondResult)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
 
         // assertions
         query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
@@ -235,6 +248,79 @@ class ManagementControllerTest extends MaestroIntegrationTest {
         assertNotNull(docs);
         assertEquals(2L, page.getContent().size());
         assertEquals(multiRepoDoc, docs.get(1));
+        assertEquals(expectedDoc0, docs.get(0));
+    }
+
+    @Test
+    void shouldRemoveConflictingDocuments() throws InterruptedException {
+        // Given
+        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
+            new TypeReference<List<Analysis>>() {});
+        // this has a different analysis id than the one in previous file
+        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.study.json",
+            new TypeReference<List<Analysis>>() {});
+        val expectedDoc0 = loadJsonFixture(this.getClass(),
+            "doc0.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+        val expectedDoc1 = loadJsonFixture(this.getClass(), "doc1.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+
+        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
+        stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
+
+
+        // test
+        val result = indexer.indexStudy(IndexStudyCommand.builder()
+            .repositoryCode("COLLAB")
+            .studyId("PEME-CA")
+            .build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
+
+        // assertions
+        var query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+        var page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        var docs = page.getContent();
+        assertNotNull(docs);
+        assertEquals(2L, page.getContent().size());
+        assertEquals(expectedDoc1, docs.get(1));
+        assertEquals(expectedDoc0, docs.get(0));
+
+        // index the same file from another repository:
+        // test
+        val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
+            .repositoryCode("aws")
+            .studyId("PEME-CA")
+            .build());
+        StepVerifier.create(secondResult)
+            .expectNext(IndexResult.builder().successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
+
+        // assertions
+        query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+            .withIndices(alias)
+            .withTypes(alias)
+            .build();
+        page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
+        docs = page.getContent();
+        assertNotNull(docs);
+        // confirm that now the index only has one document, since the conflicted file was deleted.
+        assertEquals(1L, page.getContent().size());
         assertEquals(expectedDoc0, docs.get(0));
     }
 

@@ -7,6 +7,10 @@ spring:
 maestro:
   exclusion-rules:
     file-name: exclusion-rules-test.yml
+  song:
+    max-retries: 3
+    timeout-sec: 5 # some studies take really long, +30 secs, to be downloaded
+    indexable-study-status: PUBLISHED
   elasticsearch:
     indexes:
       file-centric:

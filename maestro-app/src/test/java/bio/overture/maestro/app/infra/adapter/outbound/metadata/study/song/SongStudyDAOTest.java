@@ -61,7 +61,7 @@ class SongStudyDAOTest {
         val analysesEither = Either.<IndexerException, List<Analysis>>right(analyses);
 
         stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis"))
+            request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .inScenario("RANDOM_FAILURE")
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(aResponse()
@@ -73,7 +73,7 @@ class SongStudyDAOTest {
         );
 
         stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis"))
+            request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .inScenario("RANDOM_FAILURE")
                 .whenScenarioStateIs("WORKING")
                 .willReturn(ResponseDefinitionBuilder.okForJson(analyses))
@@ -107,7 +107,7 @@ class SongStudyDAOTest {
         );
         val expectedResult = Either.<IndexerException, List<Analysis>>left(expectedException);
         stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis"))
+            request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .willReturn(aResponse()
                     .withStatus(400)
                     .withBody("<p> Some wierd unexpected text </p>")
@@ -142,6 +142,7 @@ class SongStudyDAOTest {
             ApplicationProperties properties = mock(ApplicationProperties.class);
             when(properties.songMaxRetries()).thenReturn(3);
             when(properties.songTimeoutSeconds()).thenReturn(20);
+            when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED");
             return properties;
         }
     }

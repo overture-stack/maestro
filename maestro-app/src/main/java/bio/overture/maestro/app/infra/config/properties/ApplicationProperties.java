@@ -22,4 +22,5 @@ public interface ApplicationProperties {
     int songTimeoutSeconds();
     long elasticSearchRetryWaitDurationMillis();
     int elasticSearchRetryMaxAttempts();
+    String indexableStudyStatuses();
 }

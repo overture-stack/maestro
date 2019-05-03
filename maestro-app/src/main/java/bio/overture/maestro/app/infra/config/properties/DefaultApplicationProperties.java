@@ -61,6 +61,9 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     private List<DefaultPropertiesFileRepository> repositories;
 
+    @Value("${maestro.song.indexable-study-status}")
+    private String indexableStudyStatuses;
+
     @Override
     public List<String> elasticSearchClusterNodes() {
         return List.copyOf(this.hosts);
@@ -124,6 +127,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Override
     public int elasticSearchRetryMaxAttempts() {
         return elasticSearchRetryMaxAttempts;
+    }
+
+    @Override
+    public String indexableStudyStatuses() {
+        return indexableStudyStatuses;
     }
 
     @Data

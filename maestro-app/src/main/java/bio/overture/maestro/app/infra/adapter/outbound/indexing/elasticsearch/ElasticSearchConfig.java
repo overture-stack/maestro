@@ -30,6 +30,7 @@ import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SE
 @Import({
     CustomElasticSearchRestAdapter.class,
     FileCentricElasticSearchAdapter.class,
+    SnakeCaseJacksonSearchResultMapper.class
 })
 public class ElasticSearchConfig {
 

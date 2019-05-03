@@ -8,7 +8,7 @@ maestro:
   song:
     max-retries: 3
     timeout-sec: 100 # some studies take really long, +30 secs, to be downloaded
-
+    indexable-study-status: PUBLISHED #,UNPUBLISHED,SUPPRESSED
   exclusion-rules:
     # exclusion rules file name
     file-name: exclusion-rules.yml
@@ -54,7 +54,7 @@ maestro:
   # last resort fallback file system log in case of retries exhaustion.
   failure-log:
     enabled: true
-    dir: /tmp/logs/maestro
+    dir: ${user.home}/logs/maestro
 
 # logging & monitoring
 logging:
