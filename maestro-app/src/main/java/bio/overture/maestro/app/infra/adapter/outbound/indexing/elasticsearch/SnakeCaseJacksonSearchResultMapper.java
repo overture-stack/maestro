@@ -4,7 +4,6 @@ import bio.overture.maestro.app.infra.config.RootConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -32,12 +31,12 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGet
     @SneakyThrows
     public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
         val docs = new ArrayList<T>();
-        for(SearchHit hit : response.getHits().getHits()) {
-            String source = hit.getSourceAsString();
+        for(val hit : response.getHits().getHits()) {
+            val source = hit.getSourceAsString();
             val doc = objectMapper.readValue(source, clazz);
             docs.add(doc);
         }
-        float maxScore = response.getHits().getMaxScore();
+        val maxScore = response.getHits().getMaxScore();
         return new AggregatedPageImpl<>(docs, pageable, response.getHits().getTotalHits(),
             response.getAggregations(),
             response.getScrollId(),
@@ -47,15 +46,15 @@ class SnakeCaseJacksonSearchResultMapper implements SearchResultMapper, MultiGet
     @Override
     @SneakyThrows
     public <T> T mapSearchHit(SearchHit searchHit, Class<T> type) {
-        String source = searchHit.getSourceAsString();
+        val source = searchHit.getSourceAsString();
         return objectMapper.readValue(source, type);
     }
 
     @Override
     @SneakyThrows
     public <T> LinkedList<T> mapResults(MultiGetResponse responses, Class<T> clazz) {
-        LinkedList<T> list = new LinkedList<>();
-        for (MultiGetItemResponse response : responses.getResponses()) {
+        val list = new LinkedList<T>();
+        for (val response : responses.getResponses()) {
             if (!response.isFailed() && response.getResponse().isExists()) {
                 T result = objectMapper.readValue(response.getResponse().getSourceAsString(), clazz);
                 list.add(result);
