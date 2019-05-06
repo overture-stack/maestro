@@ -112,8 +112,9 @@ class DefaultIndexer implements Indexer {
                     .flatMap(this::batchUpsertFilesAndCollectFailures)
                     .onErrorResume(IndexerException.class, (e) -> Mono.just(this.convertIndexerExceptionToIndexResult(e)))
             )
-            .reduce(this::reduceIndexResult)
-            .onErrorResume((e) -> handleIndexRepositoryError(e, indexStudyRepositoryCommand.getRepositoryCode()));
+            .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            .onErrorResume((e) -> handleIndexRepositoryError(e, indexStudyRepositoryCommand.getRepositoryCode()))
+            .reduce(this::reduceIndexResult);
     }
 
     @Override

@@ -41,18 +41,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Tag(TestCategory.INT_TEST)
-@SuppressWarnings("all")
 class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     @Autowired
     private ElasticsearchRestTemplate elasticsearchTemplate;
 
     @Autowired
-    ApplicationProperties applicationProperties;
+    private ApplicationProperties applicationProperties;
 
     @Autowired
     @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
-    ObjectMapper elasticSearchJsonMapper;
+    private ObjectMapper elasticSearchJsonMapper;
 
     private String alias;
 
@@ -65,15 +64,8 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     }
 
     @Test
-    void shouldHandleErrorsIfStudyDaoThrowException() throws InterruptedException {
+    void shouldHandleErrorsIfStudyDaoThrowException() {
         // Given
-        val analyses = loadJsonFixture(this.getClass(), "PEME-CA.analysis.json", Analysis.class);
-        val expectedDoc0 = loadJsonFixture(this.getClass(),
-            "doc0.json",
-            FileCentricDocument.class,
-            elasticSearchJsonMapper,
-            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
-
         stubFor(
             request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254368"))
                 .willReturn(aResponse()
@@ -212,6 +204,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Test
     void shouldIndexStudyWithExclusionsApplied() throws InterruptedException {
         // Given
+        @SuppressWarnings("all")
         val analyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
@@ -257,8 +250,10 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Test
     void shouldDeleteSingleAnalysis() throws InterruptedException {
         // Given
+        @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
             new TypeReference<List<Analysis>>() {});
+        @SuppressWarnings("all")
         val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json",
             new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),
@@ -270,15 +265,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             FileCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
-        val multiRepoDoc = loadJsonFixture(this.getClass(),
-            "doc2.json",
-            FileCentricDocument.class,
-            elasticSearchJsonMapper,
-            Map.of(
-                "COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl(),
-                "AWS_REPO_URL", applicationProperties.repositories().get(1).getUrl()
-            )
-        );
+
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
@@ -317,8 +304,10 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Test
     void shouldUpdateExistingFileDocRepository() throws InterruptedException {
         // Given
+        @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
             new TypeReference<List<Analysis>>() {});
+        @SuppressWarnings("all")
         val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json",
             new TypeReference<List<Analysis>>() {});
 
@@ -380,9 +369,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Test
     void shouldRemoveConflictingDocuments() throws InterruptedException {
         // Given
+        @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
             new TypeReference<List<Analysis>>() {});
+
         // this has a different analysis id than the one in previous file
+        @SuppressWarnings("all")
         val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.study.json",
             new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),

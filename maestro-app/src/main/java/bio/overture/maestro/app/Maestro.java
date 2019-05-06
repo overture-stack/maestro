@@ -14,9 +14,7 @@ import org.springframework.retry.annotation.EnableRetry;
 @SpringBootApplication
 @Import({RootConfiguration.class})
 public class Maestro {
-
     public static void main(String[] args) {
         SpringApplication.run(Maestro.class, args);
     }
-
 }
