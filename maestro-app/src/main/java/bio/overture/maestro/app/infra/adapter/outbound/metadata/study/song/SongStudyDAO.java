@@ -162,22 +162,6 @@ class SongStudyDAO implements StudyDAO {
         return Mono.just(Either.left(ex));
     }
 
-    @NotNull
-    private Flux<Either<IndexerException, Study>>
-        handleGetStudiesFailure(@NonNull GetAllStudiesCommand getAllStudiesCommand, Throwable e) {
-
-        val rootCause = e.getCause() == null ? e : e.getCause();
-        val ex = wrapWithIndexerException(rootCause,
-        format("failed fetching study analysis, command: {0}, retries exhausted",
-            getAllStudiesCommand),
-        FailureData.builder()
-            .failingIds(Map.of(REPOSITORY,
-                Set.of(getAllStudiesCommand.getFilesRepositoryBaseUrl())))
-            .build()
-        );
-        return Flux.just(Either.left(ex));
-    }
-
     private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(Retry<Object> retry, Duration timeout) {
         // order is important here timeouts should be retried.
         return (in) -> in.timeout(timeout).retryWhen(retry);
