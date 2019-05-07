@@ -4,31 +4,33 @@ server:
 maestro:
   kafka:
     broker: localhost:9092
-    indexing-topic: maestro-index-requests
+    indexing_topic: maestro_index_requests
   song:
-    max-retries: 3
-    timeout-sec: 100 # some studies take really long, +30 secs, to be downloaded
-    indexable-study-status: PUBLISHED #,UNPUBLISHED,SUPPRESSED
-  exclusion-rules:
+    max_retries: 3
+    timeout_sec:
+        study: 100 # some studies take really long, +30 secs, to be downloaded
+        analysis: 5
+    indexable_study_status: PUBLISHED #,UNPUBLISHED,SUPPRESSED
+  exclusion_rules:
     # exclusion rules file name
-    file-name: exclusion-rules.yml
+    file_name: exclusion-rules.yml
 
   # elastic search server & client props
   elasticsearch:
-    cluster-nodes: localhost:9200, localhost:9201
+    cluster_nodes: localhost:9200, localhost:9201
     indexes:
-      file-centric:
+      file_centric:
         alias: file_centric
     client:
       # this is to control the number of documents per bulk request in elasticsearch
-      docs-per-bulk-req-max: 5000
+      docs_per_bulk_req_max: 5000
       # max time to wait for a connection to be established
-      connection-timeout: 5000
+      connection_timeout: 5000
       # max time to wait on idle connection (no data flow)
-      socket-timeout: 10000
+      socket_timeout: 10000
       retry:
-        max-attempts: 3
-        wait-duration-millis: 500
+        max_attempts: 3
+        wait_duration_millis: 500
 
   # Genome file repositories props
   repositories:
@@ -52,7 +54,7 @@ maestro:
       country: US
 
   # last resort fallback file system log in case of retries exhaustion.
-  failure-log:
+  failure_log:
     enabled: true
     dir: ${user.home}/logs/maestro
 
@@ -73,7 +75,7 @@ management:
         include: '*'
   endpoint:
     health:
-      show-details: ALWAYS
+      show_details: ALWAYS
 
 spring:
   application:
@@ -87,4 +89,4 @@ spring:
       bindings:
         input:
           # we don't specify content type because @StreamListener will handle that
-          destination: ${maestro.kafka.indexing-topic}
+          destination: ${maestro.kafka.indexing_topic}

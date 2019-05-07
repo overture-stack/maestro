@@ -1,7 +1,7 @@
 package bio.overture.maestro.app.infra.adapter.inbound.messaging;
 
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.api.exception.IndexerException;
+import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyCommand;
 import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +22,30 @@ public class IndexingMessagesStreamListener {
         this.indexer = indexer;
     }
 
-
-    public void handleIndexAnalysisMessage(@Input(Sink.INPUT) Flux<IndexAnalysisMessage> indexAnalysisMessage) {
-        throw new IndexerException("not implemented yet");
+    @StreamListener
+    public void handleIndexAnalysisMessage(@Input(Sink.INPUT) Flux<IndexAnalysisMessage> indexAnalysisMessageFlux) {
+        indexAnalysisMessageFlux.subscribe( msg -> {
+            try {
+                indexer.indexAnalysis(IndexAnalysisCommand.builder()
+                    .studyId(msg.getStudyId())
+                    .analysisId(msg.getAnalysisId())
+                    .repositoryCode(msg.getRepositoryCode())
+                    .build()
+                ).onErrorResume((e) -> {
+                    log.error("failed reading message: {} ", msg, e);
+                    return Mono.empty();
+                }).subscribe(indexResult ->
+                    log.info(" processed message : {} success : {}", msg, indexResult.isSuccessful())
+                );
+            } catch (Exception e) {
+                log.error("failed reading message: {} ", msg, e);
+            }
+        });
     }
 
     @StreamListener
     public void handleIndexStudyMessage(@Input(Sink.INPUT) Flux<IndexStudyMessage> indexStudyMessageFlux) {
-        indexStudyMessageFlux.subscribe( msg -> {
+        indexStudyMessageFlux.subscribe(msg -> {
             try {
                 indexer.indexStudy(IndexStudyCommand.builder()
                     .studyId(msg.getStudyId())

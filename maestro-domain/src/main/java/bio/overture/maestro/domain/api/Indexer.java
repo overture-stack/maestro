@@ -12,6 +12,8 @@ import java.util.List;
  * Main entry point for the Indexer API
  */
 public interface Indexer {
+
+    Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
     /**
      * This method will fetch the specified study from the specified repository
      * and will invoke the index server {@link FileCentricIndexAdapter}
@@ -26,6 +28,12 @@ public interface Indexer {
      *          and cannot be used to produce list of {@link bio.overture.maestro.domain.entities.indexing.FileCentricDocument}
      */
     Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand);
+
+    /**
+     * This method will trigger a full indexing for a metadata repository (all studies)
+     * @param indexStudyRepositoryCommand contains the repository code to index.
+     * @return result indicating success/fail and failures information.
+     */
     Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand);
 
     void addRule(AddRuleCommand addRuleCommand);

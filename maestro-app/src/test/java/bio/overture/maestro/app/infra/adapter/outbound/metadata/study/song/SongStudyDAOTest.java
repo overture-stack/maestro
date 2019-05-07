@@ -4,6 +4,7 @@ import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.masestro.test.TestCategory;
@@ -36,6 +37,7 @@ import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerExce
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.text.MessageFormat.format;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -55,10 +57,84 @@ class SongStudyDAOTest {
     private StudyDAO songStudyDAO;
 
     @Test
-    void shouldRetryOnFailure() {
+    void fetchingAnalysisShouldReturnMonoErrorIfRetriesExhausted() {
+
+        //given
+        val analysisId = "EGAZ00001254247";
+        val command = GetAnalysisCommand.builder()
+            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
+            .studyId("PEME-CA")
+            .analysisId(analysisId)
+            .build();
+        val expectedException = wrapWithIndexerException(new RetryExhaustedException(),
+            format("failed fetching study analysis, command: {0}, retries exhausted",
+                command),
+            FailureData.builder()
+                .failingIds(Map.of(STUDY_ID, Set.of("PEME-CA")))
+                .build()
+        );
+        val expectedResult = Either.<IndexerException, List<Analysis>>left(expectedException);
+        stubFor(
+            request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
+                .willReturn(aResponse()
+                    .withStatus(400)
+                    .withBody("<p> Some wierd unexpected text </p>")
+                    .withHeader("content-type", "text/html")
+                )
+        );
+
+        //when
+        val analysesMono = songStudyDAO.getAnalysis(command);
+
+        //then
+        StepVerifier.create(analysesMono)
+            .expectErrorSatisfies((e) -> {
+                assertTrue(e instanceof RetryExhaustedException);
+            }).verify();
+    }
+
+    @Test
+    void shouldRetryFetchingAnalysisOnFailure() {
+        val analysis = loadJsonFixture(this.getClass(),
+            "PEME-CA.analysis.json", Analysis.class);
+        val analysisId = "EGAZ00001254247";
+        stubFor(
+            request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
+                .inScenario("RANDOM_FAILURE")
+                .whenScenarioStateIs(Scenario.STARTED)
+                .willReturn(aResponse()
+                    .withStatus(400)
+                    .withBody("<p> some wierd unexpected text </p>")
+                    .withHeader("content-type", "text/html")
+                )
+                .willSetStateTo("WORKING")
+        );
+
+        stubFor(
+            request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
+                .inScenario("RANDOM_FAILURE")
+                .whenScenarioStateIs("WORKING")
+                .willReturn(ResponseDefinitionBuilder.okForJson(analysis))
+        );
+
+        val analysesMono = songStudyDAO.getAnalysis(GetAnalysisCommand.builder()
+            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
+            .studyId("PEME-CA")
+            .analysisId(analysisId)
+            .build()
+        );
+
+        StepVerifier.create(analysesMono)
+            .expectNext(analysis)
+            .verifyComplete();
+
+    }
+
+
+    @Test
+    void shouldRetryFetchingStudyAnalysesOnFailure() {
         val analyses = loadJsonFixture(this.getClass(),
             "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
-        val analysesEither = Either.<IndexerException, List<Analysis>>right(analyses);
 
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
@@ -86,13 +162,13 @@ class SongStudyDAOTest {
         );
 
         StepVerifier.create(analysesMono)
-            .expectNext(analysesEither)
+            .expectNext(analyses)
             .verifyComplete();
 
     }
 
     @Test
-    void shouldReturnErrorIfRetriedExahustedFailure() {
+    void fetchingStudyAnalysesShouldReturnRetryExhaustedException() {
         //given
         val command = GetStudyAnalysesCommand.builder()
             .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
@@ -120,10 +196,7 @@ class SongStudyDAOTest {
 
         //then
         StepVerifier.create(analysesMono)
-            .expectNextMatches(actual -> actual.isLeft()
-                && actual.left().get().getMessage().equals(expectedException.getMessage())
-                && actual.left().get().getFailureData().equals(expectedException.getFailureData()))
-            .expectComplete()
+            .expectError(RetryExhaustedException.class)
             .verify();
     }
 
@@ -141,7 +214,7 @@ class SongStudyDAOTest {
         ApplicationProperties properties() {
             ApplicationProperties properties = mock(ApplicationProperties.class);
             when(properties.songMaxRetries()).thenReturn(3);
-            when(properties.songTimeoutSeconds()).thenReturn(20);
+            when(properties.songStudyCallTimeoutSeconds()).thenReturn(20);
             when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED");
             return properties;
         }

@@ -19,8 +19,9 @@ public interface ApplicationProperties {
     Resource fileCentricMapping();
     Resource exclusionRules();
     int songMaxRetries();
-    int songTimeoutSeconds();
+    int songStudyCallTimeoutSeconds();
     long elasticSearchRetryWaitDurationMillis();
     int elasticSearchRetryMaxAttempts();
     String indexableStudyStatuses();
+    int songAnalysisCallTimeoutSeconds();
 }
