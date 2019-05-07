@@ -46,6 +46,7 @@ class SongStudyDAO implements StudyDAO {
     private static final String MSG_ANALYSIS_DOES_NOT_EXIST =
         "analysis {0} doesn't exist for study {1}, repository {2} (or not in a matching state)";
     private static final int FALLBACK_SONG_TIMEOUT = 60;
+    private static final int FALLBACK_SONG_ANALYSIS_TIMEOUT = 5;
     private static final int FALLBACK_SONG_MAX_RETRY = 0;
     private static final String REPOSITORY = "repository";
     private final WebClient webClient;
@@ -66,9 +67,10 @@ class SongStudyDAO implements StudyDAO {
         this.indexableStudyStatusesList = List.of(indexableStudyStatuses.split(","));
         this.songMaxRetries = applicationProperties.songMaxRetries() >= 0 ? applicationProperties.songMaxRetries()
             : FALLBACK_SONG_MAX_RETRY;
-        this.studyCallTimeoutSeconds = applicationProperties.songTimeoutSeconds() > 0 ? applicationProperties.songTimeoutSeconds()
+        this.studyCallTimeoutSeconds = applicationProperties.songStudyCallTimeoutSeconds() > 0 ? applicationProperties.songStudyCallTimeoutSeconds()
             : FALLBACK_SONG_TIMEOUT;
-        this.analysisCallTimeoutSeconds = 5;
+        this.analysisCallTimeoutSeconds = applicationProperties.songAnalysisCallTimeoutSeconds() > 0 ?
+            applicationProperties.songAnalysisCallTimeoutSeconds(): FALLBACK_SONG_ANALYSIS_TIMEOUT;
     }
 
     @Override
