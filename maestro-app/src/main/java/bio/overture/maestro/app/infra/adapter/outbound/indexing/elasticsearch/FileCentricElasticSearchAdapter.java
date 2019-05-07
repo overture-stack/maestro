@@ -4,6 +4,7 @@ import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.entities.indexing.FileCentricAnalysis;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
@@ -130,7 +131,8 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private Void delelteByAnalysiId(String analysisId) {
         val deleteQuery = new DeleteQuery();
         deleteQuery.setQuery(QueryBuilders.boolQuery()
-            .must(QueryBuilders.termQuery("analysis.id", analysisId))
+            .must(QueryBuilders.termQuery(FileCentricDocument.Fields.analysis
+                + "." + FileCentricAnalysis.Fields.id, analysisId))
         );
         deleteQuery.setType(this.alias);
         deleteQuery.setIndex(this.alias);
@@ -260,12 +262,12 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
             .build();
         val retry = Retry.of("tryBulkUpsertRequestForPart", retryConfig);
-        val decorated = Retry.decorateCheckedSupplier(retry, () -> {
+        val decorated = Retry.<Set<String>>decorateCheckedSupplier(retry, () -> {
             log.trace("tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ", partNum,
                 listParthHash);
             doRequestForPart(listPart);
             log.trace("tryBulkUpsertRequestForPart: done bulk upsert all docs");
-            return Set.<String>of();
+            return Set.of();
         });
         val result = Try.of(decorated)
             .recover((t) -> {
