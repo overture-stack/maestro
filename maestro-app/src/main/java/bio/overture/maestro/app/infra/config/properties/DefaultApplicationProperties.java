@@ -23,20 +23,23 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     final static String MAESTRO_PREFIX = "maestro";
 
-    @Value("${maestro.elasticsearch.cluster-nodes}")
+    @Value("${maestro.elasticsearch.cluster_nodes}")
     private List<String> hosts;
 
-    @Value("${maestro.elasticsearch.indexes.file-centric.alias:file-centric}")
+    @Value("${maestro.elasticsearch.indexes.file_centric.alias:file_centric}")
     private String fileCentricAlias;
 
-    @Value("${maestro.elasticsearch.client.docs-per-bulk-req-max:1000}")
+    @Value("${maestro.elasticsearch.client.docs_per_bulk_req_max:1000}")
     private Integer docsPerBulkReqMax;
 
-    @Value("${maestro.song.max-retries:3}")
+    @Value("${maestro.song.max_retries:3}")
     private Integer songMaxRetries;
 
-    @Value("${maestro.song.timeout-sec:10}")
-    private Integer songTimeoutSeconds;
+    @Value("${maestro.song.timeout_sec.study:10}")
+    private Integer songStudyCallTimeout;
+
+    @Value("${maestro.song.timeout_sec.analysis:5}")
+    private int songAnalysisCallTimeoutSec;
 
     @Value("classpath:index.settings.json")
     private Resource indexSettings;
@@ -44,24 +47,24 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("classpath:file_centric.mapping.json")
     private Resource fileCentricMapping;
 
-    @Value("classpath:${maestro.exclusion-rules.file-name:exclusion-rules.yml}")
+    @Value("classpath:${maestro.exclusion_rules.file_name:exclusion-rules.yml}")
     private Resource exclusionRules;
 
-    @Value("${maestro.elasticsearch.client.connection-timeout:5000}")
+    @Value("${maestro.elasticsearch.client.connection_timeout:5000}")
     private long elasticSearchClientConnectionTimeout;
 
-    @Value("${maestro.elasticsearch.client.socket-timeout:10000}")
+    @Value("${maestro.elasticsearch.client.socket_timeout:10000}")
     private long elasticSearchClientSocketTimeout;
 
-    @Value("${maestro.elasticsearch.client.retry.max-attempts:3}")
+    @Value("${maestro.elasticsearch.client.retry.max_attempts:3}")
     private int elasticSearchRetryMaxAttempts;
 
-    @Value("${maestro.elasticsearch.client.retry.wait-duration-millis:100}")
+    @Value("${maestro.elasticsearch.client.retry.wait_duration_millis:100}")
     private long elasticSearchRetryWaitDurationMillis;
 
     private List<DefaultPropertiesFileRepository> repositories;
 
-    @Value("${maestro.song.indexable-study-status}")
+    @Value("${maestro.song.indexable_study_status}")
     private String indexableStudyStatuses;
 
     @Override
@@ -115,8 +118,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public int songTimeoutSeconds() {
-        return songTimeoutSeconds;
+    public int songStudyCallTimeoutSeconds() {
+        return songStudyCallTimeout;
     }
 
     @Override
@@ -132,6 +135,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Override
     public String indexableStudyStatuses() {
         return indexableStudyStatuses;
+    }
+
+    @Override
+    public int songAnalysisCallTimeoutSeconds() {
+        return songAnalysisCallTimeoutSec;
     }
 
     @Data

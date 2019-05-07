@@ -214,7 +214,7 @@ class SongStudyDAOTest {
         ApplicationProperties properties() {
             ApplicationProperties properties = mock(ApplicationProperties.class);
             when(properties.songMaxRetries()).thenReturn(3);
-            when(properties.songTimeoutSeconds()).thenReturn(20);
+            when(properties.songStudyCallTimeoutSeconds()).thenReturn(20);
             when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED");
             return properties;
         }
