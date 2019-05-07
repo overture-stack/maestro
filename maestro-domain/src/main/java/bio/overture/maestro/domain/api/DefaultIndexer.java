@@ -106,8 +106,9 @@ class DefaultIndexer implements Indexer {
             .flatMapMany(this::getAllStudies)
             .flatMap(studyAndRepository ->
                 // I had to put this block inside this flatmap to allow these operations to bubble up their exceptions
-                // for this errorResume handler without interrupting the main flux, and terminating it with error signals.
-                // for example if fetchAnalyses throws error for a study the parent flux will continue emitting studies
+                // to this onErrorResume handler without interrupting the main flux, and terminating it with error signals.
+                // for example if fetchAnalyses down stream throws error for a study the studies flux will
+                // continue emitting studies
                 this.getStudyAnalysesDocuments(studyAndRepository)
                     .flatMap(this::batchUpsertFilesAndCollectFailures)
                     .onErrorResume(IndexerException.class, (e) -> Mono.just(this.convertIndexerExceptionToIndexResult(e)))
