@@ -137,7 +137,6 @@ class DefaultIndexer implements Indexer {
      * Private Methods  *
      * **************** */
 
-    @NotNull
     private Mono<? extends IndexResult> handleRemoveAnalysisError(@NonNull AnalysisIdentifier analysisIdentifier) {
         val failureInfo = Map.of(ANALYSIS_ID, Set.of(analysisIdentifier.getAnalysisId()));
         this.notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_REMOVE_ANALYSIS, failureInfo));
@@ -149,12 +148,14 @@ class DefaultIndexer implements Indexer {
 
     private Mono<StudyRepository> tryGetStudyRepository(@NonNull String repoCode) {
         return this.studyRepositoryDao.getFilesRepository(repoCode)
-            .onErrorMap((e) -> {
-                val failure = Map.of(REPO_CODE, Set.of(repoCode));
-                this.notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_REPOSITORY, failure));
-                return wrapWithIndexerException(e, "failed getting repository",FailureData.builder()
-                    .failingIds(failure).build());
-            });
+            .onErrorMap((e) -> handleGetStudyRepoError(repoCode, e));
+    }
+
+    private Throwable handleGetStudyRepoError(@NonNull String repoCode, Throwable e) {
+        val failure = Map.of(REPO_CODE, Set.of(repoCode));
+        this.notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_REPOSITORY, failure));
+        return wrapWithIndexerException(e, "failed getting repository", FailureData.builder()
+            .failingIds(failure).build());
     }
 
     private Flux<StudyAndRepository> getAllStudies(StudyRepository studyRepository) {
@@ -216,15 +217,19 @@ class DefaultIndexer implements Indexer {
 
         return this.studyDAO
             .getStudyAnalyses(command)
-            .onErrorMap(e -> {
-                notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
-                return wrapWithIndexerException(e,
-                    format("failed fetching study analysis, command: {0}, retries exhausted", command),
-                    FailureData.builder()
-                        .failingIds(Map.of(STUDY_ID, Set.of(studyId)))
-                        .build()
-                );
-            });
+            .onErrorMap(e -> handleFetchAnalysesError(studyRepositoryBaseUrl, studyId, command, e));
+    }
+
+    @NotNull
+    private Throwable handleFetchAnalysesError(String studyRepositoryBaseUrl, String studyId,
+                                               GetStudyAnalysesCommand command, Throwable e) {
+        notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
+        return wrapWithIndexerException(e,
+            format("failed fetching study analysis, command: {0}, retries exhausted", command),
+            FailureData.builder()
+                .failingIds(Map.of(STUDY_ID, Set.of(studyId)))
+                .build()
+        );
     }
 
     private void notifyStudyFetchingError(String studyId, String repoUrl, String excMsg) {
@@ -259,20 +264,9 @@ class DefaultIndexer implements Indexer {
             .studyId(tuple.getStudy().getStudyId())
             .build()
         ).map(List::of)
-        .onErrorMap((e) -> {
-            val failureInfo = Map.of(
-                ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
-                STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
-                REPO_CODE, Set.of(tuple.studyRepository.getCode())
-            );
-            notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_ANALYSIS, failureInfo));
-            return wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
-                    .failingIds(
-                        failureInfo
-                    ).build()
-                );
-        });
+        .onErrorMap((e) -> handleFetchAnalysisError(tuple, e));
     }
+
 
     private IndexResult convertIndexerExceptionToIndexResult(IndexerException e) {
         return IndexResult.builder()
@@ -412,6 +406,21 @@ class DefaultIndexer implements Indexer {
             .conflictingFiles(conflictingPairs)
             .build();
     }
+
+    private Throwable handleFetchAnalysisError(StudyAnalysisRepositoryTuple tuple, Throwable e) {
+        val failureInfo = Map.of(
+            ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
+            STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
+            REPO_CODE, Set.of(tuple.studyRepository.getCode())
+        );
+        notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_ANALYSIS, failureInfo));
+        return wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
+            .failingIds(
+                failureInfo
+            ).build()
+        );
+    }
+
 
     private Mono<Void> handleConflicts(ConflictsCheckResult conflictingFiles) {
         val filesToRemove = conflictingFiles.getConflictingFiles().stream()
