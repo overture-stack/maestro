@@ -167,7 +167,7 @@ class DefaultIndexerTest {
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
-        for(Study study: studies) {
+        for(val study: studies) {
             val studyId = study.getStudyId();
             val command = GetStudyAnalysesCommand.builder()
                 .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
@@ -199,7 +199,7 @@ class DefaultIndexerTest {
             .verify();
 
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
-        for(Study study: studies) {
+        for(val study: studies) {
             val studyId = study.getStudyId();
             val command = GetStudyAnalysesCommand.builder()
                 .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
