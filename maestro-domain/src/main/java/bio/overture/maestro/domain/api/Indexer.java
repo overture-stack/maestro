@@ -13,7 +13,19 @@ import java.util.List;
  */
 public interface Indexer {
 
+    /**
+     * Allows indexing a single analysis in a specific metadata repository in a specific study
+     * @param indexAnalysisCommand specify repo, study and analysis Id
+     * @return success flag and failure info if any
+     */
     Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
+
+    /**
+     * Used to remove all file documents for an analysis.
+     * @param removeAnalysisCommand specify repo study and analysis id
+     * @return flag indicating success and failure info if any
+     */
+    Mono<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand);
     /**
      * This method will fetch the specified study from the specified repository
      * and will invoke the index server {@link FileCentricIndexAdapter}

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-public class IndexAnalysisCommand {
+public class RemoveAnalysisCommand {
     @NonNull
     private AnalysisIdentifier analysisIdentifier;
 }

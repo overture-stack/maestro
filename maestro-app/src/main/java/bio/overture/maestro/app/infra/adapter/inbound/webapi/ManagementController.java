@@ -1,10 +1,7 @@
 package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -35,21 +32,45 @@ public class ManagementController {
         return Mono.just(response);
     }
 
+    @DeleteMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<IndexResult> removeAnalysis(@PathVariable String analysisId,
+                                            @PathVariable String studyId,
+                                            @PathVariable String repositoryCode) {
+        log.debug("in removeAnalysis, args studyId {}, repoId: {}, analysisId : {}", studyId,
+            repositoryCode, analysisId);
+        return indexer.removeAnalysis(RemoveAnalysisCommand.builder()
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .repositoryCode(repositoryCode)
+                    .analysisId(analysisId)
+                    .studyId(studyId)
+                    .build()
+            ).build()
+        );
+    }
+
     @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<IndexResult> indexAnalysis(@PathVariable String analysisId, @PathVariable String studyId, @PathVariable String repositoryCode) {
+    public Mono<IndexResult> indexAnalysis(@PathVariable String analysisId,
+                                           @PathVariable String studyId,
+                                           @PathVariable String repositoryCode) {
         log.debug("in indexAnalysis, args studyId {}, repoId: {}, analysisId : {}", studyId, repositoryCode, analysisId);
         return indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .repositoryCode(repositoryCode)
-            .analysisId(analysisId)
-            .studyId(studyId)
-            .build()
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .repositoryCode(repositoryCode)
+                    .analysisId(analysisId)
+                    .studyId(studyId)
+                    .build()
+            ).build()
         );
     }
 
     @PostMapping("/index/repository/{repositoryCode}/study/{studyId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryCode) {
+    public Mono<IndexResult> indexStudy(@PathVariable String studyId,
+                                        @PathVariable String repositoryCode) {
         log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryCode);
         return indexer.indexStudy(IndexStudyCommand.builder()
                 .repositoryCode(repositoryCode)

@@ -2,14 +2,14 @@
 DOCKER_COMPOSE_LOCAL_DIR = ./run/docker
 VERSION=0.0.1-SNAPSHOT
 
-boot-run:
+run:
 	cd maestro-app
 	../mvnw spring-boot:run
 
-mvn-i:
-	./mvnw clean install -Dmaven.test.skip=true
+package:
+	./mvnw clean package -Dmaven.test.skip=true
 
-mvn-t:
+test:
 	./mvnw clean test
 
 #doc stands for docker

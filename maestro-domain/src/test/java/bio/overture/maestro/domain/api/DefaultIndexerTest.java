@@ -2,10 +2,7 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
-import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
-import bio.overture.maestro.domain.api.message.IndexStudyRepositoryCommand;
+import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import bio.overture.maestro.domain.entities.indexing.StorageType;
@@ -24,7 +21,6 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisComma
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
-import io.vavr.control.Either;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
@@ -97,7 +93,7 @@ class DefaultIndexerTest {
             .failureData(failure)
             .successful(false)
             .build();
-        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
         given(studyDAO.getStudyAnalyses(any(GetStudyAnalysesCommand.class)))
             .willReturn(Mono.error(new IndexerException("failed", new RuntimeException(""), failure)));
@@ -126,15 +122,10 @@ class DefaultIndexerTest {
     void indexRepositoryShouldHandleFetchStudiesFailure() {
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
-        val studies = getExpectedStudies();
-        val studiesEither = studies.stream()
-            .map(Either::<IndexerException, Study>right)
-            .collect(Collectors.toUnmodifiableList());
         val fileRepo = Mono.just(getStubFilesRepository());
         val failure = FailureData.builder()
             .failingIds(Map.of(REPO_CODE, Set.of(repoCode))).build();
         val failedIndexResult = IndexResult.builder().failureData(failure).successful(false).build();
-        val successfulResult = IndexResult.builder().successful(true).build();
         val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
 
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
@@ -164,9 +155,6 @@ class DefaultIndexerTest {
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
         val studies = getExpectedStudies();
-        val studiesEither = studies.stream()
-            .map(Either::<IndexerException, Study>right)
-            .collect(Collectors.toUnmodifiableList());
         val fileRepo = Mono.just(getStubFilesRepository());
         val failure = FailureData.builder()
             .failingIds(Map.of("study", Set.of("PACA-CA"))).build();
@@ -179,7 +167,7 @@ class DefaultIndexerTest {
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
-        for(Study study: studies) {
+        for(val study: studies) {
             val studyId = study.getStudyId();
             val command = GetStudyAnalysesCommand.builder()
                 .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
@@ -211,8 +199,14 @@ class DefaultIndexerTest {
             .verify();
 
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
-        then(studyDAO).should(times(2)).getStudyAnalyses(any());
-        then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(any());
+        for(val study: studies) {
+            val studyId = study.getStudyId();
+            val command = GetStudyAnalysesCommand.builder()
+                .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
+                .build();
+            then(studyDAO).should(times(1)).getStudyAnalyses(eq(command));
+        }
+        then(indexServerAdapter).should(times(2)).batchUpsertFileRepositories(any());
         then(notifier).should(times(1)).notify(any());
     }
 
@@ -275,10 +269,6 @@ class DefaultIndexerTest {
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
         val studies = getExpectedStudies();
-        val studiesEither = studies.stream()
-            .map(Either::<IndexerException, Study>right)
-            .collect(Collectors.toUnmodifiableList());
-
         val fileRepo = Mono.just(getStubFilesRepository());
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
@@ -421,10 +411,12 @@ class DefaultIndexerTest {
 
         // When
         val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .studyId(studyId)
-            .analysisId(analysisId)
-            .repositoryCode(filesRepository.getCode())
-            .build()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .studyId(studyId)
+                .analysisId(analysisId)
+                .repositoryCode(filesRepository.getCode())
+                .build()
+            ).build()
         );
 
         // Then
@@ -436,6 +428,37 @@ class DefaultIndexerTest {
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
         then(studyDAO).should(times(1)).getAnalysis(eq(getStudyAnalysesCommand));
         then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
+
+    }
+
+    @Test
+    void shouldRemoveSingleAnalysis() {
+        // Given
+        val studyId = "PEME-CA";
+        val analysisId = "EGAZ00001254368";
+        val filesRepository = getStubFilesRepository();
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.<Void>fromSupplier(() -> null);
+
+        given(indexServerAdapter.removeAnalysisFiles(eq(analysisId))).willReturn(monoResult);
+
+        // When
+        val indexResultMono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .studyId(studyId)
+                .analysisId(analysisId)
+                .repositoryCode(filesRepository.getCode())
+                .build()
+            ).build()
+        );
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectNext(result)
+            .expectComplete()
+            .verify();
+
+        then(indexServerAdapter).should(times(1)).removeAnalysisFiles(eq(analysisId));
 
     }
 
@@ -458,8 +481,8 @@ class DefaultIndexerTest {
             .analysisId(analysisId)
             .filesRepositoryBaseUrl(filesRepository.getBaseUrl())
             .build();
-        val sampleExclusionRule = Mono.just(
-            Map.<Class<?>, List<? extends ExclusionRule>>of(
+        val sampleExclusionRule = Mono.<Map<Class<?>, List<? extends ExclusionRule>>>just(
+            Map.of(
                 Analysis.class, List.of(new IDExclusionRule(Analysis.class, List.of("EGAZ00001254368")))
             )
         );
@@ -472,10 +495,12 @@ class DefaultIndexerTest {
 
         // When
         val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-            .studyId(studyId)
-            .analysisId(analysisId)
-            .repositoryCode(filesRepository.getCode())
-            .build()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .studyId(studyId)
+                .analysisId(analysisId)
+                .repositoryCode(filesRepository.getCode())
+                .build()
+            ).build()
         );
 
         // Then

@@ -1,6 +1,7 @@
 package bio.overture.maestro.domain.entities.indexing;
 
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@FieldNameConstants
 public class FileCentricDocument {
 
     @NonNull
