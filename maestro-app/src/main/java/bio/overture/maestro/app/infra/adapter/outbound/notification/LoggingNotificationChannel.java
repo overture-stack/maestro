@@ -19,10 +19,14 @@ import java.util.Set;
 @Order(1)
 public class LoggingNotificationChannel implements NotificationChannel {
 
+    private static final int MAX_NOTIFICATION_STRING_LENGTH = 1024;
+
     @Override
     public void send(IndexerNotification notification) {
         val notificationString = notification.toString();
-        val notificationStringTruncated = notificationString.substring(0, Math.min(notificationString.length(), 1024));
+        val notificationStringTruncated = notificationString.substring(0,
+            Math.min(notificationString.length(), MAX_NOTIFICATION_STRING_LENGTH));
+
         switch (notification.getNotificationName().getCategory()) {
             case ERROR:
                 log.error("{}", notificationStringTruncated);

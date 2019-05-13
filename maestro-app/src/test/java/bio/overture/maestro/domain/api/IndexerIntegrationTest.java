@@ -6,8 +6,10 @@ import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
+import bio.overture.maestro.domain.entities.indexing.Repository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
+import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
 import bio.overture.masestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,11 +18,13 @@ import lombok.SneakyThrows;
 import lombok.val;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -39,6 +43,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 @Tag(TestCategory.INT_TEST)
 class IndexerIntegrationTest extends MaestroIntegrationTest {
@@ -52,6 +59,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Autowired
     @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
     private ObjectMapper elasticSearchJsonMapper;
+
+    @SpyBean
+    private Notifier notifier;
 
     private String alias;
 
@@ -141,7 +151,6 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         assertEquals(1L, page.getContent().size());
         assertEquals(expectedDoc0, docs.get(0));
     }
-
 
     @Test
     void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException {
@@ -364,10 +373,8 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         assertEquals(expectedDoc0, docs.get(0));
     }
 
-
-
     @Test
-    void shouldRemoveConflictingDocuments() throws InterruptedException {
+    void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException {
         // Given
         @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
@@ -387,6 +394,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
+        val expectedNotification = new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
+            getConflicts(expectedDoc1, awsStudyAnalyses.get(0).getAnalysisId()));
+
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
             .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
@@ -401,10 +411,10 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .repositoryCode("aws")
             .studyId("PEME-CA")
             .build());
+
         StepVerifier.create(secondResult)
             .expectNext(IndexResult.builder().successful(true).build())
             .verifyComplete();
-
         Thread.sleep(sleepMillis);
 
         // assertions
@@ -412,12 +422,37 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .withIndices(alias)
             .withTypes(alias)
             .build();
+
         val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
         val docs = page.getContent();
         assertNotNull(docs);
-        // confirm that now the index only has one document, since the conflicted file was deleted.
-        assertEquals(1L, page.getContent().size());
+        then(notifier).should(times(1)).notify(eq(expectedNotification));
+        assertEquals(2L, page.getContent().size());
         assertEquals(expectedDoc0, docs.get(0));
+        assertEquals(expectedDoc1, docs.get(1));
+    }
+
+    @NotNull
+    private Map<String,? extends Object> getConflicts(FileCentricDocument document, String differentAnalysisId) {
+        return Map.of("conflicts", List.of(DefaultIndexer.FileConflict.builder()
+            .indexedFile(
+                DefaultIndexer.ConflictingFile.builder()
+                    .studyId(document.getStudy())
+                    .analysisId(document.getAnalysis().getId())
+                    .objectId(document.getObjectId())
+                    .repoCode(document
+                        .getRepositories()
+                        .stream().map(Repository::getCode)
+                        .collect(Collectors.toUnmodifiableSet()))
+                    .build()
+            ).newFile(
+                DefaultIndexer.ConflictingFile.builder()
+                    .studyId(document.getStudy())
+                    .analysisId(differentAnalysisId)
+                    .objectId(document.getObjectId())
+                    .repoCode(Set.of("aws"))
+                    .build()
+            ).build()));
     }
 
     private void populateIndexWithCollabStudy(FileCentricDocument expectedDoc0, FileCentricDocument expectedDoc1) throws InterruptedException {
