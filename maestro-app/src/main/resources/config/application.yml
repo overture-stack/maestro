@@ -6,6 +6,8 @@ maestro:
     broker: localhost:9092
     indexing_topic: maestro_index_requests
   song:
+    kafka:
+      analysis-topic: song-analysis
     max_retries: 3
     timeout_sec:
         study: 100 # some studies take really long, +30 secs, to be downloaded
@@ -44,6 +46,14 @@ maestro:
       storageType: S3
       organization: ICGC
       country: CA
+    - code: song.overture
+      url: http://localhost:8080
+      name: local song
+      metadataPath: /oicr.icgc.meta/metadata
+      # optional
+      storageType: S3
+      organization: overture
+      country: LH
     - code: aws
       url: https://virginia.song.icgc.org
       name: aws virginia
@@ -90,3 +100,6 @@ spring:
         input:
           # we don't specify content type because @StreamListener will handle that
           destination: ${maestro.kafka.indexing_topic}
+        song-input:
+          # we don't specify content type because @StreamListener will handle that
+          destination: ${maestro.song.kafka.analysis-topic}
