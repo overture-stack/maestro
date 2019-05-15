@@ -9,13 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Sink;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @EnableBinding(SongAnalysisSink.class)
 public class SongAnalysisStreamListener {
+
+    private static final String PUBLISHED = "PUBLISHED";
 
     private Indexer indexer;
 
@@ -31,7 +32,7 @@ public class SongAnalysisStreamListener {
     private void doHandle(AnalysisMessage msg) {
         Mono<IndexResult> resultMono;
         try {
-            if (msg.getState().equals("PUBLISHED")) {
+            if (msg.getState().equals(PUBLISHED)) {
                 resultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
                     .analysisIdentifier(AnalysisIdentifier.builder()
                         .repositoryCode(msg.getSongServerId())
@@ -39,7 +40,7 @@ public class SongAnalysisStreamListener {
                         .analysisId(msg.getAnalysisId())
                         .build())
                     .build());
-            } else {
+            } else { // UNPUBLISHED, SUPPRESSED
                 resultMono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
                     .analysisIdentifier(AnalysisIdentifier.builder()
                         .analysisId(msg.getAnalysisId())

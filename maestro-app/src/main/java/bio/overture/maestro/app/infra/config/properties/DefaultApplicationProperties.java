@@ -64,8 +64,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     private List<DefaultPropertiesFileRepository> repositories;
 
-    @Value("${maestro.song.indexable_study_status}")
-    private String indexableStudyStatuses;
+    @Value("${maestro.song.indexable_study_states_csv:PUBLISHED}")
+    private String indexableStudyStates;
 
     @Override
     public List<String> elasticSearchClusterNodes() {
@@ -134,7 +134,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     @Override
     public String indexableStudyStatuses() {
-        return indexableStudyStatuses;
+        return indexableStudyStates;
     }
 
     @Override

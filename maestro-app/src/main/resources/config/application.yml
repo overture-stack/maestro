@@ -12,7 +12,6 @@ maestro:
     timeout_sec:
         study: 100 # some studies take really long, +30 secs, to be downloaded
         analysis: 5
-    indexable_study_status: PUBLISHED #,UNPUBLISHED,SUPPRESSED
   exclusion_rules:
     # exclusion rules file name
     file_name: exclusion-rules.yml

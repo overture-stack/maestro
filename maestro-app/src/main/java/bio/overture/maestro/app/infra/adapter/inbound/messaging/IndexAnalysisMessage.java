@@ -15,4 +15,6 @@ class IndexAnalysisMessage {
     private String studyId;
     @NonNull
     private String repositoryCode;
+    /** if callers set this flag it will do a remove instead of add.*/
+    private Boolean remove = false;
 }
