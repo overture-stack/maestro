@@ -333,8 +333,6 @@ class DefaultIndexerTest {
             getConflicts(fileCentricDocuments));
         given(indexServerAdapter.fetchByIds(anyList()))
             .willReturn(Mono.just(List.of(fileCentricDocuments.get(0))));
-        given(indexServerAdapter.removeFiles(eq(Set.of(fileCentricDocuments.get(0).getObjectId()))))
-            .willReturn(Mono.fromSupplier(() -> null));
         given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
         given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
         given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
@@ -358,7 +356,7 @@ class DefaultIndexerTest {
         then(studyDAO).should(times(1)).getStudyAnalyses(eq(getStudyAnalysesCommand));
         then(indexServerAdapter).should(times(1))
             .batchUpsertFileRepositories(eq(batchIndexFilesCommand));
-        then(indexServerAdapter).should(times(1))
+        then(indexServerAdapter).should(times(0))
             .removeFiles(eq(Set.of(fileCentricDocuments.get(0).getObjectId())));
 
     }
@@ -371,14 +369,16 @@ class DefaultIndexerTest {
                     .studyId(fileCentricDocuments.get(0).getStudy())
                     .analysisId(fileCentricDocuments.get(0).getAnalysis().getId())
                     .objectId(fileCentricDocuments.get(0).getObjectId())
-                    .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode).collect(Collectors.toList()))
+                    .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode)
+                        .collect(Collectors.toUnmodifiableSet()))
                     .build()
             ).newFile(
                 DefaultIndexer.ConflictingFile.builder()
                     .studyId(fileCentricDocuments.get(0).getStudy())
                     .analysisId(fileCentricDocuments.get(0).getAnalysis().getId())
                     .objectId(fileCentricDocuments.get(0).getObjectId())
-                    .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode).collect(Collectors.toList()))
+                    .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode)
+                        .collect(Collectors.toUnmodifiableSet()))
                     .build()
             ).build()));
     }
