@@ -288,6 +288,7 @@ class DefaultIndexer implements Indexer {
 
     @NotNull
     private Mono<IndexResult> handleIndexAnalysisError(Throwable e, @NonNull AnalysisIdentifier indexAnalysisCommand) {
+        log.error("unhandled exception while indexing analysis", e);
         val failureContext = Map.of(
             ANALYSIS_ID, indexAnalysisCommand.getAnalysisId(),
             STUDY_ID, indexAnalysisCommand.getStudyId(),

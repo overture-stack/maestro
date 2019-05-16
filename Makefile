@@ -1,6 +1,6 @@
 .ONESHELL:
 DOCKER_COMPOSE_LOCAL_DIR = ./run/docker
-VERSION=0.0.1-SNAPSHOT
+VERSION=$(shell cat ./.mvn/maven.config | grep revision | cut -d '=' -f2)-SNAPSHOT
 
 run:
 	cd maestro-app
@@ -12,39 +12,30 @@ package:
 test:
 	./mvnw clean test
 
-#doc stands for docker
-doc-login:
-	docker login
-
-doc-push: doc-login doc-build
-	cd maestro-app
-	../mvnw dockerfile:push
-
-doc-push-directly:doc-build
+docker-push:
 	docker push overture/maestro:$(VERSION)
 
-doc-build: mvn-i
-	cd maestro-app
-	../mvnw dockerfile:build
+docker-build:
+	docker build -f ci-cd/Dockerfile . -t overture/maestro:$(VERSION)
 
 # use this when you want to run maestro as container
-doc-start: mvn-i doc-clean
+docker-start: mvn-i doc-clean
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose up -d
 
-doc-stop:
+docker-stop:
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose down
 
-doc-restart-app: mvn-i
+docker-restart-app: mvn-i
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose up --build -d maestro
 
 # only starts the infrastructure containers needed by maestro
 # use this when you run maestro from the ide (not as a container)
-doc-start-dev:
+docker-start-dev:
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose -f docker-compose.dev.yml up -d
 
-doc-clean:
+docker-clean:
 	docker system prune
