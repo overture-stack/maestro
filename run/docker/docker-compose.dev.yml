@@ -9,10 +9,12 @@ services:
       - discovery.type=single-node
       - cluster.name=maestro.elasticsearch
       - "ES_JAVA_OPTS=-Xms512m -Xmx2048m"
+
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - 2181:2181
+
   # see : https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html#ce-docker-quickstart
   broker:
     image: confluentinc/cp-kafka:5.2.1
