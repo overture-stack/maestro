@@ -9,6 +9,11 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
+  - name: helm
+    image: alpine/helm:2.12.3
+    command:
+    - cat
+    tty: true
   - name: jdk
     tty: true
     image: openjdk:11-jdk
@@ -76,7 +81,6 @@ spec:
 
                     // the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
                     // container)
-                    // TODO: pass jar name to the docker file to avoid rebuilding.
                     sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:edge"
                     sh "docker push overture/maestro:edge"
                }
@@ -90,22 +94,13 @@ spec:
                 branch "rc/${version}-${commit}"
             }
             steps {
-//                container('jdk') {
-//                    // publish the jar to the artifacts store <Version>.<commitId>-RC
-//                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-RC -DskipTests deploy"
-//                }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    // TODO: pass jar name to the docker file to avoid rebuilding.
                     sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:${version}.${commit}-RC"
                     sh "docker push overture/maestro:${version}.${commit}-RC"
-                    // for testing
-                    withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git tag ${version}.${commit}-RC"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
-                    }
+
                }
             }
         }
@@ -118,7 +113,14 @@ spec:
                 branch "rc/${version}-${commit}"
             }
             steps {
-                sh "echo kubectl magic again"
+                container('helm') {
+                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'QA_KUBECONFIG')]) {
+                        sh 'helm init --client-only'
+                        sh 'helm ls --kubeconfig $QA_KUBECONFIG'
+                        sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
+                        sh "helm upgrade --install maestro-qa overture/maestro -f ci-cd/chart-values/values.qa.yaml --set image.tag=${version}.${commit}"
+                    }
+                }
             }
         }
 
@@ -150,7 +152,14 @@ spec:
                 branch "master"
             }
             steps {
-                sh "echo kubectl dark magic"
+                container('helm') {
+                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'PR_KUBECONFIG')]) {
+                        sh 'helm init --client-only'
+                        sh 'helm ls --kubeconfig $PR_KUBECONFIG'
+                        sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
+                        sh "helm upgrade --install maestro-pr overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}"
+                    }
+                }
             }
         }
     }
