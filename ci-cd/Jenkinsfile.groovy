@@ -62,7 +62,7 @@ spec:
             steps {
                 container('jdk') {
                     // remove the snapshot and append the commit (the dot before ${commit} is intentional)
-                    // this does NOT publish to artifactory store
+                    // this does NOT publish to a maven artifacts store
                     sh "./mvnw -Dsha1=.${commit} -Dchangelist=-${BUILD_NUMBER} test package"
                 }
             }
