@@ -220,7 +220,6 @@ class DefaultIndexer implements Indexer {
             .onErrorMap(e -> handleFetchAnalysesError(studyRepositoryBaseUrl, studyId, command, e));
     }
 
-    @NotNull
     private Throwable handleFetchAnalysesError(String studyRepositoryBaseUrl, String studyId,
                                                GetStudyAnalysesCommand command, Throwable e) {
         notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
@@ -256,7 +255,6 @@ class DefaultIndexer implements Indexer {
             .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
     }
 
-    @NotNull
     private Mono<List<Analysis>> tryFetchAnalysis(StudyAnalysisRepositoryTuple tuple) {
         return this.studyDAO.getAnalysis(GetAnalysisCommand.builder()
             .analysisId(tuple.getAnalysisId())
@@ -275,7 +273,6 @@ class DefaultIndexer implements Indexer {
             .build();
     }
 
-    @NotNull
     private Mono<IndexResult> handleIndexStudyError(Throwable e, String studyId, String repoCode) {
         val failInfo = Map.of(
             STUDY_ID, Set.of(studyId),
@@ -284,7 +281,6 @@ class DefaultIndexer implements Indexer {
         return notifyAndReturnFallback(failInfo);
     }
 
-    @NotNull
     private Mono<IndexResult> handleIndexAnalysisError(Throwable e, @NonNull AnalysisIdentifier indexAnalysisCommand) {
         val fails = Map.of(
             ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()),
@@ -294,7 +290,6 @@ class DefaultIndexer implements Indexer {
         return notifyAndReturnFallback(fails);
     }
 
-    @NotNull
     private Mono<IndexResult> notifyAndReturnFallback(Map<String, Set<String>> failInfo) {
         this.notifier.notify(new IndexerNotification(NotificationName.UNHANDLED_ERROR, failInfo));
         return Mono.just(IndexResult.builder()
@@ -315,7 +310,6 @@ class DefaultIndexer implements Indexer {
             .onErrorMap((e) -> handleExclusionStepError(analyses, e));
     }
 
-    @NotNull
     private Throwable handleExclusionStepError(List<Analysis> analyses, Throwable e) {
         val failureInfo = Map.of(ANALYSIS_ID, analyses.stream()
             .map(Analysis::getAnalysisId)

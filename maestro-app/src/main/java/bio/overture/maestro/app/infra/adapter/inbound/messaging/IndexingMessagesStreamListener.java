@@ -4,9 +4,9 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.*;
 import io.vavr.Tuple2;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -22,7 +22,7 @@ public class IndexingMessagesStreamListener {
 
     private final Indexer indexer;
 
-    public IndexingMessagesStreamListener(Indexer indexer) {
+    public IndexingMessagesStreamListener(@NonNull Indexer indexer) {
         this.indexer = indexer;
     }
 
@@ -44,7 +44,6 @@ public class IndexingMessagesStreamListener {
             .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
     }
 
-    @NotNull
     private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexOrRemoveAnalysis(IndexAnalysisMessage msg) {
         if (msg.getRemove()) {
             return removeAnalysis(msg);
@@ -53,7 +52,6 @@ public class IndexingMessagesStreamListener {
         }
     }
 
-    @NotNull
     private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> removeAnalysis(IndexAnalysisMessage msg) {
         return indexer.removeAnalysis(RemoveAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
@@ -66,7 +64,6 @@ public class IndexingMessagesStreamListener {
             .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
-    @NotNull
     private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexAnalysis(IndexAnalysisMessage msg) {
         return indexer.indexAnalysis(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
@@ -79,7 +76,6 @@ public class IndexingMessagesStreamListener {
         .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
-    @NotNull
     private Mono<Tuple2<IndexStudyMessage, IndexResult>> indexStudy(IndexStudyMessage msg) {
         return indexer.indexStudy(IndexStudyCommand.builder()
                 .studyId(msg.getStudyId())
@@ -89,7 +85,6 @@ public class IndexingMessagesStreamListener {
             .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
-    @NotNull
     private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
         return indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
                 .repositoryCode(msg.getRepositoryCode())
@@ -98,7 +93,6 @@ public class IndexingMessagesStreamListener {
             .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
-    @NotNull
     private <T> Mono<Tuple2<T, IndexResult>> catchUnhandledErrors(T msg, Throwable e) {
         log.error("failed processing message: {} ", msg, e);
         val indexResult = IndexResult.builder()
