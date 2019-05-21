@@ -43,7 +43,7 @@ class DefaultIndexer implements Indexer {
     static final String ANALYSIS_ID = "analysisId";
     private static final String REPO_URL = "repoUrl";
     private static final String ERR = "err";
-    private static final String FAILURE_DATA = "failure_data";
+    private static final String FAILURE_DATA = "failureData";
     private static final String CONFLICTS = "conflicts";
 
     private final FileCentricIndexAdapter fileCentricIndexAdapter;
@@ -105,7 +105,7 @@ class DefaultIndexer implements Indexer {
         return tryGetStudyRepository(indexStudyRepositoryCommand.getRepositoryCode())
             .flatMapMany(this::getAllStudies)
             .flatMap(studyAndRepository ->
-                // I had to put this block inside this flatmap to allow these operations to bubble up their exceptions
+                // I had to put this block inside this flatMap to allow these operations to bubble up their exceptions
                 // to this onErrorResume handler without interrupting the main flux, and terminating it with error signals.
                 // for example if fetchAnalyses down stream throws error for a study the studies flux will
                 // continue emitting studies
@@ -168,7 +168,8 @@ class DefaultIndexer implements Indexer {
 
     @NotNull
     private Throwable handleGetStudiesError(StudyRepository studyRepository, Throwable e) {
-        notifyFailedToFetchStudies(studyRepository.getCode(), e.getMessage());
+        val errMsg = getErrorMessageOrType(e);
+        notifyFailedToFetchStudies(studyRepository.getCode(), errMsg);
         return wrapWithIndexerException(e, "fetch studies failed", FailureData.builder()
             .failingIds(Map.of(REPO_CODE, Set.of(studyRepository.getCode())))
             .build());
@@ -265,7 +266,6 @@ class DefaultIndexer implements Indexer {
         .onErrorMap((e) -> handleFetchAnalysisError(tuple, e));
     }
 
-
     private IndexResult convertIndexerExceptionToIndexResult(IndexerException e) {
         return IndexResult.builder()
             .failureData(e.getFailureData())
@@ -274,26 +274,32 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<IndexResult> handleIndexStudyError(Throwable e, String studyId, String repoCode) {
-        val failInfo = Map.of(
-            STUDY_ID, Set.of(studyId),
-            REPO_CODE, Set.of(repoCode)
+        val context = Map.of(
+            STUDY_ID, studyId,
+            REPO_CODE, repoCode,
+            ERR, getErrorMessageOrType(e)
         );
-        return notifyAndReturnFallback(failInfo);
+        val failingId = Map.of(STUDY_ID, Set.of(studyId));
+        return notifyAndReturnFallback(failingId, context);
     }
 
     private Mono<IndexResult> handleIndexAnalysisError(Throwable e, @NonNull AnalysisIdentifier indexAnalysisCommand) {
-        val fails = Map.of(
-            ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()),
-            STUDY_ID, Set.of(indexAnalysisCommand.getStudyId()),
-            REPO_CODE, Set.of(indexAnalysisCommand.getRepositoryCode())
+        val failureContext = Map.of(
+            ANALYSIS_ID, indexAnalysisCommand.getAnalysisId(),
+            STUDY_ID, indexAnalysisCommand.getStudyId(),
+            REPO_CODE, indexAnalysisCommand.getRepositoryCode(),
+            ERR, getErrorMessageOrType(e)
         );
-        return notifyAndReturnFallback(fails);
+        val failedAnalysisId = Map.of(ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()));
+        return notifyAndReturnFallback(failedAnalysisId, failureContext);
     }
 
-    private Mono<IndexResult> notifyAndReturnFallback(Map<String, Set<String>> failInfo) {
-        this.notifier.notify(new IndexerNotification(NotificationName.UNHANDLED_ERROR, failInfo));
+    @NotNull
+    private Mono<IndexResult> notifyAndReturnFallback(Map<String, Set<String>> failingIds,
+                                                      Map<String, ? extends Object> contextInfo) {
+        this.notifier.notify(new IndexerNotification(NotificationName.UNHANDLED_ERROR, contextInfo));
         return Mono.just(IndexResult.builder()
-            .failureData(FailureData.builder().failingIds(failInfo).build())
+            .failureData(FailureData.builder().failingIds(failingIds).build())
             .successful(false)
             .build()
         );
@@ -342,7 +348,10 @@ class DefaultIndexer implements Indexer {
     private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
         return getAlreadyIndexed(files)
             .map(storedFilesList -> findConflicts(files, storedFilesList))
-            .flatMap(conflictsCheckResult -> handleConflicts(conflictsCheckResult).then(Mono.just(conflictsCheckResult)))
+            .flatMap(conflictsCheckResult -> {
+                handleConflicts(conflictsCheckResult);
+                return Mono.just(conflictsCheckResult);
+            })
             .map(conflictsCheckResult -> removeConflictingFromInputFilesList(files, conflictsCheckResult))
             .flatMap(this::callBatchUpsert)
             .doOnNext(this::notifyIndexRequestFailures)
@@ -352,8 +361,7 @@ class DefaultIndexer implements Indexer {
                     .successful(false)
                     .failureData(((IndexerException) ex).getFailureData())
                     .build())
-            )
-            .doOnSuccess(indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}", files.size(),
+            ).doOnSuccess(indexResult -> log.trace("finished batchUpsert, list size {}, hashcode {}", files.size(),
                 Objects.hashCode(files))
             );
     }
@@ -416,23 +424,9 @@ class DefaultIndexer implements Indexer {
     }
 
 
-    private Mono<Void> handleConflicts(ConflictsCheckResult conflictingFiles) {
-        val filesToRemove = conflictingFiles.getConflictingFiles().stream()
-            .map(Tuple2::_1)
-            .collect(Collectors.toUnmodifiableList());
-        if (filesToRemove.isEmpty()) {
-            return Mono.fromSupplier(() -> null);
-        }
-
-        val ids = filesToRemove.stream()
-            .map(FileCentricDocument::getObjectId)
-            .collect(Collectors.toUnmodifiableSet());
+    private void handleConflicts(ConflictsCheckResult conflictingFiles) {
+        if (conflictingFiles == null || conflictingFiles.getConflictingFiles().isEmpty()) return;
         this.notifyConflicts(conflictingFiles);
-        return this.fileCentricIndexAdapter
-            .removeFiles(ids)
-            .onErrorMap((ex) -> wrapWithIndexerException(ex, "failed to remove files",
-                FailureData.builder().failingIds(Map.of("ids", new HashSet<>(ids))).build())
-            );
     }
 
     private List<FileCentricDocument> removeConflictingFromInputFilesList(List<FileCentricDocument> files,
@@ -502,9 +496,9 @@ class DefaultIndexer implements Indexer {
             .stream()
             .map(tuple -> tuple.apply(this::toFileConflict))
             .collect(Collectors.toUnmodifiableList());
-        val notif = new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
+        val notification = new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
             Map.of(CONFLICTS, conflictingFileList));
-        this.notifier.notify(notif);
+        this.notifier.notify(notification);
     }
 
     private boolean isInConflictsList(ConflictsCheckResult conflictsCheckResult,
@@ -525,14 +519,16 @@ class DefaultIndexer implements Indexer {
                 .analysisId(f1.getAnalysis().getId())
                 .studyId(f1.getStudy())
                 .repoCode(f1.getRepositories().stream()
-                    .map(Repository::getCode).collect(Collectors.toUnmodifiableList())
+                    .map(Repository::getCode)
+                    .collect(Collectors.toUnmodifiableSet())
                 ).build()
             ).indexedFile(ConflictingFile.builder()
                 .objectId(f2.getObjectId())
                 .analysisId(f2.getAnalysis().getId())
                 .studyId(f2.getStudy())
-                .repoCode(f2.getRepositories().stream().map(Repository::getCode)
-                    .collect(Collectors.toUnmodifiableList())
+                .repoCode(f2.getRepositories().stream()
+                    .map(Repository::getCode)
+                    .collect(Collectors.toUnmodifiableSet())
                 ).build()
             ).build();
     }
@@ -547,8 +543,9 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<? extends IndexResult> handleIndexRepositoryError(Throwable e, String repositoryCode) {
-        val fail = Map.of(REPO_CODE, Set.of(repositoryCode));
-        return this.notifyAndReturnFallback(fail);
+        val failingId = Map.of(REPO_CODE, Set.of(repositoryCode));
+        val contextInfo = Map.of(REPO_CODE, repositoryCode, ERR, e.getMessage());
+        return this.notifyAndReturnFallback(failingId, contextInfo);
     }
 
     private IndexResult reduceIndexResult(IndexResult accumulatedResult, IndexResult newResult) {
@@ -564,6 +561,10 @@ class DefaultIndexer implements Indexer {
             .failureData(both)
             .successful(both.getFailingIds().isEmpty())
             .build();
+    }
+
+    private String getErrorMessageOrType(Throwable e) {
+        return e.getMessage() == null ? e.getClass().getName() : e.getMessage();
     }
 
     @Getter
@@ -583,7 +584,7 @@ class DefaultIndexer implements Indexer {
         private String objectId;
         private String analysisId;
         private String studyId;
-        private List<String> repoCode;
+        private Set<String> repoCode;
     }
 
     @Getter

@@ -14,7 +14,7 @@ import java.util.List;
 public interface StudyDAO {
 
     /**
-     * loads analyses (only published) for a single study from a single repository.
+     * loads analyses for a single study from a single repository
      *
      * @param getStudyAnalysesCommand contains studyId and repository base url
      * @return a mono of all analyses found related to a study.
@@ -22,6 +22,18 @@ public interface StudyDAO {
      *  in case the study wasn't found.
      */
     @NonNull Mono<List<Analysis>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
+
+    /**
+     * loads all studies in a repository
+     * @param getStudyAnalysesCommand contains repository url
+     * @return a flux of all the studies in the specified repository
+     */
     @NonNull Flux<Study> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
+
+    /**
+     * load an analysis of a study from a repository
+     * @param command specifies the analysis id, the study and the repository url
+     * @return the analysis mono
+     */
     @NonNull Mono<Analysis> getAnalysis(@NonNull GetAnalysisCommand command);
 }
