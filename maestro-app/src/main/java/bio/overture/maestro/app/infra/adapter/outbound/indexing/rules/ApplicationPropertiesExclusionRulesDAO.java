@@ -45,13 +45,6 @@ public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO
     public void init() throws Exception {
         val mapper = new ObjectMapper(new YAMLFactory());
         try {
-            this.exclusionRulesResource.getFile();
-        } catch (FileNotFoundException __) {
-            log.warn("No exclusion rules file with name {} found", this.exclusionRulesResource.getFilename());
-            return;
-        }
-
-        try {
             val ruleConfig = mapper.readValue(this.exclusionRulesResource.getInputStream(), RuleConfig.class);
 
             if (ruleConfig == null
@@ -74,6 +67,7 @@ public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO
             });
 
             this.exclusionRules = Map.copyOf(rulesByEntity);
+            log.info("loaded exclusionRules :{}", this.exclusionRules.size());
         } catch (Exception e) {
             this.exclusionRules = Map.of();
             log.error("failed to read exclusion rules", e);

@@ -17,7 +17,7 @@ by default, that makes searching Analyses and Studies much more powerful and eas
 - Reactive
     - Event driven
     - Elastic
-    - Resiliency & Fault tolerence
+    - Resiliency & Fault tolerance
 - Failure audit
 - Runtime configurability
 - Extendable: separate domain from infrastructure & configuration
@@ -46,14 +46,14 @@ by default, that makes searching Analyses and Studies much more powerful and eas
     - Spring cloud contract wiremock
 
 ## Structure
-The project is following the ports/adapters archeticture, where the domain is completely isolated from external infrastructure
+The project is following the ports/adapters architecture, where the domain is completely isolated from external infrastructure
 and frameworks.
 - Two maven modules:
     - maestro domain
       - the core features and framework independent logic that is portable and contains the main indexing, rules, notifications
       logic as specified by the business features. Has packages like:
-          - entities : contains pojos and entities
-          - api: the logic that fullfills the business features
+          - entities : contains POJOs and entities
+          - api: the logic that fulfills the business features
           - ports: contains the interfaces needed by the api to communicate with anything outside the indexing context.
 
     - mastro app:
@@ -61,19 +61,29 @@ and frameworks.
        - Contains the infrastructure and adapters (ports implementations) that is needed to connect the domain
          with the outside world like elastic search, song web clients, configuration files etc.
          It also has the Spring framework configurations here to keep technologies outside of the domain.
+# Dependencies:
+To Successfully run Maestro (as is) you need the following services to be deployed and configure it to use them:
+- [Elasticsearch](https://www.elastic.co/products/elasticsearch)
+- [Apache Kafka](https://kafka.apache.org/)
+- [SONG](https://github.com/overture-stack/SONG)
+
+you can check the sample docker compose files under ./run/docker for containerized versions of elastic & kafka.
+for SONG please check the SONG github repo [here](https://github.com/overture-stack/SONG/tree/develop/dev) 
+on how to run it with docker. Or you can run it as jar.
 
 ## How to:
 Note: if you don't/can't use the Makefile, look inside it for the shell commands and replicate them.
-- Build: `make mvn-i`
-- Test: `make mvn-t`
+- Compile: `make` 
+- Test: `make test`
+- Package: `make package`
 - Run:
     - Development:
-        - `make doc-start-dev` starts the infrastructure containers
+        - `make docker-start-dev` starts the infrastructure containers
             - kafka
             - elastic search
             - other helper tools if you want like kafka rest proxy
-        - `make boot-run`: start maestro (Maestro.java) from the IDE/cmd as a java application
+        - `make run` OR start maestro (Maestro.java) from the IDE/cmd as a java application
     - Demo:
-        - `make doc-start` starts meastro from a docker image along with all needed infrastructure
+        - `make docker-start` starts meastro from a docker image along with all needed infrastructure
 
 
