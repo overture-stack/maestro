@@ -154,7 +154,7 @@ spec:
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
                     sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
-                    sh "docker push overture/maestro:${verison}"
+                    sh "docker push overture/maestro:${version}"
                     sh "docker push overture/maestro:latest"
                     withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh "git tag ${version}"
