@@ -1,0 +1,60 @@
+[
+  {
+    "objectId": "43d29864-6756-51f0-bb2a-ba7cff860778",
+    "access": "controlled",
+    "study": "PEME-CA",
+    "analysis": {
+      "id": "EGAZ00001254368",
+      "type": "sequencingRead",
+      "state": "PUBLISHED",
+      "study": "PEME-CA",
+      "experiment": {
+        "analysisId": "EGAZ00001254368",
+        "aligned": true,
+        "libraryStrategy": "WGS"
+      }
+    },
+    "file": {
+      "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
+      "format": "BAM",
+      "md5sum": "29ff9df727803d20834b9997bc17e970",
+      "size": 88906416144,
+      "lastModified": null,
+      "indexFile": {
+        "objectId": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
+        "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
+        "format": "BAI",
+        "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
+        "size": 8939816
+      }
+    },
+    "repositories": [
+      {
+        "code": "TEST-REPO",
+        "organization": "org",
+        "name": "singer",
+        "type": "S3",
+        "country": "CA",
+        "baseUrl": "http://song.sing.sung",
+        "dataPath": "/p1/p2",
+        "metadataPath": "/m1/m2/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
+      }
+    ],
+    "donors": [
+      {
+        "id": "DO232978",
+        "submittedId": "MDT-AP-0749",
+        "specimen": {
+          "id": "SP201301",
+          "type": "Primary tumour - solid tissue",
+          "submittedId": "MDT-AP-0749_tumor_specimen",
+          "sample": {
+            "id": "SA604924",
+            "submittedId": "MDT-AP-0749_tumor",
+            "type": "DNA"
+          }
+        }
+      }
+    ]
+  }
+]

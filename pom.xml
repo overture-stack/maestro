@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2019. Ontario Institute for Cancer Research
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as
+  ~   published by the Free Software Foundation, either version 3 of the
+  ~   License, or (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -11,16 +28,18 @@
     
     <groupId>bio.overture</groupId>
     <artifactId>maestro</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <!-- from .mvn/maven.config -->
+    <version>${revision}${sha1}${changelist}</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.3.RELEASE</version>
+        <version>2.1.4.RELEASE</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -32,14 +51,33 @@
         </dependency>
 
         <dependency>
+            <groupId>io.projectreactor.addons</groupId>
+            <artifactId>reactor-logback</artifactId>
+            <!-- https://github.com/reactor/reactor-addons/issues/124 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.java</groupId>
+                    <artifactId>tools</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
         </dependency>
 
     </dependencies>
@@ -52,6 +90,36 @@
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.projectreactor.addons</groupId>
+                <artifactId>reactor-extra</artifactId>
+                <version>${reactor-extra.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>${vavr.version}</version>
+            </dependency>
+
+            <!-- resilience4j -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-circuitbreaker</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-retry</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-bulkhead</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <!-- /resilence4j -->
 
 
             <!-- elasticsearch -->
@@ -94,12 +162,20 @@
             </dependency>
 
 
-            <!-- ********** logging ********** -->
+            <!-- ********** logging & monitoring ********** -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.projectreactor.addons/reactor-logback -->
+            <dependency>
+                <groupId>io.projectreactor.addons</groupId>
+                <artifactId>reactor-logback</artifactId>
+                <version>${reactor-logback.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -108,6 +184,12 @@
             </dependency>
 
 
+            <!-- https://codecentric.github.io/spring-boot-admin/current/ -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin-starter-client.version}</version>
+            </dependency>
 
             <!-- ********** Testing  ************* -->
             <!-- junit 5 -->
@@ -154,6 +236,14 @@
                 <version>${testcontainers.version}</version>
                 <scope>test</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.playtika.testcontainers</groupId>
+                <artifactId>embedded-elasticsearch</artifactId>
+                <version>${embedded-elasticsearch.version}</version>
+                <scope>test</scope>
+            </dependency>
+
             <!-- /testcontainers -->
 
             <dependency>
@@ -183,6 +273,20 @@
                 <version>${jackson-databind.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson-dataformat-yaml.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -193,18 +297,26 @@
 
         <!-- versions -->
         <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <lombok.version>1.18.6</lombok.version>
         <testcontainers.version>1.10.6</testcontainers.version>
         <junit5.version>5.4.0</junit5.version>
         <slf4j.version>1.7.16</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <reactor.version>3.2.6.RELEASE</reactor.version>
-        <spring-data-elasticsearch.version>3.2.0.M1</spring-data-elasticsearch.version>
+        <reactor.version>3.2.8.RELEASE</reactor.version>
+        <spring-data-elasticsearch.version>3.2.0.M2</spring-data-elasticsearch.version>
         <elasticsearch.version>6.6.1</elasticsearch.version>
         <mockito-junit-jupiter.version>2.23.4</mockito-junit-jupiter.version>
         <jackson-databind.version>2.9.8</jackson-databind.version>
         <mockito-core.version>2.21.0</mockito-core.version>
         <junit-platform.version>1.4.0</junit-platform.version>
+        <spring-boot-admin-starter-client.version>2.1.3</spring-boot-admin-starter-client.version>
+        <jackson-dataformat-yaml.version>2.3.0</jackson-dataformat-yaml.version>
+        <embedded-elasticsearch.version>1.19</embedded-elasticsearch.version>
+        <reactor-logback.version>${reactor-extra.version}</reactor-logback.version>
+        <resilience4j.version>0.14.1</resilience4j.version>
+        <reactor-extra.version>3.2.2.RELEASE</reactor-extra.version>
+        <vavr.version>0.9.3</vavr.version>
     </properties>
 
     <repositories>
@@ -237,6 +349,34 @@
     </repositories>
 
     <build>
+        <plugins>
+            <!-- https://maven.apache.org/maven-ci-friendly.html -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -247,6 +387,8 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <!-- up until now this is the latest working version
+                     see https://stackoverflow.com/questions/46772420/junit-5-test-case-not-executed -->
                     <version>2.19.1</version>
                     <dependencies>
                         <dependency>
@@ -254,10 +396,13 @@
                             <artifactId>junit-platform-surefire-provider</artifactId>
                             <version>1.0.1</version>
                         </dependency>
+                        <dependency>
+                            <groupId>org.junit.jupiter</groupId>
+                            <artifactId>junit-jupiter-engine</artifactId>
+                            <version>${junit5.version}</version>
+                        </dependency>
                     </dependencies>
                 </plugin>
-
-
             </plugins>
         </pluginManagement>
     </build>

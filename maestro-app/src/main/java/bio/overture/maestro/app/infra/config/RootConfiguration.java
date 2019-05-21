@@ -1,32 +1,46 @@
+/*
+ *  Copyright (c) 2019. Ontario Institute for Cancer Research
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package bio.overture.maestro.app.infra.config;
 
-import bio.overture.maestro.domain.api.DefaultIndexer;
+import bio.overture.maestro.app.infra.adapter.inbound.messaging.MessagingConfig;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.GlobalWebExceptionHandler;
 import bio.overture.maestro.app.infra.adapter.inbound.webapi.ManagementController;
-import bio.overture.maestro.app.infra.adapter.outbound.PropertyFileStudyRepositoryDAO;
-import bio.overture.maestro.app.infra.adapter.outbound.FileCentricElasticSearchAdapter;
-import bio.overture.maestro.app.infra.adapter.outbound.SongStudyDAO;
+import bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.ElasticSearchConfig;
+import bio.overture.maestro.app.infra.adapter.outbound.indexing.rules.ExclusionRulesConfig;
+import bio.overture.maestro.app.infra.adapter.outbound.metadata.repostiory.RepositoryConfig;
+import bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song.SongConfig;
+import bio.overture.maestro.app.infra.adapter.outbound.notification.NotificationConfig;
+import bio.overture.maestro.app.infra.config.properties.PropertiesConfig;
+import bio.overture.maestro.domain.api.DomainApiConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import lombok.val;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.RestClients;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER;
 
 /**
  * Aggregates all configuration in one place
  */
 @Configuration
 @Import({
-    DomainConfig.class,
+    DomainApiConfig.class,
+    PortsConfig.class,
     InfraConfig.class,
 })
 public class RootConfiguration {
@@ -34,25 +48,27 @@ public class RootConfiguration {
 }
 
 /**
- * Configuration about domain related beans, delegated here to keep the domain module agnostic of injection framework .
+ * Configuration about domain related beans (ports implementations), delegated here to keep the domain module agnostic of injection framework .
  */
 @Configuration
 @Import({
-    DefaultIndexer.class,
+    ElasticSearchConfig.class,
+    ExclusionRulesConfig.class,
+    MessagingConfig.class,
+    WebConfig.class,
+    SongConfig.class,
+    RepositoryConfig.class,
+    NotificationConfig.class,
 })
-class DomainConfig {}
+class PortsConfig {}
 
 /**
  * Aggregator for all configurations related to
- * the infrastructure module (this module).
+ * the infrastructure beans (I/O & networking, properties, datasources, etc)
  */
 @Configuration
 @Import({
-    ElasticSearchClientConfig.class,
-    WebConfig.class,
-    SongStudyDAO.class,
-    PropertyFileStudyRepositoryDAO.class,
-    ApplicationProperties.class,
+    PropertiesConfig.class,
 })
 class InfraConfig {
     @Bean
@@ -69,39 +85,17 @@ class InfraConfig {
     GlobalWebExceptionHandler.class,
     ManagementController.class,
 })
-class WebConfig {}
+class WebConfig {
+    private static final String DEFAULT_DOCUMENT_JSON_MAPPER = "DEFAULT_DOCUMENT_JSON_MAPPER" ;
 
-/**
- * Elasticsearch related configuration
- */
-@Configuration
-@Import({
-    FileCentricElasticSearchAdapter.class,
-})
-class ElasticSearchClientConfig {
-
-    @Autowired
-    ApplicationProperties properties;
-
-    @Bean
-    RestHighLevelClient client() {
-        val clientConfiguration = ClientConfiguration.builder()
-            .connectedTo(properties.getHosts().toArray(new String[0]))
-            .build();
-        return RestClients.create(clientConfiguration)
-            .rest();
-    }
-
-    @Bean(name = ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
-    ObjectMapper documentObjectMapper() {
-        val mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        return mapper;
-    }
-
-    @Bean
-    ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
-        return new ElasticsearchRestTemplate(client);
+    /**
+     * This bean is needed for spring webflux to not use the ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER
+     * marked as primary so by default callers who don't specify which bean they need, will get this.
+     */
+    @Primary
+    @Bean(name = DEFAULT_DOCUMENT_JSON_MAPPER)
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }
 

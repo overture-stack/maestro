@@ -1,48 +1,35 @@
 .ONESHELL:
 DOCKER_COMPOSE_LOCAL_DIR = ./run/docker
-VERSION=0.0.1-SNAPSHOT
+VERSION=$(shell cat ./.mvn/maven.config | grep revision | cut -d '=' -f2)-SNAPSHOT
 
-boot-run:
+build:
+	./mvnw clean compile
+test:
+	./mvnw clean test
+package:
+	./mvnw clean package -Dmaven.test.skip=true
+run:
 	cd maestro-app
 	../mvnw spring-boot:run
 
-mvn-i:
-	./mvnw clean install -Dmaven.test.skip=true
-
-mvn-t:
-	./mvnw clean test
-
-#doc stands for docker
-doc-login:
-	docker login
-
-doc-push: doc-login doc-build
-	cd maestro-app
-	../mvnw dockerfile:push
-
-doc-push-directly:doc-build
+docker-push:
 	docker push overture/maestro:$(VERSION)
-
-doc-build: mvn-i
-	cd maestro-app
-	../mvnw dockerfile:build
-
-# start using images only, don't build from code.
-doc-start-img:
+docker-build:
+	docker build -f ci-cd/Dockerfile . -t overture/maestro:$(VERSION)
+# use this when you want to run maestro as container
+docker-start: mvn-i doc-clean
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose -f docker-compose.yml up -d
-
-doc-start: mvn-i doc-clean
-	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose up --build -d
-
-doc-stop:
+	docker-compose up -d
+docker-stop:
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose down
-
-doc-restart-app: mvn-i
+docker-restart-app: mvn-i
 	cd $(DOCKER_COMPOSE_LOCAL_DIR);
 	docker-compose up --build -d maestro
-
-doc-clean:
+# only starts the infrastructure containers needed by maestro
+# use this when you run maestro from the ide (not as a container)
+docker-start-dev:
+	cd $(DOCKER_COMPOSE_LOCAL_DIR);
+	docker-compose -f docker-compose.dev.yml up -d
+docker-clean:
 	docker system prune

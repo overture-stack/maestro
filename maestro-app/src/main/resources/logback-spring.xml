@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2019. Ontario Institute for Cancer Research
+  ~
+  ~   This program is free software: you can redistribute it and/or modify
+  ~   it under the terms of the GNU Affero General Public License as
+  ~   published by the Free Software Foundation, either version 3 of the
+  ~   License, or (at your option) any later version.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU Affero General Public License for more details.
+  ~
+  ~   You should have received a copy of the GNU Affero General Public License
+  ~   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<configuration debug="true">
+    <springProperty name="failure-log-path" source="maestro.failure-log.dir"/>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <!-- The underlying appender will be the standard console one. -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %clr(%d{yyyy-MM-dd}){blue} | %clr(%d{HH:mm:ss.SSS}){blue} | %clr(${PID}){faint} | %clr(%t){red} | %clr(%p) | %clr(%logger){cyan} | %clr(%m){faint}%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="failureLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${failure-log-path:-/tmp/maestro}/failures.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>failures.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history capped at 1GB total size -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Wrap calls to the console logger with async dispatching to Disruptor. -->
+    <appender name="async" class="reactor.logback.AsyncAppender">
+        <appender-ref ref="stdout"/>
+    </appender>
+
+    <!-- Wrap calls to the console logger with async dispatching to Disruptor. -->
+    <appender name="asyncFailureLog" class="reactor.logback.AsyncAppender">
+        <appender-ref ref="failureLogAppender"/>
+    </appender>
+
+    <logger name="bio.overture.maestro.app.infra.adapter.outbound.notification.FileBasedFailuresLogger"
+            level="INFO"
+            additivity="false">
+        <appender-ref ref="asyncFailureLog"/>
+    </logger>
+
+    <!-- Direct all logging through the AsyncAppender. -->
+    <root>
+        <appender-ref ref="async"/>
+    </root>
+
+</configuration>

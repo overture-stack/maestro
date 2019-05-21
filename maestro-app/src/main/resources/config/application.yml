@@ -2,26 +2,81 @@ server:
   port: 11235
 
 maestro:
+  kafka:
+    broker: localhost:9092
+    indexing_topic: maestro_index_requests
+  song:
+    kafka:
+      analysis-topic: song-analysis
+    max_retries: 3
+    timeout_sec:
+        study: 100 # some studies take really long, +30 secs, to be downloaded
+        analysis: 5
+  exclusion_rules:
+    # exclusion rules file name
+    file_name: exclusion-rules.yml
+
+  # elastic search server & client props
   elasticsearch:
-    cluster-name: ${ELASTICSEARCH.CLUSTER.NAME:maestro.elasticsearch}
-    cluster-nodes: ${ELASTICSEARCH.CLUSTER.NODES:localhost:9200, localhost:9201}
+    cluster_nodes: localhost:9200, localhost:9201
     indexes:
-      file-centric:
+      file_centric:
         alias: file_centric
+    client:
+      # this is to control the number of documents per bulk request in elasticsearch
+      docs_per_bulk_req_max: 5000
+      # max time to wait for a connection to be established
+      connection_timeout: 5000
+      # max time to wait on idle connection (no data flow)
+      socket_timeout: 10000
+      retry:
+        max_attempts: 3
+        wait_duration_millis: 500
+
+  # Genome file repositories props
   repositories:
+      # must be unique
     - code: collab
       url: https://song.cancercollaboratory.org
       name: collaboratory
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
+      # optional
       storageType: S3
       organization: ICGC
       country: CA
+    - code: song.overture
+      url: http://localhost:8080
+      name: local song
+      metadataPath: /oicr.icgc.meta/metadata
+      # optional
+      storageType: S3
+      organization: overture
+      country: LH
     - code: aws
-      url: http://aws.amazon.com
-      name: aws repo
+      url: https://virginia.song.icgc.org
+      name: aws virginia
+      metadataPath: /oicr.icgc.meta/metadata
+      # optional
+      storageType: S3
+      organization: ICGC
       country: US
 
+  # last resort fallback file system log in case of retries exhaustion.
+  failure_log:
+    enabled: true
+    dir: ${user.home}/logs/maestro
+
+# logging & monitoring
+logging:
+  level:
+    root: INFO
+    bio.overture: TRACE
+    # very verbose class, only enable lower level when necessary
+    bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
+    org.apache.kafka.clients: WARN
+
+# spring boot actuator endpoints
 management:
   endpoints:
     web:
@@ -29,4 +84,21 @@ management:
         include: '*'
   endpoint:
     health:
-    show-details: ALWAYS
+      show_details: ALWAYS
+
+spring:
+  application:
+    name: maestro
+  output.ansi.enabled: ALWAYS
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${maestro.kafka.broker}
+      bindings:
+        input:
+          # we don't specify content type because @StreamListener will handle that
+          destination: ${maestro.kafka.indexing_topic}
+        song-input:
+          # we don't specify content type because @StreamListener will handle that
+          destination: ${maestro.song.kafka.analysis-topic}
