@@ -135,7 +135,7 @@ spec:
                         sh 'helm init --client-only'
                         sh 'helm ls --kubeconfig $QA_KUBECONFIG'
                         sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
-                        sh "helm upgrade --install maestro-qa overture/maestro -f ci-cd/chart-values/values.qa.yaml --set image.tag=${version}.${commit}"
+                        sh "helm upgrade --kubeconfig $QA_KUBECONFIG --install maestro-qa overture/maestro -f ci-cd/chart-values/values.qa.yaml --set image.tag=${version}.${commit}"
                     }
                 }
             }
@@ -174,7 +174,7 @@ spec:
                         sh 'helm init --client-only'
                         sh 'helm ls --kubeconfig $PR_KUBECONFIG'
                         sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
-                        sh "helm upgrade --install maestro-pr overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}"
+                        sh "helm upgrade --kubeconfig $PR_KUBECONFIG --install maestro-pr overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}"
                     }
                 }
             }
