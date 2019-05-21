@@ -79,7 +79,7 @@ spec:
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
 
-                    // the netowrk=host needed to download dependencies using the host network (since we are inside 'docker'
+                    // the network=host needed to download dependencies using the host network (since we are inside 'docker'
                     // container)
                     sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:edge"
                     sh "docker push overture/maestro:edge"
