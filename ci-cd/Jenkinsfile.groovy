@@ -178,8 +178,8 @@ spec:
                         sh "helm ls --kubeconfig $KUBECONFIG"
                         sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
                         sh """
-                            helm upgrade --kubeconfig $KUBECONFIG --install --namespace=overture-staging maestro-pr \\ 
-                                overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}
+                            helm upgrade --kubeconfig $KUBECONFIG --install --namespace=overture-staging maestro-pr \\
+                            overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}
                            """
                     }
                 }
