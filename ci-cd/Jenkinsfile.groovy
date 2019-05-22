@@ -131,11 +131,14 @@ spec:
             }
             steps {
                 container('helm') {
-                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'QA_KUBECONFIG')]) {
+                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'KUBECONFIG')]) {
                         sh 'helm init --client-only'
-                        sh 'helm ls --kubeconfig $QA_KUBECONFIG'
+                        sh "helm ls --kubeconfig $KUBECONFIG"
                         sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
-                        sh "helm upgrade --kubeconfig $QA_KUBECONFIG --install maestro-qa overture/maestro -f ci-cd/chart-values/values.qa.yaml --set image.tag=${version}.${commit}"
+                        sh """
+                            helm upgrade --kubeconfig $KUBECONFIG --install --namespace=overture-qa maestro-qa \\
+                            overture/maestro -f ci-cd/chart-values/values.qa.yaml --set image.tag=${version}.${commit}
+                           """
                     }
                 }
             }
@@ -170,11 +173,14 @@ spec:
             }
             steps {
                 container('helm') {
-                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'PR_KUBECONFIG')]) {
+                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'KUBECONFIG')]) {
                         sh 'helm init --client-only'
-                        sh 'helm ls --kubeconfig $PR_KUBECONFIG'
+                        sh "helm ls --kubeconfig $KUBECONFIG"
                         sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
-                        sh "helm upgrade --kubeconfig $PR_KUBECONFIG --install maestro-pr overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}"
+                        sh """
+                            helm upgrade --kubeconfig $KUBECONFIG --install --namespace=overture-staging maestro-pr \\ 
+                                overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}
+                           """
                     }
                 }
             }
