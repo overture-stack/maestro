@@ -18,7 +18,7 @@ maestro:
 
   # elastic search server & client props
   elasticsearch:
-    cluster_nodes: localhost:9200, localhost:9201
+    cluster_nodes: http://localhost:9200, http://localhost:9201
     indexes:
       file_centric:
         alias: file_centric

@@ -29,11 +29,10 @@ public interface ApplicationProperties {
     List<String> elasticSearchClusterNodes();
     String fileCentricAlias();
     int maxDocsPerBulkRequest();
-    Resource indexSettings();
-    long elasticSearchClientConnectionTimeoutMillis();
-    long elasticSearchClientSocketTimeoutMillis();
+    int elasticSearchClientConnectionTimeoutMillis();
+    int elasticSearchClientSocketTimeoutMillis();
     List<PropertiesFileRepository> repositories();
-    Resource fileCentricMapping();
+    Resource fileCentricIndex();
     Resource exclusionRules();
     int songMaxRetries();
     int songStudyCallTimeoutSeconds();

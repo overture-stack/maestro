@@ -20,18 +20,19 @@ package bio.overture.maestro;
 import bio.overture.maestro.app.Maestro;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.masestro.test.TestCategory;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.test.context.ContextConfiguration;
-
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 
 
 /**
@@ -55,16 +56,16 @@ public abstract class MaestroIntegrationTest {
     private ApplicationProperties properties;
 
     @Autowired
-    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private RestHighLevelClient client;
 
     @AfterEach
-    void tearDown() throws InterruptedException {
+    @SneakyThrows
+    void tearDown() {
         // clean indexes after each test to keep tests isolated
-        DeleteQuery query = new DeleteQuery();
-        query.setIndex(properties.fileCentricAlias());
-        query.setType(properties.fileCentricAlias());
-        query.setQuery(matchAllQuery());
-        elasticsearchRestTemplate.delete(query);
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest();
+        deleteByQueryRequest.indices(properties.fileCentricAlias());
+        deleteByQueryRequest.setQuery(QueryBuilders.matchAllQuery());
+        client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
         Thread.sleep(sleepMillis);
     }
 

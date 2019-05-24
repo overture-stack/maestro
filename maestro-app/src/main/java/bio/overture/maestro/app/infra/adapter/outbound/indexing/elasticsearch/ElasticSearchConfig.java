@@ -21,21 +21,17 @@ import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.val;
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
+import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.RestClients;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.http.HttpHeaders;
 
-import javax.net.ssl.SSLContext;
-import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER;
 
@@ -45,7 +41,6 @@ import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SE
  */
 @Configuration
 @Import({
-    CustomElasticSearchRestAdapter.class,
     FileCentricElasticSearchAdapter.class,
     SnakeCaseJacksonSearchResultMapper.class
 })
@@ -62,44 +57,26 @@ public class ElasticSearchConfig {
 
     @Bean
     RestHighLevelClient client(ApplicationProperties properties) {
-        val clientConfiguration = ClientConfiguration.builder()
-            .connectedTo(properties.elasticSearchClusterNodes().toArray(new String[0]))
-            .build();
-
-        /*
-         * This is needed to control the timeouts, by default
-         * it's 5 secs, since we send some large bulk requests bumped to 10
-         */
-        return RestClients.create(new ClientConfiguration() {
-            @Override
-            public List<InetSocketAddress> getEndpoints() {
-                return clientConfiguration.getEndpoints();
+        val httpHostArrayList = new ArrayList<HttpHost>(properties.elasticSearchClusterNodes()
+            .stream()
+            .map(HttpHost::create)
+            .collect(Collectors.toUnmodifiableList()));
+        val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[]{}));
+        builder.setHttpClientConfigCallback((httpAsyncClientBuilder) -> {
+            val connectTimeout = properties.elasticSearchClientConnectionTimeoutMillis();
+            val timeout = properties.elasticSearchClientSocketTimeoutMillis();
+            val requestConfigBuilder = RequestConfig.custom();
+            if (connectTimeout > 0) {
+                requestConfigBuilder.setConnectTimeout(connectTimeout);
+                requestConfigBuilder.setConnectionRequestTimeout(connectTimeout);
             }
-            @Override
-            public HttpHeaders getDefaultHeaders() {
-                return clientConfiguration.getDefaultHeaders();
+            if (timeout > 0) {
+                requestConfigBuilder.setSocketTimeout(timeout);
             }
-
-            @Override
-            public boolean useSsl() {
-                return clientConfiguration.useSsl();
-            }
-
-            @Override
-            public Optional<SSLContext> getSslContext() {
-                return clientConfiguration.getSslContext();
-            }
-
-            @Override
-            public Duration getConnectTimeout() {
-                return Duration.ofSeconds(properties.elasticSearchClientConnectionTimeoutMillis());
-            }
-
-            @Override
-            public Duration getSocketTimeout() {
-                return Duration.ofMinutes(properties.elasticSearchClientSocketTimeoutMillis());
-            }
-        }).rest();
+            httpAsyncClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
+            return httpAsyncClientBuilder;
+        });
+        return new RestHighLevelClient(builder);
     }
 
     @Bean(name = ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
@@ -109,8 +86,9 @@ public class ElasticSearchConfig {
         return mapper;
     }
 
-    @Bean
-    ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
-        return new ElasticsearchRestTemplate(client);
-    }
+//    @Bean
+//    ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
+//        return new ElasticsearchRestTemplate(client);
+//    }
+
 }

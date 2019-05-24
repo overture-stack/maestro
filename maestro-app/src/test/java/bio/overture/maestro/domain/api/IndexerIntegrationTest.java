@@ -33,8 +33,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -42,22 +46,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchResultMapper;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import reactor.test.StepVerifier;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
@@ -68,7 +65,7 @@ import static org.mockito.Mockito.times;
 class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     @Autowired
-    private ElasticsearchRestTemplate elasticsearchTemplate;
+    private RestHighLevelClient restHighLevelClient;
 
     @Autowired
     private ApplicationProperties applicationProperties;
@@ -128,7 +125,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     }
 
     @Test
-    void shouldIndexAnalysis() throws InterruptedException {
+    void shouldIndexAnalysis() throws InterruptedException, IOException {
         // Given
         val analyses = loadJsonFixture(this.getClass(), "PEME-CA.analysis.json", Analysis.class);
         val expectedDoc0 = loadJsonFixture(this.getClass(),
@@ -156,21 +153,15 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
+        val docs = getFileCentricDocuments();
 
         assertNotNull(docs);
-        assertEquals(1L, page.getContent().size());
+        assertEquals(1L, docs.size());
         assertEquals(expectedDoc0, docs.get(0));
     }
 
     @Test
-    void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException {
+    void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException, IOException {
         // Given
         val studiesArray = loadJsonFixture(this.getClass(), "studies.json", String[].class);
         val studies = Arrays.stream(studiesArray)
@@ -206,17 +197,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .withPageable(PageRequest.of(0, 100).first())
-            .build();
-
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
-
+        val docs = getFileCentricDocuments();
         assertNotNull(docs);
-        assertEquals(32L, page.getContent().size());
+        assertEquals(32L, docs.size());
         val sortedExpected = expectedDocs.stream()
             .sorted(Comparator.comparing(FileCentricDocument::getObjectId))
             .collect(Collectors.toList());
@@ -228,7 +211,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     }
 
     @Test
-    void shouldIndexStudyWithExclusionsApplied() throws InterruptedException {
+    void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
         val analyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
@@ -259,22 +242,16 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
+        val docs = getFileCentricDocuments();
 
         assertNotNull(docs);
-        assertEquals(2L, page.getContent().size());
+        assertEquals(2L, docs.size());
         assertEquals(expectedDoc1, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
     }
 
     @Test
-    void shouldDeleteSingleAnalysis() throws InterruptedException {
+    void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
@@ -315,20 +292,15 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
+        val docs = getFileCentricDocuments();
         assertNotNull(docs);
-        assertEquals(1L, page.getContent().size());
+        assertEquals(1L, docs.size());
         assertEquals(expectedDoc0, docs.get(0));
 
     }
 
     @Test
-    void shouldUpdateExistingFileDocRepository() throws InterruptedException {
+    void shouldUpdateExistingFileDocRepository() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
@@ -378,20 +350,15 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
+        val docs = getFileCentricDocuments();
         assertNotNull(docs);
-        assertEquals(2L, page.getContent().size());
+        assertEquals(2L, docs.size());
         assertEquals(multiRepoDoc, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
     }
 
     @Test
-    void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException {
+    void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
         val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
@@ -435,16 +402,10 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
+        val docs = getFileCentricDocuments();
         assertNotNull(docs);
         then(notifier).should(times(1)).notify(eq(expectedNotification));
-        assertEquals(2L, page.getContent().size());
+        assertEquals(2L, docs.size());
         assertEquals(expectedDoc0, docs.get(0));
         assertEquals(expectedDoc1, docs.get(1));
     }
@@ -472,6 +433,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             ).build()));
     }
 
+    @SneakyThrows
     private void populateIndexWithCollabStudy(FileCentricDocument expectedDoc0, FileCentricDocument expectedDoc1) throws InterruptedException {
         val result = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("COLLAB")
@@ -485,44 +447,35 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Thread.sleep(sleepMillis);
 
         // assertions
-        val query = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-            .withIndices(alias)
-            .withTypes(alias)
-            .build();
-        val page = elasticsearchTemplate.queryForPage(query, FileCentricDocument.class, new CustomSearchResultMapper());
-        val docs = page.getContent();
+        List<FileCentricDocument> docs = getFileCentricDocuments();
+
         assertNotNull(docs);
-        assertEquals(2L, page.getContent().size());
+        assertEquals(2L, docs.size());
         assertEquals(expectedDoc1, docs.get(1));
         assertEquals(expectedDoc0, docs.get(0));
+    }
+
+    @NotNull
+    private List<FileCentricDocument> getFileCentricDocuments() throws IOException {
+        val searchRequest = new SearchRequest(alias);
+        val searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        searchSourceBuilder.from(0);
+        searchSourceBuilder.size(100);
+        searchRequest.source(searchSourceBuilder);
+        val response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        val docs = new ArrayList<FileCentricDocument>();
+
+        for(SearchHit hit : response.getHits().getHits()) {
+            String source = hit.getSourceAsString();
+            val doc = elasticSearchJsonMapper.readValue(source, FileCentricDocument.class);
+            docs.add(doc);
+        }
+        return docs;
     }
 
     private List<Analysis> getStudyAnalyses(String studyId) {
         return Arrays.asList(loadJsonFixture(getClass(), studyId +".analysis.json", Analysis[].class));
     }
 
-    // this is needed because the json in elastic is snake case
-    private class CustomSearchResultMapper implements SearchResultMapper {
-        @Override
-        @SneakyThrows
-        public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
-            val docs = new ArrayList<T>();
-            for(SearchHit hit : response.getHits().getHits()) {
-                String source = hit.getSourceAsString();
-                val doc = elasticSearchJsonMapper.readValue(source, clazz);
-                docs.add(doc);
-            }
-            float maxScore = response.getHits().getMaxScore();
-            return new AggregatedPageImpl<>(docs, pageable, response.getHits().getTotalHits(),
-                response.getAggregations(),
-                response.getScrollId(),
-                maxScore);
-        }
-
-        @Override
-        public <T> T mapSearchHit(SearchHit searchHit, Class<T> type) {
-            return null;
-        }
-
-    }
 }
