@@ -206,13 +206,13 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
             .build();
         val retry = Retry.of("deleteByIds", retryConfig);
-        val decorated = Retry.decorateCheckedRunnable(retry, () -> deleteById(ids));
+        val decorated = Retry.decorateCheckedRunnable(retry, () -> doDeleteByIds(ids));
         decorated.run();
         return null;
     }
 
     @SneakyThrows
-    private void deleteById(Set<String> ids) {
+    private void doDeleteByIds(Set<String> ids) {
         log.trace("deleteByIds called, ids {} ", ids);
         val deleteReq = new DeleteByQueryRequest(this.alias);
         deleteReq.setQuery(QueryBuilders.idsQuery().addIds(ids.toArray(new String[]{})));
