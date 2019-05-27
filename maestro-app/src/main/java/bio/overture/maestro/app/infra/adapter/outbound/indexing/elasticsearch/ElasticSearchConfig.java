@@ -86,9 +86,4 @@ public class ElasticSearchConfig {
         return mapper;
     }
 
-//    @Bean
-//    ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
-//        return new ElasticsearchRestTemplate(client);
-//    }
-
 }
