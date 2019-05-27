@@ -28,8 +28,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.http.HttpHost;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -39,9 +41,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.RestClients;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
@@ -99,7 +98,6 @@ class FileCentricElasticSearchAdapterUnavaibilityTest {
     }
 
     @Import({
-        CustomElasticSearchRestAdapter.class,
         FileCentricElasticSearchAdapter.class,
         SnakeCaseJacksonSearchResultMapper.class,
         PropertiesConfig.class
@@ -115,12 +113,8 @@ class FileCentricElasticSearchAdapterUnavaibilityTest {
         @Bean
         RestHighLevelClient mockClient() {
             //this will trigger an IO exception
-            return RestClients.create(ClientConfiguration.create("non-existing:00000")).rest();
-        }
-
-        @Bean
-        ElasticsearchRestTemplate elasticsearchRestTemplate(RestHighLevelClient client) {
-            return new ElasticsearchRestTemplate(client);
+            val restClient = RestClient.builder(new HttpHost("nonexisting", 9201, "http"));
+            return new RestHighLevelClient(restClient);
         }
 
         @Bean(name = ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)

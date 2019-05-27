@@ -305,7 +305,7 @@
         <logback.version>1.2.3</logback.version>
         <reactor.version>3.2.8.RELEASE</reactor.version>
         <spring-data-elasticsearch.version>3.2.0.M2</spring-data-elasticsearch.version>
-        <elasticsearch.version>6.6.1</elasticsearch.version>
+        <elasticsearch.version>7.1.0</elasticsearch.version>
         <mockito-junit-jupiter.version>2.23.4</mockito-junit-jupiter.version>
         <jackson-databind.version>2.9.8</jackson-databind.version>
         <mockito-core.version>2.21.0</mockito-core.version>
