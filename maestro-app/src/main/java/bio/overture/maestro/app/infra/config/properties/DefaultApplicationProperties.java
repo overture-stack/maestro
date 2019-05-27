@@ -58,20 +58,17 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("${maestro.song.timeout_sec.analysis:5}")
     private int songAnalysisCallTimeoutSec;
 
-    @Value("classpath:index.settings.json")
-    private Resource indexSettings;
-
-    @Value("classpath:file_centric.mapping.json")
-    private Resource fileCentricMapping;
+    @Value("classpath:file_centric.json")
+    private Resource fileCentricIndex;
 
     @Value("classpath:${maestro.exclusion_rules.file_name:exclusion-rules.yml}")
     private Resource exclusionRules;
 
     @Value("${maestro.elasticsearch.client.connection_timeout:5000}")
-    private long elasticSearchClientConnectionTimeout;
+    private int elasticSearchClientConnectionTimeout;
 
     @Value("${maestro.elasticsearch.client.socket_timeout:10000}")
-    private long elasticSearchClientSocketTimeout;
+    private int elasticSearchClientSocketTimeout;
 
     @Value("${maestro.elasticsearch.client.retry.max_attempts:3}")
     private int elasticSearchRetryMaxAttempts;
@@ -100,17 +97,12 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public Resource indexSettings() {
-        return this.indexSettings;
-    }
-
-    @Override
-    public long elasticSearchClientConnectionTimeoutMillis() {
+    public int elasticSearchClientConnectionTimeoutMillis() {
         return this.elasticSearchClientConnectionTimeout;
     }
 
     @Override
-    public long elasticSearchClientSocketTimeoutMillis() {
+    public int elasticSearchClientSocketTimeoutMillis() {
         return this.elasticSearchClientSocketTimeout;
     }
 
@@ -120,8 +112,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public Resource fileCentricMapping() {
-        return fileCentricMapping;
+    public Resource fileCentricIndex() {
+        return fileCentricIndex;
     }
 
     @Override

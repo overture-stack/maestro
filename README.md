@@ -28,13 +28,12 @@ by default, that makes searching Analyses and Studies much more powerful and eas
 - lombok
 - Spring boot 2
     - Spring webflux & project reactor
-    - Spring data elasticsearch
     - Spring retry
     - Spring Cloud
         - Streams (for Kafak integration)
         - config client
     - Spring boot admin + client
-- Elasticsearch 6+
+- Elasticsearch 7+
 - Apache Kafka
 - resilience4j:
     - retry module
