@@ -97,7 +97,6 @@ public class IndexingMessagesStreamListener {
                 .repositoryCode(msg.getRepositoryCode())
                 .build())
             .map(out -> new Tuple2<>(msg, out));
-//            .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
     private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
@@ -106,14 +105,6 @@ public class IndexingMessagesStreamListener {
                 .build())
             .map(out -> new Tuple2<>(msg, out))
             .onErrorResume((e) -> catchUnhandledErrors(msg, e));
-    }
-
-    private <T> Mono<Tuple2<T, IndexResult>> doCheckedCall(T msg, Function<T, Mono<Tuple2<T, IndexResult>>> function) {
-        try {
-            return function.apply(msg);
-        } catch (Exception e) {
-            return catchUnhandledErrors(msg, e);
-        }
     }
 
     private <T> Mono<Tuple2<T, IndexResult>> catchUnhandledErrors(T msg, Throwable e) {
