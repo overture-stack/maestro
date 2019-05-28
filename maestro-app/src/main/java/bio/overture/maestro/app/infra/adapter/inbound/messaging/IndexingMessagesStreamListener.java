@@ -25,13 +25,14 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
-import reactor.core.publisher.Flux;
+import org.springframework.messaging.handler.annotation.Payload;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Function;
+
+import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
 @Slf4j
 @EnableBinding(Sink.class)
@@ -43,22 +44,19 @@ public class IndexingMessagesStreamListener {
         this.indexer = indexer;
     }
 
-    @StreamListener
-    public void handleRemoveAnalysisMessage(@Input(Sink.INPUT) Flux<IndexAnalysisMessage> indexAnalysisMessageFlux) {
-        indexAnalysisMessageFlux.flatMap(msg-> this.doCheckedCall(msg, this::indexOrRemoveAnalysis))
-            .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
+    @StreamListener(Sink.INPUT)
+    public void handleAnalysisMessage(@Payload IndexAnalysisMessage indexAnalysisMessage) {
+        handleIndexResult(() -> this.indexOrRemoveAnalysis(indexAnalysisMessage));
     }
 
-    @StreamListener
-    public void handleIndexStudyMessage(@Input(Sink.INPUT) Flux<IndexStudyMessage> indexStudyMessageFlux) {
-        indexStudyMessageFlux.flatMap(msg-> this.doCheckedCall(msg, this::indexStudy))
-            .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
+    @StreamListener(Sink.INPUT)
+    public void handleIndexStudyMessage(@Payload IndexStudyMessage indexStudyMessage) {
+        handleIndexResult(() -> this.indexStudy(indexStudyMessage));
     }
 
-    @StreamListener
-    public void handleIndexRepositoryMessage(@Input(Sink.INPUT) Flux<IndexRepositoryMessage> indexRepoMessageFlux) {
-        indexRepoMessageFlux.flatMap(msg-> this.doCheckedCall(msg, this::indexRepository))
-            .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
+    @StreamListener(Sink.INPUT)
+    public void handleIndexRepositoryMessage(@Payload IndexRepositoryMessage indexRepositoryMessage) {
+        handleIndexResult(() -> this.indexRepository(indexRepositoryMessage));
     }
 
     private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexOrRemoveAnalysis(IndexAnalysisMessage msg) {
@@ -98,8 +96,8 @@ public class IndexingMessagesStreamListener {
                 .studyId(msg.getStudyId())
                 .repositoryCode(msg.getRepositoryCode())
                 .build())
-            .map(out -> new Tuple2<>(msg, out))
-            .onErrorResume((e) -> catchUnhandledErrors(msg, e));
+            .map(out -> new Tuple2<>(msg, out));
+//            .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
     private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
@@ -110,6 +108,14 @@ public class IndexingMessagesStreamListener {
             .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
+    private <T> Mono<Tuple2<T, IndexResult>> doCheckedCall(T msg, Function<T, Mono<Tuple2<T, IndexResult>>> function) {
+        try {
+            return function.apply(msg);
+        } catch (Exception e) {
+            return catchUnhandledErrors(msg, e);
+        }
+    }
+
     private <T> Mono<Tuple2<T, IndexResult>> catchUnhandledErrors(T msg, Throwable e) {
         log.error("failed processing message: {} ", msg, e);
         val indexResult = IndexResult.builder()
@@ -117,15 +123,6 @@ public class IndexingMessagesStreamListener {
             .failureData(FailureData.builder().build())
             .build();
         return Mono.just(new Tuple2<>(msg, indexResult));
-    }
-
-    private <T> Mono<Tuple2<T, IndexResult>>
-        doCheckedCall(T msg, Function<T, Mono<Tuple2<T, IndexResult>>> function) {
-        try {
-            return function.apply(msg);
-        } catch (Exception e) {
-            return catchUnhandledErrors(msg, e);
-        }
     }
 
 }

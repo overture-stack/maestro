@@ -40,45 +40,45 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     final static String MAESTRO_PREFIX = "maestro";
 
-    @Value("${maestro.elasticsearch.cluster_nodes}")
+    @Value("${maestro.elasticsearch.clusterNodes}")
     private List<String> hosts;
 
     @Value("${maestro.elasticsearch.indexes.file_centric.alias:file_centric}")
     private String fileCentricAlias;
 
-    @Value("${maestro.elasticsearch.client.docs_per_bulk_req_max:1000}")
+    @Value("${maestro.elasticsearch.client.docsPerBulkReqMax:1000}")
     private Integer docsPerBulkReqMax;
 
-    @Value("${maestro.song.max_retries:3}")
+    @Value("${maestro.song.maxRetries:3}")
     private Integer songMaxRetries;
 
-    @Value("${maestro.song.timeout_sec.study:10}")
+    @Value("${maestro.song.timeoutSec.study:10}")
     private Integer songStudyCallTimeout;
 
-    @Value("${maestro.song.timeout_sec.analysis:5}")
+    @Value("${maestro.song.timeoutSec.analysis:5}")
     private int songAnalysisCallTimeoutSec;
 
     @Value("classpath:file_centric.json")
     private Resource fileCentricIndex;
 
-    @Value("classpath:${maestro.exclusion_rules.file_name:exclusion-rules.yml}")
+    @Value("classpath:${maestro.exclusionRules.fileName:exclusion-rules.yml}")
     private Resource exclusionRules;
 
-    @Value("${maestro.elasticsearch.client.connection_timeout:5000}")
+    @Value("${maestro.elasticsearch.client.connectionTimeout:5000}")
     private int elasticSearchClientConnectionTimeout;
 
-    @Value("${maestro.elasticsearch.client.socket_timeout:10000}")
+    @Value("${maestro.elasticsearch.client.socketTimeout:10000}")
     private int elasticSearchClientSocketTimeout;
 
-    @Value("${maestro.elasticsearch.client.retry.max_attempts:3}")
+    @Value("${maestro.elasticsearch.client.retry.maxAttempts:3}")
     private int elasticSearchRetryMaxAttempts;
 
-    @Value("${maestro.elasticsearch.client.retry.wait_duration_millis:100}")
+    @Value("${maestro.elasticsearch.client.retry.waitDurationMillis:100}")
     private long elasticSearchRetryWaitDurationMillis;
 
     private List<DefaultPropertiesFileRepository> repositories;
 
-    @Value("${maestro.song.indexable_study_states_csv:PUBLISHED}")
+    @Value("${maestro.song.indexableStudyStatesCsv:PUBLISHED}")
     private String indexableStudyStates;
 
     @Override
