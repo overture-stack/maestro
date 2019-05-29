@@ -76,7 +76,7 @@ To Successfully run Maestro (as is) you need the following services to be deploy
 - [Apache Kafka](https://kafka.apache.org/)
 - [SONG](https://github.com/overture-stack/SONG)
 
-you can check the sample docker compose files under ./run/docker for containerized versions of elastic & kafka.
+you can check the sample docker compose files under `./run/docker-compose` for containerized versions of elastic & kafka.
 for SONG please check the SONG github repo [here](https://github.com/overture-stack/SONG/tree/develop/dev) 
 on how to run it with docker. Or you can run it as jar.
 
@@ -94,7 +94,9 @@ Note: if you don't/can't use the Makefile, look inside it for the shell commands
                 - other helper tools if you want like kafka rest proxy
             2. `make run` OR start maestro (Maestro.java) from the IDE/cmd as a java application
     - Docker:
+        - Repository: https://hub.docker.com/r/overture/maestro
         - `make docker-start` starts maestro from a docker image along with all needed infrastructure
     - helm:
-        - see : https://github.com/overture-stack/helm-charts for instructions and the maestro folder
+        - Repository: https://overture-stack.github.io/charts-server/
+        - see : https://github.com/overture-stack/helm-charts for instructions and the maestro folder for examples
       
