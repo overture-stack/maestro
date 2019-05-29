@@ -1,11 +1,20 @@
 # Maestro
-
 The indexer component of genomic studies metadata.
+
+<p align="center">
+    <a href="https://github.com/overture-stack/maestro">
+        <img alt="Under Development" 
+            title="Under Development" 
+            src="http://www.overture.bio/img/progress-horizontal-UD.svg" width="320" />
+    </a>
+</p>
 
 ## Intro
 Meastro was created to enable genomic researchers to enhance their Overture SONGs by building indexes, elastic search
 by default, that makes searching Analyses and Studies much more powerful and easier.
 
+## TLDR; 
+Skip down to the How to section it has the steps to get started.
 
 ### Features:
 - Supports indexing from multiple metadata repositories (SONG).
@@ -60,6 +69,7 @@ and frameworks.
        - Contains the infrastructure and adapters (ports implementations) that is needed to connect the domain
          with the outside world like elastic search, song web clients, configuration files etc.
          It also has the Spring framework configurations here to keep technologies outside of the domain.
+         
 # Dependencies:
 To Successfully run Maestro (as is) you need the following services to be deployed and configure it to use them:
 - [Elasticsearch](https://www.elastic.co/products/elasticsearch)
@@ -76,13 +86,15 @@ Note: if you don't/can't use the Makefile, look inside it for the shell commands
 - Test: `make test`
 - Package: `make package`
 - Run:
-    - Development:
-        - `make docker-start-dev` starts the infrastructure containers
-            - kafka
-            - elastic search
-            - other helper tools if you want like kafka rest proxy
-        - `make run` OR start maestro (Maestro.java) from the IDE/cmd as a java application
-    - Demo:
-        - `make docker-start` starts meastro from a docker image along with all needed infrastructure
-
-
+    - Source:
+        - Development:
+            1. `make docker-start-dev` starts the infrastructure containers
+                - kafka
+                - elastic search
+                - other helper tools if you want like kafka rest proxy
+            2. `make run` OR start maestro (Maestro.java) from the IDE/cmd as a java application
+    - Docker:
+        - `make docker-start` starts maestro from a docker image along with all needed infrastructure
+    - helm:
+        - see : https://github.com/overture-stack/helm-charts for instructions and the maestro folder
+      
