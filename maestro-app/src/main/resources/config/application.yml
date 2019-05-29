@@ -65,7 +65,7 @@ maestro:
   notifications:
     slack:
       enabled: true
-      # todo: don't commit this
+      # todo: invalidate this url
       url: https://hooks.slack.com/services/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
       channel: maestro-notifications
       username: maestro
