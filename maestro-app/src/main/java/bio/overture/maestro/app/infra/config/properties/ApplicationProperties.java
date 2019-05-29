@@ -27,6 +27,9 @@ import java.util.Map;
  * properties
  */
 public interface ApplicationProperties {
+    String FAILURE_LOG_PROPERTY = "maestro.failureLog.enabled";
+    String MAESTRO_NOTIFICATIONS_SLACK_ENABLED = "maestro.notifications.slack.enabled";
+
     List<String> elasticSearchClusterNodes();
     String fileCentricAlias();
     int maxDocsPerBulkRequest();
