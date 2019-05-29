@@ -7,16 +7,16 @@ maestro:
     timeoutSec:
         study: 100 # some studies take really long, +30 secs, to be downloaded
         analysis: 5
-  exclusionRules:
-    # exclusion rules file name
-    fileName: exclusion-rules.yml
 
   # elastic search server & client props
   elasticsearch:
-    clusterNodes: http://localhost:9200, http://localhost:9201
+    clusterNodes:
+      - http://localhost:9200
+      - http://localhost:9201
     indexes:
-      file_centric:
-        alias: file_centric
+      fileCentric:
+          name: file_centric
+          alias: file_centric
     client:
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
@@ -61,6 +61,22 @@ maestro:
   failureLog:
     enabled: true
     dir: ${user.home}/logs/maestro
+
+  # exclusion rules configs
+  exclusionRules:
+    byId:
+      study:
+        - "test123"
+#      analysis:
+#        - "analysisId"
+#      file:
+#        - 41ba4fb3-9428-50b5-af6c-d779cd59b04d
+#      sample:
+#        - "sampleId"
+#      specimen:
+#        - "specimenId"
+#      donor:
+#        - DO232991
 
 # logging & monitoring
 logging:
@@ -115,3 +131,4 @@ spring:
           group: songConsumerGrp
           consumer:
             maxAttempts: 1
+

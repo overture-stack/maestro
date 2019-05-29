@@ -6,16 +6,24 @@ spring:
 
 maestro:
   exclusionRules:
-    fileName: exclusion-rules-test.yml
+    byId:
+      study:
+        - LIAD-FR
+      donor:
+        - DO52693
   song:
     maxRetries: 3
-    timeout_sec: 5 # some studies take really long, +30 secs, to be downloaded
+    timeoutSec:
+      study: 5
+      analysis: 5
   elasticsearch:
     indexes:
-      file_centric:
+      fileCentric:
+        name: file_centric
         alias: file_centric
     # port injected by the embedded_elasticsearch library
-    clusterNodes: ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}
+    clusterNodes:
+      - ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}
   repositories:
     - code: collab
       # port is injected by @AutoConfigureWireMock in the MaestroIntegrationTest

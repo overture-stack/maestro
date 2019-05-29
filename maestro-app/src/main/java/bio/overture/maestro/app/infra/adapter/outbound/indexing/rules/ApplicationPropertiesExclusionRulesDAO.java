@@ -45,12 +45,11 @@ import static java.text.MessageFormat.format;
 @Slf4j
 public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO {
 
-    private final Resource exclusionRulesResource;
     private Map<Class<?>, List<? extends ExclusionRule>> exclusionRules;
 
     @Inject
     public ApplicationPropertiesExclusionRulesDAO(ApplicationProperties properties) {
-        this.exclusionRulesResource = properties.exclusionRules();
+        this.init(properties.idExclusionRules());
     }
 
     @SneakyThrows
@@ -58,21 +57,15 @@ public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO
         return Mono.just(this.exclusionRules);
     }
 
-    @PostConstruct
-    public void init() throws Exception {
-        val mapper = new ObjectMapper(new YAMLFactory());
+    private void init(Map<String, List<String>> idExclusionRules) {
         try {
-            val ruleConfig = mapper.readValue(this.exclusionRulesResource.getInputStream(), RuleConfig.class);
-
-            if (ruleConfig == null
-                || ruleConfig.getById() == null
-                || ruleConfig.getById().isEmpty()) {
+            if (idExclusionRules == null || idExclusionRules.isEmpty()) {
                 this.exclusionRules = Map.of();
                 return;
             }
 
             val rulesByEntity = new LinkedHashMap<Class<?>, List<? extends ExclusionRule>>();
-            ruleConfig.getById().forEach((entity, ids) -> {
+            idExclusionRules.forEach((entity, ids) -> {
                 if (ids.isEmpty()) return;
                 val entityClass = getClassFor(entity);
                 rulesByEntity.put(entityClass, List.of(IDExclusionRule.builder()
