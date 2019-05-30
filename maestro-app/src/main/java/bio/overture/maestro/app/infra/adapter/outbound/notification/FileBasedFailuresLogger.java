@@ -22,10 +22,11 @@ import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
-import static bio.overture.maestro.app.infra.config.properties.ApplicationProperties.FAILURE_LOG_PROPERTY;
+import static bio.overture.maestro.app.infra.config.properties.ApplicationProperties.FAILURE_LOG_PROP_KEY;
 
 /**
  * This channel will store any failure in an append only log file
@@ -35,12 +36,13 @@ import static bio.overture.maestro.app.infra.config.properties.ApplicationProper
  * the logs go to separate log file. see logback-spring.xml for the configs.
  */
 @Slf4j
-@ConditionalOnProperty(value = FAILURE_LOG_PROPERTY, havingValue = "true")
+@ConditionalOnProperty(value = FAILURE_LOG_PROP_KEY, havingValue = "true")
 public class FileBasedFailuresLogger implements NotificationChannel {
 
     @Override
-    public void send(IndexerNotification notification) {
+    public Mono<Boolean> send(IndexerNotification notification) {
         log.error("{}", notification);
+        return Mono.just(true);
     }
 
     @Override

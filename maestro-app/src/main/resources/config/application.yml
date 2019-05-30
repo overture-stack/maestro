@@ -65,14 +65,20 @@ maestro:
   notifications:
     slack:
       enabled: true
+      # the types to trigger a notification to this channel (see NotificationName.java)
+      notifiedOn:
+        - ALL
       # todo: invalidate this url
       url: https://hooks.slack.com/services/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
-      channel: maestro-notifications
+      channel: argo-maestro-notif
       username: maestro
+
+      maxDataLength: 1000
+      # notifications has two parameters (TYPE [string], DATA[map])
       templates:
-        error: ':bangbang: ##MSG##.'
-        warning: ':warning: ##MSG##.'
-        info: ':information_source: ##MSG##.'
+        error: ':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
+        warning: ':warning: ##TYPE## ```##DATA##```'
+        info: ':information_source: ##TYPE## ```##DATA##```'
 
   # exclusion rules configs
   exclusionRules:

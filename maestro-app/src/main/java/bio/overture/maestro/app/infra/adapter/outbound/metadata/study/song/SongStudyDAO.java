@@ -77,6 +77,7 @@ class SongStudyDAO implements StudyDAO {
      */
     private final int studyCallTimeoutSeconds;
     private final int analysisCallTimeoutSeconds;
+
     @Inject
     public SongStudyDAO(@NonNull WebClient webClient, @NonNull ApplicationProperties applicationProperties) {
         this.webClient = webClient;
@@ -91,7 +92,6 @@ class SongStudyDAO implements StudyDAO {
     }
 
     @Override
-    @NonNull
     public Mono<List<Analysis>> getStudyAnalyses(GetStudyAnalysesCommand getStudyAnalysesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getStudyAnalysesCommand);
         val repoBaseUrl = getStudyAnalysesCommand.getFilesRepositoryBaseUrl();
@@ -99,7 +99,7 @@ class SongStudyDAO implements StudyDAO {
         val analysisListType = new ParameterizedTypeReference<List<Analysis>>(){};
         val retryConfig = Retry.allBut(NotFoundException.class)
             .retryMax(this.songMaxRetries)
-            .doOnRetry(retryCtx -> log.debug("retrying  {}", getStudyAnalysesCommand))
+            .doOnRetry(retryCtx -> log.error("exception happened, retrying  {}", getStudyAnalysesCommand, retryCtx.exception()))
             .exponentialBackoff(Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
         return this.webClient.get()
@@ -114,14 +114,13 @@ class SongStudyDAO implements StudyDAO {
     }
 
     @Override
-    @NonNull
     public Flux<Study> getStudies(@NonNull GetAllStudiesCommand getAllStudiesCommand) {
         log.trace("in getStudyAnalyses, args: {} ", getAllStudiesCommand);
         val repoBaseUrl = getAllStudiesCommand.getFilesRepositoryBaseUrl();
         val StringListType = new ParameterizedTypeReference<List<String>>(){};
         val retryConfig = Retry.allBut(NotFoundException.class)
             .retryMax(this.songMaxRetries)
-            .doOnRetry(retryCtx -> log.debug("retrying  {}", getAllStudiesCommand))
+            .doOnRetry(retryCtx -> log.error("retrying  {}", getAllStudiesCommand, retryCtx.exception()))
             .exponentialBackoff(Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
         return this.webClient.get()
@@ -137,7 +136,6 @@ class SongStudyDAO implements StudyDAO {
     }
 
     @Override
-    @NonNull
     public Mono<Analysis> getAnalysis(@NonNull GetAnalysisCommand command) {
         log.trace("in getAnalysis, args: {} ", command);
         val repoBaseUrl = command.getFilesRepositoryBaseUrl();
@@ -145,7 +143,7 @@ class SongStudyDAO implements StudyDAO {
         val studyId = command.getStudyId();
         val retryConfig = Retry.allBut(NotFoundException.class)
             .retryMax(this.songMaxRetries)
-            .doOnRetry(retryCtx -> log.debug("retrying  {}", command))
+            .doOnRetry(retryCtx -> log.error("exception happened, retrying  {}", command, retryCtx.exception()))
             .exponentialBackoff(Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
         return this.webClient.get()
@@ -163,22 +161,6 @@ class SongStudyDAO implements StudyDAO {
                 }
                 return Mono.just(analysis);
             });
-    }
-
-    @NotNull
-    private Mono<Either<IndexerException, List<Analysis>>>
-        handleGetAnalysesFailure(GetStudyAnalysesCommand getStudyAnalysesCommand,
-                                 @NonNull String studyId, Throwable e) {
-
-        val rootCause = e.getCause() == null ? e : e.getCause();
-        val ex = wrapWithIndexerException(rootCause,
-            format("failed fetching study analysis, command: {0}, retries exhausted",
-                getStudyAnalysesCommand),
-            FailureData.builder()
-                .failingIds(Map.of(STUDY_ID, Set.of(studyId)))
-                .build()
-        );
-        return Mono.just(Either.left(ex));
     }
 
     private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(Retry<Object> retry, Duration timeout) {

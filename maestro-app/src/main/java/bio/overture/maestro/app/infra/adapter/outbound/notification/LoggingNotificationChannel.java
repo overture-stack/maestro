@@ -23,6 +23,7 @@ import bio.overture.maestro.domain.port.outbound.notification.IndexerNotificatio
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.core.annotation.Order;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class LoggingNotificationChannel implements NotificationChannel {
     private static final int MAX_NOTIFICATION_STRING_LENGTH = 1024;
 
     @Override
-    public void send(IndexerNotification notification) {
+    public Mono<Boolean> send(IndexerNotification notification) {
         val notificationString = notification.toString();
         val notificationStringTruncated = notificationString.substring(0,
             Math.min(notificationString.length(), MAX_NOTIFICATION_STRING_LENGTH));
@@ -54,6 +55,8 @@ public class LoggingNotificationChannel implements NotificationChannel {
             default:
                 log.info("{}", notificationStringTruncated);
         }
+
+        return Mono.just(true);
     }
 
     @Override

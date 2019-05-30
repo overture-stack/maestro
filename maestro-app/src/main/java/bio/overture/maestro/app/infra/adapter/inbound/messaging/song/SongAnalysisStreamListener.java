@@ -71,6 +71,7 @@ public class SongAnalysisStreamListener {
             return resultMono.map(indexResult -> new Tuple2<>(msg, indexResult));
         } catch (Exception e) {
             log.error("failed reading message: {} ", msg, e);
+
             return Mono.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
         }
     }

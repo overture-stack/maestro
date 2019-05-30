@@ -428,12 +428,17 @@ class DefaultIndexer implements Indexer {
     }
 
     private Throwable handleFetchAnalysisError(StudyAnalysisRepositoryTuple tuple, Throwable e) {
-        val failureInfo = Map.of(
-            ANALYSIS_ID, Set.of(tuple.getAnalysisId()),
-            STUDY_ID, Set.of(tuple.getStudy().getStudyId()),
-            REPO_CODE, Set.of(tuple.studyRepository.getCode())
+        log.error("failed to fetch analysis", e);
+        val notificationInfo = Map.of(
+            ANALYSIS_ID, tuple.getAnalysisId(),
+            REPO_CODE, tuple.getStudyRepository().getCode(),
+            STUDY_ID, tuple.getStudy().getStudyId(),
+            ERR, e.getMessage()
         );
-        notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_ANALYSIS, failureInfo));
+        val failureInfo = Map.of(
+            ANALYSIS_ID, Set.of(tuple.getAnalysisId())
+        );
+        notifier.notify(new IndexerNotification(NotificationName.FAILED_TO_FETCH_ANALYSIS, notificationInfo));
         return wrapWithIndexerException(e, "failed getting analysis", FailureData.builder()
             .failingIds(
                 failureInfo

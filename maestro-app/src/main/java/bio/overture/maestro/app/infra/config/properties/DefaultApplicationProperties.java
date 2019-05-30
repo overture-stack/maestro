@@ -17,6 +17,8 @@
 
 package bio.overture.maestro.app.infra.config.properties;
 
+import bio.overture.maestro.app.infra.adapter.outbound.notification.Slack;
+import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.entities.indexing.StorageType;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static bio.overture.maestro.app.infra.config.properties.DefaultApplicationProperties.MAESTRO_PREFIX;
 
@@ -111,6 +115,55 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         return this.song.getTimeoutSec().getAnalysis();
     }
 
+    @Override
+    public Slack.SlackChannelInfo getSlackChannelInfo() {
+        return new Slack.SlackChannelInfo() {
+            @Override
+            public String url() {
+                return notifications.getSlack().getUrl();
+            }
+
+            @Override
+            public String channel() {
+                return notifications.getSlack().getChannel();
+            }
+
+            @Override
+            public String username() {
+                return notifications.getSlack().getUsername();
+            }
+
+            @Override
+            public String errorTemplate() {
+                return notifications.getSlack().getTemplates().getError();
+            }
+
+            @Override
+            public String warningTemplate() {
+                return notifications.getSlack().getTemplates().getWarning();
+            }
+
+            @Override
+            public String infoTemplate() {
+                return notifications.getSlack().getTemplates().getInfo();
+            }
+
+            @Override
+            public int maxDataLength() {
+                return notifications.getSlack().getMaxDataLength();
+            }
+
+            @Override
+            public Set<NotificationName> subscriptions() {
+                return notifications.getSlack()
+                    .getNotifiedOn()
+                    .stream()
+                    .map(NotificationName::valueOf)
+                    .collect(Collectors.toUnmodifiableSet());
+            }
+        };
+    }
+
     @Value("classpath:file_centric.json")
     private Resource fileCentricIndex;
 
@@ -118,6 +171,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private Elasticsearch elasticsearch = new Elasticsearch();
     private List<DefaultPropertiesFileRepository> repositories;
     private ExclusionRules exclusionRules = new ExclusionRules();
+    private Notifications notifications = new Notifications();
 
     @Data
     @ToString
@@ -190,14 +244,44 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private int connectionTimeout = 5000;
         private int socketTimeout = 10000;
         private ElasticsearchClientRetry retry = new ElasticsearchClientRetry();
+
+        @Data
+        @ToString
+        @EqualsAndHashCode
+        private static class ElasticsearchClientRetry {
+            private int maxAttempts = 3;
+            private int waitDurationMillis = 100;
+        }
     }
 
     @Data
     @ToString
     @EqualsAndHashCode
-    private static class ElasticsearchClientRetry {
-        private int maxAttempts = 3;
-        private int waitDurationMillis = 100;
+    private static class Notifications {
+        private SlackConfig slack = new SlackConfig();
+
+        @Data
+        @ToString
+        @EqualsAndHashCode
+        private static class SlackConfig {
+            private boolean enabled = false;
+            private String url;
+            private String channel;
+            private String username;
+            private Templates templates = new Templates();
+            private Set<String> notifiedOn = Set.of(NotificationName.ALL.name().toUpperCase());
+            private int maxDataLength = 1000;
+
+            @Data
+            @ToString
+            @EqualsAndHashCode
+            private static class Templates {
+                private static String DEFAULT_TEMPLATE = "##TYPE## ##DATA##";
+                private String error = DEFAULT_TEMPLATE;
+                private String warning = DEFAULT_TEMPLATE;
+                private String info = DEFAULT_TEMPLATE;
+            }
+        }
     }
 
 }
