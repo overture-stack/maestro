@@ -28,9 +28,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
-
-import java.util.function.Function;
 
 import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
@@ -45,22 +44,44 @@ public class IndexingMessagesStreamListener {
     }
 
     @StreamListener(Sink.INPUT)
-    public void handleAnalysisMessage(@Payload IndexAnalysisMessage indexAnalysisMessage) {
-        handleIndexResult(() -> this.indexOrRemoveAnalysis(indexAnalysisMessage));
+    public void handleAnalysisMessage(@Payload IndexMessage indexMessage) {
+        if (isAnalysisReq(indexMessage)) {
+            val indexAnalysisMessage = new IndexAnalysisMessage(indexMessage.getAnalysisId(),
+                indexMessage.getStudyId(),
+                indexMessage.getRepositoryCode(),
+                indexMessage.getRemoveAnalysis());
+            handleIndexResult(() -> this.indexOrRemoveAnalysis(indexAnalysisMessage));
+        } else if (isStudyMsg(indexMessage)) {
+            val indexStudyMessage = new IndexStudyMessage(indexMessage.getStudyId(), indexMessage.getRepositoryCode());
+            handleIndexResult(() -> this.indexStudy(indexStudyMessage));
+        } else if (isRepoMsg(indexMessage)) {
+            val indexRepositoryMessage = new IndexRepositoryMessage(indexMessage.getRepositoryCode());
+            handleIndexResult(() -> this.indexRepository(indexRepositoryMessage));
+        } else {
+            throw new IllegalArgumentException("invalid message format");
+        }
     }
 
-    @StreamListener(Sink.INPUT)
-    public void handleIndexStudyMessage(@Payload IndexStudyMessage indexStudyMessage) {
-        handleIndexResult(() -> this.indexStudy(indexStudyMessage));
+    private boolean isAnalysisReq(IndexMessage indexMessage) {
+        return !StringUtils.isEmpty(indexMessage.getAnalysisId())
+            && !StringUtils.isEmpty(indexMessage.getStudyId())
+            && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
     }
 
-    @StreamListener(Sink.INPUT)
-    public void handleIndexRepositoryMessage(@Payload IndexRepositoryMessage indexRepositoryMessage) {
-        handleIndexResult(() -> this.indexRepository(indexRepositoryMessage));
+    private boolean isStudyMsg(IndexMessage indexMessage) {
+        return StringUtils.isEmpty(indexMessage.getAnalysisId())
+            && !StringUtils.isEmpty(indexMessage.getStudyId())
+            && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
+    }
+
+    private boolean isRepoMsg(IndexMessage indexMessage) {
+        return StringUtils.isEmpty(indexMessage.getAnalysisId())
+            && StringUtils.isEmpty(indexMessage.getStudyId())
+            && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
     }
 
     private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexOrRemoveAnalysis(IndexAnalysisMessage msg) {
-        if (msg.getRemove()) {
+        if (msg.getRemoveAnalysis()) {
             return removeAnalysis(msg);
         } else {
             return indexAnalysis(msg);

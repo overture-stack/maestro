@@ -1,9 +1,6 @@
 server.port:
   50000
 
-spring:
-  output.ansi.enabled: ALWAYS
-
 maestro:
   exclusionRules:
     byId:
@@ -24,6 +21,21 @@ maestro:
     # port injected by the embedded_elasticsearch library
     clusterNodes:
       - ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}
+  notifications:
+    slack:
+      enabled: true
+      # the types to trigger a notification to this channel (see NotificationName.java)
+      notifiedOn:
+        - ALL
+      url: http://localhost:${wiremock.server.port}/slack
+      channel: maestro-test
+      username: maestro
+      # notifications has two parameters (TYPE [string], DATA[map])
+      templates:
+        error: ':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
+        warning: ':warning: ##TYPE## ```##DATA##```'
+        info: ':information_source: ##TYPE## ```##DATA##```'
+
   repositories:
     - code: collab
       # port is injected by @AutoConfigureWireMock in the MaestroIntegrationTest
@@ -49,3 +61,36 @@ logging:
   level:
     root: INFO
     bio.overture: INFO
+
+spring:
+  output.ansi.enabled: ALWAYS
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${embedded.kafka.brokerList}
+        bindings:
+          song-input:
+            consumer:
+              enableDlq: true
+              dlqName: maestro_song_analysis_dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+          input:
+            consumer:
+              enableDlq: true
+              dlqName: maestro_requests_dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+      bindings:
+        input:
+          # we don't specify content type because @StreamListener will handle that
+          destination: maestro_index_requests
+          group: requestsConsumerGrp
+          consumer:
+            maxAttempts: 1
+        song-input:
+          destination: song-analysis
+          group: songConsumerGrp
+          consumer:
+            maxAttempts: 1

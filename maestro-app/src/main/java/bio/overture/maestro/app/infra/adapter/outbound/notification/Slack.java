@@ -21,6 +21,7 @@ import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.NotificationChannel;
 import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,6 +31,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +53,7 @@ public class Slack implements NotificationChannel {
     }
 
     @Override
-    public Mono<Boolean> send(IndexerNotification notification) {
+    public Mono<Boolean> send(@NonNull IndexerNotification notification) {
         var template = this.slackChannelInfo.infoTemplate();
         switch (notification.getNotificationName().getCategory()) {
             case ERROR:
@@ -80,6 +82,7 @@ public class Slack implements NotificationChannel {
             .body(BodyInserters.fromObject(payload))
             .retrieve()
             .bodyToMono(String.class)
+            .timeout(Duration.ofSeconds(3L))
             .map((ignored) -> true)
             .onErrorResume(e -> {
                 log.error("failed to send message to slack", e);

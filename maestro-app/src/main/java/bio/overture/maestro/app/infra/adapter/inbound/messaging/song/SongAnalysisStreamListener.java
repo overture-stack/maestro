@@ -45,6 +45,7 @@ public class SongAnalysisStreamListener {
 
     @StreamListener(SongAnalysisSink.NAME)
     public void handleMessage(@Payload AnalysisMessage analysisMessage) {
+        log.info("received message : {}", analysisMessage);
         handleIndexResult(() -> this.doHandle(analysisMessage));
     }
 

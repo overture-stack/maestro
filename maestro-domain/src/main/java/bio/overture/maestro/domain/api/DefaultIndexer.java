@@ -58,8 +58,9 @@ class DefaultIndexer implements Indexer {
     static final String STUDY_ID = "studyId";
     static final String REPO_CODE = "repoCode";
     static final String ANALYSIS_ID = "analysisId";
+    static final String ERR = "err";
+
     private static final String REPO_URL = "repoUrl";
-    private static final String ERR = "err";
     private static final String FAILURE_DATA = "failureData";
     private static final String CONFLICTS = "conflicts";
 

@@ -149,6 +149,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.playtika.testcontainers</groupId>
+            <artifactId>embedded-kafka</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-contract-wiremock</artifactId>
             <scope>test</scope>

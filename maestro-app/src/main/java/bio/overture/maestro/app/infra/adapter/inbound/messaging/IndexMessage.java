@@ -17,19 +17,19 @@
 
 package bio.overture.maestro.app.infra.adapter.inbound.messaging;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.Value;
 
-@Getter
+@Value
 @ToString
 @AllArgsConstructor
-class IndexAnalysisMessage {
-    @NonNull
+class IndexMessage {
     private String analysisId;
-    @NonNull
     private String studyId;
     @NonNull
     private String repositoryCode;
-
     /** if callers set this flag it will do a remove instead of add.*/
     private Boolean removeAnalysis = false;
 }

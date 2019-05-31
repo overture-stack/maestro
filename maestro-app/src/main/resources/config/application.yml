@@ -64,15 +64,13 @@ maestro:
 
   notifications:
     slack:
-      enabled: true
+      enabled: false
       # the types to trigger a notification to this channel (see NotificationName.java)
       notifiedOn:
         - ALL
-      # todo: invalidate this url
-      url: https://hooks.slack.com/services/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
-      channel: argo-maestro-notif
+      url: https://hooks.slack.com/services/SECRET_TOKEN
+      channel: maestro-alerts
       username: maestro
-
       maxDataLength: 1000
       # notifications has two parameters (TYPE [string], DATA[map])
       templates:
@@ -134,7 +132,7 @@ spring:
           input:
             consumer:
               enableDlq: true
-              dlqName: maestro_requests_dlq
+              dlqName: maestro_index_requests_dlq
               autoCommitOnError: true
               autoCommitOffset: true
       bindings:
