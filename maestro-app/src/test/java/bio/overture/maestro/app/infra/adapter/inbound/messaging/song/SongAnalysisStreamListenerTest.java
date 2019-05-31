@@ -24,6 +24,7 @@ import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +45,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 
+@Disabled
 @Ignore
 @SpringBootTest(
     properties = {
