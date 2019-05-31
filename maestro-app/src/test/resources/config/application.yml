@@ -5,18 +5,25 @@ spring:
   output.ansi.enabled: ALWAYS
 
 maestro:
-  exclusion_rules:
-    file_name: exclusion-rules-test.yml
+  exclusionRules:
+    byId:
+      study:
+        - LIAD-FR
+      donor:
+        - DO52693
   song:
-    max_retries: 3
-    timeout_sec: 5 # some studies take really long, +30 secs, to be downloaded
-    indexable_study_status: PUBLISHED
+    maxRetries: 3
+    timeoutSec:
+      study: 5
+      analysis: 5
   elasticsearch:
     indexes:
-      file_centric:
+      fileCentric:
+        name: file_centric
         alias: file_centric
     # port injected by the embedded_elasticsearch library
-    cluster_nodes: ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}
+    clusterNodes:
+      - ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}
   repositories:
     - code: collab
       # port is injected by @AutoConfigureWireMock in the MaestroIntegrationTest
@@ -32,7 +39,7 @@ maestro:
       name: aws repo
       organization: ICGC
       country: US
-  failure_log:
+  failureLog:
     enabled: true
     dir: /tmp/logs/maestro
 # logging & monitoring

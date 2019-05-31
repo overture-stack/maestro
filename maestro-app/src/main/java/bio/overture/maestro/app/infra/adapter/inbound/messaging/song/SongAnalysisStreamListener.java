@@ -22,12 +22,14 @@ import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
 import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.RemoveAnalysisCommand;
+import io.vavr.Tuple2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
-import reactor.core.publisher.Flux;
+import org.springframework.messaging.handler.annotation.Payload;
 import reactor.core.publisher.Mono;
+
+import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
 @Slf4j
 @EnableBinding(SongAnalysisSink.class)
@@ -41,12 +43,12 @@ public class SongAnalysisStreamListener {
         this.indexer = indexer;
     }
 
-    @StreamListener
-    public void handleMessage(@Input(SongAnalysisSink.NAME) Flux<AnalysisMessage> analysisMessageFlux) {
-        analysisMessageFlux.subscribe(this::doHandle);
+    @StreamListener(SongAnalysisSink.NAME)
+    public void handleMessage(@Payload AnalysisMessage analysisMessage) {
+        handleIndexResult(() -> this.doHandle(analysisMessage));
     }
 
-    private void doHandle(AnalysisMessage msg) {
+    private Mono<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
         Mono<IndexResult> resultMono;
         try {
             if (msg.getState().equals(PUBLISHED)) {
@@ -66,13 +68,10 @@ public class SongAnalysisStreamListener {
                         .build()
                     ).build());
             }
-            resultMono.onErrorResume((e) -> {
-                log.error("failed reading message: {} ", msg, e);
-                return Mono.empty();
-            }).subscribe(indexResult -> log.info(" processed message : {} success : {}",
-                msg, indexResult.isSuccessful()));
+            return resultMono.map(indexResult -> new Tuple2<>(msg, indexResult));
         } catch (Exception e) {
             log.error("failed reading message: {} ", msg, e);
+            return Mono.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
         }
     }
 }

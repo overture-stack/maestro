@@ -2,36 +2,31 @@ server:
   port: 11235
 
 maestro:
-  kafka:
-    broker: localhost:9092
-    indexing_topic: maestro_index_requests
   song:
-    kafka:
-      analysis-topic: song-analysis
-    max_retries: 3
-    timeout_sec:
+    maxRetries: 3
+    timeoutSec:
         study: 100 # some studies take really long, +30 secs, to be downloaded
         analysis: 5
-  exclusion_rules:
-    # exclusion rules file name
-    file_name: exclusion-rules.yml
 
   # elastic search server & client props
   elasticsearch:
-    cluster_nodes: http://localhost:9200, http://localhost:9201
+    clusterNodes:
+      - http://localhost:9200
+      - http://localhost:9201
     indexes:
-      file_centric:
-        alias: file_centric
+      fileCentric:
+          name: file_centric
+          alias: file_centric
     client:
       # this is to control the number of documents per bulk request in elasticsearch
-      docs_per_bulk_req_max: 5000
+      docsPerBulkReqMax: 5000
       # max time to wait for a connection to be established
-      connection_timeout: 5000
+      connectionTimeout: 5000
       # max time to wait on idle connection (no data flow)
-      socket_timeout: 10000
+      socketTimeout: 10000
       retry:
-        max_attempts: 3
-        wait_duration_millis: 500
+        maxAttempts: 3
+        waitDurationMillis: 500
 
   # Genome file repositories props
   repositories:
@@ -63,9 +58,25 @@ maestro:
       country: US
 
   # last resort fallback file system log in case of retries exhaustion.
-  failure_log:
+  failureLog:
     enabled: true
     dir: ${user.home}/logs/maestro
+
+  # exclusion rules configs
+  exclusionRules:
+    byId:
+      study:
+        - "test123"
+#      analysis:
+#        - "analysisId"
+#      file:
+#        - 41ba4fb3-9428-50b5-af6c-d779cd59b04d
+#      sample:
+#        - "sampleId"
+#      specimen:
+#        - "specimenId"
+#      donor:
+#        - DO232991
 
 # logging & monitoring
 logging:
@@ -74,7 +85,7 @@ logging:
     bio.overture: TRACE
     # very verbose class, only enable lower level when necessary
     bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
-    org.apache.kafka.clients: WARN
+    org.apache.kafka.clients: INFO
 
 # spring boot actuator endpoints
 management:
@@ -94,11 +105,30 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: ${maestro.kafka.broker}
+          brokers: localhost:9092
+        bindings:
+          song-input:
+            consumer:
+              enableDlq: true
+              dlqName: maestro_song_analysis_dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+          input:
+            consumer:
+              enableDlq: true
+              dlqName: maestro_requests_dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
       bindings:
         input:
           # we don't specify content type because @StreamListener will handle that
-          destination: ${maestro.kafka.indexing_topic}
+          destination: maestro_index_requests
+          group: requestsConsumerGrp
+          consumer:
+            maxAttempts: 1
         song-input:
-          # we don't specify content type because @StreamListener will handle that
-          destination: ${maestro.song.kafka.analysis-topic}
+          destination: song-analysis
+          group: songConsumerGrp
+          consumer:
+            maxAttempts: 1
+

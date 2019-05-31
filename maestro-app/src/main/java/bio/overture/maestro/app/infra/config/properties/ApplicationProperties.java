@@ -20,6 +20,7 @@ package bio.overture.maestro.app.infra.config.properties;
 import org.springframework.core.io.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Abstraction for application properties, implementations should return deep copy to avoid mutating the original
@@ -33,7 +34,7 @@ public interface ApplicationProperties {
     int elasticSearchClientSocketTimeoutMillis();
     List<PropertiesFileRepository> repositories();
     Resource fileCentricIndex();
-    Resource exclusionRules();
+    Map<String, List<String>> idExclusionRules();
     int songMaxRetries();
     int songStudyCallTimeoutSeconds();
     long elasticSearchRetryWaitDurationMillis();
