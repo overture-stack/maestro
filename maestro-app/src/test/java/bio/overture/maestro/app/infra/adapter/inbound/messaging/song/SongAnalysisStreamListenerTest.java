@@ -22,6 +22,8 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
 import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.api.message.RemoveAnalysisCommand;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -52,11 +54,10 @@ class SongAnalysisStreamListenerTest {
     @Autowired
     SongAnalysisSink sink;
 
-    private String analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
-        "\"songServerId\": \"collab\", \"state\": \"PUBLISHED\" }";
-
     @Test
     void shouldIndexOnAnalysisPublishedMessage() throws Exception {
+        val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
+            "\"songServerId\": \"collab\", \"state\": \"PUBLISHED\" }";
         when(indexer.indexAnalysis(any())).thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
         sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
         Thread.sleep(2000);
@@ -71,6 +72,23 @@ class SongAnalysisStreamListenerTest {
         );
     }
 
+    @Test
+    void shouldRemoveOnAnalysisSuppressedMessage() throws Exception {
+        val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
+            "\"songServerId\": \"collab\", \"state\": \"SUPPRESSED\" }";
+        when(indexer.removeAnalysis(any())).thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
+        sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
+        Thread.sleep(2000);
+        then(indexer).should(times(1)).removeAnalysis(eq(RemoveAnalysisCommand.builder()
+                .analysisIdentifier(AnalysisIdentifier.builder()
+                    .studyId("PEME-CA")
+                    .analysisId("EGAZ00001254368")
+                    .repositoryCode("collab")
+                    .build())
+                .build()
+            )
+        );
+    }
 
     /*
      * This is needed or you will get :
