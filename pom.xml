@@ -238,13 +238,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>com.playtika.testcontainers</groupId>
-                <artifactId>embedded-kafka</artifactId>
-                <version>${playtika-embedded-containers.version}</version>
-                <scope>test</scope>
-            </dependency>
-
             <!-- /testcontainers -->
 
             <dependency>
