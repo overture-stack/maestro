@@ -234,7 +234,7 @@
             <dependency>
                 <groupId>com.playtika.testcontainers</groupId>
                 <artifactId>embedded-elasticsearch</artifactId>
-                <version>${embedded-elasticsearch.version}</version>
+                <version>${playtika-embedded-containers.version}</version>
                 <scope>test</scope>
             </dependency>
 
@@ -306,7 +306,7 @@
         <junit-platform.version>1.4.0</junit-platform.version>
         <spring-boot-admin-starter-client.version>2.1.3</spring-boot-admin-starter-client.version>
         <jackson-dataformat-yaml.version>2.3.0</jackson-dataformat-yaml.version>
-        <embedded-elasticsearch.version>1.19</embedded-elasticsearch.version>
+        <playtika-embedded-containers.version>1.19</playtika-embedded-containers.version>
         <reactor-logback.version>${reactor-extra.version}</reactor-logback.version>
         <resilience4j.version>0.14.1</resilience4j.version>
         <reactor-extra.version>3.2.2.RELEASE</reactor-extra.version>

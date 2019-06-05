@@ -62,6 +62,22 @@ maestro:
     enabled: true
     dir: ${user.home}/logs/maestro
 
+  notifications:
+    slack:
+      enabled: false
+      # the types to trigger a notification to this channel (see NotificationName.java)
+      notifiedOn:
+        - ALL
+      url: https://hooks.slack.com/services/SECRET_TOKEN
+      channel: maestro-alerts
+      username: maestro
+      maxDataLength: 1000
+      # notifications has two parameters (TYPE [string], DATA[map])
+      templates:
+        error: ':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
+        warning: ':warning: ##TYPE## ```##DATA##```'
+        info: ':information_source: ##TYPE## ```##DATA##```'
+
   # exclusion rules configs
   exclusionRules:
     byId:
@@ -116,7 +132,7 @@ spring:
           input:
             consumer:
               enableDlq: true
-              dlqName: maestro_requests_dlq
+              dlqName: maestro_index_requests_dlq
               autoCommitOnError: true
               autoCommitOffset: true
       bindings:

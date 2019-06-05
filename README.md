@@ -20,7 +20,9 @@ Skip down to the How to section it has the steps to get started.
 - Supports indexing from multiple metadata repositories (SONG).
 - Multiple indexing requests: analysis, study, full repository.
 - Event driven indexing.
+    - Integration with SONG to index published analysis and delete suppressed / unpublished analyses
 - Ability to Exclude analysis based on different Ids: Study, Analysis, Donor, Sample Or file.
+- Slack web hook integration
 
 ### Design Goals:
 - Reactive
@@ -28,6 +30,8 @@ Skip down to the How to section it has the steps to get started.
     - Elastic
     - Resiliency & Fault tolerance
 - Failure audit
+    - Dead letters queue for faulty messages to be retried later and reviewed.
+    - Human readable Error log
 - Runtime configurability
 - Extendable: separate domain from infrastructure & configuration
 
@@ -64,7 +68,7 @@ and frameworks.
           - api: the logic that fulfills the business features
           - ports: contains the interfaces needed by the api to communicate with anything outside the indexing context.
 
-    - mastro app:
+    - maestro app:
        - The main runnable (spring boot app)
        - Contains the infrastructure and adapters (ports implementations) that is needed to connect the domain
          with the outside world like elastic search, song web clients, configuration files etc.

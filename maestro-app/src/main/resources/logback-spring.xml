@@ -17,7 +17,7 @@
   -->
 
 <configuration debug="true">
-    <springProperty name="failure-log-path" source="maestro.failure-log.dir"/>
+    <springProperty name="failure-log-path" source="maestro.failureLog.dir"/>
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
     <!-- The underlying appender will be the standard console one. -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">

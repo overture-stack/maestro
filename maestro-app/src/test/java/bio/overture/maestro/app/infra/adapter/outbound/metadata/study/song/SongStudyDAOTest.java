@@ -83,14 +83,7 @@ class SongStudyDAOTest {
             .studyId("PEME-CA")
             .analysisId(analysisId)
             .build();
-        val expectedException = wrapWithIndexerException(new RetryExhaustedException(),
-            format("failed fetching study analysis, command: {0}, retries exhausted",
-                command),
-            FailureData.builder()
-                .failingIds(Map.of(STUDY_ID, Set.of("PEME-CA")))
-                .build()
-        );
-        val expectedResult = Either.<IndexerException, List<Analysis>>left(expectedException);
+
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
                 .willReturn(aResponse()
@@ -191,14 +184,6 @@ class SongStudyDAOTest {
             .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
             .studyId("PEME-CA")
             .build();
-        val expectedException = wrapWithIndexerException(new RetryExhaustedException(),
-            format("failed fetching study analysis, command: {0}, retries exhausted",
-                command),
-            FailureData.builder()
-                .failingIds(Map.of(STUDY_ID, Set.of("PEME-CA")))
-                .build()
-        );
-        val expectedResult = Either.<IndexerException, List<Analysis>>left(expectedException);
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .willReturn(aResponse()

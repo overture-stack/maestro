@@ -45,6 +45,7 @@ public class SongAnalysisStreamListener {
 
     @StreamListener(SongAnalysisSink.NAME)
     public void handleMessage(@Payload AnalysisMessage analysisMessage) {
+        log.info("received message : {}", analysisMessage);
         handleIndexResult(() -> this.doHandle(analysisMessage));
     }
 
@@ -71,6 +72,7 @@ public class SongAnalysisStreamListener {
             return resultMono.map(indexResult -> new Tuple2<>(msg, indexResult));
         } catch (Exception e) {
             log.error("failed reading message: {} ", msg, e);
+
             return Mono.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
         }
     }

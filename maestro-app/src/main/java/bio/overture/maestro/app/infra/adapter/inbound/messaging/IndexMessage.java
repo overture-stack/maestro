@@ -15,19 +15,21 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package bio.overture.maestro.domain.api;
+package bio.overture.maestro.app.infra.adapter.inbound.messaging;
 
-import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import reactor.core.publisher.Mono;
+import lombok.ToString;
+import lombok.Value;
 
-import java.util.Set;
-
-/**
- * A channel is an abstraction of the technology infrastructure
- * that this notification will be delivered through, can be email, web api call, filesystem or anything.
- */
-public interface NotificationChannel {
-    Mono<Boolean> send(@NonNull IndexerNotification notification);
-    Set<NotificationName> subscriptions();
+@Value
+@ToString
+@AllArgsConstructor
+class IndexMessage {
+    private String analysisId;
+    private String studyId;
+    @NonNull
+    private String repositoryCode;
+    /** if callers set this flag it will do a remove instead of add.*/
+    private Boolean removeAnalysis = false;
 }

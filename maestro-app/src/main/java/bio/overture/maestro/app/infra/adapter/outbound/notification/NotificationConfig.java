@@ -24,5 +24,6 @@ import org.springframework.context.annotation.Import;
 @Import({
     LoggingNotificationChannel.class,
     FileBasedFailuresLogger.class,
+    Slack.class,
 })
 public class NotificationConfig {}
