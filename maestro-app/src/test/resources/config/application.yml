@@ -61,36 +61,3 @@ logging:
   level:
     root: INFO
     bio.overture: INFO
-
-spring:
-  output.ansi.enabled: ALWAYS
-  cloud:
-    stream:
-      kafka:
-        binder:
-          brokers: ${embedded.kafka.brokerList}
-        bindings:
-          song-input:
-            consumer:
-              enableDlq: true
-              dlqName: maestro_song_analysis_dlq
-              autoCommitOnError: true
-              autoCommitOffset: true
-          input:
-            consumer:
-              enableDlq: true
-              dlqName: maestro_requests_dlq
-              autoCommitOnError: true
-              autoCommitOffset: true
-      bindings:
-        input:
-          # we don't specify content type because @StreamListener will handle that
-          destination: maestro_index_requests
-          group: requestsConsumerGrp
-          consumer:
-            maxAttempts: 1
-        song-input:
-          destination: song-analysis
-          group: songConsumerGrp
-          consumer:
-            maxAttempts: 1
