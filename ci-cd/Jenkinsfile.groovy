@@ -122,28 +122,6 @@ spec:
             }
         }
 
-       /*
-        * Release & Delivery
-        */
-        stage('Deploy QA') {
-            when {
-                branch "rc/${version}-${commit}"
-            }
-            steps {
-                container('helm') {
-                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'KUBECONFIG')]) {
-                        sh 'helm init --client-only'
-                        sh "helm ls --kubeconfig $KUBECONFIG"
-                        sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
-                        sh """
-                            helm upgrade --kubeconfig $KUBECONFIG --install --namespace=overture-qa maestro-qa \\
-                            overture/maestro -f ci-cd/chart-values/values.qa.yaml --set image.tag=${version}.${commit}
-                           """
-                    }
-                }
-            }
-        }
-
         stage('Release') {
             when {
                 branch "master"
@@ -167,24 +145,6 @@ spec:
             }
         }
 
-        stage('Deploy Production') {
-            when {
-                branch "master"
-            }
-            steps {
-                container('helm') {
-                    withCredentials([file(credentialsId:'4ed1e45c-b552-466b-8f86-729402993e3b', variable: 'KUBECONFIG')]) {
-                        sh 'helm init --client-only'
-                        sh "helm ls --kubeconfig $KUBECONFIG"
-                        sh 'helm repo add overture  https://overture-stack.github.io/charts-server/'
-                        sh """
-                            helm upgrade --kubeconfig $KUBECONFIG --install --namespace=overture-staging maestro-pr \\
-                            overture/maestro -f ci-cd/chart-values/values.pr.yaml --set image.tag=${version}
-                           """
-                    }
-                }
-            }
-        }
     }
 
     post {

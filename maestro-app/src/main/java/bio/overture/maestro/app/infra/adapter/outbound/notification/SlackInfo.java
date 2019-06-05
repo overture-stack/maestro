@@ -15,19 +15,6 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package bio.overture.maestro.domain.api;
+package bio.overture.maestro.app.infra.adapter.outbound.notification;
 
-import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
-import lombok.NonNull;
-import reactor.core.publisher.Mono;
 
-import java.util.Set;
-
-/**
- * A channel is an abstraction of the technology infrastructure
- * that this notification will be delivered through, can be email, web api call, filesystem or anything.
- */
-public interface NotificationChannel {
-    Mono<Boolean> send(@NonNull IndexerNotification notification);
-    Set<NotificationName> subscriptions();
-}

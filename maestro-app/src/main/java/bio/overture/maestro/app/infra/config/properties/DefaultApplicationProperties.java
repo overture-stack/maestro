@@ -17,6 +17,8 @@
 
 package bio.overture.maestro.app.infra.config.properties;
 
+import bio.overture.maestro.app.infra.adapter.outbound.notification.Slack;
+import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.entities.indexing.StorageType;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,11 +27,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static bio.overture.maestro.app.infra.config.properties.DefaultApplicationProperties.MAESTRO_PREFIX;
 
 /**
- * This abstracts the application from the underlaying property source
+ * This abstracts the application from the underlying property source
  * and allows for easier testability by mocking/proxying to this class if needed.
  */
 @Component
@@ -40,70 +45,39 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     final static String MAESTRO_PREFIX = "maestro";
 
-    @Value("${maestro.elasticsearch.cluster_nodes}")
-    private List<String> hosts;
-
-    @Value("${maestro.elasticsearch.indexes.file_centric.alias:file_centric}")
-    private String fileCentricAlias;
-
-    @Value("${maestro.elasticsearch.client.docs_per_bulk_req_max:1000}")
-    private Integer docsPerBulkReqMax;
-
-    @Value("${maestro.song.max_retries:3}")
-    private Integer songMaxRetries;
-
-    @Value("${maestro.song.timeout_sec.study:10}")
-    private Integer songStudyCallTimeout;
-
-    @Value("${maestro.song.timeout_sec.analysis:5}")
-    private int songAnalysisCallTimeoutSec;
-
-    @Value("classpath:file_centric.json")
-    private Resource fileCentricIndex;
-
-    @Value("classpath:${maestro.exclusion_rules.file_name:exclusion-rules.yml}")
-    private Resource exclusionRules;
-
-    @Value("${maestro.elasticsearch.client.connection_timeout:5000}")
-    private int elasticSearchClientConnectionTimeout;
-
-    @Value("${maestro.elasticsearch.client.socket_timeout:10000}")
-    private int elasticSearchClientSocketTimeout;
-
-    @Value("${maestro.elasticsearch.client.retry.max_attempts:3}")
-    private int elasticSearchRetryMaxAttempts;
-
-    @Value("${maestro.elasticsearch.client.retry.wait_duration_millis:100}")
-    private long elasticSearchRetryWaitDurationMillis;
-
-    private List<DefaultPropertiesFileRepository> repositories;
-
-    @Value("${maestro.song.indexable_study_states_csv:PUBLISHED}")
-    private String indexableStudyStates;
-
     @Override
     public List<String> elasticSearchClusterNodes() {
-        return List.copyOf(this.hosts);
+        return List.copyOf(this.elasticsearch.getClusterNodes());
     }
 
     @Override
     public String fileCentricAlias() {
-        return this.fileCentricAlias;
+        return this.elasticsearch.getIndexes().getFileCentric().getAlias();
     }
 
     @Override
     public int maxDocsPerBulkRequest() {
-        return this.docsPerBulkReqMax;
+        return this.elasticsearch.getClient().getDocsPerBulkReqMax();
     }
 
     @Override
     public int elasticSearchClientConnectionTimeoutMillis() {
-        return this.elasticSearchClientConnectionTimeout;
+        return this.elasticsearch.getClient().getConnectionTimeout();
     }
 
     @Override
     public int elasticSearchClientSocketTimeoutMillis() {
-        return this.elasticSearchClientSocketTimeout;
+        return this.elasticsearch.getClient().getSocketTimeout();
+    }
+
+    @Override
+    public long elasticSearchRetryWaitDurationMillis() {
+        return this.elasticsearch.getClient().getRetry().getWaitDurationMillis();
+    }
+
+    @Override
+    public int elasticSearchRetryMaxAttempts() {
+        return this.elasticsearch.getClient().getRetry().getMaxAttempts();
     }
 
     @Override
@@ -117,46 +91,93 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
-    public Resource exclusionRules() {
-        return exclusionRules;
+    public Map<String, List<String>> idExclusionRules() {
+        return Map.copyOf(this.exclusionRules.getById());
     }
 
     @Override
     public int songMaxRetries() {
-        return songMaxRetries;
+        return this.song.getMaxRetries();
     }
 
     @Override
     public int songStudyCallTimeoutSeconds() {
-        return songStudyCallTimeout;
-    }
-
-    @Override
-    public long elasticSearchRetryWaitDurationMillis() {
-        return elasticSearchRetryWaitDurationMillis;
-    }
-
-    @Override
-    public int elasticSearchRetryMaxAttempts() {
-        return elasticSearchRetryMaxAttempts;
+        return this.song.getTimeoutSec().getStudy();
     }
 
     @Override
     public String indexableStudyStatuses() {
-        return indexableStudyStates;
+        return this.song.getIndexableStudyStatesCsv();
     }
 
     @Override
     public int songAnalysisCallTimeoutSeconds() {
-        return songAnalysisCallTimeoutSec;
+        return this.song.getTimeoutSec().getAnalysis();
     }
+
+    @Override
+    public Slack.SlackChannelInfo getSlackChannelInfo() {
+        return new Slack.SlackChannelInfo() {
+            @Override
+            public String url() {
+                return notifications.getSlack().getUrl();
+            }
+
+            @Override
+            public String channel() {
+                return notifications.getSlack().getChannel();
+            }
+
+            @Override
+            public String username() {
+                return notifications.getSlack().getUsername();
+            }
+
+            @Override
+            public String errorTemplate() {
+                return notifications.getSlack().getTemplates().getError();
+            }
+
+            @Override
+            public String warningTemplate() {
+                return notifications.getSlack().getTemplates().getWarning();
+            }
+
+            @Override
+            public String infoTemplate() {
+                return notifications.getSlack().getTemplates().getInfo();
+            }
+
+            @Override
+            public int maxDataLength() {
+                return notifications.getSlack().getMaxDataLength();
+            }
+
+            @Override
+            public Set<NotificationName> subscriptions() {
+                return notifications.getSlack()
+                    .getNotifiedOn()
+                    .stream()
+                    .map(NotificationName::valueOf)
+                    .collect(Collectors.toUnmodifiableSet());
+            }
+        };
+    }
+
+    @Value("classpath:file_centric.json")
+    private Resource fileCentricIndex;
+
+    private Song song = new Song();
+    private Elasticsearch elasticsearch = new Elasticsearch();
+    private List<DefaultPropertiesFileRepository> repositories;
+    private ExclusionRules exclusionRules = new ExclusionRules();
+    private Notifications notifications = new Notifications();
 
     @Data
     @ToString
     @EqualsAndHashCode
     private static class DefaultPropertiesFileRepository
         implements PropertiesFileRepository {
-
         private String name;
         private String code;
         private String url;
@@ -165,7 +186,102 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private String organization;
         private String country;
         private StorageType storageType = StorageType.S3;
+    }
 
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class Song {
+        private SongTimeouts timeoutSec = new SongTimeouts();
+        private int maxRetries = 3;
+        private String indexableStudyStatesCsv = "PUBLISHED";
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class SongTimeouts {
+        private int study = 20;
+        private int analysis = 5;
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class ExclusionRules {
+        Map<String, List<String>> byId = Map.of();
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class Elasticsearch {
+        private List<String> clusterNodes = List.of("localhost:9200");
+        private Indexes indexes = new Indexes();
+        private ElasticsearchClient client = new ElasticsearchClient();
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class Indexes {
+        private FileCentricIndex fileCentric = new FileCentricIndex();
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class FileCentricIndex {
+        private String name = "file_centric";
+        private String alias = "file_centric";
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class ElasticsearchClient {
+        private int docsPerBulkReqMax = 1000;
+        private int connectionTimeout = 5000;
+        private int socketTimeout = 10000;
+        private ElasticsearchClientRetry retry = new ElasticsearchClientRetry();
+
+        @Data
+        @ToString
+        @EqualsAndHashCode
+        private static class ElasticsearchClientRetry {
+            private int maxAttempts = 3;
+            private int waitDurationMillis = 100;
+        }
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class Notifications {
+        private SlackConfig slack = new SlackConfig();
+
+        @Data
+        @ToString
+        @EqualsAndHashCode
+        private static class SlackConfig {
+            private boolean enabled = false;
+            private String url;
+            private String channel;
+            private String username;
+            private Templates templates = new Templates();
+            private Set<String> notifiedOn = Set.of(NotificationName.ALL.name().toUpperCase());
+            private int maxDataLength = 1000;
+
+            @Data
+            @ToString
+            @EqualsAndHashCode
+            private static class Templates {
+                private static String DEFAULT_TEMPLATE = "##TYPE## ##DATA##";
+                private String error = DEFAULT_TEMPLATE;
+                private String warning = DEFAULT_TEMPLATE;
+                private String info = DEFAULT_TEMPLATE;
+            }
+        }
     }
 
 }

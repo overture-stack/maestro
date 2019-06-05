@@ -25,13 +25,13 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
-import reactor.core.publisher.Flux;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
-import java.util.function.Function;
+import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
 @Slf4j
 @EnableBinding(Sink.class)
@@ -43,26 +43,45 @@ public class IndexingMessagesStreamListener {
         this.indexer = indexer;
     }
 
-    @StreamListener
-    public void handleRemoveAnalysisMessage(@Input(Sink.INPUT) Flux<IndexAnalysisMessage> indexAnalysisMessageFlux) {
-        indexAnalysisMessageFlux.flatMap(msg-> this.doCheckedCall(msg, this::indexOrRemoveAnalysis))
-            .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
+    @StreamListener(Sink.INPUT)
+    public void handleAnalysisMessage(@Payload IndexMessage indexMessage) {
+        if (isAnalysisReq(indexMessage)) {
+            val indexAnalysisMessage = new IndexAnalysisMessage(indexMessage.getAnalysisId(),
+                indexMessage.getStudyId(),
+                indexMessage.getRepositoryCode(),
+                indexMessage.getRemoveAnalysis());
+            handleIndexResult(() -> this.indexOrRemoveAnalysis(indexAnalysisMessage));
+        } else if (isStudyMsg(indexMessage)) {
+            val indexStudyMessage = new IndexStudyMessage(indexMessage.getStudyId(), indexMessage.getRepositoryCode());
+            handleIndexResult(() -> this.indexStudy(indexStudyMessage));
+        } else if (isRepoMsg(indexMessage)) {
+            val indexRepositoryMessage = new IndexRepositoryMessage(indexMessage.getRepositoryCode());
+            handleIndexResult(() -> this.indexRepository(indexRepositoryMessage));
+        } else {
+            throw new IllegalArgumentException("invalid message format");
+        }
     }
 
-    @StreamListener
-    public void handleIndexStudyMessage(@Input(Sink.INPUT) Flux<IndexStudyMessage> indexStudyMessageFlux) {
-        indexStudyMessageFlux.flatMap(msg-> this.doCheckedCall(msg, this::indexStudy))
-            .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
+    private boolean isAnalysisReq(IndexMessage indexMessage) {
+        return !StringUtils.isEmpty(indexMessage.getAnalysisId())
+            && !StringUtils.isEmpty(indexMessage.getStudyId())
+            && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
     }
 
-    @StreamListener
-    public void handleIndexRepositoryMessage(@Input(Sink.INPUT) Flux<IndexRepositoryMessage> indexRepoMessageFlux) {
-        indexRepoMessageFlux.flatMap(msg-> this.doCheckedCall(msg, this::indexRepository))
-            .subscribe(tuple -> log.info(" processed message : {} success : {}", tuple._1(), tuple._2().isSuccessful()));
+    private boolean isStudyMsg(IndexMessage indexMessage) {
+        return StringUtils.isEmpty(indexMessage.getAnalysisId())
+            && !StringUtils.isEmpty(indexMessage.getStudyId())
+            && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
+    }
+
+    private boolean isRepoMsg(IndexMessage indexMessage) {
+        return StringUtils.isEmpty(indexMessage.getAnalysisId())
+            && StringUtils.isEmpty(indexMessage.getStudyId())
+            && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
     }
 
     private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexOrRemoveAnalysis(IndexAnalysisMessage msg) {
-        if (msg.getRemove()) {
+        if (msg.getRemoveAnalysis()) {
             return removeAnalysis(msg);
         } else {
             return indexAnalysis(msg);
@@ -98,8 +117,7 @@ public class IndexingMessagesStreamListener {
                 .studyId(msg.getStudyId())
                 .repositoryCode(msg.getRepositoryCode())
                 .build())
-            .map(out -> new Tuple2<>(msg, out))
-            .onErrorResume((e) -> catchUnhandledErrors(msg, e));
+            .map(out -> new Tuple2<>(msg, out));
     }
 
     private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
@@ -117,15 +135,6 @@ public class IndexingMessagesStreamListener {
             .failureData(FailureData.builder().build())
             .build();
         return Mono.just(new Tuple2<>(msg, indexResult));
-    }
-
-    private <T> Mono<Tuple2<T, IndexResult>>
-        doCheckedCall(T msg, Function<T, Mono<Tuple2<T, IndexResult>>> function) {
-        try {
-            return function.apply(msg);
-        } catch (Exception e) {
-            return catchUnhandledErrors(msg, e);
-        }
     }
 
 }

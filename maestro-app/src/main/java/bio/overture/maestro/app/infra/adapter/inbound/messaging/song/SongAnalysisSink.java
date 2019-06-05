@@ -25,7 +25,7 @@ public interface SongAnalysisSink {
     /**
      * Input channel name.
      */
-    String NAME = "song-input";
+    String NAME = "songInput";
 
     /**
      * @return input channel.

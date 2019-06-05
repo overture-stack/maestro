@@ -45,7 +45,9 @@ import org.springframework.test.context.ContextConfiguration;
 @Tag(TestCategory.INT_TEST)
 @ContextConfiguration(classes = {Maestro.class})
 @AutoConfigureWireMock(port = 0) // we bind the port in the application.yml ${wiremock.server.port}
-@SpringBootTest(classes = {Maestro.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {Maestro.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+    "embedded.elasticsearch.enabled=true"
+})
 public abstract class MaestroIntegrationTest {
 
     /** wait time for elastic search to update */

@@ -18,6 +18,7 @@
 package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.MaestroIntegrationTest;
+import bio.overture.maestro.app.infra.adapter.outbound.notification.Slack;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
@@ -43,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -55,6 +58,7 @@ import java.util.stream.Collectors;
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static java.text.MessageFormat.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
@@ -77,6 +81,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @SpyBean
     private Notifier notifier;
 
+    @SpyBean
+    private Slack slackChannel;
+
     private String alias;
 
     @Autowired
@@ -89,22 +96,43 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     @Test
     void shouldHandleErrorsIfStudyDaoThrowException() {
+
+        val analysisId = "EGAZ00001254368";
+        val repoId = "collab";
+        val studyId = "PEME-CA";
+
         // Given
         stubFor(
-            request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254368"))
+            request("GET", urlEqualTo(format("/{0}/studies/{1}/analysis/{2}", repoId, studyId, analysisId)))
                 .willReturn(aResponse()
                     .withStatus(500)
-                    .withBody("<p> Some wierd unexpected text </p>")
+                    .withBody("<p> Some weird unexpected text </p>")
                     .withHeader("content-type", "text/html")
                 )
+        );
+
+        // checks the notification request
+        stubFor(request("POST", urlEqualTo("/slack"))
+            .withRequestBody(equalToJson("{\"username\":\"maestro\"," +
+                "\"text\":\":bangbang: Error : " + NotificationName.FAILED_TO_FETCH_ANALYSIS.name()
+                + ", Error Info: ```{analysisId=" + analysisId + ", " +
+                "repoCode=" + repoId + ", studyId=" + studyId + ", " +
+                "err=org.springframework.web.reactive.function.UnsupportedMediaTypeException: Content type 'text/html' " +
+                "not supported for bodyType=bio.overture.maestro.domain.entities.metadata.study.Analysis}```\"," +
+                "\"channel\":\"maestro-test\"}")
+            )
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody("ok")
+            )
         );
 
         // test
         val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
-                .analysisId("EGAZ00001254368")
-                .studyId("PEME-CA")
-                .repositoryCode("collab")
+                .analysisId(analysisId)
+                .studyId(studyId)
+                .repositoryCode(repoId)
                 .build()
             ).build());
 
@@ -112,16 +140,20 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .expectNext(IndexResult.builder()
                 .failureData(
                     FailureData.builder()
-                        .failingIds(
-                            Map.of(
-                                ANALYSIS_ID, Set.of("EGAZ00001254368"),
-                                STUDY_ID, Set.of("PEME-CA"),
-                                REPO_CODE, Set.of("collab")
-                            )
-                        ).build()
-                )
-                .successful(false).build())
-            .verifyComplete();
+                        .failingIds(Map.of(ANALYSIS_ID, Set.of(analysisId))).build()
+                ).successful(false).build()
+            ).verifyComplete();
+
+        ArgumentMatcher<IndexerNotification> matcher = (arg) ->
+             arg.getNotificationName().equals(NotificationName.FAILED_TO_FETCH_ANALYSIS)
+                && arg.getAttributes().get(ANALYSIS_ID).equals(analysisId)
+                && arg.getAttributes().get(REPO_CODE).equals(repoId)
+                && arg.getAttributes().get(STUDY_ID).equals(studyId)
+                && arg.getAttributes().containsKey(ERR);
+
+        then(notifier).should(times(1)).notify(Mockito.argThat(matcher));
+        then(slackChannel).should(times(1)).send(Mockito.argThat(matcher));
+
     }
 
     @Test
@@ -411,7 +443,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     }
 
     @NotNull
-    private Map<String,? extends Object> getConflicts(FileCentricDocument document, String differentAnalysisId) {
+    private Map<String, ? extends Object> getConflicts(FileCentricDocument document, String differentAnalysisId) {
         return Map.of("conflicts", List.of(DefaultIndexer.FileConflict.builder()
             .indexedFile(
                 DefaultIndexer.ConflictingFile.builder()

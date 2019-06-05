@@ -17,15 +17,20 @@
 
 package bio.overture.maestro.app.infra.config.properties;
 
+import bio.overture.maestro.app.infra.adapter.outbound.notification.Slack;
 import org.springframework.core.io.Resource;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Abstraction for application properties, implementations should return deep copy to avoid mutating the original
  * properties
  */
 public interface ApplicationProperties {
+    String FAILURE_LOG_PROP_KEY = "maestro.failureLog.enabled";
+    String MAESTRO_NOTIFICATIONS_SLACK_ENABLED_PROP_KEY = "maestro.notifications.slack.enabled";
+
     List<String> elasticSearchClusterNodes();
     String fileCentricAlias();
     int maxDocsPerBulkRequest();
@@ -33,11 +38,12 @@ public interface ApplicationProperties {
     int elasticSearchClientSocketTimeoutMillis();
     List<PropertiesFileRepository> repositories();
     Resource fileCentricIndex();
-    Resource exclusionRules();
+    Map<String, List<String>> idExclusionRules();
     int songMaxRetries();
     int songStudyCallTimeoutSeconds();
     long elasticSearchRetryWaitDurationMillis();
     int elasticSearchRetryMaxAttempts();
     String indexableStudyStatuses();
     int songAnalysisCallTimeoutSeconds();
+    Slack.SlackChannelInfo getSlackChannelInfo();
 }
