@@ -1,0 +1,416 @@
+[
+  {
+    "analysisType": "variantCall",
+    "info": {},
+    "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+    "study": "PACA-CA",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA533729",
+        "specimenId": "SP125730",
+        "sampleSubmitterId": "PCSI_0233_Pa_P_526",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP125730",
+          "donorId": "DO51523",
+          "specimenSubmitterId": "PCSI_0233_Pa_P_526",
+          "specimenClass": "Tumour",
+          "specimenType": "Primary tumour - other"
+        },
+        "donor": {
+          "donorId": "DO51523",
+          "donorSubmitterId": "PCSI_0233",
+          "studyId": "PACA-CA",
+          "donorGender": "male",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
+        "fileSize": 543337,
+        "fileType": "VCF",
+        "fileMd5sum": "14ded2a7342f9124421ace5aa920510d",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "bb949d15-334f-5712-9f04-41225a7beb8d",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz.tbi",
+        "fileSize": 224729,
+        "fileType": "TBI",
+        "fileMd5sum": "99f0b87f5113494e2fc2284c91dc15e0",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
+        "fileSize": 5565355,
+        "fileType": "VCF",
+        "fileMd5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "2910e07c-268b-57a5-877a-0cec35298319",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz.tbi",
+        "fileSize": 546153,
+        "fileType": "TBI",
+        "fileMd5sum": "1abed463bc92e0d8486699b37af73737",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
+        "fileSize": 101384873,
+        "fileType": "VCF",
+        "fileMd5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "425898fd-35d3-5ee2-ac00-50dfd724f4c6",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz.tbi",
+        "fileSize": 1541330,
+        "fileType": "TBI",
+        "fileMd5sum": "a6113c54193fd7539dffd06f50f04779",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
+        "fileSize": 72850649,
+        "fileType": "VCF",
+        "fileMd5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "04c24136-c19d-5042-a3cd-36f63c7b4d6b",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz.tbi",
+        "fileSize": 1502241,
+        "fileType": "TBI",
+        "fileMd5sum": "156880f52b94b3119afa3ac6dd7b8ced",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "432779b5-95db-5caf-a529-85a36a707c04",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
+        "fileSize": 23763,
+        "fileType": "VCF",
+        "fileMd5sum": "93b219c94687e12b5fda564399fa3319",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "51306186-092d-5e3f-bb3c-028873052eb2",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz.tbi",
+        "fileSize": 10691,
+        "fileType": "TBI",
+        "fileMd5sum": "68d76af7c7b9b7c00fa0438101739798",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
+        "fileSize": 18226,
+        "fileType": "VCF",
+        "fileMd5sum": "6ebd4aa8a821da40955d7fcb879be82a",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "e5d387a1-3b51-5526-ae22-270df2e1fd2f",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz.tbi",
+        "fileSize": 6134,
+        "fileType": "TBI",
+        "fileMd5sum": "96b05a083d371ae8317651ceffb0f48b",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "3f571505-3bea-5065-956a-4b5a793ad1ed",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
+        "fileSize": 161511,
+        "fileType": "VCF",
+        "fileMd5sum": "f3a99bd737b3b416aa34e131b939b2a0",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "e8569e7c-6ae4-5aeb-ae50-b94366aae5df",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz.tbi",
+        "fileSize": 19769,
+        "fileType": "TBI",
+        "fileMd5sum": "cb856f2d5837c5f065c7c598dcd795b5",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "bbbbc35b-9ea3-5191-b6c8-9092975d8033",
+        "studyId": "PACA-CA",
+        "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "fileName": "744c62bf-4747-4ab2-aca9-50879cea82e0.xml",
+        "fileSize": 60087,
+        "fileType": "XML",
+        "fileMd5sum": "64db344f980be12737566635acf5820f",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "info": {},
+      "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "variantCallingTool": "DKFZ/EMBL variant call pipeline",
+      "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
+    }
+  },
+  {
+    "analysisType": "variantCall",
+    "info": {},
+    "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+    "study": "PACA-CA",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA533758",
+        "specimenId": "SP125791",
+        "sampleSubmitterId": "ASHPC_0022_Pa_P",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP125791",
+          "donorId": "DO51498",
+          "specimenSubmitterId": "ASHPC_0022_Pa_P",
+          "specimenClass": "Tumour",
+          "specimenType": "Primary tumour - other"
+        },
+        "donor": {
+          "donorId": "DO51498",
+          "donorSubmitterId": "PCSI_0450",
+          "studyId": "PACA-CA",
+          "donorGender": "female",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "e122b153-c98b-530d-879a-11871a427d1b",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
+        "fileSize": 58091383,
+        "fileType": "VCF",
+        "fileMd5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "b26a535c-3531-55ad-8725-17aa6afb22c2",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz.tbi",
+        "fileSize": 1524609,
+        "fileType": "TBI",
+        "fileMd5sum": "894fa70742c16ed7f845abd68609f20c",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
+        "fileSize": 59407,
+        "fileType": "VCF",
+        "fileMd5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "b9800f14-13d5-55cf-9383-a65b5446116a",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz.tbi",
+        "fileSize": 2961,
+        "fileType": "TBI",
+        "fileMd5sum": "1ba234eb0c457dba2942215d3fc4741a",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
+        "fileSize": 2964,
+        "fileType": "VCF",
+        "fileMd5sum": "bafebb1c613c348c696dc8f940ce1039",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "52db8e51-5b3e-56ce-b939-0a96b4dfbce3",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz.tbi",
+        "fileSize": 4783,
+        "fileType": "TBI",
+        "fileMd5sum": "725becdd11e63c371e57a987420846bd",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "e704d3f5-1274-5cdd-924f-609159e121cc",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
+        "fileSize": 1704966,
+        "fileType": "VCF",
+        "fileMd5sum": "37ee70b282788eb0660f7d965f355898",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "6b32cfec-e82c-5528-b908-8e00ae927578",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz.tbi",
+        "fileSize": 303747,
+        "fileType": "TBI",
+        "fileMd5sum": "91dece67c383a67123caae382a130cb9",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "47fc8458-df52-5ad1-a0fc-cd2c277ecb93",
+        "studyId": "PACA-CA",
+        "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "fileName": "916b5a92-cea6-11e5-af30-d4714d100685.xml",
+        "fileSize": 60346,
+        "fileType": "XML",
+        "fileMd5sum": "a2a10568288e3756745dddaee91df5d5",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "info": {},
+      "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+      "variantCallingTool": "Sanger variant call pipeline",
+      "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
+    }
+  },
+  {
+    "analysisType": "variantCall",
+    "info": {},
+    "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
+    "study": "PACA-CA",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA520221",
+        "specimenId": "SP125732",
+        "sampleSubmitterId": "PCSI_0083_Pa_P_526",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP125732",
+          "donorId": "DO35442",
+          "specimenSubmitterId": "PCSI_0083_Pa_P_526",
+          "specimenClass": "Tumour",
+          "specimenType": "Primary tumour - other"
+        },
+        "donor": {
+          "donorId": "DO35442",
+          "donorSubmitterId": "PCSI_0083",
+          "studyId": "PACA-CA",
+          "donorGender": "female",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "ca8479dc-8f00-5757-b433-c3cf5b76f255",
+        "studyId": "PACA-CA",
+        "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
+        "fileName": "b8e09611-225a-4de6-87dc-104753072252.xml",
+        "fileSize": 33270,
+        "fileType": "XML",
+        "fileMd5sum": "bc3d7e8d1acc6a2d20608e10d6a6ed05",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "9727c61d-3871-54f1-a65a-2d1d91acd242",
+        "studyId": "PACA-CA",
+        "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
+        "fileName": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz",
+        "fileSize": 329863,
+        "fileType": "VCF",
+        "fileMd5sum": "01e54034c70b85812e9aac58f2525594",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "08519ab5-8665-58dc-8476-1c40cae5b789",
+        "studyId": "PACA-CA",
+        "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
+        "fileName": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz.tbi",
+        "fileSize": 148925,
+        "fileType": "TBI",
+        "fileMd5sum": "5b83369174136b88f16a08ab87bb67f7",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "info": {},
+      "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
+      "variantCallingTool": "PCAWG InDel callers",
+      "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"
+    }
+  }
+]

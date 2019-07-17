@@ -2,26 +2,108 @@ server:
   port: 11235
 
 maestro:
+  song:
+    maxRetries: 3
+    timeoutSec:
+        study: 100 # some studies take really long, +30 secs, to be downloaded
+        analysis: 5
+
+  # elastic search server & client props
   elasticsearch:
-    cluster-name: ${ELASTICSEARCH.CLUSTER.NAME:maestro.elasticsearch}
-    cluster-nodes: ${ELASTICSEARCH.CLUSTER.NODES:localhost:9200, localhost:9201}
+    clusterNodes:
+      - http://localhost:9200
+      - http://localhost:9201
     indexes:
-      file-centric:
-        alias: file_centric
+      fileCentric:
+          name: file_centric
+          alias: file_centric
+    client:
+      # this is to control the number of documents per bulk request in elasticsearch
+      docsPerBulkReqMax: 5000
+      # max time to wait for a connection to be established
+      connectionTimeout: 5000
+      # max time to wait on idle connection (no data flow)
+      socketTimeout: 10000
+      retry:
+        maxAttempts: 3
+        waitDurationMillis: 500
+
+  # Genome file repositories props
   repositories:
+      # must be unique
     - code: collab
       url: https://song.cancercollaboratory.org
       name: collaboratory
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
+      # optional
       storageType: S3
       organization: ICGC
       country: CA
+    - code: song.overture
+      url: http://localhost:8080
+      name: local song
+      metadataPath: /oicr.icgc.meta/metadata
+      # optional
+      storageType: S3
+      organization: overture
+      country: LH
     - code: aws
-      url: http://aws.amazon.com
-      name: aws repo
+      url: https://virginia.song.icgc.org
+      name: aws virginia
+      metadataPath: /oicr.icgc.meta/metadata
+      # optional
+      storageType: S3
+      organization: ICGC
       country: US
 
+  # last resort fallback file system log in case of retries exhaustion.
+  failureLog:
+    enabled: true
+    dir: ${user.home}/logs/maestro
+
+  notifications:
+    slack:
+      enabled: false
+      # the types to trigger a notification to this channel (see NotificationName.java)
+      notifiedOn:
+        - ALL
+      url: https://hooks.slack.com/services/SECRET_TOKEN
+      channel: maestro-alerts
+      username: maestro
+      maxDataLength: 1000
+      # notifications has two parameters (TYPE [string], DATA[map])
+      templates:
+        error: ':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
+        warning: ':warning: ##TYPE## ```##DATA##```'
+        info: ':information_source: ##TYPE## ```##DATA##```'
+
+  # exclusion rules configs
+  exclusionRules:
+    byId:
+      study:
+        - "test123"
+#      analysis:
+#        - "analysisId"
+#      file:
+#        - 41ba4fb3-9428-50b5-af6c-d779cd59b04d
+#      sample:
+#        - "sampleId"
+#      specimen:
+#        - "specimenId"
+#      donor:
+#        - DO232991
+
+# logging & monitoring
+logging:
+  level:
+    root: INFO
+    bio.overture: TRACE
+    # very verbose class, only enable lower level when necessary
+    bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
+    org.apache.kafka.clients: INFO
+
+# spring boot actuator endpoints
 management:
   endpoints:
     web:
@@ -29,4 +111,40 @@ management:
         include: '*'
   endpoint:
     health:
-    show-details: ALWAYS
+      show_details: ALWAYS
+
+spring:
+  application:
+    name: maestro
+  output.ansi.enabled: ALWAYS
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+        bindings:
+          songInput:
+            consumer:
+              enableDlq: true
+              dlqName: maestro_song_analysis_dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+          input:
+            consumer:
+              enableDlq: true
+              dlqName: maestro_index_requests_dlq
+              autoCommitOnError: true
+              autoCommitOffset: true
+      bindings:
+        input:
+          # we don't specify content type because @StreamListener will handle that
+          destination: maestro_index_requests
+          group: requestsConsumerGrp
+          consumer:
+            maxAttempts: 1
+        songInput:
+          destination: song-analysis
+          group: songConsumerGrp
+          consumer:
+            maxAttempts: 1
+

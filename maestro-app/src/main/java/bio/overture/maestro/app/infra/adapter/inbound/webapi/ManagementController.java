@@ -1,8 +1,25 @@
+/*
+ *  Copyright (c) 2019. Ontario Institute for Cancer Research
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Affero General Public License as
+ *   published by the Free Software Foundation, either version 3 of the
+ *   License, or (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Affero General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Affero General Public License
+ *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 
 import bio.overture.maestro.domain.api.Indexer;
-import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.api.message.IndexStudyCommand;
+import bio.overture.maestro.domain.api.message.*;
+import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -11,6 +28,7 @@ import reactor.core.publisher.Mono;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -31,21 +49,74 @@ public class ManagementController {
         return Mono.just(response);
     }
 
-    @PostMapping("/index/repository/{repositoryId}/study/{studyId}")
+    @DeleteMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<IndexResult> removeAnalysis(@PathVariable String analysisId,
+                                            @PathVariable String studyId,
+                                            @PathVariable String repositoryCode) {
+        log.debug("in removeAnalysis, args studyId {}, repoId: {}, analysisId : {}", studyId,
+            repositoryCode, analysisId);
+        return indexer.removeAnalysis(RemoveAnalysisCommand.builder()
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .repositoryCode(repositoryCode)
+                    .analysisId(analysisId)
+                    .studyId(studyId)
+                    .build()
+            ).build()
+        );
+    }
+
+    @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<IndexResult> indexStudy(@PathVariable String studyId, @PathVariable String repositoryId) {
-        log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryId);
+    public Mono<IndexResult> indexAnalysis(@PathVariable String analysisId,
+                                           @PathVariable String studyId,
+                                           @PathVariable String repositoryCode) {
+        log.debug("in indexAnalysis, args studyId {}, repoId: {}, analysisId : {}", studyId, repositoryCode, analysisId);
+        return indexer.indexAnalysis(IndexAnalysisCommand.builder()
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .repositoryCode(repositoryCode)
+                    .analysisId(analysisId)
+                    .studyId(studyId)
+                    .build()
+            ).build()
+        );
+    }
+
+    @PostMapping("/index/repository/{repositoryCode}/study/{studyId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<IndexResult> indexStudy(@PathVariable String studyId,
+                                        @PathVariable String repositoryCode) {
+        log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryCode);
         return indexer.indexStudy(IndexStudyCommand.builder()
-                .repositoryCode(repositoryId)
+                .repositoryCode(repositoryCode)
                 .studyId(studyId)
                 .build()
         );
     }
 
-    @PostMapping("/index/repository/{repositoryId}")
+    @PostMapping("/index/repository/{repositoryCode}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void indexRepository(@PathVariable String repositoryId) {
-        indexer.indexAll();
+    public Mono<IndexResult> indexRepository(@PathVariable String repositoryCode) {
+        return indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+            .repositoryCode(repositoryCode)
+            .build()
+        );
     }
 
+    @GetMapping("/rules/")
+    public List<? extends ExclusionRule> getRules() {
+        return indexer.getAllRules();
+    }
+
+    @PostMapping("/rules/byId/{type}")
+    public void addExclusionRule(@RequestBody List<String> ids) {
+        indexer.addRule(null);
+    }
+
+    @DeleteMapping("/rules/byId/{type}")
+    public void deleteExclusionRule(@RequestParam List<String> ids) {
+        indexer.deleteRule(null);
+    }
 }

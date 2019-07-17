@@ -1,0 +1,77 @@
+[
+  {
+    "analysisType": "sequencingRead",
+    "info": {
+      "dcc_project_code": "PEME-CA",
+      "isPcawg": false
+    },
+    "analysisId": "EGAZ00001254245",
+    "study": "PEME-CA",
+    "analysisState": "PUBLISHED",
+    "sample": [
+      {
+        "info": {},
+        "sampleId": "SA604905",
+        "specimenId": "SP200947",
+        "sampleSubmitterId": "MDT-AP-0432_control",
+        "sampleType": "DNA",
+        "specimen": {
+          "info": {},
+          "specimenId": "SP200947",
+          "donorId": "DO232959",
+          "specimenSubmitterId": "MDT-AP-0432_control_specimen",
+          "specimenClass": "Normal",
+          "specimenType": "Normal - blood derived"
+        },
+        "donor": {
+          "donorId": "DO232959",
+          "donorSubmitterId": "MDT-AP-0432",
+          "studyId": "PEME-CA",
+          "donorGender": "male",
+          "info": {}
+        }
+      }
+    ],
+    "file": [
+      {
+        "info": {},
+        "objectId": "464116e4-afc9-5879-b567-6f54513a32dc",
+        "studyId": "PEME-CA",
+        "analysisId": "EGAZ00001254247",
+        "fileName": "bundle.EGAZ00001254247.xml",
+        "fileSize": 6352,
+        "fileType": "XML",
+        "fileMd5sum": "cad2b396e0f7dc5384a5275f89ccad3a",
+        "fileAccess": "open"
+      },
+      {
+        "info": {},
+        "objectId": "6aa8d318-e168-520e-9d1e-cef127ee6b65",
+        "studyId": "PEME-CA",
+        "analysisId": "EGAZ00001254247",
+        "fileName": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam.bai",
+        "fileSize": 8982928,
+        "fileType": "BAI",
+        "fileMd5sum": "227a2a11d660a8a53a7375c6623034e2",
+        "fileAccess": "controlled"
+      },
+      {
+        "info": {},
+        "objectId": "9ce9358d-c93a-5f83-8032-4addcb84b51a",
+        "studyId": "PEME-CA",
+        "analysisId": "EGAZ00001254247",
+        "fileName": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam",
+        "fileSize": 77675501639,
+        "fileType": "BAM",
+        "fileMd5sum": "b2e40ebb719e1754e99be2e752239639",
+        "fileAccess": "controlled"
+      }
+    ],
+    "experiment": {
+      "analysisId": "EGAZ00001254247",
+      "aligned": true,
+      "libraryStrategy": "WGS",
+      "info": {}
+    }
+  }
+]
