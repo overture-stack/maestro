@@ -1,0 +1,10 @@
+.git
+/.idea/*
+/unused/*
+.DS_Store
+.gitignore
+README.md
+/ci-cd/*
+/run/*
+/docs/*
+Makefile
