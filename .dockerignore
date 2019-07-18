@@ -9,3 +9,4 @@ README.md
 /docs/*
 Makefile
 /sphinx-docs/*
+.vscode/*

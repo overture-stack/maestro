@@ -8,15 +8,20 @@ maestro:
         study: 100 # some studies take really long, +30 secs, to be downloaded
         analysis: 5
 
-  # elastic search server & client props
+  # elastic search server to connect to & client properties
   elasticsearch:
+    # elasticsearch server nodes to send requests to
     clusterNodes:
       - http://localhost:9200
       - http://localhost:9201
+
+    # the index name to store documents in (will be created if not existing)
     indexes:
       fileCentric:
           name: file_centric
           alias: file_centric
+
+    # elasticsearch client properties
     client:
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
@@ -24,22 +29,26 @@ maestro:
       connectionTimeout: 5000
       # max time to wait on idle connection (no data flow)
       socketTimeout: 10000
+      # in case of failure this controls the retry attempts
       retry:
+        # maximum number of retry attempts before throwing an error
         maxAttempts: 3
+        # waiting between retries (ms)
         waitDurationMillis: 500
 
-  # Genome file repositories props
+  # List of Genomic files repositories (SONGs)
   repositories:
-      # must be unique
-    - code: collab
-      url: https://song.cancercollaboratory.org
-      name: collaboratory
+    # these properties will be used in the document (see ../file_centric.json)
+    - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
+      url: http://localhost:8080
+      name: local song
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
       # optional
       storageType: S3
       organization: ICGC
       country: CA
+    # you can other SONGs as needed
     - code: song.overture
       url: http://localhost:8080
       name: local song
@@ -48,14 +57,6 @@ maestro:
       storageType: S3
       organization: overture
       country: LH
-    - code: aws
-      url: https://virginia.song.icgc.org
-      name: aws virginia
-      metadataPath: /oicr.icgc.meta/metadata
-      # optional
-      storageType: S3
-      organization: ICGC
-      country: US
 
   # last resort fallback file system log in case of retries exhaustion.
   failureLog:
@@ -119,6 +120,7 @@ spring:
   output.ansi.enabled: ALWAYS
   cloud:
     stream:
+      # kafka integration with song (remove this key to disable kafka)
       kafka:
         binder:
           brokers: localhost:9092

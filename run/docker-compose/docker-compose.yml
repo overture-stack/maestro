@@ -2,7 +2,7 @@ version: '3'
 
 services:
   maestro:
-    image: overture/maestro:0.0.1-SNAPSHOT
+    image: overture/maestro:latest
     container_name: maestro
     ports:
       - 11235:11235
