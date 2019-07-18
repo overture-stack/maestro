@@ -1,3 +1,4 @@
+# this file is used by mkdocs to build the site and theme it https://www.mkdocs.org/
 site_name: Maestro
 docs_dir: docs
 nav:
