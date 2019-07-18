@@ -1,14 +1,14 @@
-
-
 # Introduction
---------------
+
 Maestro was created to enable genomic researchers to enhance their Overture [SONG](https://www.overture.bio/products/song)
 s by building search indexes, Elasticsearch by default, that makes searching Analyses and Studies much more powerful and easier.
 Created indexes are then easy to integrate with [Arranger](https://www.overture.bio/products/arranger)
 
+
+
 # Features
-----------
-## Multiple SONGs One Index
+
+###  Multiple SONGs One Index
 Supports indexing from multiple metadata repositories [SONG](https://www.overture.bio/products/song).
 Maestro can be connected to multiple SONGs and it will index all files in one elasticsearch index, and if the same file was identified in multiple SONGs (In case of GEO Replication) it will aggregate all repositories information in the same index document.
 
@@ -87,24 +87,23 @@ example of how the document will be :
 
 ```
 
-## Multiple indexing levels 
+### Multiple indexing levels 
 Maestro index  can metadata at once: Analysis, Study or full Repository.
 
-## Different indexing APIs
+### Different indexing APIs
 - Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, 
 (see the [Configurations](#configurations) Kafka settings)
 - HTTP json API see [Using Maestro](#using-maestro)
 
-## Ability to Exclude
+### Ability to Exclude
 You can configure the installation to exclude specific analyses by one of the following Ids: Study, Analysis, Donor, Sample Or file. (see the [Configurations](#configurations) exclusion rules section )
 
-## Slack integration
+### Slack integration
 You can configure Maestro to send specific notifications to a slack webhook integration 
 currently notifications are for errors during the indexing process. 
 
 
 # Running Maestro
------------------
 Source Code: [Github](https://github.com/overture-stack/maestro)
 
 ## Dependencies
@@ -305,7 +304,7 @@ starts maestro from a docker image along with all needed infrastructure
 make docker-start
 ```
 
-## Kuberenets (Helm)
+### Kuberenets (Helm)
 if you want to run in a Kubernetes cluster you can use the maestro helm chart
 
 - [Chart Repository](https://overture-stack.github.io/charts-server/)
@@ -346,7 +345,7 @@ helm install -f values-override.yaml overture/maestro
 
 
 # Using Maestro
----------------
+
 Maestro can be used through either a message driven kafka topic or an HTTP json API
 
 ## Http API
@@ -385,7 +384,7 @@ curl -X POST \
 	-H 'cache-control: no-cache'
 ```
 # Technical Documentation
--------------------------
+
 ## Technical Design Goals
 - Reactive
     - Event driven
