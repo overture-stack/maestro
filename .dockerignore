@@ -8,3 +8,4 @@ README.md
 /run/*
 /docs/*
 Makefile
+/sphinx-docs/*
