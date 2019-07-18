@@ -1,5 +1,5 @@
 site_name: Maestro
 docs_dir: docs
 nav:
-    - Mestro: index.md
+    - Maestro: index.md
 theme: readthedocs
