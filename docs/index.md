@@ -1,15 +1,13 @@
 
+# 
 # Introduction
-
-Maestro was created to enable genomic researchers to enhance their Overture `SONG <https://www.overture.bio/products/song>`_
+Maestro was created to enable genomic researchers to enhance their Overture [SONG](https://www.overture.bio/products/song)
 s by building search indexes, Elasticsearch by default, that makes searching Analyses and Studies much more powerful and easier.
-Created indexes are then easy to integrate with `Arranger <https://www.overture.bio/products/arranger>`_.
+Created indexes are then easy to integrate with [Arranger](https://www.overture.bio/products/arranger)
 
 # Features
-
-
 ## Multiple SONGs One Index
-Supports indexing from multiple metadata repositories (`SONG <https://www.overture.bio/products/song>`_).
+Supports indexing from multiple metadata repositories [SONG](https://www.overture.bio/products/song).
 Maestro can be connected to multiple SONGs and it will index all files in one elasticsearch index, and if the same file was identified in multiple SONGs (In case of GEO Replication) it will aggregate all repositories information in the same index document.
 
 example of how the document will be : 
@@ -341,7 +339,43 @@ helm repo add overture https://overture-stack.github.io/charts-server/
 helm install -f values-override.yaml overture/maestro
 ```
 
+# Using Maestro
 
+Maestro can be used through either a message driven kafka topic or an HTTP json API
+## Http API
+
+- Index a Song Study:
+
+`POST http://maestro.host:11235/index/repository/<repo>/study/<studyId>`
+
+```bash 
+curl -X POST \
+	http://localhost:11235/index/repository/collab/study/PACA-CA \
+	-H 'Content-Type: application/json' \
+	-H 'cache-control: no-cache' \
+	-d '{}'
+  ```
+- Index an analysis: 
+
+`POST http://maestro.host:11235/index/repository/<repo>/study/<studyId>/analysis/<analysisId>`
+
+```bash
+	curl -X POST \
+	http://localhost:11235/index/repository/collab/study/PACA-CA/analysis/ad7cabf8-df45-40f8-9fcb-67d8933f46e6 \
+	-H 'Content-Type: application/json' \
+	-H 'cache-control: no-cache'
+```
+
+- Index a full repository:
+
+`POST http://maestro.host:11235/index/repository/<repo>`
+
+```bash
+	curl -X POST \
+	http://localhost:11235/index/repository/collab \
+	-H 'Content-Type: application/json' \
+	-H 'cache-control: no-cache'
+```
 # Technical Documentation
 
 ## Technical Design Goals
