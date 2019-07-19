@@ -12,7 +12,7 @@ This is the table of contents of this documents, you can come back here using th
     - [Ability to Exclude](features.md#ability-to-exclude)
     - [Slack integration](features.md#slack-integration)
 - [Setup](setup.md)
-    - [Get it](setup.md#get-it)
+    - [Source Code](setup.md#source-code)
     - [Dependencies](setup.md#dependencies)
     - [Configurations](setup.md#configurations)
     - [Running Locally](setup.md#running-locally)
