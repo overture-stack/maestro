@@ -81,9 +81,8 @@ example of how the document will be :
 Maestro can index different metadata entitites at once: Analysis, Study or full Repository.
 
 # Different indexing APIs
-- Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, 
-(see the [Configurations](setup.md#configurations) Kafka settings)
-- HTTP json API see [Using Maestro](#using-maestro)
+- Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, (see the [Usage](usage.md#kafka-topics) Kafka settings)
+- HTTP json API see [Usage](usage.md#http-api)
 
 # Ability to Exclude
 You can configure the installation to exclude specific analyses by one of the following Ids: Study, Analysis, Donor, Sample Or file. (see the [Configurations](setup.md#configurations) exclusion rules section )

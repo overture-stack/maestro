@@ -1,6 +1,9 @@
 # this file is used by mkdocs to build the site and theme it https://www.mkdocs.org/
 site_name: Maestro
 docs_dir: docs
+markdown_extensions:
+    - toc:
+        permalink: "#"
 nav:
 - Contents: 
     - Introduction: index.md
