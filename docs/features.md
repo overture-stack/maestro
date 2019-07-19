@@ -82,11 +82,11 @@ Maestro can index different metadata entitites at once: Analysis, Study or full 
 
 # Different indexing APIs
 - Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, 
-(see the [Configurations](#configurations) Kafka settings)
+(see the [Configurations](setup.md#configurations) Kafka settings)
 - HTTP json API see [Using Maestro](#using-maestro)
 
 # Ability to Exclude
-You can configure the installation to exclude specific analyses by one of the following Ids: Study, Analysis, Donor, Sample Or file. (see the [Configurations](#configurations) exclusion rules section )
+You can configure the installation to exclude specific analyses by one of the following Ids: Study, Analysis, Donor, Sample Or file. (see the [Configurations](setup.md#configurations) exclusion rules section )
 
 # Slack integration
 You can configure Maestro to send specific notifications to a slack webhook integration 
