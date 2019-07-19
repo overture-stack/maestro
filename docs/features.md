@@ -1,8 +1,8 @@
-#  Multiple SONGs One Index
-Supports indexing from multiple metadata repositories [SONG](https://www.overture.bio/products/song).
-Maestro can be connected to multiple SONGs and it will index all files in one elasticsearch index, and if the same file was identified in multiple SONGs (In case of GEO Replication) it will aggregate all repositories information in the same index document.
+#  Multiple SONGs, One Index
+Maestro supports indexing from multiple metadata repositories [SONG](https://www.overture.bio/products/song).
+Maestro can be connected to multiple SONGs and it will index all files into a single Elasticsearch index. Conflict resolution is built in as partof the indexing process. For example, if the same file was identified in multiple SONGs that are geographically distributed, then it will aggregate all repositories information in the same index document.
 
-example of how the document will be : 
+As an example, you can see in the `repositories` seciton of the following document that this file is found in multiple repositories: 
 
 ``` json
 
@@ -78,7 +78,7 @@ example of how the document will be :
 ```
 
 # Multiple indexing levels 
-Maestro can index different metadata entitites at once: Analysis, Study or full Repository.
+In the data model, data is grouped by different entitied.  Maestro can index discreet data levels. For example, indexing can be driven at a Repository, Study, or individual Analysis level. 
 
 # Different indexing APIs
 - Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, (see the [Usage](usage.md#kafka-topics) Kafka settings)
