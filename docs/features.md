@@ -78,7 +78,7 @@ example of how the document will be :
 ```
 
 # Multiple indexing levels 
-Maestro index  can metadata at once: Analysis, Study or full Repository.
+Maestro can index different metadata entitites at once: Analysis, Study or full Repository.
 
 # Different indexing APIs
 - Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, 

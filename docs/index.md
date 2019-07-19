@@ -3,7 +3,6 @@ Maestro was created to enable genomic researchers to enhance their Overture [SON
 by building search indexes, Elasticsearch by default, that makes searching Analyses and Studies much more powerful and easier.
 Created indexes are then easy to integrate with [Arranger](https://www.overture.bio/products/arranger)
 
-
 # Contents
 - [Features](/features/)
     - [Multiple SONGs One Index](/features/#multiple-songs-one-index)
