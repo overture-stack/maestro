@@ -3,7 +3,7 @@ Maestro can be used through either a message driven kafka topic or an HTTP json 
 
 # Http API
 
-- Index a Song Study:
+- Index by Study:
 
 `POST http://maestro.host:11235/index/repository/<repo>/study/<studyId>`
 
@@ -15,7 +15,7 @@ curl -X POST \
 	-d '{}'
 ```
 
-- Index an analysis: 
+- Index by Analysis: 
 
 `POST http://maestro.host:11235/index/repository/<repo>/study/<studyId>/analysis/<analysisId>`
 
@@ -26,7 +26,7 @@ curl -X POST \
 	-H 'cache-control: no-cache'
 ```
 
-- Index a full repository:
+- Index an entire repository:
 
 `POST http://maestro.host:11235/index/repository/<repo-code>`
 
@@ -82,7 +82,7 @@ spring:
 The `maestro_index_requests` topic is for on demand request message instead of using the web api above
 the body of the messages should be a JSON, and looks like one of the following:
 
-- Analysis
+- Analysis:
 ```json
 {"value" : { "repositoryCode" : "collab", "studyId" : "PEK-AB", "analysisId" : "EGAZ000", "remove": true }	}
 ```
@@ -92,7 +92,7 @@ the body of the messages should be a JSON, and looks like one of the following:
 {"value" : { "repositoryCode" : "collab", "studyId" : "PEK-AB" }	}
 ```
 
-- Full repository (SONG)
+- Full repository (SONG):
 ```json
 {"value" : { "repositoryCode" : "aws" }	}
 ```
