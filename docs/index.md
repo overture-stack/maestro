@@ -1,9 +1,10 @@
 
-Maestro was created to enable genomic researchers to enhance their Overture metadata storage system[SONG](https://www.overture.bio/products/song)
-by building search indexes, Elasticsearch by default, that makes searching Analyses and Studies easy and powerful.
-Indexes created my Maestro can be consumed [Arranger](https://www.overture.bio/products/arranger), a data portal generator. 
+# Maestro Documentation
+This is the table of contents of this documents, you can come back here using this link [index](index.md)
 
-# Contents
+- [Introduction](intro.md)
+    - [What is Maestro](intro.md#what-is-maestro)
+    - [License](intro.md#license)
 - [Features](features.md)
     - [Multiple SONGs, One Index](features.md#multiple-songs-one-index)
     - [Multiple indexing levels](features.md#multiple-indexing-levels)
@@ -26,19 +27,3 @@ Indexes created my Maestro can be consumed [Arranger](https://www.overture.bio/p
     - [Technology](tech.md#technologies-libraries)
     - [Code strcuture](tech.md#code-structure)
 
-# License
-
-Copyright (c) 2018. Ontario Institute for Cancer Research
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see https://www.gnu.org/licenses.

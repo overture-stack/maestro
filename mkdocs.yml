@@ -5,11 +5,10 @@ markdown_extensions:
     - toc:
         permalink: "#"
 nav:
-- Contents: 
-    - Introduction: index.md
-    - Features : features.md
-    - Setup: setup.md
-    - Usage: usage.md
-    - 'Code & Archeticture': tech.md  
+- Introduction: intro.md
+- Features : features.md
+- Setup: setup.md
+- Usage: usage.md
+- 'Code & Archeticture': tech.md  
 
 theme: readthedocs
