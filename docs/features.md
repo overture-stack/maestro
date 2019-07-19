@@ -78,7 +78,7 @@ As an example, you can see in the `repositories` seciton of the following docume
 ```
 
 # Multiple indexing levels 
-In the data model, data is grouped by different entitied.  Maestro can index discreet data levels. For example, indexing can be driven at a Repository, Study, or individual Analysis level. 
+In the data model, data is grouped by different entities.  Maestro can index discreet data levels. For example, indexing can be driven at a Repository, Study, or individual Analysis level. 
 
 # Different indexing APIs
 - Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, (see the [Usage](usage.md#kafka-topics) Kafka settings)
