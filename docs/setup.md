@@ -1,19 +1,17 @@
-# Get it
-Source Code is hosted on [Github](https://github.com/overture-stack/maestro)
+# Source Code
+Source Code is hosted on [Github](https://github.com/overture-stack/maestro).
 
 # Dependencies
 To run Maestro you need the following services running:
 
 - [Elasticsearch](https://www.elastic.co/products/elasticsearch) version 7+ to build index in.
-- [SONG](https://www.overture.bio/products/song) SONG to use as source for metadata.
+- [SONG](https://www.overture.bio/products/song) to use as a metadata source.
 - Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with song).
 
 
 # Configurations
 
-in the code repository the configurations are in this file: `config/application.yml`.
-you will need to change the relevent sections to connect to elasticsearch, song, kafka based on
-your setup.
+In the code repository, configurations are driven by: `config/application.yml`. Change the relevent sections to connect to Elasticsearch, SONG, Kafka based on your setup.
 
 ```yaml
 server:
