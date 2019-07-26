@@ -122,28 +122,28 @@ spec:
             }
         }
 
-        stage('Release') {
-            when {
-                branch "master"
-            }
-            steps {
+       stage('Release') {
+           when {
+               branch "master"
+           }
+           steps {
 //                container('jdk') {
 //                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests deploy"
 //                }
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
-                    }
-                    sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
-                    sh "docker push overture/maestro:${version}"
-                    sh "docker push overture/maestro:latest"
-                    withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh "git tag ${version}"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
-                    }
-               }
-            }
-        }
+               container('docker') {
+                   withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                       sh 'docker login -u $USERNAME -p $PASSWORD'
+                   }
+                   sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
+                   sh "docker push overture/maestro:${version}"
+                   sh "docker push overture/maestro:latest"
+                   withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                       sh "git tag ${version}"
+                       sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
+                   }
+              }
+           }
+       }
 
     }
 

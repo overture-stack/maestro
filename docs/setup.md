@@ -1,3 +1,19 @@
+# Source Code
+Source Code is hosted on [Github](https://github.com/overture-stack/maestro).
+
+# Dependencies
+To run Maestro you need the following services running:
+
+- [Elasticsearch](https://www.elastic.co/products/elasticsearch) version 7+ to build index in.
+- [SONG](https://www.overture.bio/products/song) to use as a metadata source.
+- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with song).
+
+
+# Configurations
+
+In the code repository, configurations are driven by: `config/application.yml`. Change the relevent sections to connect to Elasticsearch, SONG, Kafka based on your setup.
+
+```yaml
 server:
   port: 11235
 
@@ -40,7 +56,7 @@ maestro:
   repositories:
     # these properties will be used in the document (see ../file_centric.json)
     - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
-      url: http://localhost:8080
+      url: "http://localhost:8080"
       name: local song
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
@@ -50,7 +66,7 @@ maestro:
       country: CA
     # you can other SONGs as needed
     - code: song.overture
-      url: http://localhost:8080
+      url: "http://localhost:8080"
       name: local song
       metadataPath: /oicr.icgc.meta/metadata
       # optional
@@ -65,10 +81,12 @@ maestro:
 
   notifications:
     slack:
+      # enable/disable slack notifications
       enabled: false
       # the types to trigger a notification to this channel (see NotificationName.java)
       notifiedOn:
         - ALL
+      # slack workspace url
       url: https://hooks.slack.com/services/SECRET_TOKEN
       channel: maestro-alerts
       username: maestro
@@ -149,4 +167,71 @@ spring:
           group: songConsumerGrp
           consumer:
             maxAttempts: 1
+
+
+```
+
+
+
+# Running Locally
+
+Maestro has a `Makefile` for convenience if you can't use make you can check the make file for
+the commands.
+
+## Source Code (No Docker)
+Provided that you have JDK11+ and all dependencies (see [Dependencies](#dependencies)) running and modified `application.yaml` based on your environment and needs, you can run the following command:  
+
+```bash
+make run
+```
+
+## Docker (Recommended for Local installations)
+In this mode a docker-compose.yaml file will be used, it contains a dockerized version of elasticsearch and kafka see `./run/docker-compose/docker-compose.yaml`. 
+For SONG please check the SONG github repo here on how to run it with docker.
+
+- Docker image Repository: [Dockerhub](https://hub.docker.com/r/overture/maestro)
+
+starts maestro from a docker image along with all needed infrastructure
+
+```bash
+make docker-start
+```
+
+# Kuberenets (Helm)
+if you want to run in a Kubernetes cluster you can use the maestro helm chart
+
+- [Chart Repository](https://overture-stack.github.io/charts-server/)
+
+prepare your `values-override.yaml` file based on your env, you can provide the 
+app configs as env variables using the extraEnv key:
+
+```yaml
+extraEnv:
+  SERVER_PORT: "11235"
+  MAESTRO_ELASTICSEARCH_CLUSTERNODES_0: "http://localhost:9200"
+  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "localhost:9092"
+  # repos
+  MAESTRO_REPOSITORIES_0_CODE: "song"
+  MAESTRO_REPOSITORIES_0_URL: "https://song1:8080"
+  MAESTRO_REPOSITORIES_0_NAME: "song1"
+  MAESTRO_REPOSITORIES_0_ORGANIZATION: "ICGC"
+  MAESTRO_REPOSITORIES_0_COUNTRY: "CA"
+  MAESTRO_REPOSITORIES_1_CODE: "song2"
+  MAESTRO_REPOSITORIES_1_URL: "http://song2:8080"
+  MAESTRO_REPOSITORIES_1_NAME: "song2"
+  MAESTRO_REPOSITORIES_1_ORGANIZATION: "overture"
+  MAESTRO_REPOSITORIES_1_COUNTRY: "OICR"
+  MAESTRO_FAILURELOG_DIR: "/app-log"
+  # slack
+  MAESTRO_NOTIFICATIONS_SLACK_ENABLED: "true"
+  MAESTRO_NOTIFICATIONS_SLACK_URL: "secret"
+  MAESTRO_NOTIFICATIONS_SLACK_CHANNEL: "maestro-argo-notif"
+```
+
+then add overture chart repository and install the chart:
+
+```bash
+helm repo add overture https://overture-stack.github.io/charts-server/
+helm install -f values-override.yaml overture/maestro
+```
 
