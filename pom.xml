@@ -301,7 +301,7 @@
         <spring-data-elasticsearch.version>3.2.0.M2</spring-data-elasticsearch.version>
         <elasticsearch.version>7.1.0</elasticsearch.version>
         <mockito-junit-jupiter.version>2.23.4</mockito-junit-jupiter.version>
-        <jackson-databind.version>2.9.9</jackson-databind.version>
+        <jackson-databind.version>2.9.9.1</jackson-databind.version>
         <mockito-core.version>2.21.0</mockito-core.version>
         <junit-platform.version>1.4.0</junit-platform.version>
         <spring-boot-admin-starter-client.version>2.1.3</spring-boot-admin-starter-client.version>
