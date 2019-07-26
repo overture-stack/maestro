@@ -9,6 +9,13 @@ The indexer component of genomic studies metadata.
     </a>
 </p>
 
+[![Documentation Status](https://readthedocs.org/projects/maestro-overture/badge/?version=latest)](https://maestro-overture.readthedocs.io/en/latest/?badge=latest)
+
+# Documentation:
+Documentation is hosted on :
+- github pages: https://overture-stack.github.io/maestro/
+- read the docs: https://maestro-overture.readthedocs.io/en/latest/ (using mkdocs https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
+
 ## Intro
 Meastro was created to enable genomic researchers to enhance their Overture SONGs by building indexes, elastic search
 by default, that makes searching Analyses and Studies much more powerful and easier.

@@ -2,3 +2,5 @@
 *.iml
 target
 .flattened-pom.xml
+build
+.vscode
