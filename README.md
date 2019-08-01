@@ -1,6 +1,5 @@
-# Maestro
-The indexer component of genomic studies metadata.
-
+<h1 align="center">Maestro</h1>
+<p align="center">Organize geographically distributed data stored in Song and Score, with a single, configurable index.</p>
 <p align="center">
     <a href="https://github.com/overture-stack/maestro">
         <img alt="Under Development" 
@@ -10,13 +9,14 @@ The indexer component of genomic studies metadata.
 </p>
 
 [![Documentation Status](https://readthedocs.org/projects/maestro-overture/badge/?version=latest)](https://maestro-overture.readthedocs.io/en/latest/?badge=latest)
+[![Slack](http://slack.overture.bio/badge.svg)](http://slack.overture.bio)
 
-# Documentation:
+## Documentation:
 Documentation is hosted on :
 - github pages: https://overture-stack.github.io/maestro/
 - read the docs: https://maestro-overture.readthedocs.io/en/latest/ (using mkdocs https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
 
-## Intro
+## Introduction
 Meastro was created to enable genomic researchers to enhance their Overture SONGs by building indexes, elastic search
 by default, that makes searching Analyses and Studies much more powerful and easier.
 
