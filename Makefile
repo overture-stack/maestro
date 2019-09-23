@@ -27,18 +27,15 @@ docker-build:
 
 # use this when you want to run maestro as container
 docker-start:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose up -d
+	cd $(DOCKER_COMPOSE_LOCAL_DIR) && docker-compose up -d
 
 docker-stop:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose down
+	cd $(DOCKER_COMPOSE_LOCAL_DIR) && docker-compose down
 
 # only starts the infrastructure containers needed by maestro
 # use this when you run maestro from the ide (not as a container)
 docker-start-dev:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR);
-	docker-compose -f docker-compose.dev.yml up -d
+	cd $(DOCKER_COMPOSE_LOCAL_DIR) && docker-compose -f docker-compose.dev.yml up -d
 
 docker-clean:
 	docker system prune
