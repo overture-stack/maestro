@@ -33,6 +33,7 @@ public interface ApplicationProperties {
 
     List<String> elasticSearchClusterNodes();
     String fileCentricAlias();
+    String fileCentricIndexName();
     int maxDocsPerBulkRequest();
     int elasticSearchClientConnectionTimeoutMillis();
     int elasticSearchClientSocketTimeoutMillis();

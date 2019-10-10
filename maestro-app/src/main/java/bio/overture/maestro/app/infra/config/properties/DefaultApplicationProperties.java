@@ -56,6 +56,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
+    public String fileCentricIndexName() {
+        return this.elasticsearch.getIndexes().getFileCentric().getName();
+    }
+
+    @Override
     public int maxDocsPerBulkRequest() {
         return this.elasticsearch.getClient().getDocsPerBulkReqMax();
     }

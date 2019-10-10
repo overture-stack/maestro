@@ -82,12 +82,15 @@ final class FileCentricDocumentConverter {
             .analysis(FileCentricAnalysis.builder()
                 .id(analysis.getAnalysisId())
                 .state(analysis.getAnalysisState())
-                .type(analysis.getAnalysisType())
+                .type(analysis.getAnalysisType().getName())
+                .typeVersion(analysis.getAnalysisType().getVersion().toString())
                 .study(analysis.getStudy())
-                .experiment(getExpirement(analysis))
+                .experiment(analysis.getExperiment())
+                .data(analysis.getData())
                 .build()
             )
             .file(buildGenomeFileInfo(analysis, file))
+
             .repositories(List.of(Repository.builder()
                 .type(repository.getStorageType().name().toUpperCase())
                 .organization(repository.getOrganization())
@@ -106,7 +109,7 @@ final class FileCentricDocumentConverter {
      * we remove the info from the experiment map to avoid possible bad data
      * that could break indexing (similar fields names with different type
      */
-    private static Map<String, Object> getExpirement(Analysis a) {
+    private static Map<String, Object> getExperiment(Analysis a) {
         val experiment = a.getExperiment();
         if (experiment != null && experiment.containsKey("info")){
             val newExp = new HashMap<String, Object>(experiment);

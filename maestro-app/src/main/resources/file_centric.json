@@ -36,16 +36,7 @@
     }
   },
   "mappings": {
-    "dynamic_templates":[{
-        "template_1":{
-          "match":"*",
-          "match_mapping_type":"string",
-          "mapping":{
-            "type":"keyword"
-          }
-        }
-      }
-    ],
+    "dynamic": false,
     "date_detection":false,
     "properties": {
       "file_autocomplete": {
@@ -96,19 +87,16 @@
           "type": {
             "type": "keyword"
           },
+          "typeVersion": {
+            "type": "keyword"
+          },
           "tool": {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"
             ]
           },
-          "experiment": {
-            "properties" : {
-              "analysisId": {
-                "type": "keyword"
-              }
-            }
-          }
+          "experiment": "object"
         }
       },
       "data_type": {

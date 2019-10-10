@@ -5,7 +5,7 @@ maestro:
   song:
     maxRetries: 3
     timeoutSec:
-        study: 100 # some studies take really long, +30 secs, to be downloaded
+        study: 5 # some studies take really long, +30 secs, to be downloaded
         analysis: 5
 
   # elastic search server to connect to & client properties
@@ -18,7 +18,7 @@ maestro:
     # the index name to store documents in (will be created if not existing)
     indexes:
       fileCentric:
-          name: file_centric
+          name: file_centric_1.0
           alias: file_centric
 
     # elasticsearch client properties
@@ -39,8 +39,8 @@ maestro:
   # List of Genomic files repositories (SONGs)
   repositories:
     # these properties will be used in the document (see ../file_centric.json)
-    - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
-      url: http://localhost:8080
+    - code: song.qa.argo # must be unique & must match song.serverId if using kafka integration with song
+      url: https://song.qa.argo.cancercollaboratory.org/
       name: local song
       dataPath: /oicr.icgc/data
       metadataPath: /oicr.icgc.meta/metadata
@@ -49,7 +49,7 @@ maestro:
       organization: ICGC
       country: CA
     # you can other SONGs as needed
-    - code: song.overture
+    - code: song.overture1
       url: http://localhost:8080
       name: local song
       metadataPath: /oicr.icgc.meta/metadata

@@ -17,10 +17,13 @@
 
 package bio.overture.maestro.domain.entities.indexing;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 @Builder
 @Getter
@@ -36,9 +39,27 @@ public class FileCentricAnalysis {
     @NonNull
     private String type;
     @NonNull
+    private String typeVersion;
+    @NonNull
     private String state;
     @NonNull
     private String study;
 
     private Map<String, Object> experiment;
+
+    private Map<String, Object> data = new TreeMap<>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    @JsonAnySetter
+    public void setData(String key, Object value) {
+        if (data == null) {
+            this.data = new TreeMap<>();
+        }
+        data.put(key, value);
+    }
+
 }

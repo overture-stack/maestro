@@ -37,6 +37,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -82,6 +83,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     private SnakeCaseJacksonSearchResultMapper searchResultMapper;
     private final Resource fileCentricIndex;
     private final String alias;
+    private final String indexName;
     private final int documentsPerBulkRequest;
     private final int maxRetriesAttempts;
     private final long retriesWaitDuration;
@@ -100,6 +102,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         this.searchResultMapper = searchResultMapper;
         this.fileCentricIndex = properties.fileCentricIndex();
         this.alias = properties.fileCentricAlias();
+        this.indexName = properties.fileCentricIndexName();
         this.documentsPerBulkRequest = properties.maxDocsPerBulkRequest();
         this.fileCentricJSONWriter = objectMapper.writerFor(FileCentricDocument.class);
         this.retriesWaitDuration = properties.elasticSearchRetryWaitDurationMillis() > 0 ?
@@ -143,13 +146,13 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @SneakyThrows
     void initialize() {
         try {
-            val request = new GetIndexRequest(this.alias);
+            val request = new GetIndexRequest(this.indexName);
             val indexExists = this.elasticsearchRestClient.indices().exists(request, RequestOptions.DEFAULT);
 
             log.info("indexExists result: {} ", indexExists);
             if (!indexExists) {
                 this.createIndex();
-                log.info("index {} have been created", this.alias);
+                log.info("index {} have been created", this.indexName);
             }
 
         } catch (Exception e) {
@@ -222,10 +225,11 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     @SneakyThrows
     private void createIndex() {
         val indexSource = loadIndexSourceAsString(this.alias);
-        val createIndexRequest = new CreateIndexRequest(this.alias);
+        val createIndexRequest = new CreateIndexRequest(this.indexName);
+        createIndexRequest.alias(new Alias(this.alias));
         createIndexRequest.source(indexSource, XContentType.JSON);
         this.elasticsearchRestClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
-        log.info("index {} with mapping {} have been created", this.alias, this.alias);
+        log.info("index {}  have been created", this.indexName);
     }
 
     @SneakyThrows

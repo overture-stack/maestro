@@ -18,10 +18,13 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This corresponds to the analysis entity in the file metadata repository.
@@ -34,6 +37,9 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Analysis {
+
+
+
     @NonNull
     @ExclusionId
     private String analysisId;
@@ -42,7 +48,7 @@ public class Analysis {
      * Method used in this analysis (variantCall, sequenceRead)
      */
     @NonNull
-    private String analysisType;
+    private AnalysisTypeId analysisType;
 
     /**
      * the status of the analysis (published or other values)
@@ -56,10 +62,6 @@ public class Analysis {
     @NonNull
     private String study;
 
-    /**
-     * map of extra attributes that belong to this analysis
-     */
-    private Map<String, Object> info;
 
     /**
      * multiple files belong to an analysis, files can be related (bam, bai, xml)
@@ -76,8 +78,20 @@ public class Analysis {
     /**
      * extra information about the analysis type.
      * this will contain attributes that change by the analysis type.
-     *
+     * <p>
      * see the source repository api for more info if needed.
      */
     private Map<String, Object> experiment;
+
+    @NonNull private final Map<String, Object> data = new TreeMap<>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    @JsonAnySetter
+    public void setData(String key, Object value) {
+        data.put(key, value);
+    }
 }
