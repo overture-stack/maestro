@@ -18,17 +18,14 @@
 package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
 
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
-import bio.overture.maestro.domain.api.exception.FailureData;
-import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.masestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
-import io.vavr.control.Either;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Tag;
@@ -46,14 +43,9 @@ import reactor.retry.RetryExhaustedException;
 import reactor.test.StepVerifier;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song.SongStudyDAO.STUDY_ID;
-import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerException;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
+import static bio.overture.masestro.test.Fixture.loadJsonString;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static java.text.MessageFormat.format;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -104,8 +96,11 @@ class SongStudyDAOTest {
     }
 
     @Test
+    @SneakyThrows
     void shouldRetryFetchingAnalysisOnFailure() {
-        val analysis = loadJsonFixture(this.getClass(),
+        val analysis = loadJsonString(this.getClass(),
+            "PEME-CA.analysis.json");
+        val analysisObj = loadJsonFixture(this.getClass(),
             "PEME-CA.analysis.json", Analysis.class);
         val analysisId = "EGAZ00001254247";
         stubFor(
@@ -124,7 +119,11 @@ class SongStudyDAOTest {
             request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
                 .inScenario("RANDOM_FAILURE")
                 .whenScenarioStateIs("WORKING")
-                .willReturn(ResponseDefinitionBuilder.okForJson(analysis))
+                .willReturn(aResponse()
+                    .withBody(analysis)
+                    .withStatus(200)
+                    .withHeader("content-type", "application/json")
+                )
         );
 
         val analysesMono = songStudyDAO.getAnalysis(GetAnalysisCommand.builder()
@@ -135,17 +134,19 @@ class SongStudyDAOTest {
         );
 
         StepVerifier.create(analysesMono)
-            .expectNext(analysis)
+            .expectNext(analysisObj)
             .verifyComplete();
 
     }
 
 
     @Test
+    @SneakyThrows
     void shouldRetryFetchingStudyAnalysesOnFailure() {
-        val analyses = loadJsonFixture(this.getClass(),
-            "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
-
+        val analyses = loadJsonString(this.getClass(),
+            "PEME-CA.study.json");
+        val analysesList = loadJsonFixture(this.getClass(),
+            "PEME-CA.study.json",  new TypeReference<List<Analysis>>() {});
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .inScenario("RANDOM_FAILURE")
@@ -162,7 +163,11 @@ class SongStudyDAOTest {
             request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .inScenario("RANDOM_FAILURE")
                 .whenScenarioStateIs("WORKING")
-                .willReturn(ResponseDefinitionBuilder.okForJson(analyses))
+                .willReturn(aResponse()
+                    .withBody(analyses)
+                    .withStatus(200)
+                    .withHeader("content-type", "application/json")
+                )
         );
 
         val analysesMono = songStudyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
@@ -172,7 +177,7 @@ class SongStudyDAOTest {
         );
 
         StepVerifier.create(analysesMono)
-            .expectNext(analyses)
+            .expectNext(analysesList)
             .verifyComplete();
 
     }

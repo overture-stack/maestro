@@ -85,10 +85,17 @@
             ]
           },
           "type": {
-            "type": "keyword"
-          },
-          "typeVersion": {
-            "type": "keyword"
+            "properties" : {
+              "name": {
+                "type": "keyword",
+                "copy_to": [
+                  "file_autocomplete"
+                ]
+              },
+              "version": {
+                "type": "long"
+              }
+            }
           },
           "tool": {
             "type": "keyword",
@@ -96,7 +103,9 @@
               "file_autocomplete"
             ]
           },
-          "experiment": "object"
+          "experiment": {
+            "type": "object"
+          }
         }
       },
       "data_type": {

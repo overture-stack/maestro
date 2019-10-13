@@ -38,8 +38,6 @@ import java.util.TreeMap;
 @EqualsAndHashCode
 public class Analysis {
 
-
-
     @NonNull
     @ExclusionId
     private String analysisId;

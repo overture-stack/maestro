@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
 
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
+import static bio.overture.masestro.test.Fixture.loadJsonString;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.text.MessageFormat.format;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -159,7 +160,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Test
     void shouldIndexAnalysis() throws InterruptedException, IOException {
         // Given
-        val analyses = loadJsonFixture(this.getClass(), "PEME-CA.analysis.json", Analysis.class);
+        val analyses = loadJsonString(this.getClass(), "PEME-CA.analysis.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -167,7 +168,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254368"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(analyses)));
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(analyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
 
         // test
         val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
@@ -209,9 +215,15 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
         for (Study study: studies) {
             val studyId = study.getStudyId();
-            val studyAnalyses = getStudyAnalyses(studyId);
+            val studyAnalyses = getStudyAnalysesAsString(studyId);
             stubFor(request("GET", urlEqualTo("/collab/studies/" + studyId + "/analysis?analysisStates=PUBLISHED"))
-                .willReturn(ResponseDefinitionBuilder.okForJson(studyAnalyses)));
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(studyAnalyses)
+                        .withHeader("Content-Type", "application/json")
+                    )
+            );
         }
 
         stubFor(request("GET", urlEqualTo("/collab/studies/all"))
@@ -246,7 +258,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val analyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
+        val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -259,7 +271,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(analyses)));
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(analyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
 
         // test
         val result = indexer.indexStudy(IndexStudyCommand.builder()
@@ -286,11 +303,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
-            new TypeReference<List<Analysis>>() {});
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json",
-            new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -302,9 +317,19 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
+            .willReturn(aResponse()
+                .withBody(collabAnalyses)
+                .withHeader("Content-Type", "application/json")
+                .withStatus(200)
+            )
+        );
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
+            .willReturn(aResponse()
+                .withBody(awsStudyAnalyses)
+                .withHeader("Content-Type", "application/json")
+                .withStatus(200)
+            )
+        );
 
         populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
@@ -335,11 +360,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldUpdateExistingFileDocRepository() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
-            new TypeReference<List<Analysis>>() {});
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.study.json",
-            new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
 
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
@@ -362,9 +385,20 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             )
         );
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(collabAnalyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
+
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(awsStudyAnalyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
 
         // test
         // step 1
@@ -393,13 +427,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.study.json",
-            new TypeReference<List<Analysis>>() {});
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
 
         // this has a different analysis id than the one in previous file
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.study.json",
-            new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.study.json");
+        val awsStudyAnalysesList = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.study.json", new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -411,12 +444,22 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
         val expectedNotification = new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
-            getConflicts(expectedDoc1, awsStudyAnalyses.get(0).getAnalysisId()));
+            getConflicts(expectedDoc1, awsStudyAnalysesList.get(0).getAnalysisId()));
 
         stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(collabAnalyses)));
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(collabAnalyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
         stubFor(request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(ResponseDefinitionBuilder.okForJson(awsStudyAnalyses)));
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(awsStudyAnalyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
 
         // test
         populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
@@ -506,8 +549,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         return docs;
     }
 
-    private List<Analysis> getStudyAnalyses(String studyId) {
-        return Arrays.asList(loadJsonFixture(getClass(), studyId +".analysis.json", Analysis[].class));
+    @SneakyThrows
+    private String getStudyAnalysesAsString(String studyId) {
+        return loadJsonString(getClass(), studyId +".analysis.json");
     }
 
 }

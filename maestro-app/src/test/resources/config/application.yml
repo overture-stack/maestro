@@ -16,7 +16,7 @@ maestro:
   elasticsearch:
     indexes:
       fileCentric:
-        name: file_centric
+        name: file_centric_1.0
         alias: file_centric
     # port injected by the embedded_elasticsearch library
     clusterNodes:

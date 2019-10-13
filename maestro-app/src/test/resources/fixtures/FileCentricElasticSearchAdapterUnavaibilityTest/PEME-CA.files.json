@@ -5,7 +5,7 @@
     "study": "PEME-CA",
     "analysis": {
       "id": "EGAZ00001254368",
-      "type": "sequencingRead",
+      "type": { "name": "sequencingRead", "version": 1 },
       "state": "PUBLISHED",
       "study": "PEME-CA",
       "experiment": {

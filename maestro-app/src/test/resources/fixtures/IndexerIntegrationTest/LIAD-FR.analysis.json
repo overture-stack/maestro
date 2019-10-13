@@ -1,6 +1,6 @@
 [
   {
-    "analysisType": "sequencingRead",
+    "analysisType": { "name": "sequencingRead", "version": 1 },
     "info": {
       "dcc_project_code": "LIAD-FR",
       "isPcawg": false

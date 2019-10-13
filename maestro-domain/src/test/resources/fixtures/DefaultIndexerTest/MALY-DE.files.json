@@ -5,7 +5,7 @@
     "study": "MALY-DE",
     "analysis": {
       "id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "MALY-DE",
       "experiment": {
@@ -63,7 +63,7 @@
     "study": "MALY-DE",
     "analysis": {
       "id": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "MALY-DE",
       "experiment": {
@@ -121,7 +121,7 @@
     "study": "MALY-DE",
     "analysis": {
       "id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "MALY-DE",
       "experiment": {
