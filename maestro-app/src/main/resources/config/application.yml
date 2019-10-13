@@ -5,7 +5,7 @@ maestro:
   song:
     maxRetries: 3
     timeoutSec:
-        study: 5 # some studies take really long, +30 secs, to be downloaded
+        study: 100 # some studies take really long, +30 secs, to be downloaded
         analysis: 5
 
   # elastic search server to connect to & client properties
