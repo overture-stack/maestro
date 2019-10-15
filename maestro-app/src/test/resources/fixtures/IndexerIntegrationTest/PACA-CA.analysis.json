@@ -1,6 +1,6 @@
 [
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
     "study": "PACA-CA",
@@ -204,7 +204,7 @@
     }
   },
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
     "study": "PACA-CA",
@@ -342,7 +342,7 @@
     }
   },
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
     "study": "PACA-CA",

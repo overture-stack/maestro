@@ -1,18 +1,18 @@
 [
   {
-    "info": {},
+    
     "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
     "study": "LIRI-JP",
     "analysisState": "PUBLISHED",
     "sample": [
       {
-        "info": {},
+        
         "sampleId": "SA515389",
         "specimenId": "SP107109",
         "sampleSubmitterId": "RK202_C01",
         "sampleType": "DNA",
         "specimen": {
-          "info": {},
+          
           "specimenId": "SP107109",
           "donorId": "DO48736",
           "specimenSubmitterId": "RK202_C01",
@@ -23,14 +23,14 @@
           "donorId": "DO48736",
           "donorSubmitterId": "RK202",
           "studyId": "LIRI-JP",
-          "donorGender": "female",
-          "info": {}
+          "donorGender": "female"
+
         }
       }
     ],
     "file": [
       {
-        "info": {},
+        
         "objectId": "b63dff38-e239-5a5d-9c36-ec851049fd12",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -41,7 +41,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "eb2832eb-ad54-574b-bb60-1abf74489ed8",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -52,7 +52,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -63,7 +63,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "e14e73a5-a869-5b9a-a89c-be77fa54135e",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -74,7 +74,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "3106300b-3666-52b7-a3fa-a5096a51814b",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -85,7 +85,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "ad4e821d-1908-5e37-8b09-f2bcbe841a6b",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -96,7 +96,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "bed33bd4-eec1-5905-8480-5def36d7f6de",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -107,7 +107,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "deab15a3-6820-5bcc-926a-bca2ab5ddaa0",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -118,7 +118,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "233bc863-114c-5ec4-842b-7f44d189eab0",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -130,28 +130,28 @@
       }
     ],
     "experiment": {
-      "info": {},
+      
       "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
       "variantCallingTool": "Sanger variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK202_B01"
     },
-    "analysisType": "variantCall"
+    "analysisType": { "name": "variantCall", "version": 1 }
   },
   {
-    "analysisType": "variantCall",
-    "info": {},
+    "analysisType": { "name": "variantCall", "version": 1 },
+    
     "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
     "study": "LIRI-JP",
     "analysisState": "PUBLISHED",
     "sample": [
       {
-        "info": {},
+        
         "sampleId": "SA270462",
         "specimenId": "SP50179",
         "sampleSubmitterId": "RK156_C01",
         "sampleType": "DNA",
         "specimen": {
-          "info": {},
+          
           "specimenId": "SP50179",
           "donorId": "DO23549",
           "specimenSubmitterId": "RK156_C01",
@@ -162,14 +162,14 @@
           "donorId": "DO23549",
           "donorSubmitterId": "RK156",
           "studyId": "LIRI-JP",
-          "donorGender": "male",
-          "info": {}
+          "donorGender": "male"
+
         }
       }
     ],
     "file": [
       {
-        "info": {},
+        
         "objectId": "24329157-e218-5854-8f45-7fa6b9e046c6",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -180,7 +180,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "ad8a45f3-ec8d-5391-ae93-b19dc982698a",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -191,7 +191,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "4d070189-bd33-5391-b7af-ea32c6782875",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -202,7 +202,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "14e94abe-1fd1-5a85-8d26-a7291edd80ef",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -213,7 +213,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "107c83c7-595e-5b36-957b-ae706611d5b9",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -224,7 +224,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "c5496778-0d72-5cc6-aac4-98777cfbc0c2",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -235,7 +235,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "da524891-37af-5a21-9867-c6812018aa22",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -246,7 +246,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "d87c4599-bba4-5c23-b7a2-57bbeed7eacb",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -257,7 +257,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -268,7 +268,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "55283d00-b1a2-521c-99e1-e9d8d88c660d",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -279,7 +279,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -290,7 +290,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "c4d10f9f-7e9e-5cb3-a30a-0ff8865952ce",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -301,7 +301,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -312,7 +312,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "a99d2a9c-96c4-5788-9149-79a146f0f925",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -323,7 +323,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "bd7aa748-d781-523e-99dc-cb7e3469ddc6",
         "studyId": "LIRI-JP",
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -335,26 +335,26 @@
       }
     ],
     "experiment": {
-      "info": {},
+      
       "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
       "variantCallingTool": "Broad variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK156_B01"
     }
   },
   {
-    "info": {},
+    
     "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
     "study": "LIRI-JP",
     "analysisState": "PUBLISHED",
     "sample": [
       {
-        "info": {},
+        
         "sampleId": "SA501653",
         "specimenId": "SP99145",
         "sampleSubmitterId": "RK091_C01",
         "sampleType": "DNA",
         "specimen": {
-          "info": {},
+          
           "specimenId": "SP99145",
           "donorId": "DO45211",
           "specimenSubmitterId": "RK091_C01",
@@ -365,14 +365,14 @@
           "donorId": "DO45211",
           "donorSubmitterId": "RK091",
           "studyId": "LIRI-JP",
-          "donorGender": "male",
-          "info": {}
+          "donorGender": "male"
+
         }
       }
     ],
     "file": [
       {
-        "info": {},
+        
         "objectId": "316177db-022d-5121-aba8-ce72a92ee778",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -383,7 +383,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "97c3147f-dd1d-507f-a73d-8646f7ce2a0b",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -394,7 +394,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -405,7 +405,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "9abe4aad-9d35-5d4f-955c-8bceb559827e",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -416,7 +416,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "5c222a32-a79d-55e0-a490-440217c63393",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -427,7 +427,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "ad68b7cb-e91c-506e-acae-812ae2ea7678",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -438,7 +438,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "2af2e398-c27b-5645-b60b-b932a916184d",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -449,7 +449,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "bbb31cb3-f175-52c4-ba66-569e1a1d2ed7",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -460,7 +460,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -471,7 +471,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "95e7563e-e8d1-5377-8cfc-1c45a72448da",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -482,7 +482,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "60307755-185e-536e-aa3b-190fb9934844",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -493,7 +493,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "221e532c-a0c8-5573-8399-81f785423e57",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -504,7 +504,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -515,7 +515,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "87d9f1f2-3d13-5dd2-8ed5-d175952e2586",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -526,7 +526,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "8d8a4db8-071d-5385-9266-06e93ca029d0",
         "studyId": "LIRI-JP",
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -538,11 +538,11 @@
       }
     ],
     "experiment": {
-      "info": {},
+      
       "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
       "variantCallingTool": "Broad variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK091_B01"
     },
-    "analysisType": "variantCall"
+    "analysisType": { "name": "variantCall", "version": 1 }
   }
 ]

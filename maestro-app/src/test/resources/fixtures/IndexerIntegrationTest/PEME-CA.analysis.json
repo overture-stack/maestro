@@ -1,5 +1,5 @@
 {
-  "analysisType": "sequencingRead",
+  "analysisType": { "name": "sequencingRead", "version": 1 },
   "info": {
     "dcc_project_code": "PEME-CA",
     "isPcawg": false
@@ -9,13 +9,13 @@
   "analysisState": "PUBLISHED",
   "sample": [
     {
-      "info": {},
+
       "sampleId": "SA604924",
       "specimenId": "SP201301",
       "sampleSubmitterId": "MDT-AP-0749_tumor",
       "sampleType": "DNA",
       "specimen": {
-        "info": {},
+
         "specimenId": "SP201301",
         "donorId": "DO232978",
         "specimenSubmitterId": "MDT-AP-0749_tumor_specimen",
@@ -26,14 +26,13 @@
         "donorId": "DO232978",
         "donorSubmitterId": "MDT-AP-0749",
         "studyId": "PEME-CA",
-        "donorGender": "female",
-        "info": {}
+        "donorGender": "female"
       }
     }
   ],
   "file": [
     {
-      "info": {},
+
       "objectId": "41ba4fb3-9428-50b5-af6c-d779cd59b04d",
       "studyId": "PEME-CA",
       "analysisId": "EGAZ00001254368",
@@ -44,7 +43,7 @@
       "fileAccess": "open"
     },
     {
-      "info": {},
+
       "objectId": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
       "studyId": "PEME-CA",
       "analysisId": "EGAZ00001254368",
@@ -55,7 +54,7 @@
       "fileAccess": "controlled"
     },
     {
-      "info": {},
+
       "objectId": "43d29864-6756-51f0-bb2a-ba7cff860778",
       "studyId": "PEME-CA",
       "analysisId": "EGAZ00001254368",

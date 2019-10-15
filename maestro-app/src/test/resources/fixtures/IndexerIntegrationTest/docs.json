@@ -5,10 +5,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
@@ -63,10 +65,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
@@ -121,10 +125,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
@@ -179,10 +185,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK202_B01"
@@ -237,10 +245,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
@@ -295,10 +305,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
@@ -353,10 +365,12 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
+        "info": {},
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK156_B01"
@@ -411,13 +425,15 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
-        "matchedNormalSampleSubmitterId": "RK156_B01"
+        "matchedNormalSampleSubmitterId": "RK156_B01",
+        "info": {}
       }
     },
     "file": {
@@ -469,13 +485,15 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
-        "matchedNormalSampleSubmitterId": "RK156_B01"
+        "matchedNormalSampleSubmitterId": "RK156_B01",
+        "info": {}
       }
     },
     "file": {
@@ -527,12 +545,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
@@ -585,12 +605,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
@@ -643,12 +665,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "LIRI-JP",
+      "info": {},
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
@@ -701,12 +725,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
@@ -759,11 +785,13 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+        "info": {},
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
@@ -817,12 +845,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
@@ -875,12 +905,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
@@ -933,11 +965,13 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+        "info": {},
         "variantCallingTool": "Broad variant call pipeline",
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
@@ -991,12 +1025,14 @@
     "study": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
@@ -1049,12 +1085,14 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
+      "info": {},
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
@@ -1107,13 +1145,15 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
+      "info": {},
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
-        "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
+        "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R",
+        "info": {}
       }
     },
     "file": {
@@ -1165,12 +1205,14 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
@@ -1223,11 +1265,13 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "info": {},
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
@@ -1281,12 +1325,14 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
@@ -1339,11 +1385,13 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "info": {},
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
@@ -1397,11 +1445,13 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+        "info": {},
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
@@ -1455,11 +1505,13 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "info": {},
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
@@ -1513,11 +1565,13 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
+        "info": {},
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
@@ -1571,12 +1625,14 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
@@ -1629,12 +1685,14 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
@@ -1687,11 +1745,13 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "b8e09611-225a-4de6-87dc-104753072252",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "PACA-CA",
       "experiment": {
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
+        "info": {},
         "variantCallingTool": "PCAWG InDel callers",
         "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"
       }
@@ -1745,12 +1805,14 @@
     "study": "MALY-DE",
     "analysis": {
       "id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
+      "info": {},
       "study": "MALY-DE",
       "experiment": {
         "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
         "variantCallingTool": "MUSE variant call pipeline",
+        "info": {},
         "matchedNormalSampleSubmitterId": "control_4128852"
       }
     },
@@ -1803,12 +1865,14 @@
     "study": "MALY-DE",
     "analysis": {
       "id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "MALY-DE",
+      "info": {},
       "experiment": {
         "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
         "variantCallingTool": "PCAWG InDel callers",
+        "info": {},
         "matchedNormalSampleSubmitterId": "control_4166503"
       }
     },

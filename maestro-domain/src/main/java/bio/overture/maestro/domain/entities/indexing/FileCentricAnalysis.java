@@ -17,13 +17,16 @@
 
 package bio.overture.maestro.domain.entities.indexing;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
 import java.util.Map;
+import java.util.TreeMap;
 
-@Builder
 @Getter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,11 +37,36 @@ public class FileCentricAnalysis {
     @NonNull
     private String id;
     @NonNull
-    private String type;
+    private AnalysisType type;
     @NonNull
     private String state;
     @NonNull
     private String study;
-
+    @NonNull
     private Map<String, Object> experiment;
+
+    /**
+     * this field is to capture the dynamic fields in the analysis.
+     * it's the responsibility of the users to make sure the mapping is consistent with
+     * the different fields that they want to add/index, they are also responsibile
+     * to add the mappings of these fields or reindex appropriately.
+     */
+    @NonNull
+    private final Map<String, Object> data = new TreeMap<>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+
+    @JsonAnySetter
+    public void setData(String key, Object value) {
+        data.put(key, value);
+    }
+
+    public void replaceData(Map<String, Object> data) {
+        this.data.clear();
+        this.data.putAll(data);
+    }
 }

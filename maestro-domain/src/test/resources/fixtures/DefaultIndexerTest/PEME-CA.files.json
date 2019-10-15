@@ -5,13 +5,18 @@
     "study": "PEME-CA",
     "analysis": {
       "id": "EGAZ00001254368",
-      "type": "sequencingRead",
+      "type": { "name": "sequencingRead", "version": 1 },
       "state": "PUBLISHED",
       "study": "PEME-CA",
       "experiment": {
         "analysisId": "EGAZ00001254368",
         "aligned": true,
-        "libraryStrategy": "WGS"
+        "libraryStrategy": "WGS",
+        "info": {}
+      },
+      "info": {
+        "dcc_project_code" : "PEME-CA",
+        "isPcawg" : false
       }
     },
     "file": {

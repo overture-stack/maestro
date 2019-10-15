@@ -1,8 +1,10 @@
 #  Multiple SONGs, One Index
 Maestro supports indexing from multiple metadata repositories [SONG](https://www.overture.bio/products/song).
-Maestro can be connected to multiple SONGs and it will index all files into a single Elasticsearch index. Conflict resolution is built in as partof the indexing process. For example, if the same file was identified in multiple SONGs that are geographically distributed, then it will aggregate all repositories information in the same index document.
+Maestro can be connected to multiple SONGs and it will index all files into a single Elasticsearch index. 
+Conflict resolution is built in as part of the indexing process. For example, if the same file was identified in multiple 
+SONGs that are geographically distributed, then it will aggregate all repositories information in the same index document.
 
-As an example, you can see in the `repositories` seciton of the following document that this file is found in multiple repositories: 
+As an example, you can see in the `repositories` section of the following document that this file is found in multiple repositories: 
 
 ``` json
 
@@ -76,6 +78,10 @@ As an example, you can see in the `repositories` seciton of the following docume
     }
 
 ```
+# Support for Dynamic analysis attributes
+The indexer only needs the required basic fields of an analysis to exist, it supports arbitrary fields that dynamic 
+analysis can have based on the analysis schema, see SONG for more information about dynamic analysis schemas.
+Worth noting that it's the user's responsibility to manage the mapping and migration from one index to another.
 
 # Multiple indexing levels 
 In the data model, data is grouped by different entities.  Maestro can index discreet data levels. For example, indexing can be driven at a Repository, Study, or individual Analysis level. 

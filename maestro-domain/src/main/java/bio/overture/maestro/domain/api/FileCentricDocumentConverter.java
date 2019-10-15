@@ -75,16 +75,20 @@ final class FileCentricDocumentConverter {
                                                           StudyRepository repository) {
         val id = file.getObjectId();
         val metadataFileId = getMetadataFileId(analysis);
-        val repoFile = FileCentricDocument.builder()
+        val repoFileBuilder = FileCentricDocument.builder()
             .objectId(id)
             .study(file.getStudyId())
             .access(file.getFileAccess())
             .analysis(FileCentricAnalysis.builder()
                 .id(analysis.getAnalysisId())
                 .state(analysis.getAnalysisState())
-                .type(analysis.getAnalysisType())
+                .type(AnalysisType.builder()
+                    .name(analysis.getAnalysisType().getName())
+                    .version(analysis.getAnalysisType().getVersion())
+                    .build()
+                )
                 .study(analysis.getStudy())
-                .experiment(getExpirement(analysis))
+                .experiment(analysis.getExperiment())
                 .build()
             )
             .file(buildGenomeFileInfo(analysis, file))
@@ -99,21 +103,9 @@ final class FileCentricDocumentConverter {
                 .metadataPath(repository.getMetadataPath() + "/" + metadataFileId)
                 .build()))
             .donors(getDonors(analysis));
-        return repoFile.build();
-    }
-
-    /**
-     * we remove the info from the experiment map to avoid possible bad data
-     * that could break indexing (similar fields names with different type
-     */
-    private static Map<String, Object> getExpirement(Analysis a) {
-        val experiment = a.getExperiment();
-        if (experiment != null && experiment.containsKey("info")){
-            val newExp = new HashMap<String, Object>(experiment);
-            newExp.remove("info");
-            return Map.copyOf(newExp);
-        }
-        return experiment;
+        val repoFile = repoFileBuilder.build();
+        repoFile.getAnalysis().replaceData(analysis.getData());
+        return repoFile;
     }
 
     private static File buildGenomeFileInfo(Analysis analysis,
