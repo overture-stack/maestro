@@ -1,6 +1,6 @@
 [
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
     "study": "LIRI-JP",
@@ -339,7 +339,7 @@
       "variantCallingTool": "Broad variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK156_B01"
     },
-    "analysisType": "variantCall"
+    "analysisType": { "name": "variantCall", "version": 1 }
   },
   {
     "info": {},
@@ -543,6 +543,6 @@
       "variantCallingTool": "Broad variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK091_B01"
     },
-    "analysisType": "variantCall"
+    "analysisType": { "name": "variantCall", "version": 1 }
   }
 ]

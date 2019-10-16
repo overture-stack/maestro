@@ -5,7 +5,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -63,7 +63,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -121,7 +121,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -179,7 +179,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -237,7 +237,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -295,7 +295,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -353,7 +353,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -411,7 +411,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -469,7 +469,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -527,7 +527,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -585,7 +585,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {
@@ -643,7 +643,7 @@
     "study": "PACA-CA",
     "analysis": {
       "id": "b8e09611-225a-4de6-87dc-104753072252",
-      "type": "variantCall",
+      "type": { "name": "variantCall", "version": 1 },
       "state": "PUBLISHED",
       "study": "PACA-CA",
       "experiment": {

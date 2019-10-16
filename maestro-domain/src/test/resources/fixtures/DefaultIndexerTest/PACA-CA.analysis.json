@@ -1,19 +1,18 @@
 [
   {
-    "analysisType": "variantCall",
-    "info": {},
+    "analysisType": { "name": "variantCall", "version": 1 },
     "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
     "study": "PACA-CA",
     "analysisState": "PUBLISHED",
     "sample": [
       {
-        "info": {},
+        
         "sampleId": "SA533729",
         "specimenId": "SP125730",
         "sampleSubmitterId": "PCSI_0233_Pa_P_526",
         "sampleType": "DNA",
         "specimen": {
-          "info": {},
+          
           "specimenId": "SP125730",
           "donorId": "DO51523",
           "specimenSubmitterId": "PCSI_0233_Pa_P_526",
@@ -24,14 +23,14 @@
           "donorId": "DO51523",
           "donorSubmitterId": "PCSI_0233",
           "studyId": "PACA-CA",
-          "donorGender": "male",
-          "info": {}
+          "donorGender": "male"
+          
         }
       }
     ],
     "file": [
       {
-        "info": {},
+        
         "objectId": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -42,7 +41,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "bb949d15-334f-5712-9f04-41225a7beb8d",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -53,7 +52,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -64,7 +63,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "2910e07c-268b-57a5-877a-0cec35298319",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -75,7 +74,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -86,7 +85,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "425898fd-35d3-5ee2-ac00-50dfd724f4c6",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -97,7 +96,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -108,7 +107,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "04c24136-c19d-5042-a3cd-36f63c7b4d6b",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -119,7 +118,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "432779b5-95db-5caf-a529-85a36a707c04",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -130,7 +129,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "51306186-092d-5e3f-bb3c-028873052eb2",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -141,7 +140,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -152,7 +151,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "e5d387a1-3b51-5526-ae22-270df2e1fd2f",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -163,7 +162,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "3f571505-3bea-5065-956a-4b5a793ad1ed",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -174,7 +173,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "e8569e7c-6ae4-5aeb-ae50-b94366aae5df",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -185,7 +184,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+        
         "objectId": "bbbbc35b-9ea3-5191-b6c8-9092975d8033",
         "studyId": "PACA-CA",
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -197,27 +196,26 @@
       }
     ],
     "experiment": {
-      "info": {},
       "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "variantCallingTool": "DKFZ/EMBL variant call pipeline",
       "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
     }
   },
   {
-    "analysisType": "variantCall",
-    "info": {},
+    "analysisType": { "name": "variantCall", "version": 1 },
+    
     "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
     "study": "PACA-CA",
     "analysisState": "PUBLISHED",
     "sample": [
       {
-        "info": {},
+        
         "sampleId": "SA533758",
         "specimenId": "SP125791",
         "sampleSubmitterId": "ASHPC_0022_Pa_P",
         "sampleType": "DNA",
         "specimen": {
-          "info": {},
+          
           "specimenId": "SP125791",
           "donorId": "DO51498",
           "specimenSubmitterId": "ASHPC_0022_Pa_P",
@@ -228,14 +226,14 @@
           "donorId": "DO51498",
           "donorSubmitterId": "PCSI_0450",
           "studyId": "PACA-CA",
-          "donorGender": "female",
-          "info": {}
+          "donorGender": "female"
+          
         }
       }
     ],
     "file": [
       {
-        "info": {},
+
         "objectId": "e122b153-c98b-530d-879a-11871a427d1b",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -246,7 +244,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "b26a535c-3531-55ad-8725-17aa6afb22c2",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -257,7 +255,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -268,7 +266,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "b9800f14-13d5-55cf-9383-a65b5446116a",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -279,7 +277,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -290,7 +288,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "52db8e51-5b3e-56ce-b939-0a96b4dfbce3",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -301,7 +299,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "e704d3f5-1274-5cdd-924f-609159e121cc",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -312,7 +310,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "6b32cfec-e82c-5528-b908-8e00ae927578",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -323,7 +321,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "47fc8458-df52-5ad1-a0fc-cd2c277ecb93",
         "studyId": "PACA-CA",
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -335,27 +333,26 @@
       }
     ],
     "experiment": {
-      "info": {},
       "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
       "variantCallingTool": "Sanger variant call pipeline",
       "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
     }
   },
   {
-    "analysisType": "variantCall",
-    "info": {},
+    "analysisType": { "name": "variantCall", "version": 1 },
+
     "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
     "study": "PACA-CA",
     "analysisState": "PUBLISHED",
     "sample": [
       {
-        "info": {},
+
         "sampleId": "SA520221",
         "specimenId": "SP125732",
         "sampleSubmitterId": "PCSI_0083_Pa_P_526",
         "sampleType": "DNA",
         "specimen": {
-          "info": {},
+
           "specimenId": "SP125732",
           "donorId": "DO35442",
           "specimenSubmitterId": "PCSI_0083_Pa_P_526",
@@ -366,14 +363,14 @@
           "donorId": "DO35442",
           "donorSubmitterId": "PCSI_0083",
           "studyId": "PACA-CA",
-          "donorGender": "female",
-          "info": {}
+          "donorGender": "female"
+          
         }
       }
     ],
     "file": [
       {
-        "info": {},
+
         "objectId": "ca8479dc-8f00-5757-b433-c3cf5b76f255",
         "studyId": "PACA-CA",
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
@@ -384,7 +381,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "9727c61d-3871-54f1-a65a-2d1d91acd242",
         "studyId": "PACA-CA",
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
@@ -395,7 +392,7 @@
         "fileAccess": "controlled"
       },
       {
-        "info": {},
+
         "objectId": "08519ab5-8665-58dc-8476-1c40cae5b789",
         "studyId": "PACA-CA",
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
@@ -407,7 +404,7 @@
       }
     ],
     "experiment": {
-      "info": {},
+
       "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
       "variantCallingTool": "PCAWG InDel callers",
       "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"

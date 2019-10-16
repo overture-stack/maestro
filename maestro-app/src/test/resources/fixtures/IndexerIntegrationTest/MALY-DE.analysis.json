@@ -1,6 +1,6 @@
 [
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
     "study": "MALY-DE",
@@ -72,7 +72,7 @@
     }
   },
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
     "study": "MALY-DE",
@@ -144,7 +144,7 @@
     }
   },
   {
-    "analysisType": "variantCall",
+    "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
     "study": "MALY-DE",

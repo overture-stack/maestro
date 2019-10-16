@@ -6,13 +6,15 @@ PUBLISHED_DOCS_DIR=docs
 ###################
 ## MAVEN
 ###################
-build:
+compile:
 	./mvnw clean compile
+build:
+	./mvnw clean install -DskipTests
 test:
 	./mvnw clean test
 package:
 	./mvnw clean package -Dmaven.test.skip=true
-run:
+start:
 	cd maestro-app
 	../mvnw spring-boot:run
 
