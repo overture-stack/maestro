@@ -119,7 +119,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                 + ", Error Info: ```{analysisId=" + analysisId + ", " +
                 "repoCode=" + repoId + ", studyId=" + studyId + ", " +
                 "err=org.springframework.web.reactive.function.UnsupportedMediaTypeException: Content type 'text/html' " +
-                "not supported for bodyType=bio.overture.maestro.domain.entities.metadata.study.Analysis}```\"," +
+                "not supported for bodyType=bio.overture.maestro.domain.entities.metadata.studyId.Analysis}```\"," +
                 "\"channel\":\"maestro-test\"}")
             )
             .willReturn(aResponse()
@@ -258,7 +258,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+        val analyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -303,9 +303,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.studyId.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -360,9 +360,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldUpdateExistingFileDocRepository() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.studyId.json");
 
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
@@ -404,7 +404,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         // step 1
         populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
-        // step 2 index the same file from another repository:
+        // step 2 index the same files from another repository:
         val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("aws")
             .studyId("PEME-CA")
@@ -427,12 +427,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
 
-        // this has a different analysis id than the one in previous file
+        // this has a different analysis id than the one in previous files
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.study.json");
-        val awsStudyAnalysesList = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.study.json", new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.studyId.json");
+        val awsStudyAnalysesList = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.studyId.json", new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -464,7 +464,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         // test
         populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
-        // index the same file from another repository:
+        // index the same files from another repository:
         // test
         val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("aws")
@@ -490,7 +490,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         return Map.of("conflicts", List.of(DefaultIndexer.FileConflict.builder()
             .indexedFile(
                 DefaultIndexer.ConflictingFile.builder()
-                    .studyId(document.getStudy())
+                    .studyId(document.getStudyId())
                     .analysisId(document.getAnalysis().getId())
                     .objectId(document.getObjectId())
                     .repoCode(document
@@ -500,7 +500,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                     .build()
             ).newFile(
                 DefaultIndexer.ConflictingFile.builder()
-                    .studyId(document.getStudy())
+                    .studyId(document.getStudyId())
                     .analysisId(differentAnalysisId)
                     .objectId(document.getObjectId())
                     .repoCode(Set.of("aws"))

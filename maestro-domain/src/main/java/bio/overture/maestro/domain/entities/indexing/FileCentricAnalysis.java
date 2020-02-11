@@ -41,7 +41,7 @@ public class FileCentricAnalysis {
     @NonNull
     private String state;
     @NonNull
-    private String study;
+    private String studyId;
     @NonNull
     private Map<String, Object> experiment;
 

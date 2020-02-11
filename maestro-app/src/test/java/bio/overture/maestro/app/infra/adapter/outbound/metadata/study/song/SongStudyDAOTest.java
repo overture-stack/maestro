@@ -144,9 +144,9 @@ class SongStudyDAOTest {
     @SneakyThrows
     void shouldRetryFetchingStudyAnalysesOnFailure() {
         val analyses = loadJsonString(this.getClass(),
-            "PEME-CA.study.json");
+            "PEME-CA.studyId.json");
         val analysesList = loadJsonFixture(this.getClass(),
-            "PEME-CA.study.json",  new TypeReference<List<Analysis>>() {});
+            "PEME-CA.studyId.json",  new TypeReference<List<Analysis>>() {});
         stubFor(
             request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
                 .inScenario("RANDOM_FAILURE")

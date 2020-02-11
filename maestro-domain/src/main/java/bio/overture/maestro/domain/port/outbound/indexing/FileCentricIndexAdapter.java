@@ -28,7 +28,7 @@ import java.util.Set;
 
 /**
  * Adapter for the indexing server client, this provides the indexer with needed APIs
- * to index file centric documents in the index server
+ * to index files centric documents in the index server
  */
 public interface FileCentricIndexAdapter {
 
@@ -48,15 +48,15 @@ public interface FileCentricIndexAdapter {
     Mono<List<FileCentricDocument>> fetchByIds(List<String> ids);
 
     /**
-     * Method to delete file documents from the file centric index
+     * Method to delete files documents from the files centric index
      *
-     * @param fileCentricDocumentIds the list of file to delete
+     * @param fileCentricDocumentIds the list of files to delete
      * @return indexer exception instance contains the list of failures.
      */
     Mono<Void> removeFiles(Set<String> fileCentricDocumentIds);
 
     /**
-     * Remove all file documents related to the specified analysisId
+     * Remove all files documents related to the specified analysisId
      */
     Mono<Void> removeAnalysisFiles(String analysisId);
 

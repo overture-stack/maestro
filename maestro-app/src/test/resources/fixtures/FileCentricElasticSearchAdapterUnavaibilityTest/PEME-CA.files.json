@@ -2,19 +2,19 @@
   {
     "objectId": "43d29864-6756-51f0-bb2a-ba7cff860778",
     "access": "controlled",
-    "study": "PEME-CA",
+    "studyId": "PEME-CA",
     "analysis": {
       "id": "EGAZ00001254368",
       "type": { "name": "sequencingRead", "version": 1 },
       "state": "PUBLISHED",
-      "study": "PEME-CA",
+      "studyId": "PEME-CA",
       "experiment": {
         "analysisId": "EGAZ00001254368",
         "aligned": true,
         "libraryStrategy": "WGS"
       }
     },
-    "file": {
+    "files": {
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
       "format": "BAM",
       "md5sum": "29ff9df727803d20834b9997bc17e970",
@@ -48,7 +48,7 @@
           "id": "SP201301",
           "type": "Primary tumour - solid tissue",
           "submittedId": "MDT-AP-0749_tumor_specimen",
-          "sample": {
+          "samples": {
             "id": "SA604924",
             "submittedId": "MDT-AP-0749_tumor",
             "type": "DNA"

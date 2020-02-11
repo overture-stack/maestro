@@ -22,7 +22,7 @@ import bio.overture.maestro.domain.entities.indexing.StorageType;
 import lombok.*;
 
 /**
- * This represents a study (including analyses & files) metadata repository, holds information about sources where this
+ * This represents a studyId (including analyses & files) metadata repository, holds information about sources where this
  * indexer can pull metadata from.
  */
 @Builder
@@ -45,7 +45,7 @@ public class StudyRepository {
     private String code;
 
     /**
-     * the country where this file repository resides
+     * the country where this files repository resides
      */
     @NonNull
     private String country;
@@ -63,7 +63,7 @@ public class StudyRepository {
     private String dataPath;
 
     /**
-     * url path to access metadata about the file.
+     * url path to access metadata about the files.
      */
     private String metadataPath;
 

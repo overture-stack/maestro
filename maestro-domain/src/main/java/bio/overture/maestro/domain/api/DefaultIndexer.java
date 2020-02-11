@@ -125,7 +125,7 @@ class DefaultIndexer implements Indexer {
             .flatMap(studyAndRepository ->
                 // I had to put this block inside this flatMap to allow these operations to bubble up their exceptions
                 // to this onErrorResume handler without interrupting the main flux, and terminating it with error signals.
-                // for example if fetchAnalyses down stream throws error for a study the studies flux will
+                // for example if fetchAnalyses down stream throws error for a studyId the studies flux will
                 // continue emitting studies
                 this.getStudyAnalysesDocuments(studyAndRepository)
                     .flatMap(this::batchUpsertFilesAndCollectFailures)
@@ -243,7 +243,7 @@ class DefaultIndexer implements Indexer {
                                                GetStudyAnalysesCommand command, Throwable e) {
         notifyStudyFetchingError(studyId, studyRepositoryBaseUrl, e.getMessage());
         return wrapWithIndexerException(e,
-            format("failed fetching study analysis, command: {0}, retries exhausted", command),
+            format("failed fetching studyId analysis, command: {0}, retries exhausted", command),
             FailureData.builder()
                 .failingIds(Map.of(STUDY_ID, Set.of(studyId)))
                 .build()
@@ -485,7 +485,7 @@ class DefaultIndexer implements Indexer {
                 NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
                 Map.of(
                     ANALYSIS_ID, analysis.getAnalysisId(),
-                    STUDY_ID, analysis.getStudy(),
+                    STUDY_ID, analysis.getStudyId(),
                     REPO_CODE, repository.getCode(),
                     ERR, e.getMessage()
                 )
@@ -495,8 +495,8 @@ class DefaultIndexer implements Indexer {
 
     private IndexerException wrapBuildDocumentException(Analysis analysis, Throwable throwable) {
         return wrapWithIndexerException(throwable,
-            format("buildFileDocuments failed for analysis : {0}, study: {1}",
-                analysis.getAnalysisId(), analysis.getStudy()),
+            format("buildFileDocuments failed for analysis : {0}, studyId: {1}",
+                analysis.getAnalysisId(), analysis.getStudyId()),
             FailureData.builder()
                 .failingIds(Map.of(ANALYSIS_ID, Set.of(analysis.getAnalysisId())))
                 .build());
@@ -541,7 +541,7 @@ class DefaultIndexer implements Indexer {
             .newFile(ConflictingFile.builder()
                 .objectId(f1.getObjectId())
                 .analysisId(f1.getAnalysis().getId())
-                .studyId(f1.getStudy())
+                .studyId(f1.getStudyId())
                 .repoCode(f1.getRepositories().stream()
                     .map(Repository::getCode)
                     .collect(Collectors.toUnmodifiableSet())
@@ -549,7 +549,7 @@ class DefaultIndexer implements Indexer {
             ).indexedFile(ConflictingFile.builder()
                 .objectId(f2.getObjectId())
                 .analysisId(f2.getAnalysis().getId())
-                .studyId(f2.getStudy())
+                .studyId(f2.getStudyId())
                 .repoCode(f2.getRepositories().stream()
                     .map(Repository::getCode)
                     .collect(Collectors.toUnmodifiableSet())

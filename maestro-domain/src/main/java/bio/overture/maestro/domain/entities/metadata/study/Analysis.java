@@ -55,23 +55,23 @@ public class Analysis {
     private String analysisState;
 
     /**
-     * the study Id that this analysis belongs to.
+     * the studyId Id that this analysis belongs to.
      */
     @NonNull
-    private String study;
+    private String studyId;
 
 
     /**
      * multiple files belong to an analysis, files can be related (bam, bai, xml)
      */
     @NonNull
-    private List<File> file;
+    private List<File> files;
 
     /**
      * An analysis can have one or more samples
      */
     @NonNull
-    private List<Sample> sample;
+    private List<Sample> samples;
 
     /**
      * extra information about the analysis type.

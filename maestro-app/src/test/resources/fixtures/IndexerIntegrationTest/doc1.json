@@ -1,7 +1,7 @@
 {
   "object_id": "9ce9358d-c93a-5f83-8032-4addcb84b51a",
   "access": "controlled",
-  "study": "PEME-CA",
+  "studyId": "PEME-CA",
   "analysis": {
     "id": "EGAZ00001254247",
     "type": { "name": "sequencingRead", "version": 1 },
@@ -10,7 +10,7 @@
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
     },
-    "study": "PEME-CA",
+    "studyId": "PEME-CA",
     "experiment": {
       "info": {},
       "analysisId": "EGAZ00001254247",
@@ -18,7 +18,7 @@
       "libraryStrategy": "WGS"
     }
   },
-  "file": {
+  "files": {
     "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam",
     "format": "BAM",
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
@@ -52,7 +52,7 @@
         "id": "SP200947",
         "type": "Normal - blood derived",
         "submitted_id": "MDT-AP-0432_control_specimen",
-        "sample": {
+        "samples": {
           "id": "SA604905",
           "submitted_id": "MDT-AP-0432_control",
           "type": "DNA"

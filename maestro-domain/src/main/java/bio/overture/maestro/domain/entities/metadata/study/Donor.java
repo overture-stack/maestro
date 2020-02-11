@@ -23,7 +23,7 @@ import lombok.*;
 import java.util.Map;
 
 /**
- * This represents the sample donor
+ * This represents the samples donor
  * A donor is part of the {@link Sample} entity.
  */
 @Getter
@@ -44,19 +44,19 @@ public class Donor {
      * the id as submitted by the analysis creator
      */
     @NonNull
-    private String donorSubmitterId;
+    private String submitterDonorId;
 
     /**
-     * the study which this donor belongs to
+     * the studyId which this donor belongs to
      */
     @NonNull
     private String studyId;
 
     /**
-     * can be Female / Male
+     * can be Male, Female, Other
      */
     @NonNull
-    private String donorGender;
+    private String gender;
 
     /**
      * for extra information if any.

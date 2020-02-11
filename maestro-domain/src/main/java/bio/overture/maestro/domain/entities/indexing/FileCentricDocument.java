@@ -41,20 +41,20 @@ public class FileCentricDocument {
     private String access;
 
     @NonNull
-    private String study;
+    private String studyId;
 
     @NonNull
     private FileCentricAnalysis analysis;
 
     /**
-     * The actual genome analysis file information.
+     * The actual genome analysis files information.
      */
     @NonNull
-    private File file;
+    private File files;
 
     /**
-     * Each file can be hosted in more than one files repository, this references the other repositories (locations)
-     * where this file can be fetched from.
+     * Each files can be hosted in more than one files repository, this references the other repositories (locations)
+     * where this files can be fetched from.
      */
     @NonNull
     private List<Repository> repositories;
@@ -63,12 +63,12 @@ public class FileCentricDocument {
     private List<FileCentricDonor> donors;
 
     /**
-     * This method is to check if the file is a valid replica of another file.
+     * This method is to check if the files is a valid replica of another files.
      * by replication we mean that an analysis can be copied to a different metadata repository to make downloading
      * the files faster for different geographical locations.
      * it checks all attributes except for the repository (since the repository is expected to be different)
      *
-     * @param fileCentricDocument the other file we compare to
+     * @param fileCentricDocument the other files we compare to
      * @return flag indicates if this is a valid replica.
      */
     public boolean isValidReplica(FileCentricDocument fileCentricDocument) {
@@ -76,10 +76,10 @@ public class FileCentricDocument {
         if (this.equals(fileCentricDocument)) return true;
         return this.objectId.equals(fileCentricDocument.getObjectId())
             && this.access.equals(fileCentricDocument.getAccess())
-            && this.study.equals(fileCentricDocument.getStudy())
+            && this.studyId.equals(fileCentricDocument.getStudyId())
             && this.donors.equals(fileCentricDocument.getDonors())
             && this.analysis.equals(fileCentricDocument.getAnalysis())
-            && this.file.equals(fileCentricDocument.getFile());
+            && this.files.equals(fileCentricDocument.getFiles());
     }
 }
 

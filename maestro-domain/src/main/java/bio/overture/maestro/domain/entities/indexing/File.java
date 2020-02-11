@@ -34,5 +34,6 @@ public class File {
     private String md5sum;
     private Long size;
     private Long lastModified;
+    private String dataType;
     private IndexFile indexFile;
 }

@@ -104,7 +104,7 @@ class DefaultIndexerTest {
         val filesRepository = getStubFilesRepository();
         val repositoryMono = Mono.just(filesRepository);
         val failure = FailureData.builder()
-            .failingIds(Map.of("study", Set.of("anyStudy")))
+            .failingIds(Map.of("studyId", Set.of("anyStudy")))
             .build();
         val output = IndexResult.builder()
             .failureData(failure)
@@ -174,7 +174,7 @@ class DefaultIndexerTest {
         val studies = getExpectedStudies();
         val fileRepo = Mono.just(getStubFilesRepository());
         val failure = FailureData.builder()
-            .failingIds(Map.of("study", Set.of("PACA-CA"))).build();
+            .failingIds(Map.of("studyId", Set.of("PACA-CA"))).build();
         val failedIndexResult = IndexResult.builder().failureData(failure).successful(false).build();
         val successfulResult = IndexResult.builder().successful(true).build();
         val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
@@ -383,7 +383,7 @@ class DefaultIndexerTest {
         return Map.of("conflicts", List.of(DefaultIndexer.FileConflict.builder()
             .indexedFile(
                 DefaultIndexer.ConflictingFile.builder()
-                    .studyId(fileCentricDocuments.get(0).getStudy())
+                    .studyId(fileCentricDocuments.get(0).getStudyId())
                     .analysisId(fileCentricDocuments.get(0).getAnalysis().getId())
                     .objectId(fileCentricDocuments.get(0).getObjectId())
                     .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode)
@@ -391,7 +391,7 @@ class DefaultIndexerTest {
                     .build()
             ).newFile(
                 DefaultIndexer.ConflictingFile.builder()
-                    .studyId(fileCentricDocuments.get(0).getStudy())
+                    .studyId(fileCentricDocuments.get(0).getStudyId())
                     .analysisId(fileCentricDocuments.get(0).getAnalysis().getId())
                     .objectId(fileCentricDocuments.get(0).getObjectId())
                     .repoCode(fileCentricDocuments.get(0).getRepositories().stream().map(Repository::getCode)
