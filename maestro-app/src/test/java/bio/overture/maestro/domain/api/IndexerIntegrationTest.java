@@ -258,7 +258,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val analyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
+        val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -303,9 +303,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.studyId.json");
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,
@@ -360,9 +360,9 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldUpdateExistingFileDocRepository() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.studyId.json");
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
 
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
@@ -427,12 +427,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException, IOException {
         // Given
         @SuppressWarnings("all")
-        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.studyId.json");
+        val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
 
         // this has a different analysis id than the one in previous files
         @SuppressWarnings("all")
-        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.studyId.json");
-        val awsStudyAnalysesList = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.studyId.json", new TypeReference<List<Analysis>>() {});
+        val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.study.json");
+        val awsStudyAnalysesList = loadJsonFixture(this.getClass(), "PEME-CA.aws.conflicting.study.json", new TypeReference<List<Analysis>>() {});
         val expectedDoc0 = loadJsonFixture(this.getClass(),
             "doc0.json",
             FileCentricDocument.class,

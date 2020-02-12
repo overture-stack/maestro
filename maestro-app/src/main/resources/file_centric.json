@@ -1,4 +1,7 @@
 {
+  "aliases": {
+    "file_centric": {}
+  },
   "settings": {
     "index.number_of_shards" : 11,
     "index.max_result_window":300000,
@@ -79,25 +82,6 @@
       "analysis" : {
         "properties" : {
           "id" : {
-            "type": "keyword",
-            "copy_to": [
-              "file_autocomplete"
-            ]
-          },
-          "type": {
-            "properties" : {
-              "name": {
-                "type": "keyword",
-                "copy_to": [
-                  "file_autocomplete"
-                ]
-              },
-              "version": {
-                "type": "long"
-              }
-            }
-          },
-          "tool": {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"

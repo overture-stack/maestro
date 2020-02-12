@@ -5,7 +5,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -20,11 +23,13 @@
       "md5sum": "93354882b0fc014b49be1b24df8f435e",
       "size": 44440835,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "eb2832eb-ad54-574b-bb60-1abf74489ed8",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
+        "dataType": "AlignedReads",
         "size": 1458418
       }
     },
@@ -51,7 +56,8 @@
           "samples": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -63,7 +69,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -78,11 +87,13 @@
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
       "size": 11431,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "e14e73a5-a869-5b9a-a89c-be77fa54135e",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "9ce7cdedb7450a05c03e419235ed56a6",
+        "dataType": "AlignedReads",
         "size": 1756
       }
     },
@@ -109,7 +120,8 @@
           "samples": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -121,7 +133,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -136,11 +151,13 @@
       "md5sum": "492989e81699bd5a56b7956e0be7416d",
       "size": 3648,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "ad4e821d-1908-5e37-8b09-f2bcbe841a6b",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "acdf137ad635f95ee93412fa9153d066",
+        "dataType": "AlignedReads",
         "size": 5539
       }
     },
@@ -167,7 +184,8 @@
           "samples": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -179,7 +197,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -194,11 +215,13 @@
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
       "size": 1418099,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "deab15a3-6820-5bcc-926a-bca2ab5ddaa0",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "2233fb90872d759d279395b1a7ad3461",
+        "dataType": "AlignedReads",
         "size": 236926
       }
     },
@@ -225,7 +248,8 @@
           "samples": {
             "id": "SA515389",
             "submittedId": "RK202_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -237,7 +261,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -252,11 +279,13 @@
       "md5sum": "7d0676c6a85696e1cb2919836b0ab71e",
       "size": 10536170,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "ad8a45f3-ec8d-5391-ae93-b19dc982698a",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "8269ee64b80e6ec66e590767f697d37b",
+        "dataType": "AlignedReads",
         "size": 1031078
       }
     },
@@ -283,7 +312,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -295,7 +325,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -310,11 +343,13 @@
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
       "size": 59633,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "14e94abe-1fd1-5a85-8d26-a7291edd80ef",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "fdb961feac82a7912bf657450e02c44d",
+        "dataType": "AlignedReads",
         "size": 11325
       }
     },
@@ -341,7 +376,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -353,7 +389,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -368,11 +407,13 @@
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
       "size": 51548,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "c5496778-0d72-5cc6-aac4-98777cfbc0c2",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "5aeb4749609bd0a4d81ecffd673a36e1",
+        "dataType": "AlignedReads",
         "size": 10447
       }
     },
@@ -399,7 +440,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -411,7 +453,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -426,11 +471,13 @@
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
       "size": 1710383,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "d87c4599-bba4-5c23-b7a2-57bbeed7eacb",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "ade5449b588c81496e4e7d2b0b49e3d0",
+        "dataType": "AlignedReads",
         "size": 61514
       }
     },
@@ -457,7 +504,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -469,7 +517,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -484,11 +535,13 @@
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
       "size": 31242,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "55283d00-b1a2-521c-99e1-e9d8d88c660d",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "8cae7bbcd28b6a78ad5c53642ae9695c",
+        "dataType": "AlignedReads",
         "size": 14606
       }
     },
@@ -515,7 +568,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -527,7 +581,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -542,11 +599,13 @@
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
       "size": 10191,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "c4d10f9f-7e9e-5cb3-a30a-0ff8865952ce",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "139ce5f29fc0e877d5ae5a5d5e03c3f0",
+        "dataType": "AlignedReads",
         "size": 4212
       }
     },
@@ -573,7 +632,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -585,7 +645,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -600,11 +663,13 @@
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
       "size": 382815,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "a99d2a9c-96c4-5788-9149-79a146f0f925",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "797e4ef5c348d4a23e9e83790812d857",
+        "dataType": "AlignedReads",
         "size": 151104
       }
     },
@@ -631,7 +696,8 @@
           "samples": {
             "id": "SA270462",
             "submittedId": "RK156_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -643,7 +709,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -658,11 +727,13 @@
       "md5sum": "33b96c263be31852de8d5d15775561c9",
       "size": 404406,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "97c3147f-dd1d-507f-a73d-8646f7ce2a0b",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "3ed262dbc3b1c427177bdd5af5ef5633",
+        "dataType": "AlignedReads",
         "size": 27885
       }
     },
@@ -689,7 +760,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -701,7 +773,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -716,11 +791,13 @@
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
       "size": 1853889,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "9abe4aad-9d35-5d4f-955c-8bceb559827e",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "a7cf0d572f1649c8791cda7892c7be55",
+        "dataType": "AlignedReads",
         "size": 67312
       }
     },
@@ -747,7 +824,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -759,7 +837,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -774,11 +855,13 @@
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
       "size": 10429379,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "ad68b7cb-e91c-506e-acae-812ae2ea7678",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "78b2dd0696a1f2ea8ac8e25a77c4e239",
+        "dataType": "AlignedReads",
         "size": 1032907
       }
     },
@@ -805,7 +888,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -817,7 +901,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -832,11 +919,13 @@
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
       "size": 400597,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "bbb31cb3-f175-52c4-ba66-569e1a1d2ed7",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "130e37274d3c7bebcb41d027eea9148d",
+        "dataType": "AlignedReads",
         "size": 27877
       }
     },
@@ -863,7 +952,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -875,7 +965,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -890,11 +983,13 @@
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
       "size": 25270,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "95e7563e-e8d1-5377-8cfc-1c45a72448da",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "941a7d48a3250de6edcbbde1cbb4b7e1",
+        "dataType": "AlignedReads",
         "size": 12044
       }
     },
@@ -921,7 +1016,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -933,7 +1029,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -948,11 +1047,13 @@
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
       "size": 2540,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "221e532c-a0c8-5573-8399-81f785423e57",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "de502cd9a25efe6f868f3156e8fd302e",
+        "dataType": "AlignedReads",
         "size": 1336
       }
     },
@@ -979,7 +1080,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -991,7 +1093,10 @@
     "studyId": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "LIRI-JP",
       "experiment": {
@@ -1006,11 +1111,13 @@
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
       "size": 422502,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "87d9f1f2-3d13-5dd2-8ed5-d175952e2586",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "9029f92d2d1ea6d76b3a88795756aacc",
+        "dataType": "AlignedReads",
         "size": 160972
       }
     },
@@ -1037,7 +1144,8 @@
           "samples": {
             "id": "SA501653",
             "submittedId": "RK091_C01",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }

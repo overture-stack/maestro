@@ -281,7 +281,6 @@ class DefaultIndexerTest {
 
     @Test
     void shouldIndexAllRepositoryStudies() {
-
         //Given
         val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
@@ -289,7 +288,6 @@ class DefaultIndexerTest {
         val fileRepo = Mono.just(getStubFilesRepository());
         val result = IndexResult.builder().successful(true).build();
         val monoResult =  Mono.just(result);
-
         val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
 
         given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));

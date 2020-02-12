@@ -4,7 +4,7 @@ server.port:
 maestro:
   exclusionRules:
     byId:
-      study:
+      studyId:
         - LIAD-FR
       donor:
         - DO52693

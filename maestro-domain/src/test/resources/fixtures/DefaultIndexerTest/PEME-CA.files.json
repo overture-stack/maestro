@@ -5,7 +5,10 @@
     "studyId": "PEME-CA",
     "analysis": {
       "id": "EGAZ00001254368",
-      "type": { "name": "sequencingRead", "version": 1 },
+      "type": {
+        "name": "sequencingRead",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PEME-CA",
       "experiment": {
@@ -15,8 +18,8 @@
         "info": {}
       },
       "info": {
-        "dcc_project_code" : "PEME-CA",
-        "isPcawg" : false
+        "dcc_project_code": "PEME-CA",
+        "isPcawg": false
       }
     },
     "files": {
@@ -25,11 +28,13 @@
       "md5sum": "29ff9df727803d20834b9997bc17e970",
       "size": 88906416144,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
         "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
         "format": "BAI",
         "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
+        "dataType": "AlignedReads",
         "size": 8939816
       }
     },
@@ -56,7 +61,8 @@
           "samples": {
             "id": "SA604924",
             "submittedId": "MDT-AP-0749_tumor",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }

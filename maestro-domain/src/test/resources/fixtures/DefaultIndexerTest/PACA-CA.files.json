@@ -5,7 +5,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -20,11 +23,13 @@
       "md5sum": "14ded2a7342f9124421ace5aa920510d",
       "size": 543337,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "bb949d15-334f-5712-9f04-41225a7beb8d",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "99f0b87f5113494e2fc2284c91dc15e0",
+        "dataType": "AlignedReads",
         "size": 224729
       }
     },
@@ -51,7 +56,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -63,7 +69,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -78,11 +87,13 @@
       "md5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
       "size": 5565355,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "2910e07c-268b-57a5-877a-0cec35298319",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "1abed463bc92e0d8486699b37af73737",
+        "dataType": "AlignedReads",
         "size": 546153
       }
     },
@@ -109,7 +120,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -121,7 +133,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -136,11 +151,13 @@
       "md5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
       "size": 101384873,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "425898fd-35d3-5ee2-ac00-50dfd724f4c6",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "a6113c54193fd7539dffd06f50f04779",
+        "dataType": "AlignedReads",
         "size": 1541330
       }
     },
@@ -167,7 +184,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -179,7 +197,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -194,11 +215,13 @@
       "md5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
       "size": 72850649,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "04c24136-c19d-5042-a3cd-36f63c7b4d6b",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "156880f52b94b3119afa3ac6dd7b8ced",
+        "dataType": "AlignedReads",
         "size": 1502241
       }
     },
@@ -225,7 +248,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -237,7 +261,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -252,11 +279,13 @@
       "md5sum": "93b219c94687e12b5fda564399fa3319",
       "size": 23763,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "51306186-092d-5e3f-bb3c-028873052eb2",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "68d76af7c7b9b7c00fa0438101739798",
+        "dataType": "AlignedReads",
         "size": 10691
       }
     },
@@ -283,7 +312,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -295,7 +325,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -310,11 +343,13 @@
       "md5sum": "6ebd4aa8a821da40955d7fcb879be82a",
       "size": 18226,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "e5d387a1-3b51-5526-ae22-270df2e1fd2f",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "96b05a083d371ae8317651ceffb0f48b",
+        "dataType": "AlignedReads",
         "size": 6134
       }
     },
@@ -341,7 +376,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -353,7 +389,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -368,11 +407,13 @@
       "md5sum": "f3a99bd737b3b416aa34e131b939b2a0",
       "size": 161511,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "e8569e7c-6ae4-5aeb-ae50-b94366aae5df",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "cb856f2d5837c5f065c7c598dcd795b5",
+        "dataType": "AlignedReads",
         "size": 19769
       }
     },
@@ -399,7 +440,8 @@
           "samples": {
             "id": "SA533729",
             "submittedId": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -411,7 +453,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -426,11 +471,13 @@
       "md5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
       "size": 58091383,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "b26a535c-3531-55ad-8725-17aa6afb22c2",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "894fa70742c16ed7f845abd68609f20c",
+        "dataType": "AlignedReads",
         "size": 1524609
       }
     },
@@ -457,7 +504,8 @@
           "samples": {
             "id": "SA533758",
             "submittedId": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -469,7 +517,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -484,11 +535,13 @@
       "md5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
       "size": 59407,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "b9800f14-13d5-55cf-9383-a65b5446116a",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "1ba234eb0c457dba2942215d3fc4741a",
+        "dataType": "AlignedReads",
         "size": 2961
       }
     },
@@ -515,7 +568,8 @@
           "samples": {
             "id": "SA533758",
             "submittedId": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -527,7 +581,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -542,11 +599,13 @@
       "md5sum": "bafebb1c613c348c696dc8f940ce1039",
       "size": 2964,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "52db8e51-5b3e-56ce-b939-0a96b4dfbce3",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "725becdd11e63c371e57a987420846bd",
+        "dataType": "AlignedReads",
         "size": 4783
       }
     },
@@ -573,7 +632,8 @@
           "samples": {
             "id": "SA533758",
             "submittedId": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -585,7 +645,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -600,11 +663,13 @@
       "md5sum": "37ee70b282788eb0660f7d965f355898",
       "size": 1704966,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "6b32cfec-e82c-5528-b908-8e00ae927578",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "91dece67c383a67123caae382a130cb9",
+        "dataType": "AlignedReads",
         "size": 303747
       }
     },
@@ -631,7 +696,8 @@
           "samples": {
             "id": "SA533758",
             "submittedId": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }
@@ -643,7 +709,10 @@
     "studyId": "PACA-CA",
     "analysis": {
       "id": "b8e09611-225a-4de6-87dc-104753072252",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "studyId": "PACA-CA",
       "experiment": {
@@ -658,11 +727,13 @@
       "md5sum": "01e54034c70b85812e9aac58f2525594",
       "size": 329863,
       "lastModified": null,
+      "dataType": "AlignedReads",
       "indexFile": {
         "objectId": "08519ab5-8665-58dc-8476-1c40cae5b789",
         "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "5b83369174136b88f16a08ab87bb67f7",
+        "dataType": "AlignedReads",
         "size": 148925
       }
     },
@@ -689,7 +760,8 @@
           "samples": {
             "id": "SA520221",
             "submittedId": "PCSI_0083_Pa_P_526",
-            "type": "DNA"
+            "type": "DNA",
+            "matchedNormalSubmitterSampleId": null
           }
         }
       }

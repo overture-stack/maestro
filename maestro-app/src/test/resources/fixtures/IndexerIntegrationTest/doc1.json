@@ -1,7 +1,7 @@
 {
   "object_id": "9ce9358d-c93a-5f83-8032-4addcb84b51a",
   "access": "controlled",
-  "studyId": "PEME-CA",
+  "study_id": "PEME-CA",
   "analysis": {
     "id": "EGAZ00001254247",
     "type": { "name": "sequencingRead", "version": 1 },
@@ -10,7 +10,7 @@
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
     },
-    "studyId": "PEME-CA",
+    "study_id": "PEME-CA",
     "experiment": {
       "info": {},
       "analysisId": "EGAZ00001254247",
@@ -24,10 +24,12 @@
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
     "size": 77675501639,
     "last_modified": null,
+    "data_type": "AlignedReads",
     "index_file": {
       "object_id": "6aa8d318-e168-520e-9d1e-cef127ee6b65",
       "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam.bai",
       "format": "BAI",
+      "data_type": "AlignedReads",
       "md5sum": "227a2a11d660a8a53a7375c6623034e2",
       "size": 8982928
     }

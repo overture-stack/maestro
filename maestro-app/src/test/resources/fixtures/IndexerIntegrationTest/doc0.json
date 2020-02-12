@@ -1,13 +1,13 @@
 {
   "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
   "access": "controlled",
-  "studyId": "PEME-CA",
+  "study_id": "PEME-CA",
 
   "analysis": {
     "id": "EGAZ00001254368",
     "type": { "name": "sequencingRead", "version": 1 },
     "state": "PUBLISHED",
-    "studyId": "PEME-CA",
+    "study_id": "PEME-CA",
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
@@ -24,11 +24,13 @@
     "format": "BAM",
     "md5sum": "29ff9df727803d20834b9997bc17e970",
     "size": 88906416144,
+    "data_type": "AlignedReads",
     "last_modified": null,
     "index_file": {
       "object_id": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
       "format": "BAI",
+      "data_type": "AlignedReads",
       "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
       "size": 8939816
     }

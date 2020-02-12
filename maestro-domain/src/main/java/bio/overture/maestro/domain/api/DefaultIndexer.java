@@ -331,7 +331,8 @@ class DefaultIndexer implements Indexer {
                 .analyses(analyses)
                 .exclusionRulesMap(ruleMap)
                 .build()
-            ).map(analysisAndExclusions -> filterExcludedAnalyses(analyses, analysisAndExclusions))
+            )
+            .map(analysisAndExclusions -> filterExcludedAnalyses(analyses, analysisAndExclusions))
             .onErrorMap((e) -> handleExclusionStepError(analyses, e));
     }
 
