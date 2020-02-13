@@ -34,8 +34,8 @@ import java.util.List;
 import static bio.overture.maestro.domain.utility.Exceptions.notFound;
 
 /**
- * Properties file backed repository store, reads the information by binding
- * to the application.config file property: maestro.repositories
+ * Properties files backed repository store, reads the information by binding
+ * to the application.config files property: maestro.repositories
  * the configurable attributes can be found here: {@link PropertiesFileRepository}
  *
  * this serves as a default in memory store, more sophisticated cases may create a DB backed store.

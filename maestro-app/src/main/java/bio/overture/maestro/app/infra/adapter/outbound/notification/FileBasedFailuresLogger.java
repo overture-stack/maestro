@@ -29,11 +29,11 @@ import java.util.Set;
 import static bio.overture.maestro.app.infra.config.properties.ApplicationProperties.FAILURE_LOG_PROP_KEY;
 
 /**
- * This channel will store any failure in an append only log file
+ * This channel will store any failure in an append only log files
  * it uses logback loggers to do the write operation instead of manually
  * writing to files.
  *
- * the logs go to separate log file. see logback-spring.xml for the configs.
+ * the logs go to separate log files. see logback-spring.xml for the configs.
  */
 @Slf4j
 @ConditionalOnProperty(value = FAILURE_LOG_PROP_KEY, havingValue = "true")

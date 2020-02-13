@@ -59,9 +59,9 @@ class SongStudyDAO implements StudyDAO {
     private static final String STUDY_ANALYSES_URL_TEMPLATE = "{0}/studies/{1}/analysis?analysisStates={2}";
     private static final String STUDY_ANALYSIS_URL_TEMPLATE = "{0}/studies/{1}/analysis/{2}";
     private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
-    private static final String MSG_STUDY_DOES_NOT_EXIST = "study {0} doesn't exist  in the specified repository";
+    private static final String MSG_STUDY_DOES_NOT_EXIST = "studyId {0} doesn't exist  in the specified repository";
     private static final String MSG_ANALYSIS_DOES_NOT_EXIST =
-        "analysis {0} doesn't exist for study {1}, repository {2} (or not in a matching state)";
+        "analysis {0} doesn't exist for studyId {1}, repository {2} (or not in a matching state)";
     private static final int FALLBACK_SONG_TIMEOUT = 60;
     private static final int FALLBACK_SONG_ANALYSIS_TIMEOUT = 5;
     private static final int FALLBACK_SONG_MAX_RETRY = 0;

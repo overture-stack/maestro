@@ -3,33 +3,33 @@
     "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
-    "study": "MALY-DE",
+    "studyId": "MALY-DE",
     "analysisState": "PUBLISHED",
-    "sample": [
+    "samples": [
       {
         "info": {},
         "sampleId": "SA557689",
         "specimenId": "SP124981",
-        "sampleSubmitterId": "tumor_4128852",
+        "submitterSampleId": "tumor_4128852",
         "sampleType": "DNA",
         "specimen": {
           "info": {},
           "specimenId": "SP124981",
           "donorId": "DO221129",
-          "specimenSubmitterId": "tumor_4128852",
-          "specimenClass": "Tumour",
+          "submitterSpecimenId": "tumor_4128852",
+
           "specimenType": "Primary tumour - lymph node"
         },
         "donor": {
           "donorId": "DO221129",
-          "donorSubmitterId": "4128852",
+          "submitterDonorId": "4128852",
           "studyId": "MALY-DE",
-          "donorGender": "female",
+          "gender": "female",
           "info": {}
         }
       }
     ],
-    "file": [
+    "files": [
       {
         "info": {},
         "objectId": "316612a4-4c23-5434-976a-810f8cde06b7",
@@ -39,7 +39,8 @@
         "fileSize": 273787,
         "fileType": "VCF",
         "fileMd5sum": "f83b0f9099e8594b589440819ab119cd",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -50,7 +51,8 @@
         "fileSize": 146924,
         "fileType": "IDX",
         "fileMd5sum": "f5629a05fe5b8dd6a63381de259aa935",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -61,7 +63,8 @@
         "fileSize": 36818,
         "fileType": "XML",
         "fileMd5sum": "7240205cac78b6e94a131d2db14de07b",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       }
     ],
     "experiment": {
@@ -75,33 +78,33 @@
     "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
-    "study": "MALY-DE",
+    "studyId": "MALY-DE",
     "analysisState": "PUBLISHED",
-    "sample": [
+    "samples": [
       {
         "info": {},
         "sampleId": "SA542152",
         "specimenId": "SP116718",
-        "sampleSubmitterId": "tumor_4113191",
+        "submitterSampleId": "tumor_4113191",
         "sampleType": "DNA",
         "specimen": {
           "info": {},
           "specimenId": "SP116718",
           "donorId": "DO52693",
-          "specimenSubmitterId": "tumor_4113191",
-          "specimenClass": "Tumour",
+          "submitterSpecimenId": "tumor_4113191",
+
           "specimenType": "Primary tumour - lymph node"
         },
         "donor": {
           "donorId": "DO52693",
-          "donorSubmitterId": "4113191",
+          "submitterDonorId": "4113191",
           "studyId": "MALY-DE",
-          "donorGender": "female",
+          "gender": "female",
           "info": {}
         }
       }
     ],
-    "file": [
+    "files": [
       {
         "info": {},
         "objectId": "5d360754-ee81-581f-9b51-dfdd24f7a8d2",
@@ -111,7 +114,8 @@
         "fileSize": 31669,
         "fileType": "XML",
         "fileMd5sum": "8f6ef3b2f3904c523b811e9c5191e159",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -122,7 +126,8 @@
         "fileSize": 188550,
         "fileType": "VCF",
         "fileMd5sum": "02b4602861de0a5529e42d3e66eaa2a6",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -133,7 +138,8 @@
         "fileSize": 101608,
         "fileType": "TBI",
         "fileMd5sum": "c00c6672cb752c71dd2d1ef23ea559fa",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       }
     ],
     "experiment": {
@@ -147,33 +153,33 @@
     "analysisType": { "name": "variantCall", "version": 1 },
     "info": {},
     "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
-    "study": "MALY-DE",
+    "studyId": "MALY-DE",
     "analysisState": "PUBLISHED",
-    "sample": [
+    "samples": [
       {
         "info": {},
         "sampleId": "SA542043",
         "specimenId": "SP116638",
-        "sampleSubmitterId": "tumor_4166503",
+        "submitterSampleId": "tumor_4166503",
         "sampleType": "DNA",
         "specimen": {
           "info": {},
           "specimenId": "SP116638",
           "donorId": "DO52662",
-          "specimenSubmitterId": "tumor_4166503",
-          "specimenClass": "Tumour",
+          "submitterSpecimenId": "tumor_4166503",
+
           "specimenType": "Primary tumour - lymph node"
         },
         "donor": {
           "donorId": "DO52662",
-          "donorSubmitterId": "4166503",
+          "submitterDonorId": "4166503",
           "studyId": "MALY-DE",
-          "donorGender": "male",
+          "gender": "male",
           "info": {}
         }
       }
     ],
-    "file": [
+    "files": [
       {
         "info": {},
         "objectId": "46c2fec8-fd4a-5b62-8819-647bf23ac15c",
@@ -183,7 +189,8 @@
         "fileSize": 35287,
         "fileType": "XML",
         "fileMd5sum": "91733724f431b0d91b47e37778e6c20e",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -194,7 +201,8 @@
         "fileSize": 38671,
         "fileType": "VCF",
         "fileMd5sum": "020a444fb10ec02b40e141aa9cd0de87",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -205,7 +213,8 @@
         "fileSize": 19306,
         "fileType": "TBI",
         "fileMd5sum": "7c606af5d37d3788850da1a5f1705feb",
-        "fileAccess": "controlled"
+ "fileAccess": "controlled",
+  "dataType": "AlignedReads"
       }
     ],
     "experiment": {

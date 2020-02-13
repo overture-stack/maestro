@@ -57,19 +57,19 @@ public class Fixture {
         return loadJsonFixture(clazz, fileName, type, MAPPER);
     }
     /**
-     * this overload can be used to load json file and convert it to the target class using a custom mapper
+     * this overload can be used to load json files and convert it to the target class using a custom mapper
      *
      * @param clazz will be used to obtain a class loader to get the resources for.
-     * @param fileName the fixture file we want to load
+     * @param fileName the fixture files we want to load
      * @param targetClass the target java type we want to convert the json to
      * @param customMapper in case you want to pre configure a mapper (property name case for example)
      * @param <T> type parameter of the target class
-     * @param templateParams parameters map to be replaced in the json file
+     * @param templateParams parameters map to be replaced in the json files
      *                       use this if you have dynamic values that change each test run
      *                       the placeholder should be ##key## and will be replaced with the value :
      *                       templateParams.get(key)
      *
-     * @return the converted json file as java type
+     * @return the converted json files as java type
      *
      */
     @SneakyThrows
@@ -88,15 +88,15 @@ public class Fixture {
     }
 
     /**
-     * this overload can be used to load json file and convert it to the target class using a custom mapper
+     * this overload can be used to load json files and convert it to the target class using a custom mapper
      *
      * @param clazz will be used to obtain a class loader to get the resources for.
-     * @param fileName the fixture file we want to load
+     * @param fileName the fixture files we want to load
      * @param targetClass the target java type we want to convert the json to
      * @param customMapper in case you want to pre configure a mapper (property name case for example)
      * @param <T> type parameter of the target class
      *
-     * @return the converted json file as java type
+     * @return the converted json files as java type
      *
      */
     @SneakyThrows

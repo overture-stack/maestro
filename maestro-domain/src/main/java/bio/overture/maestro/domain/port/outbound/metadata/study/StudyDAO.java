@@ -26,17 +26,17 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * The study repository, which provides APIs to read Studies, analyses, etc information from a StudyRepository
+ * The studyId repository, which provides APIs to read Studies, analyses, etc information from a StudyRepository
  */
 public interface StudyDAO {
 
     /**
-     * loads analyses for a single study from a single repository
+     * loads analyses for a single studyId from a single repository
      *
      * @param getStudyAnalysesCommand contains studyId and repository base url
-     * @return a mono of all analyses found related to a study.
+     * @return a mono of all analyses found related to a studyId.
      * @throws bio.overture.maestro.domain.api.exception.NotFoundException
-     *  in case the study wasn't found.
+     *  in case the studyId wasn't found.
      */
     @NonNull Mono<List<Analysis>> getStudyAnalyses(@NonNull GetStudyAnalysesCommand getStudyAnalysesCommand);
 
@@ -48,8 +48,8 @@ public interface StudyDAO {
     @NonNull Flux<Study> getStudies(@NonNull GetAllStudiesCommand getStudyAnalysesCommand);
 
     /**
-     * load an analysis of a study from a repository
-     * @param command specifies the analysis id, the study and the repository url
+     * load an analysis of a studyId from a repository
+     * @param command specifies the analysis id, the studyId and the repository url
      * @return the analysis mono
      */
     @NonNull Mono<Analysis> getAnalysis(@NonNull GetAnalysisCommand command);

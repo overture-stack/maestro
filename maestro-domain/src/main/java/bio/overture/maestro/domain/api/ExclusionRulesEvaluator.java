@@ -52,7 +52,7 @@ class ExclusionRulesEvaluator {
         return exclusionRules.containsKey(Study.class) && exclusionRules.get(Study.class)
                 .stream()
                 .anyMatch(r -> r.applies(
-                        Study.builder().studyId(analysis.getStudy()).build()
+                        Study.builder().studyId(analysis.getStudyId()).build()
                     )
                 );
     }
@@ -64,7 +64,7 @@ class ExclusionRulesEvaluator {
     }
 
     private static boolean isExcludedByFile(Analysis analysis, Map<Class<?>, List<? extends ExclusionRule>> exclusionRules) {
-        return exclusionRules.containsKey(File.class) &&  analysis.getFile().stream()
+        return exclusionRules.containsKey(File.class) &&  analysis.getFiles().stream()
             .anyMatch(file -> exclusionRules.get(File.class)
                 .stream()
                 .anyMatch(r -> r.applies(file))
@@ -72,7 +72,7 @@ class ExclusionRulesEvaluator {
     }
 
     private static boolean isExcludedBySample(Analysis analysis, Map<Class<?>, List<? extends ExclusionRule>> exclusionRules) {
-        return exclusionRules.containsKey(Sample.class) && analysis.getSample().stream()
+        return exclusionRules.containsKey(Sample.class) && analysis.getSamples().stream()
             .anyMatch(sample -> exclusionRules.get(Sample.class)
                 .stream()
                 .anyMatch(r -> r.applies(sample))
@@ -80,7 +80,7 @@ class ExclusionRulesEvaluator {
     }
 
     private static boolean isExcludedBySpecimen(Analysis analysis, Map<Class<?>, List<? extends ExclusionRule>> exclusionRules) {
-        return exclusionRules.containsKey(Specimen.class) && analysis.getSample()
+        return exclusionRules.containsKey(Specimen.class) && analysis.getSamples()
             .stream()
             .map(Sample::getSpecimen)
             .anyMatch(specimen -> exclusionRules.get(Specimen.class)
@@ -90,7 +90,7 @@ class ExclusionRulesEvaluator {
     }
 
     private static boolean isExcludedByDonor(Analysis analysis, Map<Class<?>, List<? extends ExclusionRule>> exclusionRules) {
-        return exclusionRules.containsKey(Donor.class) && analysis.getSample()
+        return exclusionRules.containsKey(Donor.class) && analysis.getSamples()
             .stream()
             .map(Sample::getDonor)
             .anyMatch(donor -> exclusionRules.get(Donor.class)

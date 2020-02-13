@@ -82,7 +82,7 @@ maestro:
   # exclusion rules configs
   exclusionRules:
     byId:
-      study:
+      studyId:
         - "test123"
 #      analysis:
 #        - "analysisId"

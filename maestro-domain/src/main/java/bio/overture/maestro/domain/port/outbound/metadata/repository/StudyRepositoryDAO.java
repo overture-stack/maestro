@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
  */
 public interface StudyRepositoryDAO {
     /**
-     * Gets a file repository by code
+     * Gets a files repository by code
      * @param code the unique code of the repository
      * @return the repository or empty null if not found
      */

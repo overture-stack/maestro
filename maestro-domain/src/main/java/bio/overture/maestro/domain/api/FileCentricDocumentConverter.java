@@ -26,9 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,7 +44,7 @@ final class FileCentricDocumentConverter {
      * Entry point for this converter, it extracts analysis files according to the FileCentricDocument structure
      * this process is per each analysis and there is no effects on other analyses.
      *
-     * @param analysis the analysis coming from the study metadata source
+     * @param analysis the analysis coming from the studyId metadata source
      * @param repository the repository is needed to add its information to the final document.
      * @return a list of documents each representing files that an analysis produced/used.
      */
@@ -58,7 +56,7 @@ final class FileCentricDocumentConverter {
      * iterate over the files list of analysis and build a document for each one
      */
     private static List<FileCentricDocument> extractFiles(Analysis analysis, StudyRepository repository) {
-        return analysis.getFile()
+        return analysis.getFiles()
             .stream()
             .filter(FileCentricDocumentConverter::isDataFile)
             .map(f -> buildFileDocument(f, analysis, repository))
@@ -66,9 +64,9 @@ final class FileCentricDocumentConverter {
     }
 
     /**
-     * builds the file document from the analysis file
+     * builds the files document from the analysis files
      *
-     * @param file a file as represented from the source in the analysis
+     * @param file a files as represented from the source in the analysis
      */
     private static  FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
                                                           Analysis analysis,
@@ -77,7 +75,7 @@ final class FileCentricDocumentConverter {
         val metadataFileId = getMetadataFileId(analysis);
         val repoFileBuilder = FileCentricDocument.builder()
             .objectId(id)
-            .study(file.getStudyId())
+            .studyId(file.getStudyId())
             .access(file.getFileAccess())
             .analysis(FileCentricAnalysis.builder()
                 .id(analysis.getAnalysisId())
@@ -87,11 +85,11 @@ final class FileCentricDocumentConverter {
                     .version(analysis.getAnalysisType().getVersion())
                     .build()
                 )
-                .study(analysis.getStudy())
+                .studyId(analysis.getStudyId())
                 .experiment(analysis.getExperiment())
                 .build()
             )
-            .file(buildGenomeFileInfo(analysis, file))
+            .files(buildGenomeFileInfo(analysis, file))
             .repositories(List.of(Repository.builder()
                 .type(repository.getStorageType().name().toUpperCase())
                 .organization(repository.getOrganization())
@@ -111,21 +109,22 @@ final class FileCentricDocumentConverter {
     private static File buildGenomeFileInfo(Analysis analysis,
                                             bio.overture.maestro.domain.entities.metadata.study.File file) {
         val fileName = file.getFileName();
-        val indexFile = getIndexFile(analysis.getFile(), fileName);
+        val indexFile = getIndexFile(analysis.getFiles(), fileName);
         return File.builder()
             .name(fileName)
             .format(file.getFileType())
             .size(file.getFileSize())
             .md5sum(file.getFileMd5sum())
+            .dataType(file.getDataType())
             .indexFile(indexFile)
             .build();
     }
 
     /**
-     * extract metadata file if any
+     * extract metadata files if any
      */
     private static String getMetadataFileId(Analysis analysis) {
-        val xmlFile = analysis.getFile()
+        val xmlFile = analysis.getFiles()
             .stream()
             .filter(f -> isXMLFile(f.getFileName()))
             .findFirst()
@@ -134,8 +133,8 @@ final class FileCentricDocumentConverter {
     }
 
     /**
-     * get the index file associated with that file
-     * note that this will be removed, when the source explicitly handles associating index file to a file.
+     * get the index files associated with that files
+     * note that this will be removed, when the source explicitly handles associating index files to a files.
      *
      */
     private static IndexFile getIndexFile(List<bio.overture.maestro.domain.entities.metadata.study.File> files,
@@ -162,6 +161,7 @@ final class FileCentricDocumentConverter {
             .format(indexFileFormat(file.getFileName()))
             .size(file.getFileSize())
             .md5sum(file.getFileMd5sum())
+            .dataType(file.getDataType())
             .build();
     }
 
@@ -178,10 +178,10 @@ final class FileCentricDocumentConverter {
     }
 
     private static FileCentricDonor getDonor(Analysis analysis) {
-        val sample = analysis.getSample()
+        val sample = analysis.getSamples()
             .stream()
             .findFirst()
-            .orElseThrow(() -> new BadDataException("incorrect structure of song data, sample is empty"));
+            .orElseThrow(() -> new BadDataException("incorrect structure of song data, samples is empty"));
         val donor = sample.getDonor();
         val specimen = sample.getSpecimen();
         return FileCentricDonor.builder()
@@ -189,16 +189,19 @@ final class FileCentricDocumentConverter {
             .specimen(Specimen.builder()
                 .type(specimen.getSpecimenType())
                 .id(specimen.getSpecimenId())
-                .submittedId(specimen.getSpecimenSubmitterId())
-                .sample(Sample.builder()
+                .submittedId(specimen.getSubmitterSpecimenId())
+                .tumourNormalDesignation(specimen.getTumourNormalDesignation())
+                .specimenTissueSource(specimen.getSpecimenTissueSource())
+                .samples(Sample.builder()
                     .id(sample.getSampleId())
-                    .submittedId(sample.getSampleSubmitterId())
+                    .submittedId(sample.getSubmitterSampleId())
                     .type(sample.getSampleType())
+                    .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
                     .build()
                 )
                 .build()
             )
-            .submittedId(donor.getDonorSubmitterId())
+            .submittedId(donor.getSubmitterDonorId())
             .build();
     }
 

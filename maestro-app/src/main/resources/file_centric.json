@@ -1,4 +1,7 @@
 {
+  "aliases": {
+    "file_centric": {}
+  },
   "settings": {
     "index.number_of_shards" : 11,
     "index.max_result_window":300000,
@@ -58,7 +61,7 @@
         },
         "type": "keyword"
       },
-      "study": {
+      "studyId": {
         "type": "keyword",
         "copy_to": [
           "file_autocomplete"
@@ -84,25 +87,6 @@
               "file_autocomplete"
             ]
           },
-          "type": {
-            "properties" : {
-              "name": {
-                "type": "keyword",
-                "copy_to": [
-                  "file_autocomplete"
-                ]
-              },
-              "version": {
-                "type": "long"
-              }
-            }
-          },
-          "tool": {
-            "type": "keyword",
-            "copy_to": [
-              "file_autocomplete"
-            ]
-          },
           "experiment": {
             "type": "object"
           }
@@ -114,7 +98,7 @@
       "access": {
         "type": "keyword"
       },
-      "file": {
+      "files": {
         "properties": {
           "id": {
             "type": "keyword"
@@ -213,7 +197,7 @@
                   "file_autocomplete"
                 ]
               },
-              "sample": {
+              "samples": {
                 "type": "nested",
                 "properties": {
                   "id": {

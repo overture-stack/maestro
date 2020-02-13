@@ -31,29 +31,29 @@ import java.util.List;
 public interface Indexer {
 
     /**
-     * Allows indexing a single analysis in a specific metadata repository in a specific study
-     * @param indexAnalysisCommand specify repo, study and analysis Id
+     * Allows indexing a single analysis in a specific metadata repository in a specific studyId
+     * @param indexAnalysisCommand specify repo, studyId and analysis Id
      * @return success flag and failure info if any
      */
     Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
 
     /**
-     * Used to remove all file documents for an analysis.
-     * @param removeAnalysisCommand specify repo study and analysis id
+     * Used to remove all files documents for an analysis.
+     * @param removeAnalysisCommand specify repo studyId and analysis id
      * @return flag indicating success and failure info if any
      */
     Mono<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand);
     /**
-     * This method will fetch the specified study from the specified repository
+     * This method will fetch the specified studyId from the specified repository
      * and will invoke the index server {@link FileCentricIndexAdapter}
      * adapter to batch index the resulting documents.
      *
-     * @param indexStudyCommand contains the arguments needed to index a single study.
+     * @param indexStudyCommand contains the arguments needed to index a single studyId.
      * @return an index result indicating success or failure
      * @throws bio.overture.maestro.domain.api.exception.NotFoundException
-     *          if the study or the repository are not found
+     *          if the studyId or the repository are not found
      * @throws bio.overture.maestro.domain.api.exception.BadDataException
-     *          if the study is empty or the structure of the study is not as expected
+     *          if the studyId is empty or the structure of the studyId is not as expected
      *          and cannot be used to produce list of {@link bio.overture.maestro.domain.entities.indexing.FileCentricDocument}
      */
     Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand);
