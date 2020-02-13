@@ -23,7 +23,7 @@ import lombok.*;
 import java.util.Map;
 
 /**
- * Many samples can belong to an Analysis, a sample represents
+ * Many samples can belong to an Analysis, a samples represents
  * a donor and a specimen composition.
  */
 @Getter
@@ -36,7 +36,8 @@ public class Sample {
     @ExclusionId
     private String sampleId;
     private String specimenId;
-    private String sampleSubmitterId;
+    private String submitterSampleId;
+    private String matchedNormalSubmitterSampleId;
     private String sampleType;
     private Donor donor;
     private Specimen specimen;

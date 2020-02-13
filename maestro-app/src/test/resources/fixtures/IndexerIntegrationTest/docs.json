@@ -2,12 +2,15 @@
   {
     "object_id": "b63dff38-e239-5a5d-9c36-ec851049fd12",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -16,7 +19,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "93354882b0fc014b49be1b24df8f435e",
@@ -27,8 +30,10 @@
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
-        "size": 1458418
-      }
+        "size": 1458418,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -50,7 +55,7 @@
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK202_C01",
-          "sample": {
+          "samples": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
             "type": "DNA"
@@ -62,12 +67,15 @@
   {
     "object_id": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -76,7 +84,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
@@ -87,8 +95,10 @@
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "9ce7cdedb7450a05c03e419235ed56a6",
-        "size": 1756
-      }
+        "size": 1756,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -110,7 +120,7 @@
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK202_C01",
-          "sample": {
+          "samples": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
             "type": "DNA"
@@ -122,12 +132,15 @@
   {
     "object_id": "3106300b-3666-52b7-a3fa-a5096a51814b",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -136,7 +149,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "492989e81699bd5a56b7956e0be7416d",
@@ -147,8 +160,10 @@
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "acdf137ad635f95ee93412fa9153d066",
-        "size": 5539
-      }
+        "size": 5539,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -170,7 +185,7 @@
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK202_C01",
-          "sample": {
+          "samples": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
             "type": "DNA"
@@ -182,12 +197,15 @@
   {
     "object_id": "bed33bd4-eec1-5905-8480-5def36d7f6de",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -196,7 +214,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
@@ -207,8 +225,10 @@
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "2233fb90872d759d279395b1a7ad3461",
-        "size": 236926
-      }
+        "size": 236926,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -230,7 +250,7 @@
           "id": "SP107109",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK202_C01",
-          "sample": {
+          "samples": {
             "id": "SA515389",
             "submitted_id": "RK202_C01",
             "type": "DNA"
@@ -242,12 +262,15 @@
   {
     "object_id": "24329157-e218-5854-8f45-7fa6b9e046c6",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -256,7 +279,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "7d0676c6a85696e1cb2919836b0ab71e",
@@ -267,8 +290,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "8269ee64b80e6ec66e590767f697d37b",
-        "size": 1031078
-      }
+        "size": 1031078,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -290,7 +315,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -302,12 +327,15 @@
   {
     "object_id": "4d070189-bd33-5391-b7af-ea32c6782875",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -316,7 +344,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
@@ -327,8 +355,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "fdb961feac82a7912bf657450e02c44d",
-        "size": 11325
-      }
+        "size": 11325,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -350,7 +380,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -362,12 +392,15 @@
   {
     "object_id": "107c83c7-595e-5b36-957b-ae706611d5b9",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -376,7 +409,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
@@ -387,8 +420,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "5aeb4749609bd0a4d81ecffd673a36e1",
-        "size": 10447
-      }
+        "size": 10447,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -410,7 +445,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -422,12 +457,15 @@
   {
     "object_id": "da524891-37af-5a21-9867-c6812018aa22",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -436,7 +474,7 @@
         "info": {}
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
@@ -447,8 +485,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "ade5449b588c81496e4e7d2b0b49e3d0",
-        "size": 61514
-      }
+        "size": 61514,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -470,7 +510,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -482,12 +522,15 @@
   {
     "object_id": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -496,7 +539,7 @@
         "info": {}
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
@@ -507,8 +550,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "8cae7bbcd28b6a78ad5c53642ae9695c",
-        "size": 14606
-      }
+        "size": 14606,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -530,7 +575,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -542,12 +587,15 @@
   {
     "object_id": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -556,7 +604,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
@@ -567,8 +615,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "139ce5f29fc0e877d5ae5a5d5e03c3f0",
-        "size": 4212
-      }
+        "size": 4212,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -590,7 +640,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -602,12 +652,15 @@
   {
     "object_id": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -616,7 +669,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
@@ -627,8 +680,10 @@
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "797e4ef5c348d4a23e9e83790812d857",
-        "size": 151104
-      }
+        "size": 151104,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -650,7 +705,7 @@
           "id": "SP50179",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK156_C01",
-          "sample": {
+          "samples": {
             "id": "SA270462",
             "submitted_id": "RK156_C01",
             "type": "DNA"
@@ -662,12 +717,15 @@
   {
     "object_id": "316177db-022d-5121-aba8-ce72a92ee778",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -676,7 +734,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "33b96c263be31852de8d5d15775561c9",
@@ -687,8 +745,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "3ed262dbc3b1c427177bdd5af5ef5633",
-        "size": 27885
-      }
+        "size": 27885,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -710,7 +770,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -722,13 +782,16 @@
   {
     "object_id": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -736,7 +799,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
@@ -747,8 +810,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "a7cf0d572f1649c8791cda7892c7be55",
-        "size": 67312
-      }
+        "size": 67312,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -770,7 +835,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -782,13 +847,16 @@
   {
     "object_id": "5c222a32-a79d-55e0-a490-440217c63393",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "info": {},
@@ -796,7 +864,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
@@ -807,8 +875,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "78b2dd0696a1f2ea8ac8e25a77c4e239",
-        "size": 1032907
-      }
+        "size": 1032907,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -830,7 +900,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -842,13 +912,16 @@
   {
     "object_id": "2af2e398-c27b-5645-b60b-b932a916184d",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -856,7 +929,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
@@ -867,8 +940,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "130e37274d3c7bebcb41d027eea9148d",
-        "size": 27877
-      }
+        "size": 27877,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -890,7 +965,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -902,13 +977,16 @@
   {
     "object_id": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -916,7 +994,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
@@ -927,8 +1005,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "941a7d48a3250de6edcbbde1cbb4b7e1",
-        "size": 12044
-      }
+        "size": 12044,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -950,7 +1030,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -962,13 +1042,16 @@
   {
     "object_id": "60307755-185e-536e-aa3b-190fb9934844",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "info": {},
@@ -976,7 +1059,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
@@ -987,8 +1070,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "de502cd9a25efe6f868f3156e8fd302e",
-        "size": 1336
-      }
+        "size": 1336,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1010,7 +1095,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -1022,13 +1107,16 @@
   {
     "object_id": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
     "access": "controlled",
-    "study": "LIRI-JP",
+    "study_id": "LIRI-JP",
     "analysis": {
       "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1036,7 +1124,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "file": {
+    "files": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
@@ -1047,8 +1135,10 @@
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "9029f92d2d1ea6d76b3a88795756aacc",
-        "size": 160972
-      }
+        "size": 160972,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1070,7 +1160,7 @@
           "id": "SP99145",
           "type": "Primary tumour - solid tissue",
           "submitted_id": "RK091_C01",
-          "sample": {
+          "samples": {
             "id": "SA501653",
             "submitted_id": "RK091_C01",
             "type": "DNA"
@@ -1082,12 +1172,15 @@
   {
     "object_id": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "info": {},
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1096,7 +1189,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "14ded2a7342f9124421ace5aa920510d",
@@ -1107,8 +1200,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "99f0b87f5113494e2fc2284c91dc15e0",
-        "size": 224729
-      }
+        "size": 224729,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1130,7 +1225,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1142,12 +1237,15 @@
   {
     "object_id": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "info": {},
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1156,7 +1254,7 @@
         "info": {}
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
@@ -1167,8 +1265,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "1abed463bc92e0d8486699b37af73737",
-        "size": 546153
-      }
+        "size": 546153,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1190,7 +1290,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1202,13 +1302,16 @@
   {
     "object_id": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -1216,7 +1319,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
@@ -1227,8 +1330,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "a6113c54193fd7539dffd06f50f04779",
-        "size": 1541330
-      }
+        "size": 1541330,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1250,7 +1355,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1262,13 +1367,16 @@
   {
     "object_id": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "info": {},
@@ -1276,7 +1384,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
@@ -1287,8 +1395,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "156880f52b94b3119afa3ac6dd7b8ced",
-        "size": 1502241
-      }
+        "size": 1502241,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1310,7 +1420,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1322,13 +1432,16 @@
   {
     "object_id": "432779b5-95db-5caf-a529-85a36a707c04",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -1336,7 +1449,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "93b219c94687e12b5fda564399fa3319",
@@ -1347,8 +1460,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "68d76af7c7b9b7c00fa0438101739798",
-        "size": 10691
-      }
+        "size": 10691,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1370,7 +1485,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1382,13 +1497,16 @@
   {
     "object_id": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "info": {},
@@ -1396,7 +1514,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "6ebd4aa8a821da40955d7fcb879be82a",
@@ -1407,8 +1525,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "96b05a083d371ae8317651ceffb0f48b",
-        "size": 6134
-      }
+        "size": 6134,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1430,7 +1550,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1442,13 +1562,16 @@
   {
     "object_id": "3f571505-3bea-5065-956a-4b5a793ad1ed",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "info": {},
@@ -1456,7 +1579,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "file": {
+    "files": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "f3a99bd737b3b416aa34e131b939b2a0",
@@ -1467,8 +1590,10 @@
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "cb856f2d5837c5f065c7c598dcd795b5",
-        "size": 19769
-      }
+        "size": 19769,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1490,7 +1615,7 @@
           "id": "SP125730",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0233_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA533729",
             "submitted_id": "PCSI_0233_Pa_P_526",
             "type": "DNA"
@@ -1502,13 +1627,16 @@
   {
     "object_id": "e122b153-c98b-530d-879a-11871a427d1b",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "info": {},
@@ -1516,7 +1644,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "file": {
+    "files": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
@@ -1527,8 +1655,10 @@
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "894fa70742c16ed7f845abd68609f20c",
-        "size": 1524609
-      }
+        "size": 1524609,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1550,7 +1680,7 @@
           "id": "SP125791",
           "type": "Primary tumour - other",
           "submitted_id": "ASHPC_0022_Pa_P",
-          "sample": {
+          "samples": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
             "type": "DNA"
@@ -1562,13 +1692,16 @@
   {
     "object_id": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "info": {},
@@ -1576,7 +1709,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "file": {
+    "files": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
@@ -1587,8 +1720,10 @@
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "1ba234eb0c457dba2942215d3fc4741a",
-        "size": 2961
-      }
+        "size": 2961,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1610,7 +1745,7 @@
           "id": "SP125791",
           "type": "Primary tumour - other",
           "submitted_id": "ASHPC_0022_Pa_P",
-          "sample": {
+          "samples": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
             "type": "DNA"
@@ -1622,13 +1757,16 @@
   {
     "object_id": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -1636,7 +1774,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "file": {
+    "files": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "bafebb1c613c348c696dc8f940ce1039",
@@ -1647,8 +1785,10 @@
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "725becdd11e63c371e57a987420846bd",
-        "size": 4783
-      }
+        "size": 4783,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1670,7 +1810,7 @@
           "id": "SP125791",
           "type": "Primary tumour - other",
           "submitted_id": "ASHPC_0022_Pa_P",
-          "sample": {
+          "samples": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
             "type": "DNA"
@@ -1682,13 +1822,16 @@
   {
     "object_id": "e704d3f5-1274-5cdd-924f-609159e121cc",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -1696,7 +1839,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "file": {
+    "files": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "37ee70b282788eb0660f7d965f355898",
@@ -1707,8 +1850,10 @@
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "91dece67c383a67123caae382a130cb9",
-        "size": 303747
-      }
+        "size": 303747,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1730,7 +1875,7 @@
           "id": "SP125791",
           "type": "Primary tumour - other",
           "submitted_id": "ASHPC_0022_Pa_P",
-          "sample": {
+          "samples": {
             "id": "SA533758",
             "submitted_id": "ASHPC_0022_Pa_P",
             "type": "DNA"
@@ -1742,13 +1887,16 @@
   {
     "object_id": "9727c61d-3871-54f1-a65a-2d1d91acd242",
     "access": "controlled",
-    "study": "PACA-CA",
+    "study_id": "PACA-CA",
     "analysis": {
       "id": "b8e09611-225a-4de6-87dc-104753072252",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "PACA-CA",
+      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
         "info": {},
@@ -1756,7 +1904,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"
       }
     },
-    "file": {
+    "files": {
       "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "01e54034c70b85812e9aac58f2525594",
@@ -1767,8 +1915,10 @@
         "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "5b83369174136b88f16a08ab87bb67f7",
-        "size": 148925
-      }
+        "size": 148925,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1790,7 +1940,7 @@
           "id": "SP125732",
           "type": "Primary tumour - other",
           "submitted_id": "PCSI_0083_Pa_P_526",
-          "sample": {
+          "samples": {
             "id": "SA520221",
             "submitted_id": "PCSI_0083_Pa_P_526",
             "type": "DNA"
@@ -1802,13 +1952,16 @@
   {
     "object_id": "316612a4-4c23-5434-976a-810f8cde06b7",
     "access": "controlled",
-    "study": "MALY-DE",
+    "study_id": "MALY-DE",
     "analysis": {
       "id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
       "info": {},
-      "study": "MALY-DE",
+      "study_id": "MALY-DE",
       "experiment": {
         "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
         "variantCallingTool": "MUSE variant call pipeline",
@@ -1816,7 +1969,7 @@
         "matchedNormalSampleSubmitterId": "control_4128852"
       }
     },
-    "file": {
+    "files": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "f83b0f9099e8594b589440819ab119cd",
@@ -1827,8 +1980,10 @@
         "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "f5629a05fe5b8dd6a63381de259aa935",
-        "size": 146924
-      }
+        "size": 146924,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1850,7 +2005,7 @@
           "id": "SP124981",
           "type": "Primary tumour - lymph node",
           "submitted_id": "tumor_4128852",
-          "sample": {
+          "samples": {
             "id": "SA557689",
             "submitted_id": "tumor_4128852",
             "type": "DNA"
@@ -1862,12 +2017,15 @@
   {
     "object_id": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
     "access": "controlled",
-    "study": "MALY-DE",
+    "study_id": "MALY-DE",
     "analysis": {
       "id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
-      "type": { "name": "variantCall", "version": 1 },
+      "type": {
+        "name": "variantCall",
+        "version": 1
+      },
       "state": "PUBLISHED",
-      "study": "MALY-DE",
+      "study_id": "MALY-DE",
       "info": {},
       "experiment": {
         "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
@@ -1876,7 +2034,7 @@
         "matchedNormalSampleSubmitterId": "control_4166503"
       }
     },
-    "file": {
+    "files": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
@@ -1887,8 +2045,10 @@
         "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "7c606af5d37d3788850da1a5f1705feb",
-        "size": 19306
-      }
+        "size": 19306,
+        "data_type": "AlignedReads"
+      },
+      "data_type": "AlignedReads"
     },
     "repositories": [
       {
@@ -1910,7 +2070,7 @@
           "id": "SP116638",
           "type": "Primary tumour - lymph node",
           "submitted_id": "tumor_4166503",
-          "sample": {
+          "samples": {
             "id": "SA542043",
             "submitted_id": "tumor_4166503",
             "type": "DNA"
@@ -1920,4 +2080,3 @@
     ]
   }
 ]
-

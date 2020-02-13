@@ -50,6 +50,7 @@ public class File {
     @NonNull
     private String fileMd5sum;
     private String fileAccess;
+    private String dataType;
     private long fileSize;
     private Map<String, Object> info;
 }

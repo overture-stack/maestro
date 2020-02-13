@@ -17,6 +17,7 @@
 
 package bio.overture.maestro.domain.entities.indexing;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Getter
@@ -25,6 +26,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Specimen {
     @NonNull
     private String id;
@@ -33,6 +35,8 @@ public class Specimen {
     @NonNull
     private String submittedId;
     @NonNull
-    private Sample sample;
+    private Sample samples;
+    private String tumourNormalDesignation;
+    private String specimenTissueSource;
 }
 

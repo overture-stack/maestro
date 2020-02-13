@@ -5,33 +5,33 @@
     "isPcawg": false
   },
   "analysisId": "EGAZ00001254247",
-  "study": "PEME-CA",
+  "studyId": "PEME-CA",
   "analysisState": "PUBLISHED",
-  "sample": [
+  "samples": [
     {
       "info": {},
       "sampleId": "SA604905",
       "specimenId": "SP200947",
-      "sampleSubmitterId": "MDT-AP-0432_control",
+      "submitterSampleId": "MDT-AP-0432_control",
       "sampleType": "DNA",
       "specimen": {
         "info": {},
         "specimenId": "SP200947",
         "donorId": "DO232959",
-        "specimenSubmitterId": "MDT-AP-0432_control_specimen",
-        "specimenClass": "Normal",
+        "submitterSpecimenId": "MDT-AP-0432_control_specimen",
+
         "specimenType": "Normal - blood derived"
       },
       "donor": {
         "donorId": "DO232959",
-        "donorSubmitterId": "MDT-AP-0432",
+        "submitterDonorId": "MDT-AP-0432",
         "studyId": "PEME-CA",
-        "donorGender": "male",
+        "gender": "male",
         "info": {}
       }
     }
   ],
-  "file": [
+  "files": [
     {
       "info": {},
       "objectId": "464116e4-afc9-5879-b567-6f54513a32dc",
@@ -41,7 +41,8 @@
       "fileSize": 6352,
       "fileType": "XML",
       "fileMd5sum": "cad2b396e0f7dc5384a5275f89ccad3a",
-      "fileAccess": "open"
+       "fileAccess": "open",
+       "dataType": "AlignedReads"
     },
     {
       "info": {},

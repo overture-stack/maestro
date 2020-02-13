@@ -5,33 +5,33 @@
     "isPcawg": false
   },
   "analysisId": "EGAZ00001254368",
-  "study": "PEME-CA",
+  "studyId": "PEME-CA",
   "analysisState": "PUBLISHED",
-  "sample": [
+  "samples": [
     {
       "info": {},
       "sampleId": "SA604924",
       "specimenId": "SP201301",
-      "sampleSubmitterId": "MDT-AP-0749_tumor",
+      "submitterSampleId": "MDT-AP-0749_tumor",
       "sampleType": "DNA",
       "specimen": {
         "info": {},
         "specimenId": "SP201301",
         "donorId": "DO232978",
-        "specimenSubmitterId": "MDT-AP-0749_tumor_specimen",
-        "specimenClass": "Tumour",
+        "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
+
         "specimenType": "Primary tumour - solid tissue"
       },
       "donor": {
         "donorId": "DO232978",
-        "donorSubmitterId": "MDT-AP-0749",
+        "submitterDonorId": "MDT-AP-0749",
         "studyId": "PEME-CA",
-        "donorGender": "female",
+        "gender": "female",
         "info": {}
       }
     }
   ],
-  "file": [
+  "files": [
     {
       "info": {},
       "objectId": "41ba4fb3-9428-50b5-af6c-d779cd59b04d",
@@ -41,7 +41,8 @@
       "fileSize": 6342,
       "fileType": "XML",
       "fileMd5sum": "fb157ece007dc31b3d34add273efedcb",
-      "fileAccess": "open"
+      "fileAccess": "open",
+      "dataType": "AlignedReads"
     },
     {
       "info": {},
@@ -52,7 +53,8 @@
       "fileSize": 8939816,
       "fileType": "BAI",
       "fileMd5sum": "e2a83668aa4cfe4f4048e75212d44f19",
-      "fileAccess": "controlled"
+      "fileAccess": "controlled",
+      "dataType": "AlignedReads"
     },
     {
       "info": {},
@@ -63,7 +65,8 @@
       "fileSize": 88906416144,
       "fileType": "BAM",
       "fileMd5sum": "29ff9df727803d20834b9997bc17e970",
-      "fileAccess": "controlled"
+      "fileAccess": "controlled",
+      "dataType": "AlignedReads"
     }
   ],
   "experiment": {

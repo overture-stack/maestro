@@ -6,33 +6,33 @@
       "isPcawg": false
     },
     "analysisId": "EGAR00001165965",
-    "study": "LIAD-FR",
+    "studyId": "LIAD-FR",
     "analysisState": "PUBLISHED",
-    "sample": [
+    "samples": [
       {
         "info": {},
         "sampleId": "SA520689",
         "specimenId": "SP109375",
-        "sampleSubmitterId": "CHC1124T",
+        "submitterSampleId": "CHC1124T",
         "sampleType": "DNA",
         "specimen": {
           "info": {},
           "specimenId": "SP109375",
           "donorId": "DO49691",
-          "specimenSubmitterId": "CHC1124T",
-          "specimenClass": "Tumour",
+          "submitterSpecimenId": "CHC1124T",
+
           "specimenType": "Primary tumour - solid tissue"
         },
         "donor": {
           "donorId": "DO49691",
-          "donorSubmitterId": "CHC1124",
+          "submitterDonorId": "CHC1124",
           "studyId": "LIAD-FR",
-          "donorGender": "male",
+          "gender": "male",
           "info": {}
         }
       }
     ],
-    "file": [
+    "files": [
       {
         "info": {},
         "objectId": "71729c60-d87a-5458-a88c-38e6dc294733",
@@ -42,7 +42,8 @@
         "fileSize": 8904,
         "fileType": "XML",
         "fileMd5sum": "7243c2e2fa5cbabea1ad9d5e9972524a",
-        "fileAccess": "open"
+        "fileAccess": "open",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -53,7 +54,8 @@
         "fileSize": 7494108451,
         "fileType": "BAM",
         "fileMd5sum": "d309e3cdd1fc38b0fa8b5486a48e4b94",
-        "fileAccess": "controlled"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       }
     ],
     "experiment": {

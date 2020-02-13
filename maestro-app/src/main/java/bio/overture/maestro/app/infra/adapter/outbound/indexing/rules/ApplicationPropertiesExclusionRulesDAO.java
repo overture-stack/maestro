@@ -86,11 +86,11 @@ public class ApplicationPropertiesExclusionRulesDAO implements ExclusionRulesDAO
 
     private Class<?> getClassFor(String entity) {
         switch (entity) {
-            case "study": return Study.class;
+            case "studyId": return Study.class;
             case "analysis": return Analysis.class;
-            case "file": return File.class;
+            case "files": return File.class;
             case "donor": return Donor.class;
-            case "sample": return Sample.class;
+            case "samples": return Sample.class;
             case "specimen" : return Specimen.class;
         }
         throw new IllegalArgumentException(format("entity : {0} is not recognized for exclusion rules", entity));
