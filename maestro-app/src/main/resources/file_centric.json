@@ -61,7 +61,7 @@
         },
         "type": "keyword"
       },
-      "studyId": {
+      "study_id": {
         "type": "keyword",
         "copy_to": [
           "file_autocomplete"
