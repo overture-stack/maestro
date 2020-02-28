@@ -151,6 +151,4 @@ spring:
           group: songConsumerGrp
           consumer:
             maxAttempts: 1
-    config:
-      allow-override:
 
