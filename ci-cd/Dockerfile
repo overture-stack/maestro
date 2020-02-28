@@ -6,11 +6,19 @@ COPY . .
 RUN ./mvnw clean package -DskipTests
 
 FROM openjdk:11-jre-slim
-RUN mkdir /app-config && mkdir /app
+RUN mkdir /app
 COPY --from=builder /usr/src/app/maestro-app/target/maestro-app-*.jar /app/maestro-app.jar
-# allows consumers to override the application configs by mounting their configs here if they want.
-# if nothing mounted the bundled configs will be used.
-VOLUME /app-config
+
+ENV APP_USER app_user
+ENV APP_USER_ID 9999
+ENV APP_USER_GROUP_ID 9999
+ENV APP_DIR /app
+RUN addgroup --system --gid $APP_USER_GROUP_ID $APP_USER \
+    && adduser --system --uid $APP_USER_ID --gid $APP_USER_GROUP_ID $APP_USER  \
+    && mkdir -p $APP_DIR \
+    && chown -R $APP_USER:$APP_USER_GROUP_ID $APP_DIR
+USER $APP_USER_ID
+
 CMD ["java", "-jar", "/app/maestro-app.jar"]
 EXPOSE 11235
 

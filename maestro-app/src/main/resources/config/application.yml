@@ -119,6 +119,8 @@ spring:
     name: maestro
   output.ansi.enabled: ALWAYS
   cloud:
+    vault:
+      enabled: false
     stream:
       # kafka integration with song (remove this key to disable kafka)
       kafka:
