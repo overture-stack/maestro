@@ -10,11 +10,9 @@ maestro:
 
   # elastic search server to connect to & client properties
   elasticsearch:
-
-
     # elasticsearch server nodes to send requests to
     clusterNodes:
-      - https://localhost:9200
+      - http://localhost:9200
 
     # the index name to store documents in (will be created if not existing)
     indexes:
