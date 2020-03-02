@@ -38,7 +38,7 @@ public interface ApplicationProperties {
     int elasticSearchClientConnectionTimeoutMillis();
     int elasticSearchClientSocketTimeoutMillis();
     boolean elasticSearchTlsTrustSelfSigned();
-    boolean elasticSearchAuthEnabled();
+    boolean elasticSearchBasicAuthEnabled();
     String elasticSearchAuthUser();
     String elasticSearchAuthPassword();
     List<PropertiesFileRepository> repositories();

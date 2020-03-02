@@ -77,22 +77,22 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
     @Override
     public boolean elasticSearchTlsTrustSelfSigned() {
-        return this.elasticsearch.getClient().isTrustSelfSignedTls();
+        return this.elasticsearch.getClient().isTrustSelfSignedCert();
     }
 
     @Override
-    public boolean elasticSearchAuthEnabled() {
-        return false;
+    public boolean elasticSearchBasicAuthEnabled() {
+        return this.elasticsearch.getClient().getBasicAuth().isEnabled();
     }
 
     @Override
     public String elasticSearchAuthUser() {
-        return null;
+        return this.elasticsearch.getClient().getBasicAuth().getUser();
     }
 
     @Override
     public String elasticSearchAuthPassword() {
-        return null;
+        return this.elasticsearch.getClient().getBasicAuth().getPassword();
     }
 
     @Override
@@ -243,18 +243,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private static class Elasticsearch {
         private List<String> clusterNodes = List.of("localhost:9200");
         private Indexes indexes = new Indexes();
-        private ElasticsearchAuth auth = new ElasticsearchAuth();
+
         private ElasticsearchClient client = new ElasticsearchClient();
     }
 
-    @Data
-    @ToString
-    @EqualsAndHashCode
-    private static class ElasticsearchAuth {
-        private boolean enabled = false;
-        private String user;
-        private String password;
-    }
+
 
     @Data
     @ToString
@@ -275,7 +268,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @ToString
     @EqualsAndHashCode
     private static class ElasticsearchClient {
-        private boolean trustSelfSignedTls = false;
+        private ElasticsearchAuth basicAuth = new ElasticsearchAuth();
+        private boolean trustSelfSignedCert = false;
         private int docsPerBulkReqMax = 1000;
         private int connectionTimeout = 5000;
         private int socketTimeout = 10000;
@@ -287,6 +281,15 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private static class ElasticsearchClientRetry {
             private int maxAttempts = 3;
             private int waitDurationMillis = 100;
+        }
+        
+        @Data
+        @ToString
+        @EqualsAndHashCode
+        private static class ElasticsearchAuth {
+            private boolean enabled = false;
+            private String user;
+            private String password;
         }
     }
 

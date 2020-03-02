@@ -20,12 +20,17 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+
 import lombok.val;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
+
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.CommandLineRunner;
@@ -94,7 +99,7 @@ public class ElasticSearchConfig {
             }
 
             // set the credentials provider for auth
-            if (properties.elasticSearchAuthEnabled()) {
+            if (properties.elasticSearchBasicAuthEnabled()) {
                 CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(AuthScope.ANY,
                     new UsernamePasswordCredentials(properties.elasticSearchAuthUser(),

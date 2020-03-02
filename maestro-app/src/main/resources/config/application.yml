@@ -10,10 +10,7 @@ maestro:
 
   # elastic search server to connect to & client properties
   elasticsearch:
-    auth:
-      enabled: false
-      user: elastic
-      password: dummy-pass
+
 
     # elasticsearch server nodes to send requests to
     clusterNodes:
@@ -27,7 +24,11 @@ maestro:
 
     # elasticsearch client properties
     client:
-      trustSelfSignedTls: false
+      basicAuth:
+        enabled: false
+        user: elastic
+        password: dummy-pass
+      trustSelfSignedCert: false
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
       # max time to wait for a connection to be established
