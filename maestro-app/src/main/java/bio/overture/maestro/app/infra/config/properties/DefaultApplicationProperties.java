@@ -76,6 +76,26 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
+    public boolean elasticSearchTlsTrustSelfSigned() {
+        return this.elasticsearch.getClient().isTrustSelfSignedTls();
+    }
+
+    @Override
+    public boolean elasticSearchAuthEnabled() {
+        return false;
+    }
+
+    @Override
+    public String elasticSearchAuthUser() {
+        return null;
+    }
+
+    @Override
+    public String elasticSearchAuthPassword() {
+        return null;
+    }
+
+    @Override
     public long elasticSearchRetryWaitDurationMillis() {
         return this.elasticsearch.getClient().getRetry().getWaitDurationMillis();
     }
@@ -223,7 +243,17 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private static class Elasticsearch {
         private List<String> clusterNodes = List.of("localhost:9200");
         private Indexes indexes = new Indexes();
+        private ElasticsearchAuth auth = new ElasticsearchAuth();
         private ElasticsearchClient client = new ElasticsearchClient();
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class ElasticsearchAuth {
+        private boolean enabled = false;
+        private String user;
+        private String password;
     }
 
     @Data
@@ -245,6 +275,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @ToString
     @EqualsAndHashCode
     private static class ElasticsearchClient {
+        private boolean trustSelfSignedTls = false;
         private int docsPerBulkReqMax = 1000;
         private int connectionTimeout = 5000;
         private int socketTimeout = 10000;

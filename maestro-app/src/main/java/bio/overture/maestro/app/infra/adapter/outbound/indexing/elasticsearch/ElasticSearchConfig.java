@@ -22,6 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.val;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -30,6 +33,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -62,10 +68,12 @@ public class ElasticSearchConfig {
             .map(HttpHost::create)
             .collect(Collectors.toUnmodifiableList()));
         val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[]{}));
+
         builder.setHttpClientConfigCallback((httpAsyncClientBuilder) -> {
             val connectTimeout = properties.elasticSearchClientConnectionTimeoutMillis();
             val timeout = properties.elasticSearchClientSocketTimeoutMillis();
             val requestConfigBuilder = RequestConfig.custom();
+
             if (connectTimeout > 0) {
                 requestConfigBuilder.setConnectTimeout(connectTimeout);
                 requestConfigBuilder.setConnectionRequestTimeout(connectTimeout);
@@ -74,6 +82,25 @@ public class ElasticSearchConfig {
                 requestConfigBuilder.setSocketTimeout(timeout);
             }
             httpAsyncClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
+
+            if (properties.elasticSearchTlsTrustSelfSigned()) {
+                SSLContextBuilder sslCtxBuilder = new SSLContextBuilder();
+                try {
+                    sslCtxBuilder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+                    httpAsyncClientBuilder.setSSLContext(sslCtxBuilder.build());
+                } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+                    throw new RuntimeException("failed to build Elastic rest client");
+                }
+            }
+
+            // set the credentials provider for auth
+            if (properties.elasticSearchAuthEnabled()) {
+                CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+                credentialsProvider.setCredentials(AuthScope.ANY,
+                    new UsernamePasswordCredentials(properties.elasticSearchAuthUser(),
+                        properties.elasticSearchAuthPassword()));
+                httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+            }
             return httpAsyncClientBuilder;
         });
         return new RestHighLevelClient(builder);

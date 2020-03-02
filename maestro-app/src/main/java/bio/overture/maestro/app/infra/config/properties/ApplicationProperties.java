@@ -37,6 +37,10 @@ public interface ApplicationProperties {
     int maxDocsPerBulkRequest();
     int elasticSearchClientConnectionTimeoutMillis();
     int elasticSearchClientSocketTimeoutMillis();
+    boolean elasticSearchTlsTrustSelfSigned();
+    boolean elasticSearchAuthEnabled();
+    String elasticSearchAuthUser();
+    String elasticSearchAuthPassword();
     List<PropertiesFileRepository> repositories();
     Resource fileCentricIndex();
     Map<String, List<String>> idExclusionRules();
