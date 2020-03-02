@@ -76,6 +76,26 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
+    public boolean elasticSearchTlsTrustSelfSigned() {
+        return this.elasticsearch.getClient().isTrustSelfSignedCert();
+    }
+
+    @Override
+    public boolean elasticSearchBasicAuthEnabled() {
+        return this.elasticsearch.getClient().getBasicAuth().isEnabled();
+    }
+
+    @Override
+    public String elasticSearchAuthUser() {
+        return this.elasticsearch.getClient().getBasicAuth().getUser();
+    }
+
+    @Override
+    public String elasticSearchAuthPassword() {
+        return this.elasticsearch.getClient().getBasicAuth().getPassword();
+    }
+
+    @Override
     public long elasticSearchRetryWaitDurationMillis() {
         return this.elasticsearch.getClient().getRetry().getWaitDurationMillis();
     }
@@ -223,8 +243,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private static class Elasticsearch {
         private List<String> clusterNodes = List.of("localhost:9200");
         private Indexes indexes = new Indexes();
+
         private ElasticsearchClient client = new ElasticsearchClient();
     }
+
+
 
     @Data
     @ToString
@@ -245,6 +268,8 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @ToString
     @EqualsAndHashCode
     private static class ElasticsearchClient {
+        private ElasticsearchAuth basicAuth = new ElasticsearchAuth();
+        private boolean trustSelfSignedCert = false;
         private int docsPerBulkReqMax = 1000;
         private int connectionTimeout = 5000;
         private int socketTimeout = 10000;
@@ -256,6 +281,15 @@ final class DefaultApplicationProperties implements ApplicationProperties {
         private static class ElasticsearchClientRetry {
             private int maxAttempts = 3;
             private int waitDurationMillis = 100;
+        }
+        
+        @Data
+        @ToString
+        @EqualsAndHashCode
+        private static class ElasticsearchAuth {
+            private boolean enabled = false;
+            private String user;
+            private String password;
         }
     }
 

@@ -29,7 +29,7 @@ services:
     container_name: boot-admin
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
     container_name: elasticsearch.maestro.local
     ports:
       - 9200:9200
@@ -43,7 +43,7 @@ services:
       - 2181:2181
   # see : https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html#ce-docker-quickstart
   broker:
-    image: confluentinc/cp-kafka:5.2.1
+    image: confluentinc/cp-kafka:5.4.0
     hostname: kafka.maestro.local
     container_name: kafka.maestro.local
     depends_on:
@@ -65,7 +65,7 @@ services:
     - /tmp/kafka:/kafka
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:5.2.1
+    image: confluentinc/cp-kafka-rest:5.4.0
     depends_on:
       - zookeeper
       - broker

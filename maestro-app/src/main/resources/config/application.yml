@@ -13,7 +13,6 @@ maestro:
     # elasticsearch server nodes to send requests to
     clusterNodes:
       - http://localhost:9200
-      - http://localhost:9201
 
     # the index name to store documents in (will be created if not existing)
     indexes:
@@ -23,6 +22,11 @@ maestro:
 
     # elasticsearch client properties
     client:
+      basicAuth:
+        enabled: false
+        user: elastic
+        password: dummy-pass
+      trustSelfSignedCert: false
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
       # max time to wait for a connection to be established
@@ -119,6 +123,8 @@ spring:
     name: maestro
   output.ansi.enabled: ALWAYS
   cloud:
+    vault:
+      enabled: false
     stream:
       # kafka integration with song (remove this key to disable kafka)
       kafka:
