@@ -16,8 +16,11 @@ ENV APP_DIR /app
 RUN addgroup --system --gid $APP_USER_GROUP_ID $APP_USER \
     && adduser --system --uid $APP_USER_ID --gid $APP_USER_GROUP_ID $APP_USER  \
     && mkdir -p $APP_DIR \
+    && mkdir $APP_DIR/app-data \
     && chown -R $APP_USER:$APP_USER_GROUP_ID $APP_DIR
 USER $APP_USER_ID
+
+VOLUME $APP_DIR/app-data
 
 CMD ["java", "-jar", "/app/maestro-app.jar"]
 EXPOSE 11235
