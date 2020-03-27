@@ -34,6 +34,8 @@ public interface ApplicationProperties {
     List<String> elasticSearchClusterNodes();
     String fileCentricAlias();
     String fileCentricIndexName();
+    String analysisCentricAlias();
+    String analysisCentricIndexName();
     int maxDocsPerBulkRequest();
     int elasticSearchClientConnectionTimeoutMillis();
     int elasticSearchClientSocketTimeoutMillis();
@@ -43,6 +45,7 @@ public interface ApplicationProperties {
     String elasticSearchAuthPassword();
     List<PropertiesFileRepository> repositories();
     Resource fileCentricIndex();
+    Resource analysisCentricIndex();
     Map<String, List<String>> idExclusionRules();
     int songMaxRetries();
     int songStudyCallTimeoutSeconds();

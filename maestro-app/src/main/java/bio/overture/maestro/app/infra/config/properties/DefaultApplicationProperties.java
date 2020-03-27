@@ -61,6 +61,16 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     }
 
     @Override
+    public String analysisCentricAlias() {
+        return this.elasticsearch.getIndexes().getAnalysisCentric().getAlias();
+    }
+
+    @Override
+    public String analysisCentricIndexName() {
+        return this.elasticsearch.getIndexes().getAnalysisCentric().getName();
+    }
+
+    @Override
     public int maxDocsPerBulkRequest() {
         return this.elasticsearch.getClient().getDocsPerBulkReqMax();
     }
@@ -113,6 +123,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Override
     public Resource fileCentricIndex() {
         return fileCentricIndex;
+    }
+
+    @Override
+    public Resource analysisCentricIndex() {
+        return analysisCentricIndex;
     }
 
     @Override
@@ -192,6 +207,9 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @Value("classpath:file_centric.json")
     private Resource fileCentricIndex;
 
+    @Value("classpath:analysis_centric.json")
+    private Resource analysisCentricIndex;
+
     private Song song = new Song();
     private Elasticsearch elasticsearch = new Elasticsearch();
     private List<DefaultPropertiesFileRepository> repositories;
@@ -254,6 +272,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     @EqualsAndHashCode
     private static class Indexes {
         private FileCentricIndex fileCentric = new FileCentricIndex();
+        private AnalysisCentricIndex analysisCentric = new AnalysisCentricIndex();
     }
 
     @Data
@@ -262,6 +281,14 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private static class FileCentricIndex {
         private String name = "file_centric";
         private String alias = "file_centric";
+    }
+
+    @Data
+    @ToString
+    @EqualsAndHashCode
+    private static class AnalysisCentricIndex {
+        private String name = "analysis_centric";
+        private String alias = "analysis_centric";
     }
 
     @Data

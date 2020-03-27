@@ -19,6 +19,9 @@ maestro:
       fileCentric:
           name: file_centric_1.0
           alias: file_centric
+      analysisCentric:
+          name: analysis_centric_1.0
+          alias: analysis_centric
 
     # elasticsearch client properties
     client:

@@ -65,6 +65,13 @@ public interface Indexer {
      */
     Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand);
 
+    /**
+     * Index an analysis to analysis_centric index.
+     * @param indexAnalysisCommand
+     * @return
+     */
+    Mono<IndexResult> indexAnalysisToAnalysisCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand);
+
     void addRule(AddRuleCommand addRuleCommand);
     void deleteRule(DeleteRuleCommand deleteRuleCommand);
     List<? extends ExclusionRule> getAllRules();

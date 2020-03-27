@@ -36,7 +36,6 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -152,7 +151,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             log.info("indexExists result: {} ", indexExists);
             if (!indexExists) {
                 this.createIndex();
-                log.info("index {} have been created", this.indexName);
+                log.info("index {} has been created", this.indexName);
             }
 
         } catch (Exception e) {

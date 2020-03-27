@@ -25,6 +25,7 @@ public enum NotificationName {
     FETCH_REPO_STUDIES_FAILED(NotificationCategory.ERROR),
     INDEX_REQ_FAILED(NotificationCategory.ERROR),
     CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED(NotificationCategory.ERROR),
+    CONVERT_ANALYSIS_TO_ANALYSIS_DOCS_FAILED(NotificationCategory.ERROR),
     INDEX_FILE_CONFLICT(NotificationCategory.WARN),
     ALL(null),
     UNHANDLED_ERROR(NotificationCategory.ERROR),

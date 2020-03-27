@@ -20,14 +20,12 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-
 import lombok.val;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
-
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.ssl.SSLContextBuilder;
@@ -53,6 +51,7 @@ import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SE
 @Configuration
 @Import({
     FileCentricElasticSearchAdapter.class,
+    AnalysisCentricElasticSearchAdapter.class,
     SnakeCaseJacksonSearchResultMapper.class
 })
 public class ElasticSearchConfig {
@@ -63,6 +62,11 @@ public class ElasticSearchConfig {
      */
     @Bean
     CommandLineRunner elasticsearchBootstrapper(FileCentricElasticSearchAdapter adapter) {
+        return (args) -> adapter.initialize();
+    }
+
+    @Bean
+    CommandLineRunner analysisElasticsearchBootstrapper(AnalysisCentricElasticSearchAdapter adapter) {
         return (args) -> adapter.initialize();
     }
 

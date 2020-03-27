@@ -59,7 +59,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
         val repository = repositories.stream()
             .filter(propertiesFileRepository -> propertiesFileRepository.getCode().equalsIgnoreCase(code))
             .distinct()
-            .map(this::toFilesRepository)
+            .map(this :: toFilesRepository)
             .findFirst()
             .orElse(null);
         if (repository == null) {

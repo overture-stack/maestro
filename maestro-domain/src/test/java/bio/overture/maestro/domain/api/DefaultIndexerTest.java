@@ -29,6 +29,7 @@ import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Sample;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
+import bio.overture.maestro.domain.port.outbound.indexing.AnalysisCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
@@ -87,6 +88,9 @@ class DefaultIndexerTest {
     private FileCentricIndexAdapter indexServerAdapter;
 
     @Mock
+    private AnalysisCentricIndexAdapter analysisCentricIndexAdapter;
+
+    @Mock
     private Indexer indexer;
 
     @Mock
@@ -94,8 +98,8 @@ class DefaultIndexerTest {
 
     @BeforeEach
     void setUp() {
-        reset(studyRepositoryDao, studyDAO, indexServerAdapter, notifier);
-        this.indexer = new DefaultIndexer(indexServerAdapter, studyDAO, studyRepositoryDao, exclusionRulesDAO, notifier);
+        reset(studyRepositoryDao, studyDAO, indexServerAdapter, analysisCentricIndexAdapter, notifier);
+        this.indexer = new DefaultIndexer(indexServerAdapter, analysisCentricIndexAdapter, studyDAO, studyRepositoryDao, exclusionRulesDAO, notifier);
     }
 
     @Test

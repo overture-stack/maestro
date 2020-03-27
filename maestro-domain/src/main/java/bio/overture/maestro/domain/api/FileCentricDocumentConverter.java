@@ -123,7 +123,7 @@ final class FileCentricDocumentConverter {
     /**
      * extract metadata files if any
      */
-    private static String getMetadataFileId(Analysis analysis) {
+     static String getMetadataFileId(Analysis analysis) {
         val xmlFile = analysis.getFiles()
             .stream()
             .filter(f -> isXMLFile(f.getFileName()))

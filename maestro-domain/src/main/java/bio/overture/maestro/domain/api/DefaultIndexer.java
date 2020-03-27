@@ -22,10 +22,13 @@ import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.Repository;
+import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
+import bio.overture.maestro.domain.port.outbound.indexing.AnalysisCentricIndexAdapter;
+import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.indexing.rules.ExclusionRulesDAO;
@@ -43,11 +46,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+import reactor.core.scheduler.Schedulers;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import static bio.overture.maestro.domain.api.AnalysisCentricDocumentConverter.fromAnalysis;
 import static bio.overture.maestro.domain.api.ExclusionRulesEvaluator.shouldExcludeAnalysis;
 import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerException;
 import static java.text.MessageFormat.format;
@@ -65,6 +68,7 @@ class DefaultIndexer implements Indexer {
     private static final String CONFLICTS = "conflicts";
 
     private final FileCentricIndexAdapter fileCentricIndexAdapter;
+    private final AnalysisCentricIndexAdapter analysisCentricIndexAdapter;
     private final StudyDAO studyDAO;
     private final StudyRepositoryDAO studyRepositoryDao;
     private final ExclusionRulesDAO exclusionRulesDAO;
@@ -72,15 +76,29 @@ class DefaultIndexer implements Indexer {
 
     @Inject
     DefaultIndexer(FileCentricIndexAdapter fileCentricIndexAdapter,
+                   AnalysisCentricIndexAdapter analysisCentricIndexAdapter,
                    StudyDAO studyDAO,
                    StudyRepositoryDAO studyRepositoryDao,
                    ExclusionRulesDAO exclusionRulesDAO,
                    Notifier notifier) {
         this.fileCentricIndexAdapter = fileCentricIndexAdapter;
+        this.analysisCentricIndexAdapter = analysisCentricIndexAdapter;
         this.studyDAO = studyDAO;
         this.studyRepositoryDao = studyRepositoryDao;
         this.exclusionRulesDAO = exclusionRulesDAO;
         this.notifier = notifier;
+    }
+
+    @Override
+    public Mono<IndexResult> indexAnalysisToAnalysisCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand){
+        val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
+
+        return tryGetStudyRepository(indexAnalysisCommand.getAnalysisIdentifier().getRepositoryCode())
+              .map(filesRepository -> buildStudyAnalysisRepoTuple(analysisIdentifier, filesRepository))
+              .flatMap(this :: getAnalysisCentricDocuments)
+              .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
+              .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+              .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier));
     }
 
     @Override
@@ -270,8 +288,15 @@ class DefaultIndexer implements Indexer {
         getStudyAnalysisDocuments(StudyAnalysisRepositoryTuple tuple) {
 
         return tryFetchAnalysis(tuple)
-            .flatMap(this::getExclusionRulesAndFilter)
+            .flatMap(this :: getExclusionRulesAndFilter)
             .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
+    }
+
+    private Mono<Tuple2<FailureData, List<AnalysisCentricDocument>>>
+              getAnalysisCentricDocuments(StudyAnalysisRepositoryTuple tuple){
+      return tryFetchAnalysis(tuple)
+              .flatMap(this :: getExclusionRulesAndFilter)
+              .map((analyses -> buildAnalysisCentricDocuments(tuple.studyRepository, analyses)));
     }
 
     private Mono<List<Analysis>> tryFetchAnalysis(StudyAnalysisRepositoryTuple tuple) {
@@ -365,6 +390,22 @@ class DefaultIndexer implements Indexer {
             }).orElseGet(() -> new Tuple2<>(FailureData.builder().build(), List.of()));
     }
 
+    private Tuple2<FailureData, List<AnalysisCentricDocument>>
+            buildAnalysisCentricDocuments(StudyRepository repo, List<Analysis> analyses){
+      return analyses.stream()
+              .map(analysis -> buildAnalysisDocuments(analysis, repo))
+              .map(newEither -> newEither.fold(
+                      (left) -> new Tuple2<>(left.getFailureData(), List.<AnalysisCentricDocument>of()),
+                      (right) -> new Tuple2<>(FailureData.builder().build(), right)
+                    )
+                ).reduce((accumulated, current) -> {
+                  accumulated._1().addFailures(current._1());
+                  val combined = new ArrayList<>(accumulated._2());
+                  combined.addAll(current._2());
+                  return new Tuple2<>(accumulated._1(), Collections.unmodifiableList(combined));
+                  }).orElseGet(() -> new Tuple2<>(FailureData.builder().build(), List.of()));
+    }
+
     private Mono<IndexResult> batchUpsert(List<FileCentricDocument> files) {
         return getAlreadyIndexed(files)
             .map(storedFilesList -> findConflicts(files, storedFilesList))
@@ -386,7 +427,21 @@ class DefaultIndexer implements Indexer {
             );
     }
 
-    private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses,
+    private Mono<IndexResult> batchUpsertAnalysis(List<AnalysisCentricDocument> analyses) {
+        return Mono.fromSupplier(() -> analyses).subscribeOn(Schedulers.elastic())
+                .flatMap(this :: callBatchUpsertAnalysis)
+                .doOnNext(this :: notifyIndexRequestFailures)
+                .onErrorResume(
+                        (ex) -> ex instanceof IndexerException,
+                        (ex) -> Mono.just(IndexResult.builder()
+                                .successful(false)
+                                .failureData(((IndexerException) ex).getFailureData())
+                                .build())
+                ).doOnSuccess(indexResult -> log.trace("finished batch upsert analysis, list size {}, hashcode {}", analyses.size(),
+                Objects.hashCode(analyses)));
+    }
+
+        private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses,
                                                   AnalysisAndExclusions analysisAndExclusions) {
         return analyses.stream()
             .filter(analysis -> !shouldExcludeAnalysis(analysis, analysisAndExclusions.getExclusionRulesMap()))
@@ -397,13 +452,26 @@ class DefaultIndexer implements Indexer {
         buildFileDocuments(Analysis analysis, StudyRepository repository) {
 
         return Try.of(() -> FileCentricDocumentConverter.fromAnalysis(analysis, repository))
-            .onFailure((e) -> notifyBuildDocumentFailure(analysis, repository, e))
+            .onFailure((e) -> notifyBuildDocumentFailure(NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED, analysis, repository, e))
             .toEither()
             .left()
             .map((t) -> wrapBuildDocumentException(analysis, t))
             .toEither();
     }
 
+    private Either<IndexerException, List<AnalysisCentricDocument>>
+            buildAnalysisDocuments(Analysis analysis, StudyRepository repository){
+
+      return Try.of(() -> fromAnalysis(analysis, repository))
+              .onFailure( (e) ->
+                      notifyBuildDocumentFailure(NotificationName.CONVERT_ANALYSIS_TO_ANALYSIS_DOCS_FAILED, analysis, repository, e))
+              .toEither()
+              .left()
+              .map( (t) -> wrapBuildDocumentException(analysis, t))
+              .toEither();
+    }
+
+    // if there is already a record in another song
     private Mono<Map<String, FileCentricDocument>> getAlreadyIndexed(List<FileCentricDocument> files) {
         return fileCentricIndexAdapter.fetchByIds(files.stream()
             .map(FileCentricDocument::getObjectId)
@@ -467,6 +535,11 @@ class DefaultIndexer implements Indexer {
         );
     }
 
+    private Mono<IndexResult> callBatchUpsertAnalysis(List<AnalysisCentricDocument> analyses){
+        return this.analysisCentricIndexAdapter.batchUpsertAnalysisRepositories( BatchIndexAnalysisCommand.
+                builder().analyses(analyses).build());
+    }
+
     private void notifyIndexRequestFailures(IndexResult indexResult) {
         if (!indexResult.isSuccessful()) {
             notifier.notify(
@@ -480,10 +553,11 @@ class DefaultIndexer implements Indexer {
         }
     }
 
-    private void notifyBuildDocumentFailure(Analysis analysis, StudyRepository repository, Throwable e) {
+    private void notifyBuildDocumentFailure(NotificationName notificationName,
+            Analysis analysis, StudyRepository repository, Throwable e) {
         notifier.notify(
             new IndexerNotification(
-                NotificationName.CONVERT_ANALYSIS_TO_FILE_DOCS_FAILED,
+                notificationName,
                 Map.of(
                     ANALYSIS_ID, analysis.getAnalysisId(),
                     STUDY_ID, analysis.getStudyId(),
@@ -560,11 +634,20 @@ class DefaultIndexer implements Indexer {
 
     private Mono<IndexResult>
         batchUpsertFilesAndCollectFailures(Tuple2<FailureData, List<FileCentricDocument>> failureDataAndFileListTuple) {
-        return this.batchUpsert((failureDataAndFileListTuple._2()))
+        return this.batchUpsert( failureDataAndFileListTuple._2() )
             .map(upsertResult -> reduceIndexResult(IndexResult.builder()
                 .failureData(failureDataAndFileListTuple._1())
                 .build(), upsertResult)
             );
+    }
+
+    private Mono<IndexResult>
+    batchUpsertAnalysesAndCollectFailtures(Tuple2<FailureData, List<AnalysisCentricDocument>> failureDataAndAnalysisListTuple) {
+        return this.batchUpsertAnalysis( failureDataAndAnalysisListTuple._2())
+                .map( upsertResult -> reduceIndexResult(IndexResult.builder()
+                .failureData(failureDataAndAnalysisListTuple._1())
+                .build(), upsertResult)
+                );
     }
 
     private Mono<? extends IndexResult> handleIndexRepositoryError(Throwable e, String repositoryCode) {

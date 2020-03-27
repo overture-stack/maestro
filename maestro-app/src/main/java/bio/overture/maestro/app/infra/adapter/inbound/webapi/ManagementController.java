@@ -84,6 +84,25 @@ public class ManagementController {
         );
     }
 
+    @PostMapping("/index/analysisCentric/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<IndexResult> indexAnalysisForAnalysisCentric(@PathVariable String analysisId,
+                                                             @PathVariable String studyId,
+                                                             @PathVariable String repositoryCode){
+        log.debug("in indexAnalysisForAnalysisCentric, args studyId {}, repoId: {}, analysisId : {}",
+                studyId, repositoryCode, analysisId);
+
+        return indexer.indexAnalysisToAnalysisCentric(IndexAnalysisCommand.builder()
+                .analysisIdentifier(
+                        AnalysisIdentifier.builder()
+                                .repositoryCode(repositoryCode)
+                                .analysisId(analysisId)
+                                .studyId(studyId)
+                                .build()
+                ).build()
+        );
+    }
+
     @PostMapping("/index/repository/{repositoryCode}/study/{studyId}")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<IndexResult> indexStudy(@PathVariable String studyId,
