@@ -18,40 +18,65 @@
 package bio.overture.maestro.app.infra.config.properties;
 
 import bio.overture.maestro.app.infra.adapter.outbound.notification.Slack;
-import org.springframework.core.io.Resource;
-
 import java.util.List;
 import java.util.Map;
+import org.springframework.core.io.Resource;
 
 /**
- * Abstraction for application properties, implementations should return deep copy to avoid mutating the original
- * properties
+ * Abstraction for application properties, implementations should return deep copy to avoid mutating
+ * the original properties
  */
 public interface ApplicationProperties {
-    String FAILURE_LOG_PROP_KEY = "maestro.failureLog.enabled";
-    String MAESTRO_NOTIFICATIONS_SLACK_ENABLED_PROP_KEY = "maestro.notifications.slack.enabled";
+  String FAILURE_LOG_PROP_KEY = "maestro.failureLog.enabled";
+  String MAESTRO_NOTIFICATIONS_SLACK_ENABLED_PROP_KEY = "maestro.notifications.slack.enabled";
 
-    List<String> elasticSearchClusterNodes();
-    String fileCentricAlias();
-    String fileCentricIndexName();
-    String analysisCentricAlias();
-    String analysisCentricIndexName();
-    int maxDocsPerBulkRequest();
-    int elasticSearchClientConnectionTimeoutMillis();
-    int elasticSearchClientSocketTimeoutMillis();
-    boolean elasticSearchTlsTrustSelfSigned();
-    boolean elasticSearchBasicAuthEnabled();
-    String elasticSearchAuthUser();
-    String elasticSearchAuthPassword();
-    List<PropertiesFileRepository> repositories();
-    Resource fileCentricIndex();
-    Resource analysisCentricIndex();
-    Map<String, List<String>> idExclusionRules();
-    int songMaxRetries();
-    int songStudyCallTimeoutSeconds();
-    long elasticSearchRetryWaitDurationMillis();
-    int elasticSearchRetryMaxAttempts();
-    String indexableStudyStatuses();
-    int songAnalysisCallTimeoutSeconds();
-    Slack.SlackChannelInfo getSlackChannelInfo();
+  List<String> elasticSearchClusterNodes();
+
+  String fileCentricAlias();
+
+  String fileCentricIndexName();
+
+  boolean isFileCentricIndexEnabled();
+
+  String analysisCentricAlias();
+
+  String analysisCentricIndexName();
+
+  boolean isAnalysisCentricIndexEnabled();
+
+  int maxDocsPerBulkRequest();
+
+  int elasticSearchClientConnectionTimeoutMillis();
+
+  int elasticSearchClientSocketTimeoutMillis();
+
+  boolean elasticSearchTlsTrustSelfSigned();
+
+  boolean elasticSearchBasicAuthEnabled();
+
+  String elasticSearchAuthUser();
+
+  String elasticSearchAuthPassword();
+
+  List<PropertiesFileRepository> repositories();
+
+  Resource fileCentricIndex();
+
+  Resource analysisCentricIndex();
+
+  Map<String, List<String>> idExclusionRules();
+
+  int songMaxRetries();
+
+  int songStudyCallTimeoutSeconds();
+
+  long elasticSearchRetryWaitDurationMillis();
+
+  int elasticSearchRetryMaxAttempts();
+
+  String indexableStudyStatuses();
+
+  int songAnalysisCallTimeoutSeconds();
+
+  Slack.SlackChannelInfo getSlackChannelInfo();
 }
