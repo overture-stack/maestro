@@ -91,6 +91,9 @@ class DefaultIndexerTest {
     private AnalysisCentricIndexAdapter analysisCentricIndexAdapter;
 
     @Mock
+    private IndexEnabledProperties indexEnabledProperties;
+
+    @Mock
     private Indexer indexer;
 
     @Mock
@@ -99,7 +102,8 @@ class DefaultIndexerTest {
     @BeforeEach
     void setUp() {
         reset(studyRepositoryDao, studyDAO, indexServerAdapter, analysisCentricIndexAdapter, notifier);
-        this.indexer = new DefaultIndexer(indexServerAdapter, analysisCentricIndexAdapter, studyDAO, studyRepositoryDao, exclusionRulesDAO, notifier);
+        this.indexer = new DefaultIndexer(indexServerAdapter, analysisCentricIndexAdapter, studyDAO, studyRepositoryDao,
+                exclusionRulesDAO, notifier, indexEnabledProperties);
     }
 
     @Test
@@ -429,7 +433,7 @@ class DefaultIndexerTest {
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
         // When
-        val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+        val indexResultMono = indexer.indexAnalysisToFileCentric(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
                 .studyId(studyId)
                 .analysisId(analysisId)
@@ -513,7 +517,7 @@ class DefaultIndexerTest {
         given(exclusionRulesDAO.getExclusionRules()).willReturn(sampleExclusionRule);
 
         // When
-        val indexResultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+        val indexResultMono = indexer.indexAnalysisToFileCentric(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
                 .studyId(studyId)
                 .analysisId(analysisId)

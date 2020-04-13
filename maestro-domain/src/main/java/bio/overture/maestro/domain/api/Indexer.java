@@ -21,6 +21,7 @@ import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
 import lombok.NonNull;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -31,11 +32,18 @@ import java.util.List;
 public interface Indexer {
 
     /**
+     * A generic method to index a single analysis to all indices
+     * @param indexAnalysisCommand
+     * @return failure info and success flag of all indices
+     */
+    Flux<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
+
+    /**
      * Allows indexing a single analysis in a specific metadata repository in a specific studyId
      * @param indexAnalysisCommand specify repo, studyId and analysis Id
      * @return success flag and failure info if any
      */
-    Mono<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
+    Mono<IndexResult> indexAnalysisToFileCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand);
 
     /**
      * Used to remove all files documents for an analysis.

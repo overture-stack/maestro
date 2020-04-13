@@ -120,7 +120,9 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
         failures.isEmpty()
             ? FailureData.builder().build()
             : FailureData.builder().failingIds(Map.of(ANALYSIS_ID, failures)).build();
-    return IndexResult.builder().failureData(fails).successful(failures.isEmpty()).build();
+    return IndexResult.builder()
+            .indexName(this.indexName)
+            .failureData(fails).successful(failures.isEmpty()).build();
   }
 
   @NotNull

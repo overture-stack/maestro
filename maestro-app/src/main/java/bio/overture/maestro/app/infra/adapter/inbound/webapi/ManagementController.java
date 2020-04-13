@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -71,9 +72,9 @@ public class ManagementController {
   }
 
   @PostMapping(
-      "/index/file_centric/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+      "/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<IndexResult> indexAnalysis(
+  public Flux<IndexResult> indexAnalysis(
       @PathVariable String analysisId,
       @PathVariable String studyId,
       @PathVariable String repositoryCode) {

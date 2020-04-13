@@ -70,7 +70,7 @@ rest-index-repo:
 ###################
 ## KAFKA
 ###################
-## the curl requests here run agains the kafka rest proxy
+## the curl requests here run against the kafka rest proxy
 ## SONG analysis topic
 kafka-analysis-publish:
 	curl -X POST \

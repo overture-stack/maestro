@@ -159,7 +159,6 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         this.createIndex();
         log.info("index {} has been created", this.indexName);
       }
-
     } catch (Exception e) {
       // we log here to document the failure if any each attempt.
       log.error("error while initializing ", e);
@@ -255,7 +254,9 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         failures.isEmpty()
             ? FailureData.builder().build()
             : FailureData.builder().failingIds(Map.of(ANALYSIS_ID, failures)).build();
-    return IndexResult.builder().failureData(fails).successful(failures.isEmpty()).build();
+    return IndexResult.builder()
+            .indexName(this.indexName)
+            .failureData(fails).successful(failures.isEmpty()).build();
   }
 
   @NotNull

@@ -29,6 +29,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.util.StringUtils;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
@@ -80,9 +81,9 @@ public class IndexingMessagesStreamListener {
             && !StringUtils.isEmpty(indexMessage.getRepositoryCode());
     }
 
-    private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexOrRemoveAnalysis(IndexAnalysisMessage msg) {
+    private Flux<Tuple2<IndexAnalysisMessage, IndexResult>> indexOrRemoveAnalysis(IndexAnalysisMessage msg) {
         if (msg.getRemoveAnalysis()) {
-            return removeAnalysis(msg);
+            return Flux.from(removeAnalysis(msg));
         } else {
             return indexAnalysis(msg);
         }
@@ -100,7 +101,7 @@ public class IndexingMessagesStreamListener {
             .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
-    private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> indexAnalysis(IndexAnalysisMessage msg) {
+    private Flux<Tuple2<IndexAnalysisMessage, IndexResult>> indexAnalysis(IndexAnalysisMessage msg) {
         return indexer.indexAnalysis(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
                 .studyId(msg.getStudyId())
@@ -112,20 +113,20 @@ public class IndexingMessagesStreamListener {
         .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
-    private Mono<Tuple2<IndexStudyMessage, IndexResult>> indexStudy(IndexStudyMessage msg) {
-        return indexer.indexStudy(IndexStudyCommand.builder()
+    private Flux<Tuple2<IndexStudyMessage, IndexResult>> indexStudy(IndexStudyMessage msg) {
+        return Flux.from(indexer.indexStudy(IndexStudyCommand.builder()
                 .studyId(msg.getStudyId())
                 .repositoryCode(msg.getRepositoryCode())
                 .build())
-            .map(out -> new Tuple2<>(msg, out));
+        ).map(out -> new Tuple2<>(msg, out));
     }
 
-    private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
-        return indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+    private Flux<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
+        return Flux.from(indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
                 .repositoryCode(msg.getRepositoryCode())
                 .build())
-            .map(out -> new Tuple2<>(msg, out))
-            .onErrorResume((e) -> catchUnhandledErrors(msg, e));
+        ).map(out -> new Tuple2<>(msg, out))
+        .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
     private <T> Mono<Tuple2<T, IndexResult>> catchUnhandledErrors(T msg, Throwable e) {
