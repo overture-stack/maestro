@@ -118,7 +118,7 @@ kafka-index-analysis:
 	-H 'cache-control: no-cache' \
 	-d '{
 	"records": [
-			{"value" : { "repositoryCode" : "collab", "studyId" : "PEME-CA", "analysisId" : "EGAZ00001254247", "remove": false }	}
+			{"value" : { "repositoryCode" : "collab", "studyId" : "PEME-CA", "analysisId" : "EGAZ00001254247", "removeAnalysis": false }	}
 		]
 	}'
 
