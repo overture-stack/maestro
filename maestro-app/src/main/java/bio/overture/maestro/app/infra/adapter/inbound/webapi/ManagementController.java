@@ -96,7 +96,7 @@ public class ManagementController {
 
   @PostMapping("/index/repository/{repositoryCode}/study/{studyId}")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<IndexResult> indexStudy(
+  public Flux<IndexResult> indexStudy(
       @PathVariable String studyId, @PathVariable String repositoryCode) {
     log.debug("in indexStudy, args studyId {}, repoId: {}", studyId, repositoryCode);
     return indexer.indexStudy(

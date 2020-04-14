@@ -124,7 +124,7 @@ class DefaultIndexerTest {
             .willReturn(Mono.error(new IndexerException("failed", new RuntimeException(""), failure)));
 
         // When
-        val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
+        val indexResultMono = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .studyId("anyStudy")
             .repositoryCode(filesRepository.getCode())
             .build()
@@ -268,7 +268,7 @@ class DefaultIndexerTest {
         given(exclusionRulesDAO.getExclusionRules()).willReturn(sampleExclusionRule);
 
         // When
-        val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
+        val indexResultMono = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .studyId(studyId)
             .repositoryCode(filesRepository.getCode())
             .build()
@@ -362,7 +362,7 @@ class DefaultIndexerTest {
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
         // When
-        val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
+        val indexResultMono = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .studyId(studyId)
             .repositoryCode(filesRepository.getCode())
             .build()
@@ -564,7 +564,7 @@ class DefaultIndexerTest {
         given(exclusionRulesDAO.getExclusionRules()).willReturn(Mono.just(Map.of()));
 
         // When
-        val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
+        val indexResultMono = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .studyId(studyId)
             .repositoryCode(filesRepository.getCode())
             .build()

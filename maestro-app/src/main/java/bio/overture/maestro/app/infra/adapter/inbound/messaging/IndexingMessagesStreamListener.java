@@ -114,11 +114,11 @@ public class IndexingMessagesStreamListener {
     }
 
     private Flux<Tuple2<IndexStudyMessage, IndexResult>> indexStudy(IndexStudyMessage msg) {
-        return Flux.from(indexer.indexStudy(IndexStudyCommand.builder()
-                .studyId(msg.getStudyId())
-                .repositoryCode(msg.getRepositoryCode())
-                .build())
-        ).map(out -> new Tuple2<>(msg, out));
+        return indexer.indexStudy(IndexStudyCommand.builder()
+                    .studyId(msg.getStudyId())
+                    .repositoryCode(msg.getRepositoryCode())
+                    .build())
+                .map(out -> new Tuple2<>(msg, out));
     }
 
     private Flux<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {

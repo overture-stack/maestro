@@ -142,33 +142,56 @@ class DefaultIndexer implements Indexer {
     }
 
     @Override
-    public Mono<IndexResult> indexStudy(@NonNull IndexStudyCommand indexStudyCommand) {
-        log.trace("in indexStudy, args: {} ", indexStudyCommand);
-        return tryGetStudyRepository(indexStudyCommand.getRepositoryCode())
-            .map(filesRepository -> toStudyAndRepositoryTuple(indexStudyCommand, filesRepository))
-            .flatMap(this::getStudyAnalysesDocuments)
-            .flatMap(this::batchUpsertFilesAndCollectFailures)
-            .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
-            .onErrorResume((e) -> handleIndexStudyError(e, indexStudyCommand.getStudyId(),
-                indexStudyCommand.getRepositoryCode()));
+    public Flux<IndexResult> indexStudy(@NonNull IndexStudyCommand command) {
+        List <Mono<IndexResult>> monos = new ArrayList<>();
+        if (isFileCentricEnabled) {
+            monos.add(indexStudyToFileCentric(command));
+        }
+        if(isAnalysisCentricEnabled){
+            monos.add(indexStudyToAnalysisCentric(command));
+        }
+        return Flux.merge(monos);
     }
 
     @Override
-    public Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand) {
-        log.trace("in indexStudyRepository, args: {} ", indexStudyRepositoryCommand);
-        return tryGetStudyRepository(indexStudyRepositoryCommand.getRepositoryCode())
+    public Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command) {
+        log.trace("in indexStudyToFileCentric, args: {} ", command);
+        return prepareStudyAndRepo(command)
+            .flatMap(this :: getFileDocuments)
+            .flatMap(this :: batchUpsertFilesAndCollectFailures)
+            .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            .onErrorResume((e) -> handleIndexStudyError(e, command.getStudyId(),
+                    command.getRepositoryCode()));
+    }
+
+    @Override
+    public Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command) {
+        log.trace("in indexStudyToAnalysisCentric, args: {} ", command);
+        return prepareStudyAndRepo(command)
+            .flatMap(this :: getAnalysisDocuments)
+            .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
+            .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            .onErrorResume((e) -> handleIndexStudyError(e, command.getStudyId(),
+                    command.getRepositoryCode()));
+    }
+
+
+    @Override
+    public Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand command) {
+        log.trace("in indexStudyRepository, args: {} ", command);
+        return tryGetStudyRepository(command.getRepositoryCode())
             .flatMapMany(this::getAllStudies)
             .flatMap(studyAndRepository ->
                 // I had to put this block inside this flatMap to allow these operations to bubble up their exceptions
                 // to this onErrorResume handler without interrupting the main flux, and terminating it with error signals.
                 // for example if fetchAnalyses down stream throws error for a studyId the studies flux will
                 // continue emitting studies
-                this.getStudyAnalysesDocuments(studyAndRepository)
+                this.getFileDocuments(studyAndRepository)
                     .flatMap(this :: batchUpsertFilesAndCollectFailures)
                     .onErrorResume(IndexerException.class, (e) -> Mono.just(this.convertIndexerExceptionToIndexResult(e)))
             )
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
-            .onErrorResume((e) -> handleIndexRepositoryError(e, indexStudyRepositoryCommand.getRepositoryCode()))
+            .onErrorResume((e) -> handleIndexRepositoryError(e, command.getRepositoryCode()))
             .reduce(this::reduceIndexResult);
     }
 
@@ -190,6 +213,11 @@ class DefaultIndexer implements Indexer {
     /* **************** *
      * Private Methods  *
      * **************** */
+    private Mono<StudyAndRepository> prepareStudyAndRepo(@NonNull IndexStudyCommand command){
+        return tryGetStudyRepository(command.getRepositoryCode())
+                .map(filesRepository -> toStudyAndRepositoryTuple(command, filesRepository));
+    }
+
     private Mono<StudyAnalysisRepositoryTuple> prepareTuple(@NonNull IndexAnalysisCommand indexAnalysisCommand){
         val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
         return tryGetStudyRepository(analysisIdentifier.getRepositoryCode())
@@ -257,12 +285,21 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
-        getStudyAnalysesDocuments(StudyAndRepository repoAndStudyEither) {
+        getFileDocuments(StudyAndRepository either) {
 
-        val studyId = repoAndStudyEither.getStudy().getStudyId();
-        val repoUrl = repoAndStudyEither.getStudyRepository().getBaseUrl();
+        val studyId = either.getStudy().getStudyId();
+        val repoUrl = either.getStudyRepository().getBaseUrl();
         return getFilteredAnalyses(repoUrl, studyId)
-            .map((analyses) -> buildAnalysisFileDocuments(repoAndStudyEither.getStudyRepository(), analyses));
+            .map((analyses) -> buildAnalysisFileDocuments(either.getStudyRepository(), analyses));
+    }
+
+    private Mono<Tuple2<FailureData, List<AnalysisCentricDocument>>>
+        getAnalysisDocuments(StudyAndRepository either) {
+
+        val studyId = either.getStudy().getStudyId();
+        val repoUrl = either.getStudyRepository().getBaseUrl();
+        return getFilteredAnalyses(repoUrl, studyId)
+                .map((analyses -> buildAnalysisCentricDocuments(either.getStudyRepository(), analyses)));
     }
 
     private Mono<List<Analysis>> getFilteredAnalyses(String repoBaseUrl, String studyId) {

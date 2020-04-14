@@ -279,7 +279,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         );
 
         // test
-        val result = indexer.indexStudy(IndexStudyCommand.builder()
+        val result = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .repositoryCode("collab")
             .studyId("PEME-CA")
             .build());
@@ -405,7 +405,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
         // step 2 index the same files from another repository:
-        val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
+        val secondResult = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .repositoryCode("aws")
             .studyId("PEME-CA")
             .build());
@@ -466,7 +466,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
         // index the same files from another repository:
         // test
-        val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
+        val secondResult = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .repositoryCode("aws")
             .studyId("PEME-CA")
             .build());
@@ -510,7 +510,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     @SneakyThrows
     private void populateIndexWithCollabStudy(FileCentricDocument expectedDoc0, FileCentricDocument expectedDoc1) throws InterruptedException {
-        val result = indexer.indexStudy(IndexStudyCommand.builder()
+        val result = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .repositoryCode("COLLAB")
             .studyId("PEME-CA")
             .build());
