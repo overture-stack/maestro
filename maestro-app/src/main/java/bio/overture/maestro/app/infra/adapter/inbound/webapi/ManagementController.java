@@ -110,33 +110,6 @@ public class ManagementController {
         IndexStudyRepositoryCommand.builder().repositoryCode(repositoryCode).build());
   }
 
-  /*
-  Below are analysis_centric index endpoints:
-   */
-  @PostMapping(
-      "/index/analysis_centric/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
-  @ResponseStatus(HttpStatus.CREATED)
-  public Mono<IndexResult> indexAnalysisForAnalysisCentric(
-      @PathVariable String analysisId,
-      @PathVariable String studyId,
-      @PathVariable String repositoryCode) {
-    log.debug(
-        "in indexAnalysisForAnalysisCentric, args studyId {}, repoId: {}, analysisId : {}",
-        studyId,
-        repositoryCode,
-        analysisId);
-
-    return indexer.indexAnalysisToAnalysisCentric(
-        IndexAnalysisCommand.builder()
-            .analysisIdentifier(
-                AnalysisIdentifier.builder()
-                    .repositoryCode(repositoryCode)
-                    .analysisId(analysisId)
-                    .studyId(studyId)
-                    .build())
-            .build());
-  }
-
   @GetMapping("/rules/")
   public List<? extends ExclusionRule> getRules() {
     return indexer.getAllRules();

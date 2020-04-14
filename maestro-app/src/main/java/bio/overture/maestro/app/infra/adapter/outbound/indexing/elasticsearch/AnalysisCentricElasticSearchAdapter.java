@@ -1,12 +1,12 @@
 package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 
+import static bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.SearchAdapterHelper.*;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 import static java.lang.String.format;
 import static java.util.Collections.singletonMap;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
-import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.AnalysisCentricIndexAdapter;
@@ -16,10 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
 import io.vavr.control.Try;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -28,9 +26,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.admin.indices.alias.Alias;
-import org.elasticsearch.action.bulk.BulkItemResponse;
-import org.elasticsearch.action.bulk.BulkRequest;
-import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -38,14 +33,11 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.script.Script;
-import org.elasticsearch.script.ScriptType;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.util.Assert;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -67,7 +59,6 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   private final String alias;
   private final String indexName;
   private final boolean enabled;
-  private static final String ANALYSIS_ID = "analysisId";
   private static final int FALLBACK_MAX_RETRY_ATTEMPTS = 0;
   private static final int FALL_BACK_WAIT_DURATION = 100;
   private final long retriesWaitDuration;
@@ -109,20 +100,14 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
 
   @SneakyThrows
   private IndexResult bulkUpsertAnalysisRepositories(List<AnalysisCentricDocument> analyses) {
-    log.trace("in bulkUpsertAnalysisRepositories, analyses count : {} ", analyses.size());
+    log.trace("in AnalysisCentricElasticSearchAdapter - bulkUpsertAnalysisRepositories, analyses count : {} ", analyses.size());
     val failures =
         Parallel.blockingScatterGather(
                 analyses, this.documentsPerBulkRequest, this::tryBulkUpsertRequestForPart)
             .stream()
             .flatMap(Set::stream)
             .collect(Collectors.toUnmodifiableSet());
-    val fails =
-        failures.isEmpty()
-            ? FailureData.builder().build()
-            : FailureData.builder().failingIds(Map.of(ANALYSIS_ID, failures)).build();
-    return IndexResult.builder()
-            .indexName(this.indexName)
-            .failureData(fails).successful(failures.isEmpty()).build();
+    return buildIndexResult(failures, this.indexName);
   }
 
   @NotNull
@@ -131,23 +116,18 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
     val partNum = entry.getKey();
     val listPart = entry.getValue();
     val listPartHash = Objects.hashCode(listPart);
-    val retryConfig =
-        RetryConfig.custom()
-            .maxAttempts(this.maxRetriesAttempts)
-            .retryExceptions(IOException.class)
-            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
-            .build();
-    val retry = Retry.of("tryBulkUpsertRequestForPart", retryConfig);
+    val retry = buildRetry(this.maxRetriesAttempts, this.retriesWaitDuration);
+
     val decorated =
         Retry.<Set<String>>decorateCheckedSupplier(
             retry,
             () -> {
               log.trace(
-                  "tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ",
+                  "AnalysisCentricElasticSearchAdapter - tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ",
                   partNum,
                   listPartHash);
               doRequestForPart(listPart);
-              log.trace("tryBulkUpsertRequestForPart: done bulk upsert all docs");
+              log.trace("AnalysisCentricElasticSearchAdapter - tryBulkUpsertRequestForPart: done bulk upsert all docs");
               return Set.of();
             });
     val result =
@@ -171,7 +151,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   private void doRequestForPart(List<AnalysisCentricDocument> listPart) throws IOException {
     this.bulkUpdateRequest(
         listPart.stream()
-            .map(this::mapAnalysisToUpsertRepositoryQuery)
+            .map(this :: mapAnalysisToUpsertRepositoryQuery)
             .collect(Collectors.toList()));
   }
 
@@ -183,12 +163,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
         singletonMap(
             "repository",
             mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
-    val inline =
-        new Script(
-            ScriptType.INLINE,
-            "painless",
-            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }",
-            parameters);
+    val inline = getInline(parameters);
 
     return new UpdateRequest()
         .id(analysisCentricDocument.getAnalysisId())
@@ -204,33 +179,9 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   }
 
   private void bulkUpdateRequest(List<UpdateRequest> requests) throws IOException {
-    val bulkRequest = new BulkRequest();
-    for (UpdateRequest query : requests) {
-      bulkRequest.add(prepareUpdate(query));
-    }
+    val bulkRequest = buildBulkUpdateRequest(requests);
     checkForBulkUpdateFailure(
         this.elasticsearchRestClient.bulk(bulkRequest, RequestOptions.DEFAULT));
-  }
-
-  private void checkForBulkUpdateFailure(BulkResponse bulkResponse) {
-    if (bulkResponse.hasFailures()) {
-      val failedDocuments = new HashMap<String, String>();
-      for (BulkItemResponse item : bulkResponse.getItems()) {
-        if (item.isFailed()) failedDocuments.put(item.getId(), item.getFailureMessage());
-      }
-      throw new RuntimeException(
-          "Bulk indexing has failures. Use ElasticsearchException.getFailedDocuments() for detailed messages ["
-              + failedDocuments
-              + "]");
-    }
-  }
-
-  private UpdateRequest prepareUpdate(UpdateRequest req) {
-    Assert.notNull(req, "No IndexRequest define for Query");
-    String indexName = req.index();
-    Assert.notNull(indexName, "No index defined for Query");
-    Assert.notNull(req.id(), "No Id define for Query");
-    return req;
   }
 
   @Retryable(maxAttempts = 5, backoff = @Backoff(value = 1000, multiplier = 1.5))

@@ -112,20 +112,18 @@ class DefaultIndexer implements Indexer {
     public Mono<IndexResult> indexAnalysisToAnalysisCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand){
         val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
 
-        return tryGetStudyRepository(indexAnalysisCommand.getAnalysisIdentifier().getRepositoryCode())
-              .map(filesRepository -> buildStudyAnalysisRepoTuple(analysisIdentifier, filesRepository))
-              .flatMap(this :: getAnalysisCentricDocuments)
-              .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
-              .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
-              .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier));
+        return prepareTuple(indexAnalysisCommand)
+            .flatMap(this :: getAnalysisCentricDocuments)
+            .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
+            .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier));
     }
 
     @Override
     public Mono<IndexResult> indexAnalysisToFileCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
         val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
 
-        return tryGetStudyRepository(indexAnalysisCommand.getAnalysisIdentifier().getRepositoryCode())
-            .map(filesRepository -> buildStudyAnalysisRepoTuple(analysisIdentifier, filesRepository))
+        return prepareTuple(indexAnalysisCommand)
             .flatMap(this :: getFileCentricDocuments)
             .flatMap(this :: batchUpsertFilesAndCollectFailures)
             // this handles exceptions that were handled already and avoids them getting to the generic handler
@@ -192,6 +190,12 @@ class DefaultIndexer implements Indexer {
     /* **************** *
      * Private Methods  *
      * **************** */
+    private Mono<StudyAnalysisRepositoryTuple> prepareTuple(@NonNull IndexAnalysisCommand indexAnalysisCommand){
+        val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
+        return tryGetStudyRepository(analysisIdentifier.getRepositoryCode())
+                .map(studyRepository ->
+                        buildStudyAnalysisRepoTuple(analysisIdentifier, studyRepository));
+    }
 
     private Mono<? extends IndexResult> handleRemoveAnalysisError(@NonNull AnalysisIdentifier analysisIdentifier) {
         val failureInfo = Map.of(ANALYSIS_ID, Set.of(analysisIdentifier.getAnalysisId()));
@@ -538,7 +542,6 @@ class DefaultIndexer implements Indexer {
         );
     }
 
-
     private void handleConflicts(ConflictsCheckResult conflictingFiles) {
         if (conflictingFiles == null || conflictingFiles.getConflictingFiles().isEmpty()) return;
         this.notifyConflicts(conflictingFiles);
@@ -655,21 +658,21 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<IndexResult>
-        batchUpsertFilesAndCollectFailures(Tuple2<FailureData, List<FileCentricDocument>> failureDataAndFileListTuple) {
-        return this.batchUpsert( failureDataAndFileListTuple._2() )
+        batchUpsertFilesAndCollectFailures(Tuple2<FailureData, List<FileCentricDocument>> tuple) {
+        return this.batchUpsert( tuple._2() )
                 .map( upsertResult -> reduceIndexResult(
                                 IndexResult.builder()
-                                    .failureData(failureDataAndFileListTuple._1()).build(),
+                                    .failureData(tuple._1()).build(),
                                 upsertResult));
     }
 
     private Mono<IndexResult>
-    batchUpsertAnalysesAndCollectFailtures(Tuple2<FailureData, List<AnalysisCentricDocument>> failureDataAndAnalysisListTuple) {
-        return this.batchUpsertAnalysis( failureDataAndAnalysisListTuple._2())
+    batchUpsertAnalysesAndCollectFailtures(Tuple2<FailureData, List<AnalysisCentricDocument>> tuple) {
+        return this.batchUpsertAnalysis( tuple._2())
                 .map( upsertResult ->
                         reduceIndexResult(
                                 IndexResult.builder()
-                                    .failureData(failureDataAndAnalysisListTuple._1()).build(),
+                                    .failureData(tuple._1()).build(),
                                 upsertResult));
     }
 
