@@ -35,7 +35,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
-import io.vavr.control.Try;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
@@ -111,11 +110,20 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   @Override
   public Mono<IndexResult> batchUpsertFileRepositories(
       @NonNull BatchIndexFilesCommand batchIndexFilesCommand) {
-    log.debug(
-        "in batchUpsertFileRepositories, args: {} ", batchIndexFilesCommand.getFiles().size());
-    return Mono.fromSupplier(
-            () -> this.bulkUpsertFileRepositories(batchIndexFilesCommand.getFiles()))
-        .subscribeOn(Schedulers.elastic());
+    return SearchAdapterHelper.batchUpsertDocuments(
+        batchIndexFilesCommand.getFiles(),
+        documentsPerBulkRequest,
+        maxRetriesAttempts,
+        retriesWaitDuration,
+        this.indexName,
+        this.elasticsearchRestClient,
+        this::getAnalysisId,
+        this::mapFileToUpsertRepositoryQuery
+    );
+  }
+
+  private String getAnalysisId(FileCentricDocument d) {
+    return d.getAnalysis().getId();
   }
 
   @Override
@@ -232,68 +240,6 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     createIndexRequest.alias(new Alias(this.alias));
     createIndexRequest.source(indexSource, XContentType.JSON);
     this.elasticsearchRestClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
-  }
-
-  @SneakyThrows
-  private IndexResult bulkUpsertFileRepositories(List<FileCentricDocument> filesList) {
-    log.trace("in FileCentricElasticSearchAdapter - bulkUpsertFileRepositories, filesList count : {} ", filesList.size());
-    val failures =
-        Parallel.blockingScatterGather(
-                filesList, this.documentsPerBulkRequest, this::tryBulkUpsertRequestForPart)
-            .stream()
-            .flatMap(Set::stream)
-            .collect(Collectors.toUnmodifiableSet());
-
-    return buildIndexResult(failures, this.indexName);
-  }
-
-  @NotNull
-  private Set<String> tryBulkUpsertRequestForPart(
-      Map.Entry<Integer, List<FileCentricDocument>> entry) {
-    val partNum = entry.getKey();
-    val listPart = entry.getValue();
-    val listPartHash = Objects.hashCode(listPart);
-    val retry = buildRetry(this.maxRetriesAttempts, this.retriesWaitDuration);
-
-    val decorated =
-        Retry.<Set<String>>decorateCheckedSupplier(
-            retry,
-            () -> {
-              log.trace(
-                  "FileCentricElasticSearchAdapter - tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ",
-                  partNum,
-                  listPartHash);
-              doRequestForPart(listPart);
-              log.trace("FileCentricElasticSearchAdapter - tryBulkUpsertRequestForPart: done bulk upsert all docs");
-              return Set.of();
-            });
-    val result =
-        Try.of(decorated)
-            .recover(
-                (t) -> {
-                  log.error(
-                      "failed sending request for: part#: {}, hash: {} to elastic search,"
-                          + " gathering failed Ids.",
-                      partNum,
-                      listPartHash,
-                      t);
-                  return listPart.stream()
-                      .map(fileCentricDocument -> fileCentricDocument.getAnalysis().getId())
-                      .collect(Collectors.toUnmodifiableSet());
-                });
-
-    return result.get();
-  }
-
-  private void doRequestForPart(List<FileCentricDocument> listPart) throws IOException {
-    this.bulkUpdateRequest(
-        listPart.stream().map(this::mapFileToUpsertRepositoryQuery).collect(Collectors.toList()));
-  }
-
-  private void bulkUpdateRequest(List<UpdateRequest> requests) throws IOException {
-   val bulkRequest = buildBulkUpdateRequest(requests);
-    checkForBulkUpdateFailure(
-        this.elasticsearchRestClient.bulk(bulkRequest, RequestOptions.DEFAULT));
   }
 
   @SneakyThrows

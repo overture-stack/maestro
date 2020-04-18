@@ -2,27 +2,142 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.IndexResult;
+import bio.overture.maestro.domain.utility.Parallel;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
+import io.vavr.control.Try;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.util.Assert;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @NoArgsConstructor
 public class SearchAdapterHelper {
     private static final String ANALYSIS_ID = "analysisId";
+
+    public static <T> Mono<IndexResult> batchUpsertDocuments(
+        @NonNull List<T> documents,
+        int documentsPerBulkRequest,
+        int maxRetriesAttempts,
+        long retriesWaitDuration,
+        String indexName,
+        RestHighLevelClient client,
+        Function<T, String> documentAnalysisIdExtractor,
+        Function<T, UpdateRequest> mapper
+    ) {
+        log.debug(
+            "in batchUpsertAnalysisRepositories, analyses count: {} ",
+            documents.size());
+        return Mono.fromSupplier(
+            () -> bulkUpsertAnalysisRepositories(documents,
+                documentsPerBulkRequest,
+                maxRetriesAttempts,
+                retriesWaitDuration,
+                indexName,
+                client,
+                documentAnalysisIdExtractor,
+                mapper)
+            ).subscribeOn(Schedulers.elastic());
+    }
+
+    @SneakyThrows
+    private static <T> IndexResult bulkUpsertAnalysisRepositories(List<T> analyses,
+                                                           int documentsPerBulkRequest,
+                                                           int maxRetriesAttempts,
+                                                           long retriesWaitDuration,
+                                                           String indexName,
+                                                           RestHighLevelClient client,
+                                                           Function<T, String> documentAnalysisIdExtractor,
+                                                           Function<T, UpdateRequest> mapper) {
+        log.trace("in AnalysisCentricElasticSearchAdapter - bulkUpsertAnalysisRepositories, analyses count : {} ", analyses.size());
+        val failures =
+            Parallel.blockingScatterGather(analyses,
+                documentsPerBulkRequest,
+                (list) -> tryBulkUpsertRequestForPart(list, maxRetriesAttempts, retriesWaitDuration, mapper, documentAnalysisIdExtractor, client))
+                .stream()
+                .flatMap(Set::stream)
+                .collect(Collectors.toUnmodifiableSet());
+        return buildIndexResult(failures, indexName);
+    }
+
+    @NotNull
+    private static <T> Set<String> tryBulkUpsertRequestForPart(
+        Map.Entry<Integer, List<T>> entry,
+        int maxRetriesAttempts,
+        long retriesWaitDuration,
+        Function<T, UpdateRequest> mapper,
+        Function<T, String> documentAnalysisIdExtractor,
+        RestHighLevelClient client
+    ) {
+        val partNum = entry.getKey();
+        val listPart = entry.getValue();
+        val listPartHash = Objects.hashCode(listPart);
+        val retry = buildRetry(maxRetriesAttempts, retriesWaitDuration);
+        val decorated =
+            Retry.<Set<String>>decorateCheckedSupplier(
+                retry,
+                () -> {
+                    log.trace(
+                        "AnalysisCentricElasticSearchAdapter - tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ",
+                        partNum,
+                        listPartHash);
+                    doRequestForPart(listPart, mapper, client);
+                    log.trace("AnalysisCentricElasticSearchAdapter - tryBulkUpsertRequestForPart: done bulk upsert all docs");
+                    return Set.of();
+                });
+        val result =
+            Try.of(decorated)
+                .recover(
+                    (t) -> {
+                        log.error(
+                            "failed sending request for: part#: {}, hash: {} to elastic search,"
+                                + " gathering failed Ids.",
+                            partNum,
+                            listPartHash,
+                            t);
+                        return listPart.stream()
+                            .map(documentAnalysisIdExtractor)
+                            .collect(Collectors.toUnmodifiableSet());
+                    });
+
+        return result.get();
+    }
+
+    private static <T> void doRequestForPart(List<T> listPart,
+                                      Function<T, UpdateRequest> mapper,
+                                      RestHighLevelClient client) throws IOException {
+        bulkUpdateRequest(
+            listPart.stream()
+                .map(mapper)
+                .collect(Collectors.toList()),
+            client);
+    }
+
+    private static void bulkUpdateRequest(List<UpdateRequest> requests, RestHighLevelClient client) throws IOException {
+        val bulkRequest = buildBulkUpdateRequest(requests);
+        checkForBulkUpdateFailure(client.bulk(bulkRequest, RequestOptions.DEFAULT));
+    }
 
     public static IndexResult buildIndexResult(@NonNull Set<String> failures, @NonNull String indexName){
         val fails =
