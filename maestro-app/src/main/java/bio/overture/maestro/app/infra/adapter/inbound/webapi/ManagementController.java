@@ -106,7 +106,7 @@ public class ManagementController {
   @PostMapping("/index/repository/{repositoryCode}")
   @ResponseStatus(HttpStatus.CREATED)
   public Mono<IndexResult> indexRepository(@PathVariable String repositoryCode) {
-    return indexer.indexStudyRepository(
+    return indexer.indexRepository(
         IndexStudyRepositoryCommand.builder().repositoryCode(repositoryCode).build());
   }
 

@@ -22,10 +22,21 @@ import io.vavr.Tuple2;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import java.util.function.Supplier;
 
 @Slf4j
 public class IndexMessagesHelper {
+    public static <T> void handleIndexRepository(Supplier<Mono<Tuple2<T, IndexResult>>> resultSupplier) {
+        val result = resultSupplier.get().blockOptional();
+        val tuple = result.orElseThrow(() -> new RuntimeException("failed to obtain result"));
+        if (!tuple._2().isSuccessful()) {
+            log.error("failed to process message : {} successfully", tuple._1());
+            throw new RuntimeException("failed to process the message");
+        }
+    }
+
     public static <T> void handleIndexResult(Supplier<Flux<Tuple2<T, IndexResult>>> resultSupplier) {
         /*
          * Why Blocking?

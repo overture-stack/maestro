@@ -285,7 +285,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   private static class FileCentricIndex {
     private String name = "file_centric";
     private String alias = "file_centric";
-    private boolean enabled = false;
+    private boolean enabled = true;
   }
 
   @Data
@@ -294,7 +294,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   private static class AnalysisCentricIndex {
     private String name = "analysis_centric";
     private String alias = "analysis_centric";
-    private boolean enabled = false;
+    private boolean enabled = true;
   }
 
   @Data

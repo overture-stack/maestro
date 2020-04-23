@@ -39,20 +39,6 @@ public interface Indexer {
     Flux<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
 
     /**
-     * Allows indexing a single analysis in a specific metadata repository in a specific studyId
-     * @param indexAnalysisCommand specify repo, studyId and analysis Id
-     * @return success flag and failure info if any
-     */
-    Mono<IndexResult> indexAnalysisToFileCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand);
-
-    /**
-     * Index an analysis to analysis_centric index.
-     * @param indexAnalysisCommand
-     * @return
-     */
-    Mono<IndexResult> indexAnalysisToAnalysisCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand);
-
-    /**
      * Used to remove all files documents for an analysis.
      * @param removeAnalysisCommand specify repo studyId and analysis id
      * @return flag indicating success and failure info if any
@@ -67,39 +53,11 @@ public interface Indexer {
     Flux<IndexResult> indexStudy(@NonNull IndexStudyCommand command);
 
     /**
-     * This method will fetch the specified studyId from the specified repository
-     * and will invoke the index server {@link FileCentricIndexAdapter}
-     * adapter to batch index the resulting documents.
-     *
-     * @param command contains the arguments needed to index a single studyId.
-     * @return an index result indicating success or failure
-     * @throws bio.overture.maestro.domain.api.exception.NotFoundException
-     *          if the studyId or the repository are not found
-     * @throws bio.overture.maestro.domain.api.exception.BadDataException
-     *          if the studyId is empty or the structure of the studyId is not as expected
-     *          and cannot be used to produce list of {@link bio.overture.maestro.domain.entities.indexing.FileCentricDocument}
+     * A generic method to index the entire repository to all indices.
+     * @param command contains repository code
+     * @return result indicating success/fail and failure information
      */
-    Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command);
-
-    /**
-     * Indexes a study to analysis_centric.
-     * @param command contains the arguments needed to index a single studyId.
-     * @return an index result indicating success or failure
-     * @throws bio.overture.maestro.domain.api.exception.NotFoundException
-     *          if the studyId or the repository are not found
-     * @throws bio.overture.maestro.domain.api.exception.BadDataException
-     *           if the studyId is empty or the structure of the studyId is not as expected
-     *           and cannot be used to produce list of {
-     *              @link bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument}
-     */
-    Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command);
-
-    /**
-     * This method will trigger a full indexing for a metadata repository (all studies)
-     * @param indexStudyRepositoryCommand contains the repository code to index.
-     * @return result indicating success/fail and failures information.
-     */
-    Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand indexStudyRepositoryCommand);
+    Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command);
 
     void addRule(AddRuleCommand addRuleCommand);
     void deleteRule(DeleteRuleCommand deleteRuleCommand);

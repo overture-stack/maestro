@@ -108,7 +108,6 @@ class DefaultIndexer implements Indexer {
         return Flux.merge(monos);
     }
 
-    @Override
     public Mono<IndexResult> indexAnalysisToAnalysisCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand){
         val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
 
@@ -119,7 +118,6 @@ class DefaultIndexer implements Indexer {
             .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier));
     }
 
-    @Override
     public Mono<IndexResult> indexAnalysisToFileCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
         val analysisIdentifier = indexAnalysisCommand.getAnalysisIdentifier();
 
@@ -144,51 +142,59 @@ class DefaultIndexer implements Indexer {
     @Override
     public Flux<IndexResult> indexStudy(@NonNull IndexStudyCommand command) {
         List <Mono<IndexResult>> monos = new ArrayList<>();
+
+        Mono<Tuple2<List<Analysis>,  StudyAndRepository>> mono = prepareStudyAndRepo(command)
+            .flatMap(studyAndRepository -> getFilteredAnalyses
+                (studyAndRepository.getStudyRepository().getBaseUrl(), studyAndRepository.getStudy().getStudyId())
+                    .map(analyses ->
+                        new Tuple2<>(analyses, studyAndRepository)
+                    ));
+
         if (isFileCentricEnabled) {
-            monos.add(indexStudyToFileCentric(command));
+            monos.add(indexStudyToFileCentric(command, mono));
         }
         if(isAnalysisCentricEnabled){
-            monos.add(indexStudyToAnalysisCentric(command));
+            monos.add(indexStudyToAnalysisCentric(command, mono));
         }
         return Flux.merge(monos);
     }
 
-    @Override
-    public Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command) {
+    public Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command,
+                                                     @NonNull Mono<Tuple2<List<Analysis>,  StudyAndRepository>> tuple2) {
         log.trace("in indexStudyToFileCentric, args: {} ", command);
-        return prepareStudyAndRepo(command)
-            .flatMap(this :: getFileDocuments)
+        return tuple2
+            .map(t -> buildFileCentricDocuments(t._2().getStudyRepository(), t._1()))
             .flatMap(this :: batchUpsertFilesAndCollectFailures)
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             .onErrorResume((e) -> handleIndexStudyError(e, command.getStudyId(),
-                    command.getRepositoryCode()));
+                command.getRepositoryCode()));
     }
 
-    @Override
-    public Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command) {
+    public Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command,
+                                                         @NonNull Mono<Tuple2<List<Analysis>,  StudyAndRepository>> tuple2) {
         log.trace("in indexStudyToAnalysisCentric, args: {} ", command);
-        return prepareStudyAndRepo(command)
-            .flatMap(this :: getAnalysisDocuments)
+        return tuple2
+            .map( t -> buildAnalysisCentricDocuments(t._2().getStudyRepository(), t._1()))
             .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             .onErrorResume((e) -> handleIndexStudyError(e, command.getStudyId(),
-                    command.getRepositoryCode()));
+                command.getRepositoryCode()));
     }
 
-
     @Override
-    public Mono<IndexResult> indexStudyRepository(@NonNull IndexStudyRepositoryCommand command) {
+    public Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command) {
         log.trace("in indexStudyRepository, args: {} ", command);
         return tryGetStudyRepository(command.getRepositoryCode())
-            .flatMapMany(this::getAllStudies)
+            .flatMapMany(this :: getAllStudies)
             .flatMap(studyAndRepository ->
+                this.indexStudy(IndexStudyCommand.builder()
+                    .studyId(studyAndRepository.getStudy().getStudyId())
+                    .repositoryCode(studyAndRepository.studyRepository.getCode())
+                    .build())
                 // I had to put this block inside this flatMap to allow these operations to bubble up their exceptions
                 // to this onErrorResume handler without interrupting the main flux, and terminating it with error signals.
                 // for example if fetchAnalyses down stream throws error for a studyId the studies flux will
                 // continue emitting studies
-                this.getFileDocuments(studyAndRepository)
-                    .flatMap(this :: batchUpsertFilesAndCollectFailures)
-                    .onErrorResume(IndexerException.class, (e) -> Mono.just(this.convertIndexerExceptionToIndexResult(e)))
             )
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             .onErrorResume((e) -> handleIndexRepositoryError(e, command.getRepositoryCode()))
@@ -290,7 +296,7 @@ class DefaultIndexer implements Indexer {
         val studyId = either.getStudy().getStudyId();
         val repoUrl = either.getStudyRepository().getBaseUrl();
         return getFilteredAnalyses(repoUrl, studyId)
-            .map((analyses) -> buildAnalysisFileDocuments(either.getStudyRepository(), analyses));
+            .map((analyses) -> buildFileCentricDocuments(either.getStudyRepository(), analyses));
     }
 
     private Mono<Tuple2<FailureData, List<AnalysisCentricDocument>>>
@@ -304,7 +310,7 @@ class DefaultIndexer implements Indexer {
 
     private Mono<List<Analysis>> getFilteredAnalyses(String repoBaseUrl, String studyId) {
         return fetchAnalyses(repoBaseUrl, studyId)
-            .flatMap(this::getExclusionRulesAndFilter);
+            .flatMap(this :: getExclusionRulesAndFilter);
     }
 
     private Mono<List<Analysis>> fetchAnalyses(String studyRepositoryBaseUrl, String studyId) {
@@ -353,7 +359,7 @@ class DefaultIndexer implements Indexer {
     private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
         getFileCentricDocuments(StudyAnalysisRepositoryTuple tuple) {
         return getAnalysisFromStudyRepository(tuple)
-                .map((analyses) -> buildAnalysisFileDocuments(tuple.studyRepository, analyses));
+                .map((analyses) -> buildFileCentricDocuments(tuple.studyRepository, analyses));
     }
 
     private Mono<Tuple2<FailureData, List<AnalysisCentricDocument>>>
@@ -437,7 +443,7 @@ class DefaultIndexer implements Indexer {
     }
 
     private Tuple2<FailureData, List<FileCentricDocument>>
-        buildAnalysisFileDocuments(StudyRepository repo, List<Analysis> analyses) {
+    buildFileCentricDocuments(StudyRepository repo, List<Analysis> analyses) {
 
         return analyses.stream()
             .map(analysis -> buildFileDocuments(analysis, repo))
@@ -697,20 +703,21 @@ class DefaultIndexer implements Indexer {
     private Mono<IndexResult>
         batchUpsertFilesAndCollectFailures(Tuple2<FailureData, List<FileCentricDocument>> tuple) {
         return this.batchUpsert( tuple._2() )
-                .map( upsertResult -> reduceIndexResult(
-                                IndexResult.builder()
-                                    .failureData(tuple._1()).build(),
-                                upsertResult));
+            .map( upsertResult ->
+                reduceIndexResult(
+                    IndexResult.builder()
+                        .failureData(tuple._1()).build(),
+                    upsertResult));
     }
 
     private Mono<IndexResult>
     batchUpsertAnalysesAndCollectFailtures(Tuple2<FailureData, List<AnalysisCentricDocument>> tuple) {
         return this.batchUpsertAnalysis( tuple._2())
-                .map( upsertResult ->
-                        reduceIndexResult(
-                                IndexResult.builder()
-                                    .failureData(tuple._1()).build(),
-                                upsertResult));
+            .map( upsertResult ->
+                reduceIndexResult(
+                    IndexResult.builder()
+                        .failureData(tuple._1()).build(),
+                    upsertResult));
     }
 
     private Mono<? extends IndexResult> handleIndexRepositoryError(Throwable e, String repositoryCode) {
@@ -781,7 +788,7 @@ class DefaultIndexer implements Indexer {
     @Builder
     @ToString
     @EqualsAndHashCode
-    private static class StudyAndRepository {
+    public static class StudyAndRepository {
         private StudyRepository studyRepository;
         private Study study;
     }

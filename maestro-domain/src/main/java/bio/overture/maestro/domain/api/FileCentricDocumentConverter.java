@@ -68,7 +68,7 @@ final class FileCentricDocumentConverter {
      *
      * @param file a files as represented from the source in the analysis
      */
-    private static  FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
+    private static FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
                                                           Analysis analysis,
                                                           StudyRepository repository) {
         val id = file.getObjectId();

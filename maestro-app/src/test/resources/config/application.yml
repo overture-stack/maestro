@@ -22,7 +22,7 @@ maestro:
       analysisCentric:
         name: analysis_centric_1.0
         alias: analysis_centric
-        enabled: true
+        enabled: false
     # port injected by the embedded_elasticsearch library
     clusterNodes:
       - ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}

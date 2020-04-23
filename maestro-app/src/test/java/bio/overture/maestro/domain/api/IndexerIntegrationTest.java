@@ -88,7 +88,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     private String alias;
 
     @Autowired
-    private Indexer indexer;
+    private DefaultIndexer indexer;
 
     @BeforeEach
     void setUp() {
@@ -230,7 +230,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .willReturn(ResponseDefinitionBuilder.okForJson(studiesArray)));
 
         // test
-        val result = indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+        val result = indexer.indexRepository(IndexStudyRepositoryCommand.builder()
             .repositoryCode("collab")
             .build());
 
@@ -279,7 +279,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         );
 
         // test
-        val result = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
+        val result = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("collab")
             .studyId("PEME-CA")
             .build());
@@ -405,7 +405,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
 
         // step 2 index the same files from another repository:
-        val secondResult = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
+        val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("aws")
             .studyId("PEME-CA")
             .build());
@@ -466,7 +466,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
         // index the same files from another repository:
         // test
-        val secondResult = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
+        val secondResult = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("aws")
             .studyId("PEME-CA")
             .build());
@@ -510,7 +510,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     @SneakyThrows
     private void populateIndexWithCollabStudy(FileCentricDocument expectedDoc0, FileCentricDocument expectedDoc1) throws InterruptedException {
-        val result = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
+        val result = indexer.indexStudy(IndexStudyCommand.builder()
             .repositoryCode("COLLAB")
             .studyId("PEME-CA")
             .build());

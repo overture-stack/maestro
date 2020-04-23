@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexRepository;
 import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class IndexingMessagesStreamListener {
             handleIndexResult(() -> this.indexStudy(indexStudyMessage));
         } else if (isRepoMsg(indexMessage)) {
             val indexRepositoryMessage = new IndexRepositoryMessage(indexMessage.getRepositoryCode());
-            handleIndexResult(() -> this.indexRepository(indexRepositoryMessage));
+            handleIndexRepository(() -> this.indexRepository(indexRepositoryMessage));
         } else {
             throw new IllegalArgumentException("invalid message format");
         }
@@ -121,12 +122,12 @@ public class IndexingMessagesStreamListener {
                 .map(out -> new Tuple2<>(msg, out));
     }
 
-    private Flux<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
-        return Flux.from(indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
-                .repositoryCode(msg.getRepositoryCode())
-                .build())
-        ).map(out -> new Tuple2<>(msg, out))
-        .onErrorResume((e) -> catchUnhandledErrors(msg, e));
+    private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(IndexRepositoryMessage msg) {
+        return indexer.indexRepository(IndexStudyRepositoryCommand.builder()
+                    .repositoryCode(msg.getRepositoryCode())
+                    .build())
+                .map(out -> new Tuple2<>(msg, out))
+                .onErrorResume((e) -> catchUnhandledErrors(msg, e));
     }
 
     private <T> Mono<Tuple2<T, IndexResult>> catchUnhandledErrors(T msg, Throwable e) {
