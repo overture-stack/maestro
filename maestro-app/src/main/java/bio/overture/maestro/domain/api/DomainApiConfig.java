@@ -17,6 +17,9 @@
 
 package bio.overture.maestro.domain.api;
 
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -25,4 +28,14 @@ import org.springframework.context.annotation.Import;
     DefaultIndexer.class,
     Notifier.class,
 })
-public class DomainApiConfig {}
+public class DomainApiConfig {
+
+  @Bean
+  IndexEnabled indexEnabled(@Autowired ApplicationProperties applicationProperties) {
+    return new IndexEnabled
+            .IndexEnabledBuilder()
+            .isAnalysisCentricEnabled(applicationProperties.isAnalysisCentricIndexEnabled())
+            .isFileCentricEnabled(applicationProperties.isFileCentricIndexEnabled())
+            .build();
+  }
+}

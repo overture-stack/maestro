@@ -68,7 +68,7 @@ final class FileCentricDocumentConverter {
      *
      * @param file a files as represented from the source in the analysis
      */
-    private static  FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
+    private static FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
                                                           Analysis analysis,
                                                           StudyRepository repository) {
         val id = file.getObjectId();
@@ -123,7 +123,7 @@ final class FileCentricDocumentConverter {
     /**
      * extract metadata files if any
      */
-    private static String getMetadataFileId(Analysis analysis) {
+     static String getMetadataFileId(Analysis analysis) {
         val xmlFile = analysis.getFiles()
             .stream()
             .filter(f -> isXMLFile(f.getFileName()))

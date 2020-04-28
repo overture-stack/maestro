@@ -18,8 +18,6 @@
 package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
 
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
-import bio.overture.maestro.domain.api.exception.FailureData;
-import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.exception.NotFoundException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
@@ -27,11 +25,9 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCom
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
-import io.vavr.control.Either;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,23 +35,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
-
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 import static bio.overture.maestro.domain.utility.Exceptions.notFound;
-import static bio.overture.maestro.domain.utility.Exceptions.wrapWithIndexerException;
 import static java.text.MessageFormat.format;
 import static reactor.core.publisher.Mono.error;
 
 @Slf4j
 class SongStudyDAO implements StudyDAO {
 
-    static final String STUDY_ID = "studyId";
     private static final String STUDY_ANALYSES_URL_TEMPLATE = "{0}/studies/{1}/analysis?analysisStates={2}";
     private static final String STUDY_ANALYSIS_URL_TEMPLATE = "{0}/studies/{1}/analysis/{2}";
     private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";

@@ -88,7 +88,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     private String alias;
 
     @Autowired
-    private Indexer indexer;
+    private DefaultIndexer indexer;
 
     @BeforeEach
     void setUp() {
@@ -129,7 +129,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         );
 
         // test
-        val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+        val result = indexer.indexAnalysisToFileCentric(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
                 .analysisId(analysisId)
                 .studyId(studyId)
@@ -176,7 +176,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         );
 
         // test
-        val result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+        val result = indexer.indexAnalysisToFileCentric(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
                 .analysisId("EGAZ00001254368")
                 .studyId("PEME-CA")
@@ -185,7 +185,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             ).build());
 
         StepVerifier.create(result)
-            .expectNext(IndexResult.builder().successful(true).build())
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
             .verifyComplete();
 
         Thread.sleep(sleepMillis);
@@ -230,12 +230,12 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .willReturn(ResponseDefinitionBuilder.okForJson(studiesArray)));
 
         // test
-        val result = indexer.indexStudyRepository(IndexStudyRepositoryCommand.builder()
+        val result = indexer.indexRepository(IndexStudyRepositoryCommand.builder()
             .repositoryCode("collab")
             .build());
 
         StepVerifier.create(result)
-            .expectNext(IndexResult.builder().successful(true).build())
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
             .verifyComplete();
 
         Thread.sleep(sleepMillis);
@@ -285,7 +285,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .build());
 
         StepVerifier.create(result)
-            .expectNext(IndexResult.builder().successful(true).build())
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
             .verifyComplete();
 
         Thread.sleep(sleepMillis);
@@ -411,7 +411,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .build());
 
         StepVerifier.create(secondResult)
-            .expectNext(IndexResult.builder().successful(true).build())
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
             .verifyComplete();
         Thread.sleep(sleepMillis);
 
@@ -472,7 +472,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .build());
 
         StepVerifier.create(secondResult)
-            .expectNext(IndexResult.builder().successful(true).build())
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
             .verifyComplete();
         Thread.sleep(sleepMillis);
 
@@ -516,7 +516,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             .build());
 
         StepVerifier.create(result)
-            .expectNext(IndexResult.builder().successful(true).build())
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
             .verifyComplete();
 
         Thread.sleep(sleepMillis);

@@ -9,7 +9,6 @@ services:
     environment:
       - maestro.elasticsearch.cluster-nodes=elasticsearch.maestro.local:9200
       - spring.cloud.stream.kafka.binder.brokers=kafka.maestro.local:9092
-      - spring.boot.admin.client.url=http://boot-admin:1122
       - management.health.elasticsearch.enabled=false
       - management.security.enabled=false
     depends_on:

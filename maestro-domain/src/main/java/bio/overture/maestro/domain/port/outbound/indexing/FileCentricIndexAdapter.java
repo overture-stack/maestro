@@ -17,12 +17,10 @@
 
 package bio.overture.maestro.domain.port.outbound.indexing;
 
-
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import lombok.NonNull;
 import reactor.core.publisher.Mono;
-
 import java.util.List;
 import java.util.Set;
 

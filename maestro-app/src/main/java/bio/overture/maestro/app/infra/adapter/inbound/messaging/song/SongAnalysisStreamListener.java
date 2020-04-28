@@ -24,10 +24,11 @@ import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.RemoveAnalysisCommand;
 import io.vavr.Tuple2;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
@@ -49,11 +50,11 @@ public class SongAnalysisStreamListener {
         handleIndexResult(() -> this.doHandle(analysisMessage));
     }
 
-    private Mono<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
-        Mono<IndexResult> resultMono;
+    private Flux<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
+        Flux<IndexResult> result;
         try {
             if (msg.getState().equals(PUBLISHED)) {
-                resultMono = indexer.indexAnalysis(IndexAnalysisCommand.builder()
+                result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
                     .analysisIdentifier(AnalysisIdentifier.builder()
                         .repositoryCode(msg.getSongServerId())
                         .studyId(msg.getStudyId())
@@ -61,19 +62,19 @@ public class SongAnalysisStreamListener {
                         .build())
                     .build());
             } else { // UNPUBLISHED, SUPPRESSED
-                resultMono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
+                val mono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
                     .analysisIdentifier(AnalysisIdentifier.builder()
                         .analysisId(msg.getAnalysisId())
                         .studyId(msg.getStudyId())
                         .repositoryCode(msg.getSongServerId())
                         .build()
                     ).build());
+                result = Flux.from(mono);
             }
-            return resultMono.map(indexResult -> new Tuple2<>(msg, indexResult));
+            return result.map(indexResult -> new Tuple2<>(msg, indexResult));
         } catch (Exception e) {
             log.error("failed reading message: {} ", msg, e);
-
-            return Mono.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
+            return Flux.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
         }
     }
 }

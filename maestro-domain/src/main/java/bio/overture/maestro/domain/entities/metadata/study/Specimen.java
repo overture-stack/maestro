@@ -37,7 +37,6 @@ public class Specimen {
     private String specimenId;
     private String donorId;
     private String submitterSpecimenId;
-    @JsonIgnore
     private String tumourNormalDesignation;
     private String specimenTissueSource;
     private String specimenType;
