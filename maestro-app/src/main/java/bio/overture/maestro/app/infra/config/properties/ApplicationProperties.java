@@ -30,6 +30,8 @@ public interface ApplicationProperties {
     String FAILURE_LOG_PROP_KEY = "maestro.failureLog.enabled";
     String MAESTRO_NOTIFICATIONS_SLACK_ENABLED_PROP_KEY = "maestro.notifications.slack.enabled";
 
+    int webClientMaxInMemorySize();
+
     List<String> elasticSearchClusterNodes();
 
     String fileCentricAlias();

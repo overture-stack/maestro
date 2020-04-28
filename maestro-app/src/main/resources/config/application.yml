@@ -2,6 +2,8 @@ server:
   port: 11235
 
 maestro:
+  webclient:
+    maxInMemorySize: 1000000
   song:
     maxRetries: 3
     timeoutSec:

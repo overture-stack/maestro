@@ -57,7 +57,6 @@ class SongStudyDAO implements StudyDAO {
     private static final int FALLBACK_SONG_TIMEOUT = 60;
     private static final int FALLBACK_SONG_ANALYSIS_TIMEOUT = 5;
     private static final int FALLBACK_SONG_MAX_RETRY = 0;
-    private static final int MAX_IN_MEMORY_SIZE = 640 * 1024;
     private final WebClient webClient;
     private final int songMaxRetries;
     private final int minBackoffSec = 1;
@@ -71,8 +70,8 @@ class SongStudyDAO implements StudyDAO {
     private final int analysisCallTimeoutSeconds;
 
     @Inject
-    public SongStudyDAO(@NonNull ApplicationProperties applicationProperties) {
-        this.webClient = configWebClient();
+    public SongStudyDAO(@NonNull WebClient webClient, @NonNull ApplicationProperties applicationProperties) {
+        this.webClient = webClient;
         this.indexableStudyStatuses = applicationProperties.indexableStudyStatuses();
         this.indexableStudyStatusesList = List.of(indexableStudyStatuses.split(","));
         this.songMaxRetries = applicationProperties.songMaxRetries() >= 0 ? applicationProperties.songMaxRetries()
@@ -153,16 +152,6 @@ class SongStudyDAO implements StudyDAO {
                 }
                 return Mono.just(analysis);
             });
-    }
-
-    private WebClient configWebClient() {
-        return WebClient.builder()
-            .exchangeStrategies(
-                ExchangeStrategies.builder()
-                    .codecs(configurer -> configurer.defaultCodecs()
-                        .maxInMemorySize(MAX_IN_MEMORY_SIZE))
-                    .build())
-            .build();
     }
 
     private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(Retry<Object> retry, Duration timeout) {
