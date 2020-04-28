@@ -198,7 +198,7 @@ class DefaultIndexer implements Indexer {
             )
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             .onErrorResume((e) -> handleIndexRepositoryError(e, command.getRepositoryCode()))
-            .reduce(this::reduceIndexResult);
+            .reduce(this :: reduceIndexResult);
     }
 
     @Override

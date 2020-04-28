@@ -424,6 +424,73 @@ class DefaultIndexerTest {
     }
 
     @Test
+    void indexRepositoryshouldNotifyOnStudyFetchError() {
+        //Given
+        val repoCode = "TEST-REPO";
+        val filesRepository = getStubFilesRepository();
+        val fileRepo = Mono.just(getStubFilesRepository());
+        val failure = FailureData.builder()
+            .failingIds(Map.of("studyId", Set.of("PACA-CA"))).build();
+        val failedIndexResult = IndexResult.builder().failureData(failure).successful(false).build();
+        val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
+
+        given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.error(new IndexerException("failed", new RuntimeException(""), failure)));
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+
+        // When
+        val indexResultMono = indexer.indexRepository(IndexStudyRepositoryCommand.builder()
+            .repositoryCode("TEST-REPO")
+            .build());
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectNext(failedIndexResult)
+            .expectComplete()
+            .verify();
+
+        then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
+        then(notifier).should(times(1)).notify(any());
+    }
+
+    @Test
+    void shouldIndexAllRepositoryStudies() {
+        //Given
+        val repoCode = "TEST-REPO";
+        val filesRepository = getStubFilesRepository();
+        val studies = getExpectedStudies();
+        val fileRepo = Mono.just(getStubFilesRepository());
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.just(result);
+        val getStudiesCmd = GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getBaseUrl()).build();
+
+        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(studyDAO.getStudies(eq(getStudiesCmd))).willReturn(Flux.fromIterable(studies));
+
+        for(Study study: studies) {
+            val studyId = study.getStudyId();
+            val command = GetStudyAnalysesCommand.builder()
+                .filesRepositoryBaseUrl(filesRepository.getBaseUrl()).studyId(studyId)
+                .build();
+            val studyAnalyses = getStudyAnalyses(studyId);
+            val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
+            val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
+
+            given(studyDAO.getStudyAnalyses(eq(command))).willReturn(Mono.just(studyAnalyses));
+            given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+        }
+
+        // When
+        val indexResultMono = indexer.indexRepository(IndexStudyRepositoryCommand.builder()
+            .repositoryCode("TEST-REPO")
+            .build());
+
+        // Then
+        StepVerifier.create(indexResultMono)
+            .expectComplete()
+            .verify();
+    }
+
+    @Test
     void shouldIndexSingleStudy() {
         // Given
         val studyId = "PEME-CA";
