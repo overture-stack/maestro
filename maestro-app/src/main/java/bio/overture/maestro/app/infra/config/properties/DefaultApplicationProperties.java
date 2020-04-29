@@ -248,7 +248,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   @ToString
   @EqualsAndHashCode
   private static class WebClientConfig {
-    private int maxInMemorySize = 1000000;
+    private int maxInMemorySize = -1;
   }
 
   @Data

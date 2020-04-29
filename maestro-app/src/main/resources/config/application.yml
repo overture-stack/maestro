@@ -3,7 +3,8 @@ server:
 
 maestro:
   webclient:
-    maxInMemorySize: 1000000
+    # -1 = unlimited memory size
+    maxInMemorySize: -1
   song:
     maxRetries: 3
     timeoutSec:
