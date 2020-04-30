@@ -2,7 +2,7 @@ server:
   port: 11235
 
 maestro:
-  webclient:
+  webclientConfig:
     # -1 = unlimited memory size
     maxInMemorySize: -1
   song:
