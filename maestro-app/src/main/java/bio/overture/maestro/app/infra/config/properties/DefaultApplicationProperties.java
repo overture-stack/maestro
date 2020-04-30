@@ -44,11 +44,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
   static final String MAESTRO_PREFIX = "maestro";
 
-  private WebClientConfig webClientConfig = new WebClientConfig();
+  private WebClient webClient = new WebClient();
 
   @Override
   public int webClientMaxInMemorySize() {
-    return this.webClientConfig.maxInMemorySize;
+    return this.webClient.maxInMemorySize;
   }
 
   @Override
@@ -247,7 +247,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   @Data
   @ToString
   @EqualsAndHashCode
-  private static class WebClientConfig {
+  private static class WebClient {
     private int maxInMemorySize = -1;
   }
 
