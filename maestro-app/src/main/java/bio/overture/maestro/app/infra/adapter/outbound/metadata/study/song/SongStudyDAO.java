@@ -31,6 +31,7 @@ import lombok.val;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -56,7 +57,6 @@ class SongStudyDAO implements StudyDAO {
     private static final int FALLBACK_SONG_TIMEOUT = 60;
     private static final int FALLBACK_SONG_ANALYSIS_TIMEOUT = 5;
     private static final int FALLBACK_SONG_MAX_RETRY = 0;
-    private static final String REPOSITORY = "repository";
     private final WebClient webClient;
     private final int songMaxRetries;
     private final int minBackoffSec = 1;
@@ -96,7 +96,7 @@ class SongStudyDAO implements StudyDAO {
         return this.webClient.get()
             .uri(format(STUDY_ANALYSES_URL_TEMPLATE, repoBaseUrl, studyId, this.indexableStudyStatuses))
             .retrieve()
-            .onStatus(HttpStatus.NOT_FOUND::equals,
+            .onStatus(HttpStatus.NOT_FOUND :: equals,
                 clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
             .bodyToMono(analysisListType)
             .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)))

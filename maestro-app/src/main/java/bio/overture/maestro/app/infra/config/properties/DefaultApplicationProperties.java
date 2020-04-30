@@ -44,6 +44,13 @@ final class DefaultApplicationProperties implements ApplicationProperties {
 
   static final String MAESTRO_PREFIX = "maestro";
 
+  private WebClient webClient = new WebClient();
+
+  @Override
+  public int webClientMaxInMemorySize() {
+    return this.webClient.maxInMemorySize;
+  }
+
   @Override
   public List<String> elasticSearchClusterNodes() {
     return List.copyOf(this.elasticsearch.getClusterNodes());
@@ -235,6 +242,13 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private String organization;
     private String country;
     private StorageType storageType = StorageType.S3;
+  }
+
+  @Data
+  @ToString
+  @EqualsAndHashCode
+  private static class WebClient {
+    private int maxInMemorySize = -1;
   }
 
   @Data

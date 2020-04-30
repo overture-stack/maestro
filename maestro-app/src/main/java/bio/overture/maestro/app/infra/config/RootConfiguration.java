@@ -25,6 +25,7 @@ import bio.overture.maestro.app.infra.adapter.outbound.indexing.rules.ExclusionR
 import bio.overture.maestro.app.infra.adapter.outbound.metadata.repostiory.RepositoryConfig;
 import bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song.SongConfig;
 import bio.overture.maestro.app.infra.adapter.outbound.notification.NotificationConfig;
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.app.infra.config.properties.PropertiesConfig;
 import bio.overture.maestro.domain.api.DomainApiConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,8 +73,9 @@ class PortsConfig {}
 })
 class InfraConfig {
     @Bean
-    WebClient webClient() {
-        return WebClient.builder().build();
+    WebClient webClient(ApplicationProperties properties) {
+        return WebClient.builder().codecs(
+            c -> c.defaultCodecs().maxInMemorySize(properties.webClientMaxInMemorySize())).build();
     }
 }
 
