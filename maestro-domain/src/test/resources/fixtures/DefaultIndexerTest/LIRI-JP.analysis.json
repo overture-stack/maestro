@@ -6,13 +6,11 @@
     "analysisState": "PUBLISHED",
     "samples": [
       {
-        
         "sampleId": "SA515389",
         "specimenId": "SP107109",
         "submitterSampleId": "RK202_C01",
         "sampleType": "DNA",
         "specimen": {
-          
           "specimenId": "SP107109",
           "donorId": "DO48736",
           "submitterSpecimenId": "RK202_C01",
@@ -23,13 +21,11 @@
           "submitterDonorId": "RK202",
           "studyId": "LIRI-JP",
           "gender": "female"
-
         }
       }
     ],
     "files": [
       {
-        
         "objectId": "b63dff38-e239-5a5d-9c36-ec851049fd12",
         "studyId": "LIRI-JP",
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",

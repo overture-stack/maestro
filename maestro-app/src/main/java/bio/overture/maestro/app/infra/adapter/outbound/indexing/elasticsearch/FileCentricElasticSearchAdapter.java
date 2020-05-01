@@ -122,7 +122,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   }
 
   private String getAnalysisId(FileCentricDocument d) {
-    return d.getAnalysis().getId();
+    return d.getAnalysis().getAnalysisId();
   }
 
   @Override
@@ -198,7 +198,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         QueryBuilders.boolQuery()
             .must(
                 QueryBuilders.termQuery(
-                    FileCentricDocument.Fields.analysis + "." + FileCentricAnalysis.Fields.id,
+                    FileCentricDocument.Fields.analysis + "." + FileCentricAnalysis.Fields.analysisId,
                     analysisId)));
     this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
   }

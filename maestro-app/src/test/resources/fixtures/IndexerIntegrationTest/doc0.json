@@ -1,11 +1,13 @@
 {
   "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
-  "access": "controlled",
+  "file_type" : "BAM",
+  "file_access": "controlled",
+  "file_type": "BAM",
   "study_id": "PEME-CA",
-
   "analysis": {
-    "id": "EGAZ00001254368",
-    "type": { "name": "sequencingRead", "version": 1 },
+    "analysis_id": "EGAZ00001254368",
+    "analysis_type": "sequencingRead",
+    "analysis_version": "1",
     "state": "PUBLISHED",
     "study_id": "PEME-CA",
     "info": {
@@ -13,10 +15,10 @@
       "isPcawg": false
     },
     "experiment": {
-      "info": {},
       "analysisId": "EGAZ00001254368",
       "aligned": true,
-      "libraryStrategy": "WGS"
+      "libraryStrategy": "WGS",
+      "info": {}
     }
   },
   "files": {
@@ -42,7 +44,7 @@
       "name": "collaboratory",
       "type": "S3",
       "country": "CA",
-      "base_url": "##COLLAB_REPO_URL##",
+      "url": "##COLLAB_REPO_URL##",
       "data_path": "/oicr.icgc/data",
       "metadata_path": "/oicr.icgc.meta/metadata/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
     }
@@ -50,15 +52,16 @@
   "donors": [
     {
       "id": "DO232978",
-      "submitted_id": "MDT-AP-0749",
-      "specimen": {
+      "gender" : "Female",
+      "submitter_donor_id": "MDT-AP-0749",
+      "specimens": {
         "id": "SP201301",
-        "type": "Primary tumour - solid tissue",
-        "submitted_id": "MDT-AP-0749_tumor_specimen",
+        "specimen_type": "Primary tumour - solid tissue",
+        "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
         "samples": {
           "id": "SA604924",
-          "submitted_id": "MDT-AP-0749_tumor",
-          "type": "DNA"
+          "submitter_sample_id": "MDT-AP-0749_tumor",
+          "sample_type": "DNA"
         }
       }
     }

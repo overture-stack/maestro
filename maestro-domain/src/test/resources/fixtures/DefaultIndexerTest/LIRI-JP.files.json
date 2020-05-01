@@ -1,16 +1,14 @@
 [
   {
-    "objectId": "b63dff38-e239-5a5d-9c36-ec851049fd12",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "b63dff38-e239-5a5d-9c36-ec851049fd12",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -22,14 +20,14 @@
       "format": "VCF",
       "md5sum": "93354882b0fc014b49be1b24df8f435e",
       "size": 44440835,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "eb2832eb-ad54-574b-bb60-1abf74489ed8",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "eb2832eb-ad54-574b-bb60-1abf74489ed8",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 1458418
       }
     },
@@ -40,41 +38,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
     ],
     "donors": [
       {
         "id": "DO48736",
-        "submittedId": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submittedId": "RK202_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -86,14 +83,14 @@
       "format": "VCF",
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
       "size": 11431,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "e14e73a5-a869-5b9a-a89c-be77fa54135e",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "e14e73a5-a869-5b9a-a89c-be77fa54135e",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "9ce7cdedb7450a05c03e419235ed56a6",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 1756
       }
     },
@@ -104,41 +101,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
     ],
     "donors": [
       {
         "id": "DO48736",
-        "submittedId": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submittedId": "RK202_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "3106300b-3666-52b7-a3fa-a5096a51814b",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "3106300b-3666-52b7-a3fa-a5096a51814b",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -150,14 +146,14 @@
       "format": "VCF",
       "md5sum": "492989e81699bd5a56b7956e0be7416d",
       "size": 3648,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "ad4e821d-1908-5e37-8b09-f2bcbe841a6b",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "ad4e821d-1908-5e37-8b09-f2bcbe841a6b",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "acdf137ad635f95ee93412fa9153d066",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 5539
       }
     },
@@ -168,41 +164,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
     ],
     "donors": [
       {
         "id": "DO48736",
-        "submittedId": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submittedId": "RK202_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "bed33bd4-eec1-5905-8480-5def36d7f6de",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "bed33bd4-eec1-5905-8480-5def36d7f6de",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -214,14 +209,14 @@
       "format": "VCF",
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
       "size": 1418099,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "deab15a3-6820-5bcc-926a-bca2ab5ddaa0",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "deab15a3-6820-5bcc-926a-bca2ab5ddaa0",
         "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz.tbi",
         "format": "TBI",
         "md5sum": "2233fb90872d759d279395b1a7ad3461",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 236926
       }
     },
@@ -232,41 +227,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
     ],
     "donors": [
       {
         "id": "DO48736",
-        "submittedId": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submittedId": "RK202_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "24329157-e218-5854-8f45-7fa6b9e046c6",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "24329157-e218-5854-8f45-7fa6b9e046c6",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -278,14 +272,14 @@
       "format": "VCF",
       "md5sum": "7d0676c6a85696e1cb2919836b0ab71e",
       "size": 10536170,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "ad8a45f3-ec8d-5391-ae93-b19dc982698a",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "ad8a45f3-ec8d-5391-ae93-b19dc982698a",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "8269ee64b80e6ec66e590767f697d37b",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 1031078
       }
     },
@@ -296,41 +290,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "4d070189-bd33-5391-b7af-ea32c6782875",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "4d070189-bd33-5391-b7af-ea32c6782875",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -342,14 +335,14 @@
       "format": "VCF",
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
       "size": 59633,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "14e94abe-1fd1-5a85-8d26-a7291edd80ef",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "14e94abe-1fd1-5a85-8d26-a7291edd80ef",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "fdb961feac82a7912bf657450e02c44d",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 11325
       }
     },
@@ -360,41 +353,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "107c83c7-595e-5b36-957b-ae706611d5b9",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "107c83c7-595e-5b36-957b-ae706611d5b9",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -406,14 +398,14 @@
       "format": "VCF",
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
       "size": 51548,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "c5496778-0d72-5cc6-aac4-98777cfbc0c2",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "c5496778-0d72-5cc6-aac4-98777cfbc0c2",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "5aeb4749609bd0a4d81ecffd673a36e1",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 10447
       }
     },
@@ -424,41 +416,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "da524891-37af-5a21-9867-c6812018aa22",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "da524891-37af-5a21-9867-c6812018aa22",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -470,14 +461,14 @@
       "format": "VCF",
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
       "size": 1710383,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "d87c4599-bba4-5c23-b7a2-57bbeed7eacb",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "d87c4599-bba4-5c23-b7a2-57bbeed7eacb",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "ade5449b588c81496e4e7d2b0b49e3d0",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 61514
       }
     },
@@ -488,41 +479,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -534,14 +524,14 @@
       "format": "VCF",
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
       "size": 31242,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "55283d00-b1a2-521c-99e1-e9d8d88c660d",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "55283d00-b1a2-521c-99e1-e9d8d88c660d",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "8cae7bbcd28b6a78ad5c53642ae9695c",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 14606
       }
     },
@@ -552,41 +542,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -598,14 +587,14 @@
       "format": "VCF",
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
       "size": 10191,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "c4d10f9f-7e9e-5cb3-a30a-0ff8865952ce",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "c4d10f9f-7e9e-5cb3-a30a-0ff8865952ce",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "139ce5f29fc0e877d5ae5a5d5e03c3f0",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 4212
       }
     },
@@ -616,41 +605,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -662,14 +650,14 @@
       "format": "VCF",
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
       "size": 382815,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "a99d2a9c-96c4-5788-9149-79a146f0f925",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "a99d2a9c-96c4-5788-9149-79a146f0f925",
         "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "797e4ef5c348d4a23e9e83790812d857",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 151104
       }
     },
@@ -680,41 +668,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
     ],
     "donors": [
       {
         "id": "DO23549",
-        "submittedId": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submittedId": "RK156_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "316177db-022d-5121-aba8-ce72a92ee778",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "316177db-022d-5121-aba8-ce72a92ee778",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -726,14 +713,14 @@
       "format": "VCF",
       "md5sum": "33b96c263be31852de8d5d15775561c9",
       "size": 404406,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "97c3147f-dd1d-507f-a73d-8646f7ce2a0b",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "97c3147f-dd1d-507f-a73d-8646f7ce2a0b",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "3ed262dbc3b1c427177bdd5af5ef5633",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 27885
       }
     },
@@ -744,41 +731,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -790,14 +776,14 @@
       "format": "VCF",
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
       "size": 1853889,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "9abe4aad-9d35-5d4f-955c-8bceb559827e",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "9abe4aad-9d35-5d4f-955c-8bceb559827e",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "a7cf0d572f1649c8791cda7892c7be55",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 67312
       }
     },
@@ -808,41 +794,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "5c222a32-a79d-55e0-a490-440217c63393",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "5c222a32-a79d-55e0-a490-440217c63393",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -854,14 +839,14 @@
       "format": "VCF",
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
       "size": 10429379,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "ad68b7cb-e91c-506e-acae-812ae2ea7678",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "ad68b7cb-e91c-506e-acae-812ae2ea7678",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "78b2dd0696a1f2ea8ac8e25a77c4e239",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 1032907
       }
     },
@@ -872,41 +857,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "2af2e398-c27b-5645-b60b-b932a916184d",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "2af2e398-c27b-5645-b60b-b932a916184d",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -918,14 +902,14 @@
       "format": "VCF",
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
       "size": 400597,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "bbb31cb3-f175-52c4-ba66-569e1a1d2ed7",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "bbb31cb3-f175-52c4-ba66-569e1a1d2ed7",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "130e37274d3c7bebcb41d027eea9148d",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 27877
       }
     },
@@ -936,41 +920,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -982,14 +965,14 @@
       "format": "VCF",
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
       "size": 25270,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "95e7563e-e8d1-5377-8cfc-1c45a72448da",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "95e7563e-e8d1-5377-8cfc-1c45a72448da",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "941a7d48a3250de6edcbbde1cbb4b7e1",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 12044
       }
     },
@@ -1000,41 +983,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "60307755-185e-536e-aa3b-190fb9934844",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "60307755-185e-536e-aa3b-190fb9934844",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1046,14 +1028,14 @@
       "format": "VCF",
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
       "size": 2540,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "221e532c-a0c8-5573-8399-81f785423e57",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "221e532c-a0c8-5573-8399-81f785423e57",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "de502cd9a25efe6f868f3156e8fd302e",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 1336
       }
     },
@@ -1064,41 +1046,40 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }
     ]
   },
   {
-    "objectId": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
-    "access": "controlled",
-    "studyId": "LIRI-JP",
+    "object_id": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
+    "file_access": "controlled",
+    "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
-      "studyId": "LIRI-JP",
+      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1110,14 +1091,14 @@
       "format": "VCF",
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
       "size": 422502,
-      "lastModified": null,
-      "dataType": "AlignedReads",
-      "indexFile": {
-        "objectId": "87d9f1f2-3d13-5dd2-8ed5-d175952e2586",
+      "last_modified": null,
+      "data_type": "AlignedReads",
+      "index_file": {
+        "object_id": "87d9f1f2-3d13-5dd2-8ed5-d175952e2586",
         "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
         "format": "IDX",
         "md5sum": "9029f92d2d1ea6d76b3a88795756aacc",
-        "dataType": "AlignedReads",
+        "data_type": "AlignedReads",
         "size": 160972
       }
     },
@@ -1128,24 +1109,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "baseUrl": "http://song.sing.sung",
-        "dataPath": "/p1/p2",
-        "metadataPath": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung",
+        "data_path": "/p1/p2",
+        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
     ],
     "donors": [
       {
         "id": "DO45211",
-        "submittedId": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submittedId": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submittedId": "RK091_C01",
-            "type": "DNA",
-            "matchedNormalSubmitterSampleId": null
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA",
+            "matched_normal_submitter_sample_id": null
           }
         }
       }

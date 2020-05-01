@@ -1,6 +1,9 @@
 [
   {
-    "analysisType": { "name": "sequencingRead", "version": 1 },
+    "analysisType": {
+      "name": "sequencingRead",
+      "version": 1
+    },
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
@@ -20,14 +23,13 @@
           "specimenId": "SP201301",
           "donorId": "DO232978",
           "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
-
           "specimenType": "Primary tumour - solid tissue"
         },
         "donor": {
           "donorId": "DO232978",
           "submitterDonorId": "MDT-AP-0749",
           "studyId": "PEME-CA",
-          "gender": "female",
+          "gender": "Female",
           "info": {}
         }
       }
@@ -42,8 +44,8 @@
         "fileSize": 6342,
         "fileType": "XML",
         "fileMd5sum": "fb157ece007dc31b3d34add273efedcb",
-         "fileAccess": "open",
-  "dataType": "AlignedReads"
+        "fileAccess": "open",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -54,8 +56,8 @@
         "fileSize": 8939816,
         "fileType": "BAI",
         "fileMd5sum": "e2a83668aa4cfe4f4048e75212d44f19",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -66,8 +68,8 @@
         "fileSize": 88906416144,
         "fileType": "BAM",
         "fileMd5sum": "29ff9df727803d20834b9997bc17e970",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       }
     ],
     "experiment": {
@@ -78,7 +80,10 @@
     }
   },
   {
-    "analysisType": { "name": "sequencingRead", "version": 1 },
+    "analysisType": {
+      "name": "sequencingRead",
+      "version": 1
+    },
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
@@ -98,14 +103,13 @@
           "specimenId": "SP200947",
           "donorId": "DO232959",
           "submitterSpecimenId": "MDT-AP-0432_control_specimen",
-
           "specimenType": "Normal - blood derived"
         },
         "donor": {
           "donorId": "DO232959",
           "submitterDonorId": "MDT-AP-0432",
           "studyId": "PEME-CA",
-          "gender": "male",
+          "gender": "Female",
           "info": {}
         }
       }
@@ -120,8 +124,8 @@
         "fileSize": 6352,
         "fileType": "XML",
         "fileMd5sum": "cad2b396e0f7dc5384a5275f89ccad3a",
-         "fileAccess": "open",
-  "dataType": "AlignedReads"
+        "fileAccess": "open",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -132,8 +136,8 @@
         "fileSize": 8982928,
         "fileType": "BAI",
         "fileMd5sum": "227a2a11d660a8a53a7375c6623034e2",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -144,8 +148,8 @@
         "fileSize": 77675501639,
         "fileType": "BAM",
         "fileMd5sum": "b2e40ebb719e1754e99be2e752239639",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       }
     ],
     "experiment": {

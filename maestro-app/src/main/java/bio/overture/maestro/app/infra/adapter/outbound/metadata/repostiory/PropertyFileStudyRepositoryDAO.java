@@ -73,7 +73,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
         log.trace("Converting : {} to StudyRepository ", propertiesFileRepository);
         return StudyRepository.builder()
             .code(propertiesFileRepository.getCode())
-            .baseUrl(propertiesFileRepository.getUrl())
+            .url(propertiesFileRepository.getUrl())
             .name(propertiesFileRepository.getName())
             .dataPath(propertiesFileRepository.getDataPath())
             .metadataPath(propertiesFileRepository.getMetadataPath())

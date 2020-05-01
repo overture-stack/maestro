@@ -45,7 +45,7 @@ final class AnalysisCentricDocumentConverter {
                     .name(repository.getName())
                     .code(repository.getCode())
                     .country(repository.getCountry())
-                    .baseUrl(repository.getBaseUrl())
+                    .url(repository.getUrl())
                     .dataPath(repository.getDataPath())
                     .metadataPath(repository.getMetadataPath() + "/" + metadataFileId)
                     .build()))
@@ -118,15 +118,15 @@ final class AnalysisCentricDocumentConverter {
                                                                                             @NonNull Sample sample){
     return List.of(bio.overture.maestro.domain.entities.indexing.Specimen.builder()
             .id(specimen.getSpecimenId())
-            .submittedId(specimen.getSubmitterSpecimenId())
-            .type(specimen.getSpecimenType())
+            .submitterSpecimenId(specimen.getSubmitterSpecimenId())
+            .specimenType(specimen.getSpecimenType())
             .specimenTissueSource(specimen.getSpecimenTissueSource())
             .tumourNormalDesignation(specimen.getTumourNormalDesignation())
             .samples(bio.overture.maestro.domain.entities.indexing.Sample.builder()
                 .id(sample.getSampleId())
                 .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
-                .submittedId(sample.getSubmitterSampleId())
-                .type(sample.getSampleType())
+                .submitterSampleId(sample.getSubmitterSampleId())
+                .sampleType(sample.getSampleType())
                 .build())
             .build());
   }
