@@ -38,6 +38,8 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCom
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
+import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import io.vavr.Tuple2;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
@@ -50,9 +52,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -212,36 +214,48 @@ class DefaultIndexerTest {
         then(studyRepositoryDao).should(times(1)).getFilesRepository(repoCode);
     }
 
-    @Test
-    void shouldDetectConflictInFileAndDeleteItFromIndex() {
-        // Given
-        val studyId = "MALY-DE";
-        val repoCode = "TEST-REPO";
-        val filesRepository = getStubFilesRepository();
-        val a1 = Arrays.asList(loadJsonFixture(getClass(),
-            studyId +".conflicting.analysis.json", Analysis[].class));
-        val fileRepo = Mono.just(getStubFilesRepository());
-        val studyAnalyses = Mono.just(a1);
-        val getStudyAnalysesCommand = GetStudyAnalysesCommand.builder()
-            .studyId(studyId)
-            .filesRepositoryBaseUrl(filesRepository.getUrl())
-            .build();
-        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
-        given(studyDAO.getStudyAnalyses(eq(getStudyAnalysesCommand))).willReturn(studyAnalyses);
+  @Test
+  void shouldDetectConflictInFileAndDeleteItFromIndex() {
+    // Given
+    val studyId = "MALY-DE";
+    val filesRepository = getStubFilesRepository();
+    // Note: in MALE-DE.conflicting.analysis.json, conflict is: analysis 0a1df2a2-029d-48cc-839c-0a7c89ff972f is UNPUBLISHED
+    val a1 = Arrays.asList(loadJsonFixture(getClass(), studyId +".conflicting.analysis.json", Analysis[].class));
+    val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
+    val nonConflictingDocs = fileCentricDocuments.subList(1, fileCentricDocuments.size());
+    val result = IndexResult.builder().successful(true).build();
+    val monoResult =  Mono.just(result);
+    val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(nonConflictingDocs).build();
+    val expectedNotification = new IndexerNotification(NotificationName.INDEX_FILE_CONFLICT,
+        getConflicts(fileCentricDocuments));
 
-        // When
-        val command = IndexStudyCommand.builder()
-            .studyId(studyId)
-            .repositoryCode(filesRepository.getCode())
-            .build();
+    given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of(fileCentricDocuments.get(0))));
+    given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
 
-        val indexResultMono = indexer.indexStudy(command);
+    val studyAndRepo = DefaultIndexer.StudyAndRepository.builder()
+        .study(Study.builder().studyId(studyId).build())
+        .studyRepository(filesRepository)
+        .build();
+    val mono = Mono.just(new Tuple2<>(a1, studyAndRepo));
 
-        // Then
-        StepVerifier.create(indexResultMono)
-            .expectComplete()
-            .verify();
-    }
+    // When
+    val command = IndexStudyCommand.builder()
+        .studyId(studyId)
+        .repositoryCode(filesRepository.getCode())
+        .build();
+
+    val indexResultMono = indexer.indexStudyToFileCentric(command, mono);
+
+    // Then
+    StepVerifier.create(indexResultMono)
+        .expectNext(result)
+        .expectComplete()
+        .verify();
+
+    then(notifier).should(times(1)).notify(eq(expectedNotification));
+    then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
+    then(indexServerAdapter).should(times(0)).removeFiles(eq(Set.of(fileCentricDocuments.get(0).getObjectId())));
+  }
 
     @NotNull
     private Map<String, Object> getConflicts(List<FileCentricDocument> fileCentricDocuments) {
@@ -468,24 +482,37 @@ class DefaultIndexerTest {
     void shouldIndexSingleStudy() {
         // Given
         val studyId = "PEME-CA";
-        val repoCode = "TEST-REPO";
         val filesRepository = getStubFilesRepository();
-        val fileRepo = Mono.just(getStubFilesRepository());
+        val a1 = getStudyAnalyses(studyId);
+        val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
+        val result = IndexResult.builder().successful(true).build();
+        val monoResult =  Mono.just(result);
+        val batchIndexFilesCommand = BatchIndexFilesCommand.builder().files(fileCentricDocuments).build();
 
-        given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(fileRepo);
+        given(indexServerAdapter.fetchByIds(anyList())).willReturn(Mono.just(List.of()));
+        given(indexServerAdapter.batchUpsertFileRepositories(eq(batchIndexFilesCommand))).willReturn(monoResult);
+
+        val studyAndRepo = DefaultIndexer.StudyAndRepository.builder()
+            .study(Study.builder().studyId(studyId).build())
+            .studyRepository(filesRepository)
+            .build();
+        val mono = Mono.just(new Tuple2<>(a1, studyAndRepo));
 
         // When
-        val indexResultMono = indexer.indexStudy(IndexStudyCommand.builder()
+      Hooks.onOperatorDebug();
+        val indexResultMono = indexer.indexStudyToFileCentric(IndexStudyCommand.builder()
             .studyId(studyId)
             .repositoryCode(filesRepository.getCode())
-            .build());
+            .build(), mono
+        );
 
         // Then
         StepVerifier.create(indexResultMono)
+            .expectNext(result)
             .expectComplete()
             .verify();
 
-        then(studyRepositoryDao).should(times(1)).getFilesRepository(eq(repoCode));
+        then(indexServerAdapter).should(times(1)).batchUpsertFileRepositories(eq(batchIndexFilesCommand));
     }
 
     @SneakyThrows

@@ -59,7 +59,6 @@ public class FileCentricAnalysis {
         return data;
     }
 
-
     @JsonAnySetter
     public void setData(String key, Object value) {
         data.put(key, value);
