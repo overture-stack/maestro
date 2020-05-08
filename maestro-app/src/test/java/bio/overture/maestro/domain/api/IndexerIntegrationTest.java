@@ -351,7 +351,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         // assertions
         val docs = getFileCentricDocuments();
         assertNotNull(docs);
-//        assertEquals(1L, docs.size());
+        assertEquals(1L, docs.size());
         assertEquals(expectedDoc0, docs.get(0));
     }
 
