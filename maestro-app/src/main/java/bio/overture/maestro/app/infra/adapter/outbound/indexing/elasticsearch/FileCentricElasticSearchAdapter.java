@@ -192,13 +192,13 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
   @SneakyThrows
   private void deleteByAnalysisIdRunnable(String analysisId) {
-    log.trace("deleteByAnalysisId called, analysisId {} ", analysisId);
+    log.trace("deleteByAnalysisId called, analysis_id {} ", analysisId);
     DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(this.alias);
     deleteByQueryRequest.setQuery(
         QueryBuilders.boolQuery()
             .must(
                 QueryBuilders.termQuery(
-                    FileCentricDocument.Fields.analysis + "." + FileCentricAnalysis.Fields.analysisId,
+                    FileCentricDocument.Fields.analysis + "." + "analysis_id",
                     analysisId)));
     this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
   }
