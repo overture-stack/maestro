@@ -159,7 +159,7 @@ class DefaultIndexer implements Indexer {
         return Flux.merge(monos);
     }
 
-    public Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command,
+    private Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command,
                                                      @NonNull Mono<Tuple2<List<Analysis>,  StudyAndRepository>> tuple2) {
         log.trace("in indexStudyToFileCentric, args: {} ", command);
         return tuple2
@@ -170,7 +170,7 @@ class DefaultIndexer implements Indexer {
                 command.getRepositoryCode()));
     }
 
-    public Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command,
+    private Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command,
                                                          @NonNull Mono<Tuple2<List<Analysis>,  StudyAndRepository>> tuple2) {
         log.trace("in indexStudyToAnalysisCentric, args: {} ", command);
         return tuple2
@@ -183,7 +183,7 @@ class DefaultIndexer implements Indexer {
 
     @Override
     public Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command) {
-        log.trace("in indexStudyRepository, args: {} ", command);
+        log.trace("in indexRepository, args: {} ", command);
         return tryGetStudyRepository(command.getRepositoryCode())
             .flatMapMany(this :: getAllStudies)
             .flatMap(studyAndRepository ->
