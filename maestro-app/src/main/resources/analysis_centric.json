@@ -76,6 +76,7 @@
       "analysis_state": {
         "type": "keyword"
       },
+      "experiment": {},
       "study_id": {
         "type": "keyword",
         "copy_to": [

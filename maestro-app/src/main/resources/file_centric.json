@@ -98,7 +98,8 @@
           },
           "analysis_version": {
             "type": "integer"
-          }
+          },
+          "experiment": {}
         }
       },
       "data_type": {
