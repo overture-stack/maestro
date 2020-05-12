@@ -18,12 +18,12 @@ public class AnalysisCentricDonor {
   private String id;
 
   @NonNull
-  private String submittedId;
+  private String submitterDonorId;
 
   @NonNull
   private String gender;
 
   @NonNull
-  private List<Specimen> specimen;
+  private List<Specimen> specimens;
 
 }

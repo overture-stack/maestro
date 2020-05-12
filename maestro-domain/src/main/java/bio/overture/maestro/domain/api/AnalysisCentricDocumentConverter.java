@@ -1,6 +1,5 @@
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.entities.indexing.AnalysisType;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDonor;
@@ -30,13 +29,11 @@ final class AnalysisCentricDocumentConverter {
 
   static AnalysisCentricDocument convertAnalysis(Analysis analysis, StudyRepository repository){
     val metadataFileId = getMetadataFileId(analysis);
-    return AnalysisCentricDocument.builder()
+    val doc = AnalysisCentricDocument.builder()
             .analysisId(analysis.getAnalysisId())
             .analysisState(analysis.getAnalysisState())
-            .analysisType(AnalysisType.builder()
-                    .name(analysis.getAnalysisType().getName())
-                    .version(analysis.getAnalysisType().getVersion())
-                    .build())
+            .analysisType(analysis.getAnalysisType().getName())
+            .analysisVersion(analysis.getAnalysisType().getVersion())
             .studyId(analysis.getStudyId())
             .donors(getDonors(analysis))
             .repositories(List.of(Repository.builder()
@@ -52,6 +49,8 @@ final class AnalysisCentricDocumentConverter {
             .experiment(analysis.getExperiment())
             .files(buildAnalysisCentricFiles(analysis.getFiles()))
             .build();
+    doc.replaceData(analysis.getData());
+    return doc;
   }
 
   public static List<AnalysisCentricDonor> getDonors(@NonNull Analysis analysis){
@@ -81,19 +80,19 @@ final class AnalysisCentricDocumentConverter {
     // Every element in list has the same donor, so just use the first donor
     val anyDonor = list.get(0);
 
-    checkNotFound(anyDonor.getSpecimen() != null && anyDonor.getSpecimen().size() > 0,
+    checkNotFound(anyDonor.getSpecimens() != null && anyDonor.getSpecimens().size() > 0,
             "Failed to merge AnalysisCentricDonor by specimen: donor doesn't have specimen,");
 
     val specimenList = list.stream()
             // One donor only has one specimen in list
-            .map(analysisCentricDonor -> analysisCentricDonor.getSpecimen().get(0))
+            .map(analysisCentricDonor -> analysisCentricDonor.getSpecimens().get(0))
             .collect(Collectors.toList());
 
     return AnalysisCentricDonor.builder()
             .id(anyDonor.getId())
-            .submittedId(anyDonor.getSubmittedId())
+            .submitterDonorId(anyDonor.getSubmitterDonorId())
             .gender(anyDonor.getGender())
-            .specimen(specimenList)
+            .specimens(specimenList)
             .build();
   }
 
@@ -103,8 +102,8 @@ final class AnalysisCentricDocumentConverter {
     return AnalysisCentricDonor.builder()
             .id(donor.getDonorId())
             .gender(donor.getGender())
-            .submittedId(donor.getSubmitterDonorId())
-            .specimen(buildSpecimen(specimen, sample))
+            .submitterDonorId(donor.getSubmitterDonorId())
+            .specimens(buildSpecimen(specimen, sample))
             .build();
   }
 
@@ -140,12 +139,12 @@ final class AnalysisCentricDocumentConverter {
   private static AnalysisCentricFile fromFile(@NonNull File file){
     return AnalysisCentricFile.builder()
             .id(file.getObjectId())
-            .access(file.getFileAccess())
+            .fileAccess(file.getFileAccess())
             .dataType(file.getDataType())
             .md5Sum(file.getFileMd5sum())
             .name(file.getFileName())
             .size(file.getFileSize())
-            .type(file.getFileType())
+            .fileType(file.getFileType())
             .build();
   }
 }

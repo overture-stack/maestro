@@ -1,6 +1,5 @@
 package bio.overture.maestro.domain.entities.indexing.analysis;
 
-import bio.overture.maestro.domain.entities.indexing.AnalysisType;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -21,7 +20,9 @@ public class AnalysisCentricDocument {
 
   @NonNull private String analysisId;
 
-  @NonNull private AnalysisType analysisType;
+  @NonNull private String analysisType;
+
+  @NonNull private Integer analysisVersion;
 
   @NonNull private String analysisState;
 
@@ -45,5 +46,10 @@ public class AnalysisCentricDocument {
   @JsonAnySetter
   public void setData(String key, Object value) {
     data.put(key, value);
+  }
+
+  public void replaceData(Map<String, Object> data) {
+    this.data.clear();
+    this.data.putAll(data);
   }
 }
