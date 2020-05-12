@@ -28,15 +28,15 @@ public class AnalysisCentricDocumentConverterTest {
     val donor_1 = AnalysisCentricDonor.builder()
             .id("DO1")
             .gender("female")
-            .submittedId("MDT-AP-0749")
-            .specimen(buildSpecimenListForDonor1())
+            .submitterDonorId("MDT-AP-0749")
+            .specimens(buildSpecimenListForDonor1())
             .build();
 
     val donor_2 = AnalysisCentricDonor.builder()
             .id("DO2")
             .gender("female")
-            .submittedId("MDT-AP-0749")
-            .specimen(buildSpecimenListForDonor2())
+            .submitterDonorId("MDT-AP-0749")
+            .specimens(buildSpecimenListForDonor2())
             .build();
 
     val results = AnalysisCentricDocumentConverter.getDonors(analysisObj);

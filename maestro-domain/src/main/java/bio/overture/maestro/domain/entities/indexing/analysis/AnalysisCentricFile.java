@@ -18,11 +18,11 @@ public class AnalysisCentricFile  {
 
   @NonNull private Long size;
 
-  @NonNull private String type;
+  @NonNull private String fileType;
 
   @NonNull private String md5Sum;
 
-  @NonNull private String access;
+  @NonNull private String fileAccess;
 
   @NonNull private String dataType;
 }
