@@ -139,7 +139,6 @@ class SongStudyDAOTest {
 
     }
 
-
     @Test
     @SneakyThrows
     void shouldRetryFetchingStudyAnalysesOnFailure() {

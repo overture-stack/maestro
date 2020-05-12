@@ -1,14 +1,13 @@
 [
   {
     "object_id": "b63dff38-e239-5a5d-9c36-ec851049fd12",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -42,7 +41,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
@@ -50,15 +49,16 @@
     "donors": [
       {
         "id": "DO48736",
-        "submitted_id": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submitted_id": "RK202_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -66,14 +66,13 @@
   },
   {
     "object_id": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -107,7 +106,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
@@ -115,15 +114,16 @@
     "donors": [
       {
         "id": "DO48736",
-        "submitted_id": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submitted_id": "RK202_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -131,14 +131,13 @@
   },
   {
     "object_id": "3106300b-3666-52b7-a3fa-a5096a51814b",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -172,7 +171,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
@@ -180,15 +179,16 @@
     "donors": [
       {
         "id": "DO48736",
-        "submitted_id": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submitted_id": "RK202_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -196,14 +196,13 @@
   },
   {
     "object_id": "bed33bd4-eec1-5905-8480-5def36d7f6de",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "909614f0-ceeb-11e5-8498-af7e4d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -237,7 +236,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
       }
@@ -245,15 +244,16 @@
     "donors": [
       {
         "id": "DO48736",
-        "submitted_id": "RK202",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK202",
+        "specimens": {
           "id": "SP107109",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK202_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK202_C01",
           "samples": {
             "id": "SA515389",
-            "submitted_id": "RK202_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK202_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -261,14 +261,13 @@
   },
   {
     "object_id": "24329157-e218-5854-8f45-7fa6b9e046c6",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -302,7 +301,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -310,15 +309,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -326,14 +326,13 @@
   },
   {
     "object_id": "4d070189-bd33-5391-b7af-ea32c6782875",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -367,7 +366,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -375,15 +374,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -391,14 +391,13 @@
   },
   {
     "object_id": "107c83c7-595e-5b36-957b-ae706611d5b9",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -432,7 +431,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -440,15 +439,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -456,14 +456,13 @@
   },
   {
     "object_id": "da524891-37af-5a21-9867-c6812018aa22",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -497,7 +496,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -505,15 +504,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -521,14 +521,13 @@
   },
   {
     "object_id": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -562,7 +561,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -570,15 +569,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -586,14 +586,13 @@
   },
   {
     "object_id": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -627,7 +626,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -635,15 +634,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -651,14 +651,13 @@
   },
   {
     "object_id": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -692,7 +691,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
       }
@@ -700,15 +699,16 @@
     "donors": [
       {
         "id": "DO23549",
-        "submitted_id": "RK156",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK156",
+        "specimens": {
           "id": "SP50179",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK156_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK156_C01",
           "samples": {
             "id": "SA270462",
-            "submitted_id": "RK156_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK156_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -716,14 +716,13 @@
   },
   {
     "object_id": "316177db-022d-5121-aba8-ce72a92ee778",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "LIRI-JP",
       "info": {},
@@ -757,7 +756,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -765,15 +764,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -781,14 +781,13 @@
   },
   {
     "object_id": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "LIRI-JP",
@@ -822,7 +821,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -830,15 +829,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -846,14 +846,13 @@
   },
   {
     "object_id": "5c222a32-a79d-55e0-a490-440217c63393",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "LIRI-JP",
@@ -887,7 +886,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -895,15 +894,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -911,14 +911,13 @@
   },
   {
     "object_id": "2af2e398-c27b-5645-b60b-b932a916184d",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "LIRI-JP",
@@ -952,7 +951,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -960,15 +959,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -976,14 +976,13 @@
   },
   {
     "object_id": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "LIRI-JP",
@@ -1017,7 +1016,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -1025,15 +1024,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1041,14 +1041,13 @@
   },
   {
     "object_id": "60307755-185e-536e-aa3b-190fb9934844",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "LIRI-JP",
@@ -1082,7 +1081,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -1090,15 +1089,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1106,14 +1106,13 @@
   },
   {
     "object_id": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "LIRI-JP",
     "analysis": {
-      "id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "LIRI-JP",
@@ -1147,7 +1146,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
       }
@@ -1155,15 +1154,16 @@
     "donors": [
       {
         "id": "DO45211",
-        "submitted_id": "RK091",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "RK091",
+        "specimens": {
           "id": "SP99145",
-          "type": "Primary tumour - solid tissue",
-          "submitted_id": "RK091_C01",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "RK091_C01",
           "samples": {
             "id": "SA501653",
-            "submitted_id": "RK091_C01",
-            "type": "DNA"
+            "submitter_sample_id": "RK091_C01",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1171,14 +1171,13 @@
   },
   {
     "object_id": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "PACA-CA",
       "info": {},
@@ -1212,7 +1211,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1220,15 +1219,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1236,14 +1236,13 @@
   },
   {
     "object_id": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
-    "access": "controlled",
+    "file_type": "VCF",
+    "file_access": "controlled",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "PACA-CA",
       "info": {},
@@ -1277,7 +1276,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1285,15 +1284,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1301,14 +1301,13 @@
   },
   {
     "object_id": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1342,7 +1341,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1350,15 +1349,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1366,14 +1366,13 @@
   },
   {
     "object_id": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1407,7 +1406,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1415,15 +1414,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1431,14 +1431,13 @@
   },
   {
     "object_id": "432779b5-95db-5caf-a529-85a36a707c04",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1472,7 +1471,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1480,15 +1479,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1496,14 +1496,13 @@
   },
   {
     "object_id": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1537,7 +1536,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1545,15 +1544,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1561,14 +1561,13 @@
   },
   {
     "object_id": "3f571505-3bea-5065-956a-4b5a793ad1ed",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1602,7 +1601,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
       }
@@ -1610,15 +1609,16 @@
     "donors": [
       {
         "id": "DO51523",
-        "submitted_id": "PCSI_0233",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0233",
+        "specimens": {
           "id": "SP125730",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0233_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": {
             "id": "SA533729",
-            "submitted_id": "PCSI_0233_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0233_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1626,14 +1626,13 @@
   },
   {
     "object_id": "e122b153-c98b-530d-879a-11871a427d1b",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1667,7 +1666,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
       }
@@ -1675,15 +1674,16 @@
     "donors": [
       {
         "id": "DO51498",
-        "submitted_id": "PCSI_0450",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0450",
+        "specimens": {
           "id": "SP125791",
-          "type": "Primary tumour - other",
-          "submitted_id": "ASHPC_0022_Pa_P",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": {
             "id": "SA533758",
-            "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "submitter_sample_id": "ASHPC_0022_Pa_P",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1691,14 +1691,13 @@
   },
   {
     "object_id": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1732,7 +1731,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
       }
@@ -1740,15 +1739,16 @@
     "donors": [
       {
         "id": "DO51498",
-        "submitted_id": "PCSI_0450",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0450",
+        "specimens": {
           "id": "SP125791",
-          "type": "Primary tumour - other",
-          "submitted_id": "ASHPC_0022_Pa_P",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": {
             "id": "SA533758",
-            "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "submitter_sample_id": "ASHPC_0022_Pa_P",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1756,14 +1756,13 @@
   },
   {
     "object_id": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1797,7 +1796,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
       }
@@ -1805,15 +1804,16 @@
     "donors": [
       {
         "id": "DO51498",
-        "submitted_id": "PCSI_0450",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0450",
+        "specimens": {
           "id": "SP125791",
-          "type": "Primary tumour - other",
-          "submitted_id": "ASHPC_0022_Pa_P",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": {
             "id": "SA533758",
-            "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "submitter_sample_id": "ASHPC_0022_Pa_P",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1821,14 +1821,13 @@
   },
   {
     "object_id": "e704d3f5-1274-5cdd-924f-609159e121cc",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "916b5a92-cea6-11e5-af30-d4714d100685",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1862,7 +1861,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
       }
@@ -1870,15 +1869,16 @@
     "donors": [
       {
         "id": "DO51498",
-        "submitted_id": "PCSI_0450",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0450",
+        "specimens": {
           "id": "SP125791",
-          "type": "Primary tumour - other",
-          "submitted_id": "ASHPC_0022_Pa_P",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": {
             "id": "SA533758",
-            "submitted_id": "ASHPC_0022_Pa_P",
-            "type": "DNA"
+            "submitter_sample_id": "ASHPC_0022_Pa_P",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1886,14 +1886,13 @@
   },
   {
     "object_id": "9727c61d-3871-54f1-a65a-2d1d91acd242",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "PACA-CA",
     "analysis": {
-      "id": "b8e09611-225a-4de6-87dc-104753072252",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "b8e09611-225a-4de6-87dc-104753072252",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "PACA-CA",
@@ -1927,7 +1926,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/ca8479dc-8f00-5757-b433-c3cf5b76f255"
       }
@@ -1935,15 +1934,16 @@
     "donors": [
       {
         "id": "DO35442",
-        "submitted_id": "PCSI_0083",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "PCSI_0083",
+        "specimens": {
           "id": "SP125732",
-          "type": "Primary tumour - other",
-          "submitted_id": "PCSI_0083_Pa_P_526",
+          "specimen_type": "Primary tumour - other",
+          "submitter_specimen_id": "PCSI_0083_Pa_P_526",
           "samples": {
             "id": "SA520221",
-            "submitted_id": "PCSI_0083_Pa_P_526",
-            "type": "DNA"
+            "submitter_sample_id": "PCSI_0083_Pa_P_526",
+            "sample_type": "DNA"
           }
         }
       }
@@ -1951,14 +1951,13 @@
   },
   {
     "object_id": "316612a4-4c23-5434-976a-810f8cde06b7",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "MALY-DE",
     "analysis": {
-      "id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
       "study_id": "MALY-DE",
@@ -1992,7 +1991,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/95cbd8c1-1cb1-5c18-8c2d-6f54867d7b72"
       }
@@ -2000,15 +1999,16 @@
     "donors": [
       {
         "id": "DO221129",
-        "submitted_id": "4128852",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "4128852",
+        "specimens": {
           "id": "SP124981",
-          "type": "Primary tumour - lymph node",
-          "submitted_id": "tumor_4128852",
+          "specimen_type": "Primary tumour - lymph node",
+          "submitter_specimen_id": "tumor_4128852",
           "samples": {
             "id": "SA557689",
-            "submitted_id": "tumor_4128852",
-            "type": "DNA"
+            "submitter_sample_id": "tumor_4128852",
+            "sample_type": "DNA"
           }
         }
       }
@@ -2016,14 +2016,13 @@
   },
   {
     "object_id": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
-    "access": "controlled",
+    "file_access": "controlled",
+    "file_type": "VCF",
     "study_id": "MALY-DE",
     "analysis": {
-      "id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
-      "type": {
-        "name": "variantCall",
-        "version": 1
-      },
+      "analysis_id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
+      "analysis_type": "variantCall",
+      "analysis_version": "1",
       "state": "PUBLISHED",
       "study_id": "MALY-DE",
       "info": {},
@@ -2057,7 +2056,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "base_url": "##COLLAB_REPO_URL##",
+        "url": "##COLLAB_REPO_URL##",
         "data_path": "/oicr.icgc/data",
         "metadata_path": "/oicr.icgc.meta/metadata/46c2fec8-fd4a-5b62-8819-647bf23ac15c"
       }
@@ -2065,15 +2064,16 @@
     "donors": [
       {
         "id": "DO52662",
-        "submitted_id": "4166503",
-        "specimen": {
+        "gender": "Female",
+        "submitter_donor_id": "4166503",
+        "specimens": {
           "id": "SP116638",
-          "type": "Primary tumour - lymph node",
-          "submitted_id": "tumor_4166503",
+          "specimen_type": "Primary tumour - lymph node",
+          "submitter_specimen_id": "tumor_4166503",
           "samples": {
             "id": "SA542043",
-            "submitted_id": "tumor_4166503",
-            "type": "DNA"
+            "submitter_sample_id": "tumor_4166503",
+            "sample_type": "DNA"
           }
         }
       }

@@ -31,9 +31,9 @@ public class Specimen {
     @NonNull
     private String id;
     @NonNull
-    private String type;
+    private String specimenType;
     @NonNull
-    private String submittedId;
+    private String submitterSpecimenId;
     @NonNull
     private Sample samples;
     private String tumourNormalDesignation;

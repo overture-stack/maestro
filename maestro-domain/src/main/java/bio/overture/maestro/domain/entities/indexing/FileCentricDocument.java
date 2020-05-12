@@ -38,10 +38,11 @@ public class FileCentricDocument {
     private String objectId;
 
     @NonNull
-    private String access;
-
-    @NonNull
     private String studyId;
+
+    private String fileType;
+
+    private String fileAccess;
 
     @NonNull
     private FileCentricAnalysis analysis;
@@ -75,8 +76,9 @@ public class FileCentricDocument {
         if (fileCentricDocument == null) return false;
         if (this.equals(fileCentricDocument)) return true;
         return this.objectId.equals(fileCentricDocument.getObjectId())
-            && this.access.equals(fileCentricDocument.getAccess())
             && this.studyId.equals(fileCentricDocument.getStudyId())
+            && this.fileType.equals(fileCentricDocument.getFileType())
+            && this.fileAccess.equals(fileCentricDocument.getFileAccess())
             && this.donors.equals(fileCentricDocument.getDonors())
             && this.analysis.equals(fileCentricDocument.getAnalysis())
             && this.files.equals(fileCentricDocument.getFiles());

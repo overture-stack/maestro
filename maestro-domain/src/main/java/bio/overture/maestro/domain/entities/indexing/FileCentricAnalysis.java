@@ -35,16 +35,16 @@ import java.util.TreeMap;
 public class FileCentricAnalysis {
 
     @NonNull
-    private String id;
+    private String analysisId;
     @NonNull
-    private AnalysisType type;
+    private String analysisType;
+    @NonNull
+    private Integer analysisVersion;
     @NonNull
     private String state;
     @NonNull
-    private String studyId;
-    @NonNull
     private Map<String, Object> experiment;
-
+    private String studyId;
     /**
      * this field is to capture the dynamic fields in the analysis.
      * it's the responsibility of the users to make sure the mapping is consistent with
@@ -58,7 +58,6 @@ public class FileCentricAnalysis {
     public Map<String, Object> getData() {
         return data;
     }
-
 
     @JsonAnySetter
     public void setData(String key, Object value) {

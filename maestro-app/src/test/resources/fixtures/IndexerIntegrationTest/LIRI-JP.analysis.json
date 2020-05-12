@@ -24,7 +24,7 @@
           "donorId": "DO48736",
           "submitterDonorId": "RK202",
           "studyId": "LIRI-JP",
-          "gender": "female",
+          "gender": "Female",
           "info": {}
         }
       }
@@ -170,7 +170,7 @@
           "donorId": "DO23549",
           "submitterDonorId": "RK156",
           "studyId": "LIRI-JP",
-          "gender": "male",
+          "gender": "Female",
           "info": {}
         }
       }
@@ -389,7 +389,7 @@
           "donorId": "DO45211",
           "submitterDonorId": "RK091",
           "studyId": "LIRI-JP",
-          "gender": "male",
+          "gender": "Female",
           "info": {}
         }
       }

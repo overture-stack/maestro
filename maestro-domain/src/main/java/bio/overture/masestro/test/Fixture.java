@@ -19,6 +19,7 @@ package bio.overture.masestro.test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,10 +44,15 @@ public class Fixture {
     private final static String BASE_PATH = "fixtures" + File.separator;
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
-
     @SneakyThrows
     public static <T> T loadJsonFixture(Class clazz, String fileName, Class<T> targetClass) {
         return loadJsonFixture(clazz, fileName, targetClass, MAPPER);
+    }
+
+    @SneakyThrows
+    public static <T> T loadJsonFixtureSnakeCase(Class clazz, String fileName, Class<T> targetClass) {
+        ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        return loadJsonFixture(clazz, fileName, targetClass, mapper);
     }
 
     /**

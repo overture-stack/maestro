@@ -42,7 +42,7 @@ public class Repository {
     private String country;
 
     @NonNull
-    private String baseUrl;
+    private String url;
 
     @NonNull
     private String dataPath;

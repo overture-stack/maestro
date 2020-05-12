@@ -1,10 +1,12 @@
 {
   "object_id": "9ce9358d-c93a-5f83-8032-4addcb84b51a",
-  "access": "controlled",
+  "file_access": "controlled",
+  "file_type": "BAM",
   "study_id": "PEME-CA",
   "analysis": {
-    "id": "EGAZ00001254247",
-    "type": { "name": "sequencingRead", "version": 1 },
+    "analysis_id": "EGAZ00001254247",
+    "analysis_type": "sequencingRead",
+    "analysis_version": "1",
     "state": "PUBLISHED",
     "info": {
       "dcc_project_code": "PEME-CA",
@@ -41,7 +43,7 @@
       "name": "collaboratory",
       "type": "S3",
       "country": "CA",
-      "base_url": "##COLLAB_REPO_URL##",
+      "url": "##COLLAB_REPO_URL##",
       "data_path": "/oicr.icgc/data",
       "metadata_path": "/oicr.icgc.meta/metadata/464116e4-afc9-5879-b567-6f54513a32dc"
     },
@@ -51,7 +53,7 @@
       "name": "aws repo",
       "type": "S3",
       "country": "US",
-      "base_url": "##AWS_REPO_URL##",
+      "url": "##AWS_REPO_URL##",
       "data_path": "/oicr.icgc/data",
       "metadata_path": "/oicr.icgc.meta/metadata/464116e4-afc9-5879-b567-6f54513a32dc"
     }
@@ -59,15 +61,16 @@
   "donors": [
     {
       "id": "DO232959",
-      "submitted_id": "MDT-AP-0432",
-      "specimen": {
+      "gender" : "Female",
+      "submitter_donor_id": "MDT-AP-0432",
+      "specimens": {
         "id": "SP200947",
-        "type": "Normal - blood derived",
-        "submitted_id": "MDT-AP-0432_control_specimen",
+        "specimen_type": "Normal - blood derived",
+        "submitter_specimen_id": "MDT-AP-0432_control_specimen",
         "samples": {
           "id": "SA604905",
-          "submitted_id": "MDT-AP-0432_control",
-          "type": "DNA"
+          "submitter_sample_id": "MDT-AP-0432_control",
+          "sample_type": "DNA"
         }
       }
     }

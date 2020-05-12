@@ -145,7 +145,7 @@ class DefaultIndexer implements Indexer {
 
         Mono<Tuple2<List<Analysis>,  StudyAndRepository>> mono = prepareStudyAndRepo(command)
             .flatMap(studyAndRepository -> getFilteredAnalyses
-                (studyAndRepository.getStudyRepository().getBaseUrl(), studyAndRepository.getStudy().getStudyId())
+                (studyAndRepository.getStudyRepository().getUrl(), studyAndRepository.getStudy().getStudyId())
                     .map(analyses ->
                         new Tuple2<>(analyses, studyAndRepository)
                     ));
@@ -159,7 +159,7 @@ class DefaultIndexer implements Indexer {
         return Flux.merge(monos);
     }
 
-    public Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command,
+    private Mono<IndexResult> indexStudyToFileCentric(@NonNull IndexStudyCommand command,
                                                      @NonNull Mono<Tuple2<List<Analysis>,  StudyAndRepository>> tuple2) {
         log.trace("in indexStudyToFileCentric, args: {} ", command);
         return tuple2
@@ -170,7 +170,7 @@ class DefaultIndexer implements Indexer {
                 command.getRepositoryCode()));
     }
 
-    public Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command,
+    private Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command,
                                                          @NonNull Mono<Tuple2<List<Analysis>,  StudyAndRepository>> tuple2) {
         log.trace("in indexStudyToAnalysisCentric, args: {} ", command);
         return tuple2
@@ -183,7 +183,7 @@ class DefaultIndexer implements Indexer {
 
     @Override
     public Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command) {
-        log.trace("in indexStudyRepository, args: {} ", command);
+        log.trace("in indexRepository, args: {} ", command);
         return tryGetStudyRepository(command.getRepositoryCode())
             .flatMapMany(this :: getAllStudies)
             .flatMap(studyAndRepository ->
@@ -254,7 +254,7 @@ class DefaultIndexer implements Indexer {
 
     private Flux<StudyAndRepository> getAllStudies(StudyRepository studyRepository) {
         return this.studyDAO.getStudies(GetAllStudiesCommand.builder()
-            .filesRepositoryBaseUrl(studyRepository.getBaseUrl())
+            .filesRepositoryBaseUrl(studyRepository.getUrl())
             .build()
         ).onErrorMap((e) -> handleGetStudiesError(studyRepository, e))
         .map(study -> toStudyAndRepository(studyRepository, study));
@@ -284,36 +284,17 @@ class DefaultIndexer implements Indexer {
     }
 
     private StudyAndRepository toStudyAndRepositoryTuple(@NonNull IndexStudyCommand indexStudyCommand,
-                                                         StudyRepository filesRepository) {
+                                                         @NonNull StudyRepository filesRepository) {
         return StudyAndRepository.builder()
             .study(Study.builder().studyId(indexStudyCommand.getStudyId()).build())
             .studyRepository(filesRepository).build();
     }
 
-    private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
-        getFileDocuments(StudyAndRepository either) {
-
-        val studyId = either.getStudy().getStudyId();
-        val repoUrl = either.getStudyRepository().getBaseUrl();
-        return getFilteredAnalyses(repoUrl, studyId)
-            .map((analyses) -> buildFileCentricDocuments(either.getStudyRepository(), analyses));
+    private Mono<List<Analysis>> getFilteredAnalyses(@NonNull String repoBaseUrl, @NonNull String studyId) {
+        return fetchAnalyses(repoBaseUrl, studyId).flatMap(this :: getExclusionRulesAndFilter);
     }
 
-    private Mono<Tuple2<FailureData, List<AnalysisCentricDocument>>>
-        getAnalysisDocuments(StudyAndRepository either) {
-
-        val studyId = either.getStudy().getStudyId();
-        val repoUrl = either.getStudyRepository().getBaseUrl();
-        return getFilteredAnalyses(repoUrl, studyId)
-                .map((analyses -> buildAnalysisCentricDocuments(either.getStudyRepository(), analyses)));
-    }
-
-    private Mono<List<Analysis>> getFilteredAnalyses(String repoBaseUrl, String studyId) {
-        return fetchAnalyses(repoBaseUrl, studyId)
-            .flatMap(this :: getExclusionRulesAndFilter);
-    }
-
-    private Mono<List<Analysis>> fetchAnalyses(String studyRepositoryBaseUrl, String studyId) {
+    private Mono<List<Analysis>> fetchAnalyses(@NonNull String studyRepositoryBaseUrl, @NonNull String studyId) {
         val command = GetStudyAnalysesCommand.builder()
             .filesRepositoryBaseUrl(studyRepositoryBaseUrl)
             .studyId(studyId)
@@ -352,8 +333,7 @@ class DefaultIndexer implements Indexer {
     }
 
     private Mono<List<Analysis>> getAnalysisFromStudyRepository(StudyAnalysisRepositoryTuple tuple) {
-        return tryFetchAnalysis(tuple)
-                .flatMap(this :: getExclusionRulesAndFilter);
+        return tryFetchAnalysis(tuple).flatMap(this :: getExclusionRulesAndFilter);
     }
 
     private Mono<Tuple2<FailureData, List<FileCentricDocument>>>
@@ -371,7 +351,7 @@ class DefaultIndexer implements Indexer {
     private Mono<List<Analysis>> tryFetchAnalysis(StudyAnalysisRepositoryTuple tuple) {
         return this.studyDAO.getAnalysis(GetAnalysisCommand.builder()
             .analysisId(tuple.getAnalysisId())
-            .filesRepositoryBaseUrl(tuple.getStudyRepository().getBaseUrl())
+            .filesRepositoryBaseUrl(tuple.getStudyRepository().getUrl())
             .studyId(tuple.getStudy().getStudyId())
             .build()
         ).map(List::of)
@@ -483,8 +463,8 @@ class DefaultIndexer implements Indexer {
                 return Mono.just(conflictsCheckResult);
             })
             .map(conflictsCheckResult -> removeConflictingFromInputFilesList(files, conflictsCheckResult))
-            .flatMap(this::callBatchUpsert)
-            .doOnNext(this::notifyIndexRequestFailures)
+            .flatMap(this :: callBatchUpsert)
+            .doOnNext(this :: notifyIndexRequestFailures)
             .onErrorResume(
                 (ex) -> ex instanceof IndexerException,
                 (ex) -> Mono.just(IndexResult.builder()
@@ -510,8 +490,7 @@ class DefaultIndexer implements Indexer {
                 Objects.hashCode(analyses)));
     }
 
-        private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses,
-                                                  AnalysisAndExclusions analysisAndExclusions) {
+    private List<Analysis> filterExcludedAnalyses(List<Analysis> analyses, AnalysisAndExclusions analysisAndExclusions) {
         return analyses.stream()
             .filter(analysis -> !shouldExcludeAnalysis(analysis, analysisAndExclusions.getExclusionRulesMap()))
             .collect(Collectors.toList());
@@ -543,7 +522,7 @@ class DefaultIndexer implements Indexer {
     // if there is already a record in another song
     private Mono<Map<String, FileCentricDocument>> getAlreadyIndexed(List<FileCentricDocument> files) {
         return fileCentricIndexAdapter.fetchByIds(files.stream()
-            .map(FileCentricDocument::getObjectId)
+            .map(FileCentricDocument :: getObjectId)
             .collect(Collectors.toList())
         ).map((fetchResult) -> {
                 // we convert this list to a hash map to optimize performance for large lists when we lookup files by Ids
@@ -683,7 +662,7 @@ class DefaultIndexer implements Indexer {
         return FileConflict.builder()
             .newFile(ConflictingFile.builder()
                 .objectId(f1.getObjectId())
-                .analysisId(f1.getAnalysis().getId())
+                .analysisId(f1.getAnalysis().getAnalysisId())
                 .studyId(f1.getStudyId())
                 .repoCode(f1.getRepositories().stream()
                     .map(Repository::getCode)
@@ -691,7 +670,7 @@ class DefaultIndexer implements Indexer {
                 ).build()
             ).indexedFile(ConflictingFile.builder()
                 .objectId(f2.getObjectId())
-                .analysisId(f2.getAnalysis().getId())
+                .analysisId(f2.getAnalysis().getAnalysisId())
                 .studyId(f2.getStudyId())
                 .repoCode(f2.getRepositories().stream()
                     .map(Repository::getCode)
