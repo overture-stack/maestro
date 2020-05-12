@@ -99,7 +99,9 @@
           "analysis_version": {
             "type": "integer"
           },
-          "experiment": {}
+          "experiment": {
+            "type": "object"
+          }
         }
       },
       "data_type": {
