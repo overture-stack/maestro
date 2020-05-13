@@ -33,8 +33,8 @@ public class Sample {
     @NonNull
     private String id;
     @NonNull
-    private String submittedId;
+    private String submitterSampleId;
     @NonNull
-    private String type;
+    private String sampleType;
     private String matchedNormalSubmitterSampleId;
 }

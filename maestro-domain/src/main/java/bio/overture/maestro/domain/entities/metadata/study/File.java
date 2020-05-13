@@ -49,6 +49,7 @@ public class File {
     private String fileType;
     @NonNull
     private String fileMd5sum;
+    @NonNull
     private String fileAccess;
     private String dataType;
     private long fileSize;

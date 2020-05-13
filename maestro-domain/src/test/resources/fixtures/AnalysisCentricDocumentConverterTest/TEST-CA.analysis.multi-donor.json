@@ -1,0 +1,128 @@
+{
+  "analysisType": { "name": "sequencingRead", "version": 1 },
+  "info": {
+    "dcc_project_code": "TEST-CA",
+    "isPcawg": false
+  },
+  "analysisId": "EGAZ00001254368",
+  "studyId": "TEST-CA",
+  "analysisState": "PUBLISHED",
+  "samples": [
+    {
+      "info": {},
+      "sampleId": "SA1",
+      "specimenId": "SP1",
+      "submitterSampleId": "MDT-AP-0749_tumor",
+      "matchedNormalSubmitterSampleId": "PCSI_0216_St_R",
+      "sampleType": "DNA",
+      "specimen": {
+        "info": {},
+        "specimenId": "SP1",
+        "donorId": "DO1",
+        "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
+        "tumourNormalDesignation": "Tumour",
+        "specimenTissueSource": "Other",
+        "specimenType": "Primary tumour - solid tissue"
+      },
+      "donor": {
+        "donorId": "DO1",
+        "submitterDonorId": "MDT-AP-0749",
+        "studyId": "TEST-CA",
+        "gender": "female",
+        "info": {}
+      }
+    },
+    {
+      "info": {},
+      "sampleId": "SA2",
+      "specimenId": "SP2",
+      "submitterSampleId": "MDT-AP-0749_tumor",
+      "matchedNormalSubmitterSampleId": "PCSI_0216_St_R",
+      "sampleType": "DNA",
+      "specimen": {
+        "info": {},
+        "specimenId": "SP2",
+        "donorId": "DO1",
+        "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
+        "tumourNormalDesignation": "Tumour",
+        "specimenTissueSource": "Other",
+        "specimenType": "Primary tumour - solid tissue"
+      },
+      "donor": {
+        "donorId": "DO1",
+        "submitterDonorId": "MDT-AP-0749",
+        "studyId": "TEST-CA",
+        "gender": "female",
+        "info": {}
+      }
+    },
+    {
+      "info": {},
+      "sampleId": "SA3",
+      "specimenId": "SP3",
+      "submitterSampleId": "MDT-AP-0749_tumor",
+      "matchedNormalSubmitterSampleId": "PCSI_0216_St_R",
+      "sampleType": "DNA",
+      "specimen": {
+        "info": {},
+        "specimenId": "SP3",
+        "donorId": "DO2",
+        "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
+        "tumourNormalDesignation": "Tumour",
+        "specimenTissueSource": "Other",
+        "specimenType": "Primary tumour - solid tissue"
+      },
+      "donor": {
+        "donorId": "DO2",
+        "submitterDonorId": "MDT-AP-0749",
+        "studyId": "TEST-CA",
+        "gender": "female",
+        "info": {}
+      }
+    }
+  ],
+  "files": [
+    {
+      "info": {},
+      "objectId": "41ba4fb3-9428-50b5-af6c-d779cd59b04d",
+      "studyId": "TEST-CA",
+      "analysisId": "EGAZ00001254368",
+      "fileName": "bundle.EGAZ00001254368.xml",
+      "fileSize": 6342,
+      "fileType": "XML",
+      "fileMd5sum": "fb157ece007dc31b3d34add273efedcb",
+      "fileAccess": "open",
+      "dataType": "AlignedReads"
+    },
+    {
+      "info": {},
+      "objectId": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
+      "studyId": "TEST-CA",
+      "analysisId": "EGAZ00001254368",
+      "fileName": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
+      "fileSize": 8939816,
+      "fileType": "BAI",
+      "fileMd5sum": "e2a83668aa4cfe4f4048e75212d44f19",
+      "fileAccess": "controlled",
+      "dataType": "AlignedReads"
+    },
+    {
+      "info": {},
+      "objectId": "43d29864-6756-51f0-bb2a-ba7cff860778",
+      "studyId": "TEST-CA",
+      "analysisId": "EGAZ00001254368",
+      "fileName": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
+      "fileSize": 88906416144,
+      "fileType": "BAM",
+      "fileMd5sum": "29ff9df727803d20834b9997bc17e970",
+      "fileAccess": "controlled",
+      "dataType": "AlignedReads"
+    }
+  ],
+  "experiment": {
+    "analysisId": "EGAZ00001254368",
+    "aligned": true,
+    "libraryStrategy": "WGS",
+    "info": {}
+  }
+}

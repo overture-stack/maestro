@@ -60,7 +60,6 @@ public class Analysis {
     @NonNull
     private String studyId;
 
-
     /**
      * multiple files belong to an analysis, files can be related (bam, bai, xml)
      */
@@ -81,6 +80,9 @@ public class Analysis {
      */
     private Map<String, Object> experiment;
 
+    /**
+     * data represents song dynamic fields.
+     */
     @NonNull private final Map<String, Object> data = new TreeMap<>();
 
     @JsonAnyGetter

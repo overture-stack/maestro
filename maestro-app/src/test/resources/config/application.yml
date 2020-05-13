@@ -18,6 +18,11 @@ maestro:
       fileCentric:
         name: file_centric_1.0
         alias: file_centric
+        enabled: true
+      analysisCentric:
+        name: analysis_centric_1.0
+        alias: analysis_centric
+        enabled: false
     # port injected by the embedded_elasticsearch library
     clusterNodes:
       - ${embedded.elasticsearch.host}:${embedded.elasticsearch.httpPort}

@@ -59,7 +59,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
         val repository = repositories.stream()
             .filter(propertiesFileRepository -> propertiesFileRepository.getCode().equalsIgnoreCase(code))
             .distinct()
-            .map(this::toFilesRepository)
+            .map(this :: toFilesRepository)
             .findFirst()
             .orElse(null);
         if (repository == null) {
@@ -73,7 +73,7 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
         log.trace("Converting : {} to StudyRepository ", propertiesFileRepository);
         return StudyRepository.builder()
             .code(propertiesFileRepository.getCode())
-            .baseUrl(propertiesFileRepository.getUrl())
+            .url(propertiesFileRepository.getUrl())
             .name(propertiesFileRepository.getName())
             .dataPath(propertiesFileRepository.getDataPath())
             .metadataPath(propertiesFileRepository.getMetadataPath())

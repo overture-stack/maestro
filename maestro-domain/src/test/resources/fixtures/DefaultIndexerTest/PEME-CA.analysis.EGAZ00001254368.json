@@ -19,14 +19,13 @@
         "specimenId": "SP201301",
         "donorId": "DO232978",
         "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
-
         "specimenType": "Primary tumour - solid tissue"
       },
       "donor": {
         "donorId": "DO232978",
         "submitterDonorId": "MDT-AP-0749",
         "studyId": "PEME-CA",
-        "gender": "female",
+        "gender": "Female",
         "info": {}
       }
     }

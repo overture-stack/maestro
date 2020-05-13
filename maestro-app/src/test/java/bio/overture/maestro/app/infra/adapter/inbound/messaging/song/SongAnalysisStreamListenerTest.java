@@ -31,6 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.support.GenericMessage;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -58,16 +59,17 @@ class SongAnalysisStreamListenerTest {
     void shouldIndexOnAnalysisPublishedMessage() throws Exception {
         val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
             "\"songServerId\": \"collab\", \"state\": \"PUBLISHED\" }";
-        when(indexer.indexAnalysis(any())).thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
+        when(indexer.indexAnalysis(any())).thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
         sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
         Thread.sleep(2000);
-        then(indexer).should(times(1)).indexAnalysis(eq(IndexAnalysisCommand.builder()
-            .analysisIdentifier(AnalysisIdentifier.builder()
-                .studyId("PEME-CA")
-                .analysisId("EGAZ00001254368")
-                .repositoryCode("collab")
-                .build())
-            .build()
+        then(indexer).should(times(1))
+            .indexAnalysis(eq(IndexAnalysisCommand.builder()
+                .analysisIdentifier(AnalysisIdentifier.builder()
+                    .studyId("PEME-CA")
+                    .analysisId("EGAZ00001254368")
+                    .repositoryCode("collab")
+                    .build())
+                .build()
             )
         );
     }

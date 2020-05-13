@@ -79,13 +79,25 @@
           "file_autocomplete"
         ]
       },
+      "file_type": {
+        "type": "keyword"
+      },
+      "file_access": {
+        "type": "keyword"
+      },
       "analysis" : {
         "properties" : {
-          "id" : {
+          "analysis_id" : {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"
             ]
+          },
+          "analysis_type": {
+            "type": "keyword"
+          },
+          "analysis_version": {
+            "type": "integer"
           },
           "experiment": {
             "type": "object"
@@ -93,9 +105,6 @@
         }
       },
       "data_type": {
-        "type": "keyword"
-      },
-      "access": {
         "type": "keyword"
       },
       "files": {
@@ -170,13 +179,16 @@
               "file_autocomplete"
             ]
           },
-          "submitted_id": {
+          "gender": {
+            "type": "keyword"
+          },
+          "submitter_donor_id": {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"
             ]
           },
-          "specimen": {
+          "specimens": {
             "type": "nested",
             "properties": {
               "id": {
@@ -185,17 +197,20 @@
                   "file_autocomplete"
                 ]
               },
-              "submitted_id": {
+              "submitter_specimen_id": {
                 "type": "keyword",
                 "copy_to": [
                   "file_autocomplete"
                 ]
               },
-              "type": {
-                "type": "keyword",
-                "copy_to": [
-                  "file_autocomplete"
-                ]
+              "tumour_normal_designation": {
+                "type": "keyword"
+              },
+              "specimen_tissue_source": {
+                "type": "keyword"
+              },
+              "specimen_type": {
+                "type": "keyword"
               },
               "samples": {
                 "type": "nested",
@@ -206,13 +221,16 @@
                       "file_autocomplete"
                     ]
                   },
-                  "submitted_id": {
+                  "submitter_sample_id": {
                     "type": "keyword",
                     "copy_to": [
                       "file_autocomplete"
                     ]
                   },
-                  "type": {
+                  "sample_type": {
+                    "type": "keyword"
+                  },
+                  "matched_normal_submitter_sample_id": {
                     "type": "keyword",
                     "copy_to": [
                       "file_autocomplete"
@@ -237,6 +255,9 @@
             "type": "keyword"
           },
           "country": {
+            "type": "keyword"
+          },
+          "url": {
             "type": "keyword"
           }
         }

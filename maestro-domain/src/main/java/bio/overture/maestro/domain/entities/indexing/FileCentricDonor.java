@@ -30,8 +30,11 @@ public class FileCentricDonor {
     private String id;
 
     @NonNull
-    private String submittedId;
+    private String gender;
 
     @NonNull
-    private Specimen specimen;
+    private String submitterDonorId;
+
+    @NonNull
+    private Specimen specimens;
 }

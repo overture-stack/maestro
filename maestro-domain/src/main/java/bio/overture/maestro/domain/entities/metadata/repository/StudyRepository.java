@@ -54,7 +54,7 @@ public class StudyRepository {
      * based url of the host of this repository metadata
      */
     @NonNull
-    private String baseUrl;
+    private String url;
 
     /**
      * url path to access the files in the object store

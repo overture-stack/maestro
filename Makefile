@@ -70,7 +70,7 @@ rest-index-repo:
 ###################
 ## KAFKA
 ###################
-## the curl requests here run agains the kafka rest proxy
+## the curl requests here run against the kafka rest proxy
 ## SONG analysis topic
 kafka-analysis-publish:
 	curl -X POST \
@@ -118,7 +118,7 @@ kafka-index-analysis:
 	-H 'cache-control: no-cache' \
 	-d '{
 	"records": [
-			{"value" : { "repositoryCode" : "collab", "studyId" : "PEME-CA", "analysisId" : "EGAZ00001254247", "remove": false }	}
+			{"value" : { "repositoryCode" : "collab", "studyId" : "PEME-CA", "analysisId" : "EGAZ00001254247", "removeAnalysis": false }	}
 		]
 	}'
 

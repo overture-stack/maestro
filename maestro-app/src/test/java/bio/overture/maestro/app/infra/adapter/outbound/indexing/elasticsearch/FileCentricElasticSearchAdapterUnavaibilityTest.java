@@ -72,14 +72,16 @@ class FileCentricElasticSearchAdapterUnavaibilityTest {
     @Test
     void shouldRetryUpsertOnIOException() throws IOException {
         // given
-        val files = Arrays.asList(Fixture.loadJsonFixture(
+        val files = Arrays.asList(Fixture.loadJsonFixtureSnakeCase(
             this.getClass(), "PEME-CA.files.json", FileCentricDocument[].class));
 
-        val expectedResult = IndexResult.builder().failureData(
-            FailureData.builder()
-                .failingIds(Map.of("analysisId", Set.of("EGAZ00001254368")))
+        val expectedResult = IndexResult.builder()
+                .indexName("file_centric")
+                .failureData(
+                    FailureData.builder()
+                    .failingIds(Map.of("analysisId", Set.of("EGAZ00001254368")))
                 .build()
-        ).successful(false)
+         ).successful(false)
         .build();
 
         // when

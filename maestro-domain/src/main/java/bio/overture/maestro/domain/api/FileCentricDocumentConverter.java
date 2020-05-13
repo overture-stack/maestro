@@ -25,7 +25,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -68,7 +67,7 @@ final class FileCentricDocumentConverter {
      *
      * @param file a files as represented from the source in the analysis
      */
-    private static  FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
+    private static FileCentricDocument buildFileDocument(bio.overture.maestro.domain.entities.metadata.study.File file,
                                                           Analysis analysis,
                                                           StudyRepository repository) {
         val id = file.getObjectId();
@@ -76,15 +75,13 @@ final class FileCentricDocumentConverter {
         val repoFileBuilder = FileCentricDocument.builder()
             .objectId(id)
             .studyId(file.getStudyId())
-            .access(file.getFileAccess())
+            .fileType(file.getFileType())
+            .fileAccess(file.getFileAccess())
             .analysis(FileCentricAnalysis.builder()
-                .id(analysis.getAnalysisId())
+                .analysisId(analysis.getAnalysisId())
                 .state(analysis.getAnalysisState())
-                .type(AnalysisType.builder()
-                    .name(analysis.getAnalysisType().getName())
-                    .version(analysis.getAnalysisType().getVersion())
-                    .build()
-                )
+                .analysisType(analysis.getAnalysisType().getName())
+                .analysisVersion(analysis.getAnalysisType().getVersion())
                 .studyId(analysis.getStudyId())
                 .experiment(analysis.getExperiment())
                 .build()
@@ -96,7 +93,7 @@ final class FileCentricDocumentConverter {
                 .name(repository.getName())
                 .code(repository.getCode())
                 .country(repository.getCountry())
-                .baseUrl(repository.getBaseUrl())
+                .url(repository.getUrl())
                 .dataPath(repository.getDataPath())
                 .metadataPath(repository.getMetadataPath() + "/" + metadataFileId)
                 .build()))
@@ -123,7 +120,7 @@ final class FileCentricDocumentConverter {
     /**
      * extract metadata files if any
      */
-    private static String getMetadataFileId(Analysis analysis) {
+     static String getMetadataFileId(Analysis analysis) {
         val xmlFile = analysis.getFiles()
             .stream()
             .filter(f -> isXMLFile(f.getFileName()))
@@ -186,22 +183,24 @@ final class FileCentricDocumentConverter {
         val specimen = sample.getSpecimen();
         return FileCentricDonor.builder()
             .id(donor.getDonorId())
-            .specimen(Specimen.builder()
-                .type(specimen.getSpecimenType())
+            .gender(donor.getGender())
+            .specimens(Specimen.builder()
+                .specimenTissueSource(specimen.getSpecimenType())
                 .id(specimen.getSpecimenId())
-                .submittedId(specimen.getSubmitterSpecimenId())
+                .submitterSpecimenId(specimen.getSubmitterSpecimenId())
                 .tumourNormalDesignation(specimen.getTumourNormalDesignation())
                 .specimenTissueSource(specimen.getSpecimenTissueSource())
+                .specimenType(specimen.getSpecimenType())
                 .samples(Sample.builder()
                     .id(sample.getSampleId())
-                    .submittedId(sample.getSubmitterSampleId())
-                    .type(sample.getSampleType())
+                    .submitterSampleId(sample.getSubmitterSampleId())
+                    .sampleType(sample.getSampleType())
                     .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
                     .build()
                 )
                 .build()
             )
-            .submittedId(donor.getSubmitterDonorId())
+            .submitterDonorId(donor.getSubmitterDonorId())
             .build();
     }
 

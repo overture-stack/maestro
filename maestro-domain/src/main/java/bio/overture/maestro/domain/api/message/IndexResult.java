@@ -27,7 +27,7 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class IndexResult {
-    @Builder.Default
-    private FailureData failureData = FailureData.builder().build();
+    private String indexName;
+    @Builder.Default private FailureData failureData = FailureData.builder().build();
     private boolean successful;
 }
