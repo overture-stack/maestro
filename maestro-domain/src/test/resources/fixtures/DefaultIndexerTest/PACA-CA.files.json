@@ -10,7 +10,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -73,7 +72,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -136,7 +134,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -199,7 +196,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -262,7 +258,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -325,7 +320,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -388,7 +382,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -451,7 +444,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -514,7 +506,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -577,7 +568,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -640,7 +630,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -703,7 +692,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
         "variantCallingTool": "PCAWG InDel callers",

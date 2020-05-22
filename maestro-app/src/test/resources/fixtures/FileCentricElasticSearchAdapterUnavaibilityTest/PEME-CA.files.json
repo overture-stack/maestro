@@ -10,7 +10,6 @@
       "analysis_type": "sequencingRead",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PEME-CA",
       "experiment": {
         "analysisId": "EGAZ00001254368",
         "aligned": true,

@@ -10,7 +10,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "MALY-DE",
       "experiment": {
         "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
         "variantCallingTool": "MUSE variant call pipeline",
@@ -73,7 +72,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "MALY-DE",
       "experiment": {
         "analysisId": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
         "variantCallingTool": " PCAWG SNV-MNV callers",
@@ -136,7 +134,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "MALY-DE",
       "experiment": {
         "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
         "variantCallingTool": "PCAWG InDel callers",

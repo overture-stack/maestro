@@ -9,7 +9,6 @@
     "analysis_type": "sequencingRead",
     "analysis_version": "1",
     "state": "PUBLISHED",
-    "study_id": "PEME-CA",
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false

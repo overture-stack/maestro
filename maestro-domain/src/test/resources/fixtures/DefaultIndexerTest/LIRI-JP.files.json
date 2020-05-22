@@ -10,7 +10,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -73,7 +72,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -136,7 +134,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -199,7 +196,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -262,7 +258,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -325,7 +320,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -388,7 +382,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -451,7 +444,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -514,7 +506,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -577,7 +568,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -640,7 +630,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
         "variantCallingTool": "Broad variant call pipeline",
@@ -703,7 +692,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -766,7 +754,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -829,7 +816,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -892,7 +878,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -955,7 +940,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1018,7 +1002,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1081,7 +1064,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",

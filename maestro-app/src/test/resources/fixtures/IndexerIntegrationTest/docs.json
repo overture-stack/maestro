@@ -10,7 +10,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -74,7 +73,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -138,7 +136,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -202,7 +199,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -266,7 +262,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -330,7 +325,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -394,7 +388,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "info": {},
@@ -458,7 +451,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -522,7 +514,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -586,7 +577,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -650,7 +640,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -714,7 +703,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "LIRI-JP",
       "info": {},
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -779,7 +767,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -843,7 +830,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "info": {},
@@ -907,7 +893,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -971,7 +956,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1035,7 +1019,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "info": {},
@@ -1099,7 +1082,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "LIRI-JP",
       "experiment": {
         "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
         "variantCallingTool": "Broad variant call pipeline",
@@ -1162,7 +1144,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "info": {},
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1226,7 +1207,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "PACA-CA",
       "info": {},
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1291,7 +1271,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -1355,7 +1334,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "info": {},
@@ -1419,7 +1397,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
@@ -1483,7 +1460,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "info": {},
@@ -1547,7 +1523,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "info": {},
@@ -1611,7 +1586,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "info": {},
@@ -1675,7 +1649,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "info": {},
@@ -1739,7 +1712,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -1803,7 +1775,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
@@ -1867,7 +1838,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "PACA-CA",
       "experiment": {
         "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
         "info": {},
@@ -1931,7 +1901,6 @@
       "analysis_version": "1",
       "state": "PUBLISHED",
       "info": {},
-      "study_id": "MALY-DE",
       "experiment": {
         "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
         "variantCallingTool": "MUSE variant call pipeline",
@@ -1994,7 +1963,6 @@
       "analysis_type": "variantCall",
       "analysis_version": "1",
       "state": "PUBLISHED",
-      "study_id": "MALY-DE",
       "info": {},
       "experiment": {
         "analysisId": "327c74cd-ee0b-4885-bafd-741e17b8b163",
