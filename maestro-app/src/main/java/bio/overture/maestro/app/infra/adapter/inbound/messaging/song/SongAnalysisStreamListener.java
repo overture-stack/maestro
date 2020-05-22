@@ -17,6 +17,7 @@
 
 package bio.overture.maestro.app.infra.adapter.inbound.messaging.song;
 
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
 import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
@@ -25,10 +26,13 @@ import bio.overture.maestro.domain.api.message.RemoveAnalysisCommand;
 import io.vavr.Tuple2;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
 
@@ -36,12 +40,12 @@ import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMess
 @EnableBinding(SongAnalysisSink.class)
 public class SongAnalysisStreamListener {
 
-    private static final String PUBLISHED = "PUBLISHED";
-
     private Indexer indexer;
+    private final List<String> indexableStudyStatuses;
 
-    public SongAnalysisStreamListener(Indexer indexer) {
+    public SongAnalysisStreamListener(Indexer indexer, ApplicationProperties properties) {
         this.indexer = indexer;
+        this.indexableStudyStatuses = List.of(properties.indexableStudyStatuses().split(","));
     }
 
     @StreamListener(SongAnalysisSink.NAME)
@@ -53,7 +57,7 @@ public class SongAnalysisStreamListener {
     private Flux<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
         Flux<IndexResult> result;
         try {
-            if (msg.getState().equals(PUBLISHED)) {
+            if (this.indexableStudyStatuses.contains(msg.getState())) {
                 result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
                     .analysisIdentifier(AnalysisIdentifier.builder()
                         .repositoryCode(msg.getSongServerId())
@@ -61,7 +65,7 @@ public class SongAnalysisStreamListener {
                         .analysisId(msg.getAnalysisId())
                         .build())
                     .build());
-            } else { // UNPUBLISHED, SUPPRESSED
+            } else {
                 val mono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
                     .analysisIdentifier(AnalysisIdentifier.builder()
                         .analysisId(msg.getAnalysisId())

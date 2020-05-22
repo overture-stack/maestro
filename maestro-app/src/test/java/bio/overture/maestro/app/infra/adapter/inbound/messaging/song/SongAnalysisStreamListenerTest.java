@@ -18,6 +18,7 @@
 package bio.overture.maestro.app.infra.adapter.inbound.messaging.song;
 
 import bio.overture.maestro.app.infra.adapter.inbound.messaging.MessagingConfig;
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
 import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
@@ -29,16 +30,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.support.GenericMessage;
+import org.springframework.test.context.ContextConfiguration;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /*
  * This test is based on : https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_testing
@@ -47,6 +50,7 @@ import static org.mockito.Mockito.when;
  * However this test does serve the purpose of testing the listener
  */
 @SpringBootTest(classes = {SongAnalysisStreamListenerTest.MockApplication.class})
+@ContextConfiguration(classes = {SongAnalysisStreamListenerTest.Config.class})
 class SongAnalysisStreamListenerTest {
 
     @MockBean
@@ -75,9 +79,28 @@ class SongAnalysisStreamListenerTest {
     }
 
     @Test
-    void shouldRemoveOnAnalysisSuppressedMessage() throws Exception {
-        val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
+    void shouldAddOnAnalysisSuppressedMessage() throws Exception {
+        val analysisSuppressedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
             "\"songServerId\": \"collab\", \"state\": \"SUPPRESSED\" }";
+        when(indexer.indexAnalysis(any())).thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
+        sink.songInput().send(new GenericMessage<>(analysisSuppressedMessage));
+        Thread.sleep(2000);
+        then(indexer).should(times(1))
+            .indexAnalysis(eq(IndexAnalysisCommand.builder()
+                    .analysisIdentifier(AnalysisIdentifier.builder()
+                        .studyId("PEME-CA")
+                        .analysisId("EGAZ00001254368")
+                        .repositoryCode("collab")
+                        .build())
+                    .build()
+                )
+            );
+    }
+
+    @Test
+    void shouldRemoveOnAnalysisUnpublishedMessage() throws Exception {
+        val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
+            "\"songServerId\": \"collab\", \"state\": \"UNPUBLISHED\" }";
         when(indexer.removeAnalysis(any())).thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
         sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
         Thread.sleep(2000);
@@ -99,4 +122,14 @@ class SongAnalysisStreamListenerTest {
     @SpringBootApplication
     @Import({MessagingConfig.class})
     static class MockApplication { }
+
+    @Configuration
+    static class Config {
+        @Bean
+        ApplicationProperties properties() {
+            ApplicationProperties properties = mock(ApplicationProperties.class);
+            when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED,SUPPRESSED");
+            return properties;
+        }
+    }
 }
