@@ -3,6 +3,7 @@
     "object_id": "b63dff38-e239-5a5d-9c36-ec851049fd12",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -16,7 +17,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "93354882b0fc014b49be1b24df8f435e",
@@ -39,9 +40,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -67,6 +66,7 @@
     "object_id": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -80,7 +80,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
@@ -103,9 +103,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -131,6 +129,7 @@
     "object_id": "3106300b-3666-52b7-a3fa-a5096a51814b",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -144,7 +143,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "492989e81699bd5a56b7956e0be7416d",
@@ -167,9 +166,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -195,6 +192,7 @@
     "object_id": "bed33bd4-eec1-5905-8480-5def36d7f6de",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -208,7 +206,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
@@ -231,9 +229,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -259,6 +255,7 @@
     "object_id": "24329157-e218-5854-8f45-7fa6b9e046c6",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -272,7 +269,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "7d0676c6a85696e1cb2919836b0ab71e",
@@ -295,9 +292,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -323,6 +318,7 @@
     "object_id": "4d070189-bd33-5391-b7af-ea32c6782875",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -336,7 +332,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
@@ -359,9 +355,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -387,6 +381,7 @@
     "object_id": "107c83c7-595e-5b36-957b-ae706611d5b9",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -400,7 +395,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
@@ -423,9 +418,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -451,6 +444,7 @@
     "object_id": "da524891-37af-5a21-9867-c6812018aa22",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -464,7 +458,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
@@ -487,9 +481,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -515,6 +507,7 @@
     "object_id": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -528,7 +521,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
@@ -551,9 +544,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -579,6 +570,7 @@
     "object_id": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -592,7 +584,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
@@ -615,9 +607,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -643,6 +633,7 @@
     "object_id": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -656,7 +647,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
@@ -679,9 +670,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -707,6 +696,7 @@
     "object_id": "316177db-022d-5121-aba8-ce72a92ee778",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -720,7 +710,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "33b96c263be31852de8d5d15775561c9",
@@ -743,9 +733,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -771,6 +759,7 @@
     "object_id": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -784,7 +773,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
@@ -807,9 +796,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -835,6 +822,7 @@
     "object_id": "5c222a32-a79d-55e0-a490-440217c63393",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -848,7 +836,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
@@ -871,9 +859,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -899,6 +885,7 @@
     "object_id": "2af2e398-c27b-5645-b60b-b932a916184d",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -912,7 +899,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
@@ -935,9 +922,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -963,6 +948,7 @@
     "object_id": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -976,7 +962,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
@@ -999,9 +985,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -1027,6 +1011,7 @@
     "object_id": "60307755-185e-536e-aa3b-190fb9934844",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -1040,7 +1025,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
@@ -1063,9 +1048,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -1091,6 +1074,7 @@
     "object_id": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -1104,7 +1088,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
@@ -1127,9 +1111,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [

@@ -554,10 +554,8 @@ class DefaultIndexerTest {
             .url("http://song.sing.sung")
             .code("TEST-REPO")
             .country("CA")
-            .dataPath("/p1/p2")
             .organization("org")
             .storageType(StorageType.S3)
-            .metadataPath("/m1/m2")
             .build();
     }
 

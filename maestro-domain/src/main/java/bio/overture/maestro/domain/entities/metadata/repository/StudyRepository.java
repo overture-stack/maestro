@@ -57,17 +57,6 @@ public class StudyRepository {
     private String url;
 
     /**
-     * url path to access the files in the object store
-     */
-    @NonNull
-    private String dataPath;
-
-    /**
-     * url path to access metadata about the files.
-     */
-    private String metadataPath;
-
-    /**
      * the block storage type of files (s3 usually)
      */
     @NonNull

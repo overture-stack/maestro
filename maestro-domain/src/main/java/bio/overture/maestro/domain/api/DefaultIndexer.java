@@ -665,7 +665,7 @@ class DefaultIndexer implements Indexer {
                 .analysisId(f1.getAnalysis().getAnalysisId())
                 .studyId(f1.getStudyId())
                 .repoCode(f1.getRepositories().stream()
-                    .map(Repository::getCode)
+                    .map(Repository :: getCode)
                     .collect(Collectors.toUnmodifiableSet())
                 ).build()
             ).indexedFile(ConflictingFile.builder()
@@ -673,7 +673,7 @@ class DefaultIndexer implements Indexer {
                 .analysisId(f2.getAnalysis().getAnalysisId())
                 .studyId(f2.getStudyId())
                 .repoCode(f2.getRepositories().stream()
-                    .map(Repository::getCode)
+                    .map(Repository :: getCode)
                     .collect(Collectors.toUnmodifiableSet())
                 ).build()
             ).build();

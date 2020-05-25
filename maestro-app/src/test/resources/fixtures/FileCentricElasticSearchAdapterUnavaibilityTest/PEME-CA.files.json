@@ -3,6 +3,7 @@
     "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
     "file_access": "controlled",
     "file_type": "BAM",
+    "data_type": "AlignedReads",
     "study_id": "PEME-CA",
     "analysis": {
       "analysis_id": "EGAZ00001254368",
@@ -16,7 +17,7 @@
         "libraryStrategy": "WGS"
       }
     },
-    "files": {
+    "file": {
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
       "format": "BAM",
       "md5sum": "29ff9df727803d20834b9997bc17e970",
@@ -37,9 +38,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [

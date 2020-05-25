@@ -3,6 +3,7 @@
     "object_id": "b63dff38-e239-5a5d-9c36-ec851049fd12",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -18,7 +19,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "93354882b0fc014b49be1b24df8f435e",
@@ -41,9 +42,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -68,6 +67,7 @@
     "object_id": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -83,7 +83,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
@@ -106,9 +106,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -133,6 +131,7 @@
     "object_id": "3106300b-3666-52b7-a3fa-a5096a51814b",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -148,7 +147,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "492989e81699bd5a56b7956e0be7416d",
@@ -171,9 +170,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -198,6 +195,7 @@
     "object_id": "bed33bd4-eec1-5905-8480-5def36d7f6de",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "909614f0-ceeb-11e5-8498-af7e4d100685",
@@ -213,7 +211,7 @@
         "matchedNormalSampleSubmitterId": "RK202_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
@@ -236,9 +234,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/233bc863-114c-5ec4-842b-7f44d189eab0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -263,6 +259,7 @@
     "object_id": "24329157-e218-5854-8f45-7fa6b9e046c6",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -278,7 +275,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "7d0676c6a85696e1cb2919836b0ab71e",
@@ -301,9 +298,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -328,6 +323,7 @@
     "object_id": "4d070189-bd33-5391-b7af-ea32c6782875",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -343,7 +339,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
@@ -366,9 +362,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -393,6 +387,7 @@
     "object_id": "107c83c7-595e-5b36-957b-ae706611d5b9",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -408,7 +403,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
@@ -431,9 +426,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -458,6 +451,7 @@
     "object_id": "da524891-37af-5a21-9867-c6812018aa22",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -473,7 +467,7 @@
         "info": {}
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
@@ -496,9 +490,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -523,6 +515,7 @@
     "object_id": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -538,7 +531,7 @@
         "info": {}
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
@@ -561,9 +554,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -588,6 +579,7 @@
     "object_id": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -603,7 +595,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
@@ -626,9 +618,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -653,6 +643,7 @@
     "object_id": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
@@ -668,7 +659,7 @@
         "matchedNormalSampleSubmitterId": "RK156_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
@@ -691,9 +682,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bd7aa748-d781-523e-99dc-cb7e3469ddc6"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -718,6 +707,7 @@
     "object_id": "316177db-022d-5121-aba8-ce72a92ee778",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -733,7 +723,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "33b96c263be31852de8d5d15775561c9",
@@ -756,9 +746,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -783,6 +771,7 @@
     "object_id": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -798,7 +787,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
@@ -821,9 +810,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -848,6 +835,7 @@
     "object_id": "5c222a32-a79d-55e0-a490-440217c63393",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -863,7 +851,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
@@ -886,9 +874,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -913,6 +899,7 @@
     "object_id": "2af2e398-c27b-5645-b60b-b932a916184d",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -928,7 +915,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
@@ -951,9 +938,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -978,6 +963,7 @@
     "object_id": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -993,7 +979,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
@@ -1016,9 +1002,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1043,6 +1027,7 @@
     "object_id": "60307755-185e-536e-aa3b-190fb9934844",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -1058,7 +1043,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
@@ -1081,9 +1066,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1108,6 +1091,7 @@
     "object_id": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "LIRI-JP",
     "analysis": {
       "analysis_id": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
@@ -1123,7 +1107,7 @@
         "matchedNormalSampleSubmitterId": "RK091_B01"
       }
     },
-    "files": {
+    "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
@@ -1146,9 +1130,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/8d8a4db8-071d-5385-9266-06e93ca029d0"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1173,6 +1155,7 @@
     "object_id": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1188,7 +1171,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "14ded2a7342f9124421ace5aa920510d",
@@ -1211,9 +1194,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1238,6 +1219,7 @@
     "object_id": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
     "file_type": "VCF",
     "file_access": "controlled",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1253,7 +1235,7 @@
         "info": {}
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
@@ -1276,9 +1258,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1303,6 +1283,7 @@
     "object_id": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1318,7 +1299,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
@@ -1341,9 +1322,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1368,6 +1347,7 @@
     "object_id": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1383,7 +1363,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
@@ -1406,9 +1386,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1433,6 +1411,7 @@
     "object_id": "432779b5-95db-5caf-a529-85a36a707c04",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1448,7 +1427,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "93b219c94687e12b5fda564399fa3319",
@@ -1471,9 +1450,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1498,6 +1475,7 @@
     "object_id": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1513,7 +1491,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "6ebd4aa8a821da40955d7fcb879be82a",
@@ -1536,9 +1514,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1563,6 +1539,7 @@
     "object_id": "3f571505-3bea-5065-956a-4b5a793ad1ed",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
@@ -1578,7 +1555,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "f3a99bd737b3b416aa34e131b939b2a0",
@@ -1601,9 +1578,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1628,6 +1603,7 @@
     "object_id": "e122b153-c98b-530d-879a-11871a427d1b",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -1643,7 +1619,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
@@ -1666,9 +1642,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1693,6 +1667,7 @@
     "object_id": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -1708,7 +1683,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
       "format": "VCF",
       "md5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
@@ -1731,9 +1706,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1758,6 +1731,7 @@
     "object_id": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -1773,7 +1747,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
       "format": "VCF",
       "md5sum": "bafebb1c613c348c696dc8f940ce1039",
@@ -1796,9 +1770,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1823,6 +1795,7 @@
     "object_id": "e704d3f5-1274-5cdd-924f-609159e121cc",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
@@ -1838,7 +1811,7 @@
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "37ee70b282788eb0660f7d965f355898",
@@ -1861,9 +1834,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1888,6 +1859,7 @@
     "object_id": "9727c61d-3871-54f1-a65a-2d1d91acd242",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "b8e09611-225a-4de6-87dc-104753072252",
@@ -1903,7 +1875,7 @@
         "matchedNormalSampleSubmitterId": "PCSI_0083_Du_R"
       }
     },
-    "files": {
+    "file": {
       "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "01e54034c70b85812e9aac58f2525594",
@@ -1926,9 +1898,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/ca8479dc-8f00-5757-b433-c3cf5b76f255"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -1953,6 +1923,7 @@
     "object_id": "316612a4-4c23-5434-976a-810f8cde06b7",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "MALY-DE",
     "analysis": {
       "analysis_id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
@@ -1968,7 +1939,7 @@
         "matchedNormalSampleSubmitterId": "control_4128852"
       }
     },
-    "files": {
+    "file": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "f83b0f9099e8594b589440819ab119cd",
@@ -1991,9 +1962,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/95cbd8c1-1cb1-5c18-8c2d-6f54867d7b72"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [
@@ -2018,6 +1987,7 @@
     "object_id": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "MALY-DE",
     "analysis": {
       "analysis_id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
@@ -2033,7 +2003,7 @@
         "matchedNormalSampleSubmitterId": "control_4166503"
       }
     },
-    "files": {
+    "file": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
@@ -2056,9 +2026,7 @@
         "name": "collaboratory",
         "type": "S3",
         "country": "CA",
-        "url": "##COLLAB_REPO_URL##",
-        "data_path": "/oicr.icgc/data",
-        "metadata_path": "/oicr.icgc.meta/metadata/46c2fec8-fd4a-5b62-8819-647bf23ac15c"
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
     "donors": [

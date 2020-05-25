@@ -75,8 +75,6 @@ class PropertyFileStudyRepositoryDAO implements StudyRepositoryDAO {
             .code(propertiesFileRepository.getCode())
             .url(propertiesFileRepository.getUrl())
             .name(propertiesFileRepository.getName())
-            .dataPath(propertiesFileRepository.getDataPath())
-            .metadataPath(propertiesFileRepository.getMetadataPath())
             .organization(propertiesFileRepository.getOrganization())
             .country(propertiesFileRepository.getCountry())
             .storageType(propertiesFileRepository.getStorageType())

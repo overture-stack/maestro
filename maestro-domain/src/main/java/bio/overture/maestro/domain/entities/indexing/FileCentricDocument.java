@@ -40,6 +40,8 @@ public class FileCentricDocument {
     @NonNull
     private String studyId;
 
+    private String dataType;
+
     private String fileType;
 
     private String fileAccess;
@@ -51,7 +53,7 @@ public class FileCentricDocument {
      * The actual genome analysis files information.
      */
     @NonNull
-    private File files;
+    private File file;
 
     /**
      * Each files can be hosted in more than one files repository, this references the other repositories (locations)
@@ -77,11 +79,12 @@ public class FileCentricDocument {
         if (this.equals(fileCentricDocument)) return true;
         return this.objectId.equals(fileCentricDocument.getObjectId())
             && this.studyId.equals(fileCentricDocument.getStudyId())
+            && this.dataType.equals(fileCentricDocument.getDataType())
             && this.fileType.equals(fileCentricDocument.getFileType())
             && this.fileAccess.equals(fileCentricDocument.getFileAccess())
             && this.donors.equals(fileCentricDocument.getDonors())
             && this.analysis.equals(fileCentricDocument.getAnalysis())
-            && this.files.equals(fileCentricDocument.getFiles());
+            && this.file.equals(fileCentricDocument.getFile());
     }
 }
 
