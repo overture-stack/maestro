@@ -53,83 +53,93 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {SongAnalysisStreamListenerTest.Config.class})
 class SongAnalysisStreamListenerTest {
 
-    @MockBean
-    private Indexer indexer;
+  @Autowired SongAnalysisSink sink;
+  @MockBean private Indexer indexer;
 
-    @Autowired
-    SongAnalysisSink sink;
+  @Test
+  void shouldIndexOnAnalysisPublishedMessage() throws Exception {
+    val analysisPublishedMessage =
+        "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", "
+            + "\"songServerId\": \"collab\", \"state\": \"PUBLISHED\" }";
+    when(indexer.indexAnalysis(any()))
+        .thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
+    sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
+    Thread.sleep(2000);
+    then(indexer)
+        .should(times(1))
+        .indexAnalysis(
+            eq(
+                IndexAnalysisCommand.builder()
+                    .analysisIdentifier(
+                        AnalysisIdentifier.builder()
+                            .studyId("PEME-CA")
+                            .analysisId("EGAZ00001254368")
+                            .repositoryCode("collab")
+                            .build())
+                    .build()));
+  }
 
-    @Test
-    void shouldIndexOnAnalysisPublishedMessage() throws Exception {
-        val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
-            "\"songServerId\": \"collab\", \"state\": \"PUBLISHED\" }";
-        when(indexer.indexAnalysis(any())).thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
-        sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
-        Thread.sleep(2000);
-        then(indexer).should(times(1))
-            .indexAnalysis(eq(IndexAnalysisCommand.builder()
-                .analysisIdentifier(AnalysisIdentifier.builder()
-                    .studyId("PEME-CA")
-                    .analysisId("EGAZ00001254368")
-                    .repositoryCode("collab")
-                    .build())
-                .build()
-            )
-        );
+  @Test
+  void shouldAddOnAnalysisSuppressedMessage() throws Exception {
+    val analysisSuppressedMessage =
+        "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", "
+            + "\"songServerId\": \"collab\", \"state\": \"SUPPRESSED\" }";
+    when(indexer.indexAnalysis(any()))
+        .thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
+    sink.songInput().send(new GenericMessage<>(analysisSuppressedMessage));
+    Thread.sleep(2000);
+    then(indexer)
+        .should(times(1))
+        .indexAnalysis(
+            eq(
+                IndexAnalysisCommand.builder()
+                    .analysisIdentifier(
+                        AnalysisIdentifier.builder()
+                            .studyId("PEME-CA")
+                            .analysisId("EGAZ00001254368")
+                            .repositoryCode("collab")
+                            .build())
+                    .build()));
+  }
+
+  @Test
+  void shouldRemoveOnAnalysisUnpublishedMessage() throws Exception {
+    val analysisPublishedMessage =
+        "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", "
+            + "\"songServerId\": \"collab\", \"state\": \"UNPUBLISHED\" }";
+    when(indexer.removeAnalysis(any()))
+        .thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
+    sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
+    Thread.sleep(2000);
+    then(indexer)
+        .should(times(1))
+        .removeAnalysis(
+            eq(
+                RemoveAnalysisCommand.builder()
+                    .analysisIdentifier(
+                        AnalysisIdentifier.builder()
+                            .studyId("PEME-CA")
+                            .analysisId("EGAZ00001254368")
+                            .repositoryCode("collab")
+                            .build())
+                    .build()));
+  }
+
+  /*
+   * This is needed or you will get :
+   * org.springframework.integration.MessageDispatchingException: Dispatcher has no subscribers
+   */
+  @SpringBootApplication
+  @Import({MessagingConfig.class})
+  static class MockApplication {}
+
+  @Configuration
+  static class Config {
+    @Bean
+    ApplicationProperties properties() {
+      ApplicationProperties properties = mock(ApplicationProperties.class);
+      when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED,SUPPRESSED");
+      return properties;
     }
-
-    @Test
-    void shouldAddOnAnalysisSuppressedMessage() throws Exception {
-        val analysisSuppressedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
-            "\"songServerId\": \"collab\", \"state\": \"SUPPRESSED\" }";
-        when(indexer.indexAnalysis(any())).thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
-        sink.songInput().send(new GenericMessage<>(analysisSuppressedMessage));
-        Thread.sleep(2000);
-        then(indexer).should(times(1))
-            .indexAnalysis(eq(IndexAnalysisCommand.builder()
-                    .analysisIdentifier(AnalysisIdentifier.builder()
-                        .studyId("PEME-CA")
-                        .analysisId("EGAZ00001254368")
-                        .repositoryCode("collab")
-                        .build())
-                    .build()
-                )
-            );
-    }
-
-    @Test
-    void shouldRemoveOnAnalysisUnpublishedMessage() throws Exception {
-        val analysisPublishedMessage = "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", " +
-            "\"songServerId\": \"collab\", \"state\": \"UNPUBLISHED\" }";
-        when(indexer.removeAnalysis(any())).thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
-        sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
-        Thread.sleep(2000);
-        then(indexer).should(times(1)).removeAnalysis(eq(RemoveAnalysisCommand.builder()
-                .analysisIdentifier(AnalysisIdentifier.builder()
-                    .studyId("PEME-CA")
-                    .analysisId("EGAZ00001254368")
-                    .repositoryCode("collab")
-                    .build())
-                .build()
-            )
-        );
-    }
-
-    /*
-     * This is needed or you will get :
-     * org.springframework.integration.MessageDispatchingException: Dispatcher has no subscribers
-     */
-    @SpringBootApplication
-    @Import({MessagingConfig.class})
-    static class MockApplication { }
-
-    @Configuration
-    static class Config {
-        @Bean
-        ApplicationProperties properties() {
-            ApplicationProperties properties = mock(ApplicationProperties.class);
-            when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED,SUPPRESSED");
-            return properties;
-        }
-    }
+  }
 }
