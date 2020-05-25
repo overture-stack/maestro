@@ -79,7 +79,7 @@ final class FileCentricDocumentConverter {
             .fileAccess(file.getFileAccess())
             .analysis(FileCentricAnalysis.builder()
                 .analysisId(analysis.getAnalysisId())
-                .state(analysis.getAnalysisState())
+                .analysisState(analysis.getAnalysisState())
                 .analysisType(analysis.getAnalysisType().getName())
                 .analysisVersion(analysis.getAnalysisType().getVersion())
                 .experiment(analysis.getExperiment())
