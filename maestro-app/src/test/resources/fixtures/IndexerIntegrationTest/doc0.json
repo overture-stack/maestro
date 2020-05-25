@@ -6,9 +6,9 @@
   "study_id": "PEME-CA",
   "analysis": {
     "analysis_id": "EGAZ00001254368",
+    "analysis_state": "PUBLISHED",
     "analysis_type": "sequencingRead",
     "analysis_version": "1",
-    "state": "PUBLISHED",
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
@@ -49,7 +49,7 @@
   "donors": [
     {
       "id": "DO232978",
-      "gender" : "Female",
+      "gender": "Female",
       "submitter_donor_id": "MDT-AP-0749",
       "specimens": {
         "id": "SP201301",

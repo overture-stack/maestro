@@ -9,7 +9,7 @@
       "analysis_id": "EGAZ00001254368",
       "analysis_type" : "sequencingRead",
       "analysis_version" : 1,
-      "state" : "PUBLISHED",
+      "analysis_state" : "PUBLISHED",
       "experiment": {
         "analysisId": "EGAZ00001254368",
         "aligned": true,
