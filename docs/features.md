@@ -13,9 +13,9 @@ As an example, you can see in the `repositories` section of the following docume
       "access": "controlled",
       "study": "ABCD-CA",
       "analysis": {
-        "id": "EGAZ",
-        "type": "sequencingRead",
-        "state": "PUBLISHED",
+        "analysis_id": "EGAZ",
+        "analysis_type": "sequencingRead",
+        "analysis_state": "PUBLISHED",
         "study": "ABCD-CA",
         "experiment": {
           "analysisId": "EGAZ",
