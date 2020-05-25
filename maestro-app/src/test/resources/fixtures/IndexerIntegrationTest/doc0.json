@@ -1,8 +1,8 @@
 {
   "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
-  "file_type" : "BAM",
   "file_access": "controlled",
   "file_type": "BAM",
+  "data_type": "AlignedReads",
   "study_id": "PEME-CA",
   "analysis": {
     "analysis_id": "EGAZ00001254368",
@@ -21,7 +21,7 @@
       "info": {}
     }
   },
-  "files": {
+  "file": {
     "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
     "format": "BAM",
     "md5sum": "29ff9df727803d20834b9997bc17e970",
@@ -44,9 +44,7 @@
       "name": "collaboratory",
       "type": "S3",
       "country": "CA",
-      "url": "##COLLAB_REPO_URL##",
-      "data_path": "/oicr.icgc/data",
-      "metadata_path": "/oicr.icgc.meta/metadata/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
+      "url": "##COLLAB_REPO_URL##"
     }
   ],
   "donors": [

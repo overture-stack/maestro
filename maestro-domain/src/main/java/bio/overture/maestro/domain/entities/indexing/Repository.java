@@ -43,10 +43,4 @@ public class Repository {
 
     @NonNull
     private String url;
-
-    @NonNull
-    private String dataPath;
-
-    @NonNull
-    private String metadataPath;
 }

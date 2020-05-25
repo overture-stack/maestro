@@ -40,7 +40,7 @@
   },
   "mappings": {
     "dynamic": false,
-    "date_detection":false,
+    "date_detection": false,
     "properties": {
       "file_autocomplete": {
         "fields": {
@@ -67,11 +67,9 @@
           "file_autocomplete"
         ]
       },
-      "dataset": {
+      "data_type": {
         "type": "keyword",
-        "copy_to": [
-          "file_autocomplete"
-        ]
+        "copy_to": ["file_autocomplete"]
       },
       "object_id": {
         "type": "keyword",
@@ -104,10 +102,7 @@
           }
         }
       },
-      "data_type": {
-        "type": "keyword"
-      },
-      "files": {
+      "file": {
         "properties": {
           "id": {
             "type": "keyword"

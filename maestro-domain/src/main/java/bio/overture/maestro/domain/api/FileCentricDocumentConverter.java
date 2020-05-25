@@ -71,10 +71,10 @@ final class FileCentricDocumentConverter {
                                                           Analysis analysis,
                                                           StudyRepository repository) {
         val id = file.getObjectId();
-        val metadataFileId = getMetadataFileId(analysis);
         val repoFileBuilder = FileCentricDocument.builder()
             .objectId(id)
             .studyId(file.getStudyId())
+            .dataType(file.getDataType())
             .fileType(file.getFileType())
             .fileAccess(file.getFileAccess())
             .analysis(FileCentricAnalysis.builder()
@@ -86,7 +86,7 @@ final class FileCentricDocumentConverter {
                 .experiment(analysis.getExperiment())
                 .build()
             )
-            .files(buildGenomeFileInfo(analysis, file))
+            .file(buildGenomeFileInfo(analysis, file))
             .repositories(List.of(Repository.builder()
                 .type(repository.getStorageType().name().toUpperCase())
                 .organization(repository.getOrganization())
@@ -94,8 +94,6 @@ final class FileCentricDocumentConverter {
                 .code(repository.getCode())
                 .country(repository.getCountry())
                 .url(repository.getUrl())
-                .dataPath(repository.getDataPath())
-                .metadataPath(repository.getMetadataPath() + "/" + metadataFileId)
                 .build()))
             .donors(getDonors(analysis));
         val repoFile = repoFileBuilder.build();

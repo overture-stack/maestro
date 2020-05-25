@@ -3,6 +3,7 @@
     "object_id": "316612a4-4c23-5434-976a-810f8cde06b7",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "MALY-DE",
     "analysis": {
       "analysis_id": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",
@@ -16,7 +17,7 @@
         "matchedNormalSampleSubmitterId": "control_4128852"
       }
     },
-    "files": {
+    "file": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "f83b0f9099e8594b589440819ab119cd",
@@ -39,9 +40,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/95cbd8c1-1cb1-5c18-8c2d-6f54867d7b72"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -67,6 +66,7 @@
     "object_id": "0bafbb56-728e-5e6c-bb87-88e7bb789dab",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "MALY-DE",
     "analysis": {
       "analysis_id": "64e6f498-20ae-4c59-a5f5-36b18f81bd99",
@@ -80,7 +80,7 @@
         "matchedNormalSampleSubmitterId": "control_4113191"
       }
     },
-    "files": {
+    "file": {
       "name": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz",
       "format": "VCF",
       "md5sum": "02b4602861de0a5529e42d3e66eaa2a6",
@@ -103,9 +103,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/5d360754-ee81-581f-9b51-dfdd24f7a8d2"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
@@ -131,6 +129,7 @@
     "object_id": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "MALY-DE",
     "analysis": {
       "analysis_id": "327c74cd-ee0b-4885-bafd-741e17b8b163",
@@ -144,7 +143,7 @@
         "matchedNormalSampleSubmitterId": "control_4166503"
       }
     },
-    "files": {
+    "file": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
       "format": "VCF",
       "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
@@ -167,9 +166,7 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/46c2fec8-fd4a-5b62-8819-647bf23ac15c"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [

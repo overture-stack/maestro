@@ -28,7 +28,6 @@ final class AnalysisCentricDocumentConverter {
   }
 
   static AnalysisCentricDocument convertAnalysis(Analysis analysis, StudyRepository repository){
-    val metadataFileId = getMetadataFileId(analysis);
     val doc = AnalysisCentricDocument.builder()
             .analysisId(analysis.getAnalysisId())
             .analysisState(analysis.getAnalysisState())
@@ -43,8 +42,6 @@ final class AnalysisCentricDocumentConverter {
                     .code(repository.getCode())
                     .country(repository.getCountry())
                     .url(repository.getUrl())
-                    .dataPath(repository.getDataPath())
-                    .metadataPath(repository.getMetadataPath() + "/" + metadataFileId)
                     .build()))
             .experiment(analysis.getExperiment())
             .files(buildAnalysisCentricFiles(analysis.getFiles()))
