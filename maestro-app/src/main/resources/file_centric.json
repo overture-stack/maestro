@@ -3,8 +3,8 @@
     "file_centric": {}
   },
   "settings": {
-    "index.number_of_shards" : 11,
-    "index.max_result_window":300000,
+    "index.number_of_shards": 11,
+    "index.max_result_window": 300000,
     "analysis": {
       "analyzer": {
         "autocomplete_analyzed": {
@@ -83,13 +83,16 @@
       "file_access": {
         "type": "keyword"
       },
-      "analysis" : {
-        "properties" : {
-          "analysis_id" : {
+      "analysis": {
+        "properties": {
+          "analysis_id": {
             "type": "keyword",
             "copy_to": [
               "file_autocomplete"
             ]
+          },
+          "analysis_state": {
+            "type": "keyword"
           },
           "analysis_type": {
             "type": "keyword"
