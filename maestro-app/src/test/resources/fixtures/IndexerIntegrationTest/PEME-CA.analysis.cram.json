@@ -1,0 +1,74 @@
+{
+  "analysisType": {
+    "name": "sequencingRead",
+    "version": 1
+  },
+  "info": {
+    "dcc_project_code": "PEME-CA",
+    "isPcawg": false
+  },
+  "analysisId": "EGAZ00001254369",
+  "studyId": "PEME-CA",
+  "analysisState": "PUBLISHED",
+  "samples": [
+    {
+      "sampleId": "SA604924",
+      "specimenId": "SP201301",
+      "submitterSampleId": "MDT-AP-0749_tumor",
+      "sampleType": "DNA",
+      "specimen": {
+        "specimenId": "SP201301",
+        "donorId": "DO232978",
+        "submitterSpecimenId": "MDT-AP-0749_tumor_specimen",
+        "specimenType": "Primary tumour - solid tissue"
+      },
+      "donor": {
+        "donorId": "DO232978",
+        "submitterDonorId": "MDT-AP-0749",
+        "studyId": "PEME-CA",
+        "gender": "Female"
+      }
+    }
+  ],
+  "files": [
+    {
+      "objectId": "3286edf3-31a9-42a3-8141-36c3ad713488",
+      "studyId": "PEME-CA",
+      "analysisId": "EGAZ00001254369",
+      "fileName": "bundle.EGAZ00001254369.xml",
+      "fileSize": 6342,
+      "fileType": "XML",
+      "fileMd5sum": "fb157ece007dc31b3d34add273efedcb",
+      "fileAccess": "open",
+      "dataType": "AlignedReads"
+    },
+    {
+      "objectId": "fbf3e6da-3e1e-45f7-994c-970530365d40",
+      "studyId": "PEME-CA",
+      "analysisId": "EGAZ00001254369",
+      "fileName": "f5b822cfd81b4b9bbadfbd9b67f4ac4d.tumor_MDT-AP-0749_merged.mdup.cram.crai",
+      "fileSize": 8939816,
+      "fileType": "CRAI",
+      "fileMd5sum": "e2a83668aa4cfe4f4048e75212d44f19",
+      "fileAccess": "controlled",
+      "dataType": "AlignedReads"
+    },
+    {
+      "objectId": "1e576567-9b70-4038-8580-88047f2e157f",
+      "studyId": "PEME-CA",
+      "analysisId": "EGAZ00001254369",
+      "fileName": "f5b822cfd81b4b9bbadfbd9b67f4ac4d.tumor_MDT-AP-0749_merged.mdup.cram",
+      "fileSize": 88906416144,
+      "fileType": "CRAM",
+      "fileMd5sum": "f5b822cfd81b4b9bbadfbd9b67f4ac4d",
+      "fileAccess": "controlled",
+      "dataType": "AlignedReads"
+    }
+  ],
+  "experiment": {
+    "analysisId": "EGAZ00001254369",
+    "aligned": true,
+    "libraryStrategy": "WGS",
+    "info": {}
+  }
+}
