@@ -6,6 +6,7 @@ maestro:
     # -1 = unlimited memory size
     maxInMemorySize: -1
   song:
+    indexableStudyStatus: PUBLISHED
     maxRetries: 3
     timeoutSec:
         study: 100 # some studies take really long, +30 secs, to be downloaded

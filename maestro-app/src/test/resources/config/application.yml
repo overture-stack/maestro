@@ -9,6 +9,7 @@ maestro:
       donor:
         - DO52693
   song:
+    indexableStudyStatus: PUBLISHED
     maxRetries: 3
     timeoutSec:
       study: 5
