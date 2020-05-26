@@ -201,14 +201,14 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     @Test
     void shouldIndexCRAMAnalysis() throws InterruptedException, IOException {
         // Given
-        val analyses = loadJsonString(this.getClass(), "PEME-CA.analysis.cram.json");
-        val expectedDoc3 = loadJsonFixture(this.getClass(),
-            "doc3.json",
+        val analyses = loadJsonString(this.getClass(), "CRAM-TEST.analysis.json");
+        val expectedDoc = loadJsonFixture(this.getClass(),
+            "cram.doc0.json",
             FileCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
-        stubFor(request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254369"))
+        stubFor(request("GET", urlEqualTo("/collab/studies/CRAM-TEST/analysis/EGAZ00001254369"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withBody(analyses)
@@ -220,7 +220,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         val result = indexer.indexAnalysisToFileCentric(IndexAnalysisCommand.builder()
             .analysisIdentifier(AnalysisIdentifier.builder()
                 .analysisId("EGAZ00001254369")
-                .studyId("PEME-CA")
+                .studyId("CRAM-TEST")
                 .repositoryCode("collab")
                 .build()
             ).build());
@@ -236,7 +236,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
         assertNotNull(docs);
         assertEquals(1L, docs.size());
-        assertEquals(expectedDoc3, docs.get(0));
+        assertEquals(expectedDoc, docs.get(0));
     }
 
     @Test

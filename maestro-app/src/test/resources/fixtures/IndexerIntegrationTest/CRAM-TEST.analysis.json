@@ -4,11 +4,11 @@
     "version": 1
   },
   "info": {
-    "dcc_project_code": "PEME-CA",
+    "dcc_project_code": "CRAM-TEST",
     "isPcawg": false
   },
   "analysisId": "EGAZ00001254369",
-  "studyId": "PEME-CA",
+  "studyId": "CRAM-TEST",
   "analysisState": "PUBLISHED",
   "samples": [
     {
@@ -25,7 +25,7 @@
       "donor": {
         "donorId": "DO232978",
         "submitterDonorId": "MDT-AP-0749",
-        "studyId": "PEME-CA",
+        "studyId": "CRAM-TEST",
         "gender": "Female"
       }
     }
@@ -33,7 +33,7 @@
   "files": [
     {
       "objectId": "3286edf3-31a9-42a3-8141-36c3ad713488",
-      "studyId": "PEME-CA",
+      "studyId": "CRAM-TEST",
       "analysisId": "EGAZ00001254369",
       "fileName": "bundle.EGAZ00001254369.xml",
       "fileSize": 6342,
@@ -44,7 +44,7 @@
     },
     {
       "objectId": "fbf3e6da-3e1e-45f7-994c-970530365d40",
-      "studyId": "PEME-CA",
+      "studyId": "CRAM-TEST",
       "analysisId": "EGAZ00001254369",
       "fileName": "f5b822cfd81b4b9bbadfbd9b67f4ac4d.tumor_MDT-AP-0749_merged.mdup.cram.crai",
       "fileSize": 8939816,
@@ -55,7 +55,7 @@
     },
     {
       "objectId": "1e576567-9b70-4038-8580-88047f2e157f",
-      "studyId": "PEME-CA",
+      "studyId": "CRAM-TEST",
       "analysisId": "EGAZ00001254369",
       "fileName": "f5b822cfd81b4b9bbadfbd9b67f4ac4d.tumor_MDT-AP-0749_merged.mdup.cram",
       "fileSize": 88906416144,
