@@ -8,12 +8,11 @@
     "analysis_id": "EGAZ00001254247",
     "analysis_type": "sequencingRead",
     "analysis_version": "1",
-    "state": "PUBLISHED",
+    "analysis_state": "PUBLISHED",
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
     },
-    "study_id": "PEME-CA",
     "experiment": {
       "analysisId": "EGAZ00001254247",
       "aligned": true,

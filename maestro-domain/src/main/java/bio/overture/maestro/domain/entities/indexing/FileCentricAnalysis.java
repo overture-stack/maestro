@@ -41,10 +41,9 @@ public class FileCentricAnalysis {
     @NonNull
     private Integer analysisVersion;
     @NonNull
-    private String state;
+    private String analysisState;
     @NonNull
     private Map<String, Object> experiment;
-    private String studyId;
     /**
      * this field is to capture the dynamic fields in the analysis.
      * it's the responsibility of the users to make sure the mapping is consistent with
