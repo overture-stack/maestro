@@ -20,12 +20,8 @@ package bio.overture.masestro.test;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.experimental.UtilityClass;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -41,12 +37,17 @@ import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToS
 @UtilityClass
 public class Fixture {
 
+    private final static String FIXTURE_PATH = "src/test/resources/";
     private final static String BASE_PATH = "fixtures" + File.separator;
     private final static ObjectMapper MAPPER = new ObjectMapper();
 
     @SneakyThrows
     public static <T> T loadJsonFixture(Class clazz, String fileName, Class<T> targetClass) {
         return loadJsonFixture(clazz, fileName, targetClass, MAPPER);
+    }
+
+    public static <T> T loadConverterTestFixture(String fileName, Class<T> targetClass) {
+        return readConverterFixture(fileName, targetClass, MAPPER);
     }
 
     @SneakyThrows
@@ -115,6 +116,11 @@ public class Fixture {
     public static <T> T loadJsonFixture(Class clazz, String fileName, TypeReference<T> targetClass, ObjectMapper customMapper) {
         String json = loadJsonString(clazz, fileName);
         return customMapper.readValue(json, targetClass);
+    }
+
+    @SneakyThrows
+    public static<T> T readConverterFixture(String fileName, Class<T> targetClass, ObjectMapper customMapper) {
+        return customMapper.readValue(new File( FIXTURE_PATH + BASE_PATH + "DocumentConverterTest" + File.separator + fileName), targetClass);
     }
 
     public static String loadJsonString(Class clazz, String fileName) throws IOException {
