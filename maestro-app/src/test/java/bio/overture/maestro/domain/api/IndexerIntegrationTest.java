@@ -199,6 +199,47 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     }
 
     @Test
+    void shouldIndexCRAMAnalysis() throws InterruptedException, IOException {
+        // Given
+        val analyses = loadJsonString(this.getClass(), "CRAM-TEST.analysis.json");
+        val expectedDoc = loadJsonFixture(this.getClass(),
+            "cram.doc0.json",
+            FileCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+
+        stubFor(request("GET", urlEqualTo("/collab/studies/CRAM-TEST/analysis/EGAZ00001254369"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withBody(analyses)
+                .withHeader("Content-Type", "application/json")
+            )
+        );
+
+        // test
+        val result = indexer.indexAnalysisToFileCentric(IndexAnalysisCommand.builder()
+            .analysisIdentifier(AnalysisIdentifier.builder()
+                .analysisId("EGAZ00001254369")
+                .studyId("CRAM-TEST")
+                .repositoryCode("collab")
+                .build()
+            ).build());
+
+        StepVerifier.create(result)
+            .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
+            .verifyComplete();
+
+        Thread.sleep(sleepMillis);
+
+        // assertions
+        val docs = getFileCentricDocuments();
+
+        assertNotNull(docs);
+        assertEquals(1L, docs.size());
+        assertEquals(expectedDoc, docs.get(0));
+    }
+
+    @Test
     void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException, IOException {
         // Given
         val studiesArray = loadJsonFixture(this.getClass(), "studies.json", String[].class);
