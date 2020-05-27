@@ -47,17 +47,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -109,17 +109,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -171,17 +171,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -233,17 +233,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -295,17 +295,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -357,17 +357,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -419,17 +419,17 @@
         "id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
+        "specimens": [{
           "id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -481,17 +481,17 @@
         "id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
+        "specimens": [{
           "id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
+          "samples": [{
             "id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -543,17 +543,17 @@
         "id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
+        "specimens": [{
           "id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
+          "samples": [{
             "id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -605,17 +605,17 @@
         "id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
+        "specimens": [{
           "id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
+          "samples": [{
             "id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -667,17 +667,17 @@
         "id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
+        "specimens": [{
           "id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
+          "samples": [{
             "id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -729,17 +729,17 @@
         "id": "DO35442",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0083",
-        "specimens": {
+        "specimens": [{
           "id": "SP125732",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0083_Pa_P_526",
-          "samples": {
+          "samples": [{
             "id": "SA520221",
             "submitter_sample_id": "PCSI_0083_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   }

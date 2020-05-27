@@ -13,10 +13,10 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static bio.overture.maestro.domain.api.FileCentricDocumentConverter.getMetadataFileId;
 import static bio.overture.maestro.domain.api.exception.NotFoundException.checkNotFound;
 
 @Slf4j
@@ -80,19 +80,57 @@ final class AnalysisCentricDocumentConverter {
     checkNotFound(anyDonor.getSpecimens() != null && anyDonor.getSpecimens().size() > 0,
             "Failed to merge AnalysisCentricDonor by specimen: donor doesn't have specimen,");
 
+    //  Each donor has only one specimen in the list
     val specimenList = list.stream()
-            // One donor only has one specimen in list
             .map(analysisCentricDonor -> analysisCentricDonor.getSpecimens().get(0))
             .collect(Collectors.toList());
+
+    val specimenMap = specimenList.stream()
+              .collect(
+                  Collectors.groupingBy(bio.overture.maestro.domain.entities.indexing.Specimen :: getId, Collectors.toList()));
+
+    val specimens = specimenMap.values()
+        .stream()
+        .collect(Collectors.toList())
+        .stream()
+        .map(speList -> groupSpecimensBySample(speList))
+        .collect(Collectors.toList());
 
     return AnalysisCentricDonor.builder()
             .id(anyDonor.getId())
             .submitterDonorId(anyDonor.getSubmitterDonorId())
             .gender(anyDonor.getGender())
-            .specimens(specimenList)
+            .specimens(specimens)
             .build();
   }
 
+  public static bio.overture.maestro.domain.entities.indexing.Specimen groupSpecimensBySample(@NonNull List<bio.overture.maestro.domain.entities.indexing.Specimen> list){
+    checkNotFound(list.size() > 0,
+        "Failed to merge Specimen by Sample: Specimen list is empty.");
+
+    val samples = new ArrayList<bio.overture.maestro.domain.entities.indexing.Sample>();
+    list.stream().forEach(specimen -> samples.addAll(specimen.getSamples()));
+    val specimen = list.get(0);
+
+    // if there is more than one sample in the list, merge samples under one specimen
+    if(list.size() > 1) {
+      return bio.overture.maestro.domain.entities.indexing.Specimen.builder()
+          .samples(samples)
+          .id(specimen.getId())
+          .specimenType(specimen.getSpecimenType())
+          .tumourNormalDesignation(specimen.getTumourNormalDesignation())
+          .specimenTissueSource(specimen.getSpecimenTissueSource())
+          .submitterSpecimenId(specimen.getSubmitterSpecimenId())
+          .build();
+    } else return specimen;
+  }
+
+  /**
+   * Converts song metadata sample to AnalysisCentricDonor,
+   * each song Sample has one donor and one specimen.
+   * @param sample song metadata Sample object
+   * @return converted AnalysisCentricDonor object
+   */
   private static AnalysisCentricDonor extractDonor(@NonNull Sample sample){
     val donor = sample.getDonor();
     val specimen = sample.getSpecimen();
@@ -110,7 +148,7 @@ final class AnalysisCentricDocumentConverter {
    * @param sample
    * @return
    */
-  private static List<bio.overture.maestro.domain.entities.indexing.Specimen> buildSpecimen(@NonNull Specimen specimen,
+  public static List<bio.overture.maestro.domain.entities.indexing.Specimen> buildSpecimen(@NonNull Specimen specimen,
                                                                                             @NonNull Sample sample){
     return List.of(bio.overture.maestro.domain.entities.indexing.Specimen.builder()
             .id(specimen.getSpecimenId())
@@ -118,12 +156,13 @@ final class AnalysisCentricDocumentConverter {
             .specimenType(specimen.getSpecimenType())
             .specimenTissueSource(specimen.getSpecimenTissueSource())
             .tumourNormalDesignation(specimen.getTumourNormalDesignation())
-            .samples(bio.overture.maestro.domain.entities.indexing.Sample.builder()
+            .samples(List.of(
+                bio.overture.maestro.domain.entities.indexing.Sample.builder()
                 .id(sample.getSampleId())
                 .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
                 .submitterSampleId(sample.getSubmitterSampleId())
                 .sampleType(sample.getSampleType())
-                .build())
+                .build()))
             .build());
   }
 

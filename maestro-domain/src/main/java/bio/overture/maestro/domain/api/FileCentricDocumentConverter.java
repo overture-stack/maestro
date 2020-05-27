@@ -17,19 +17,23 @@
 
 package bio.overture.maestro.domain.api;
 
-import bio.overture.maestro.domain.api.exception.BadDataException;
 import bio.overture.maestro.domain.entities.indexing.*;
 import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static bio.overture.maestro.domain.api.AnalysisCentricDocumentConverter.buildSpecimen;
+import static bio.overture.maestro.domain.api.AnalysisCentricDocumentConverter.groupSpecimensBySample;
+import static bio.overture.maestro.domain.api.exception.NotFoundException.checkNotFound;
+
 
 /**
  * This class holds the structural changes that the indexer applies to prepare the File documents
@@ -135,16 +139,6 @@ final class FileCentricDocumentConverter {
         .build();
   }
 
-  /** extract metadata files if any */
-  static String getMetadataFileId(Analysis analysis) {
-    val xmlFile =
-        analysis.getFiles().stream()
-            .filter(f -> isXMLFile(f.getFileName()))
-            .findFirst()
-            .orElse(null);
-    return xmlFile == null ? EMPTY_STRING : xmlFile.getObjectId();
-  }
-
   /**
    * get the index files associated with that files note that this will be removed, when the source
    * explicitly handles associating index files to a files.
@@ -185,39 +179,69 @@ final class FileCentricDocumentConverter {
     return files.stream().filter(f -> f.getFileName().equalsIgnoreCase(name)).findFirst();
   }
 
-  private static List<FileCentricDonor> getDonors(Analysis analysis) {
-    return List.of(getDonor(analysis));
+  public static List<FileCentricDonor> getDonors(@NonNull Analysis analysis) {
+      val groupedByDonormap = analysis.getSamples()
+          .stream()
+          .map(sample -> extractDonor(sample))
+          .collect(Collectors.groupingBy(FileCentricDonor :: getId, Collectors.toList()));
+
+      return groupedByDonormap.values()
+          .stream()
+          .collect(Collectors.toList())
+          .stream()
+          .map(donorList -> mergeDonorBySpecimen(donorList))
+          .collect(Collectors.toList());
   }
 
-  private static FileCentricDonor getDonor(Analysis analysis) {
-    val sample =
-        analysis.getSamples().stream()
-            .findFirst()
-            .orElseThrow(
-                () -> new BadDataException("incorrect structure of song data, samples is empty"));
-    val donor = sample.getDonor();
-    val specimen = sample.getSpecimen();
-    return FileCentricDonor.builder()
-        .id(donor.getDonorId())
-        .gender(donor.getGender())
-        .specimens(
-            Specimen.builder()
-                .specimenTissueSource(specimen.getSpecimenType())
-                .id(specimen.getSpecimenId())
-                .submitterSpecimenId(specimen.getSubmitterSpecimenId())
-                .tumourNormalDesignation(specimen.getTumourNormalDesignation())
-                .specimenTissueSource(specimen.getSpecimenTissueSource())
-                .specimenType(specimen.getSpecimenType())
-                .samples(
-                    Sample.builder()
-                        .id(sample.getSampleId())
-                        .submitterSampleId(sample.getSubmitterSampleId())
-                        .sampleType(sample.getSampleType())
-                        .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
-                        .build())
-                .build())
-        .submitterDonorId(donor.getSubmitterDonorId())
-        .build();
+    /**
+     * Converts song metadata sample to FileCentricDonor,
+     * each song Sample has one donor and one specimen.
+     * @param sample song metadata Sample object
+     * @return converted FileCentricDonor object
+     */
+  private static FileCentricDonor extractDonor(@NonNull bio.overture.maestro.domain.entities.metadata.study.Sample sample){
+      val donor = sample.getDonor();
+      val specimen = sample.getSpecimen();
+      return FileCentricDonor.builder()
+          .id(donor.getDonorId())
+          .submitterDonorId(donor.getSubmitterDonorId())
+          .gender(donor.getGender())
+          .specimens(buildSpecimen(specimen, sample))
+          .build();
+  }
+
+  private static FileCentricDonor mergeDonorBySpecimen(@NonNull List<FileCentricDonor> list){
+      checkNotFound(list.size() > 0,
+          "Failed to merge FileCentricDonor by specimen: donor list is empty.");
+
+      // Every element in list has the same donor, so just use the first donor
+      val anyDonor = list.get(0);
+
+      checkNotFound(anyDonor.getSpecimens() != null && anyDonor.getSpecimens().size() > 0,
+          "Failed to merge FileCentricDonor by specimen: donor doesn't have specimen,");
+
+      val specimenList = list.stream()
+          .map(fileCentricDonor -> fileCentricDonor.getSpecimens().get(0))
+          .collect(Collectors.toList());
+
+      val specimenMap = specimenList.stream()
+          .collect(Collectors.groupingBy(
+              Specimen :: getId, Collectors.toList()
+          ));
+
+      val specimens = specimenMap.values()
+          .stream()
+          .collect(Collectors.toList())
+          .stream()
+          .map(speList -> groupSpecimensBySample(speList))
+          .collect(Collectors.toList());
+
+      return FileCentricDonor.builder()
+          .id(anyDonor.getId())
+          .submitterDonorId(anyDonor.getSubmitterDonorId())
+          .gender(anyDonor.getGender())
+          .specimens(specimens)
+          .build();
   }
 
   private static boolean isDataFile(bio.overture.maestro.domain.entities.metadata.study.File f) {

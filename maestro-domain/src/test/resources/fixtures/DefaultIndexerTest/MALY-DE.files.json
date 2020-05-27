@@ -47,17 +47,17 @@
         "id": "DO221129",
         "gender" : "Female",
         "submitter_donor_id": "4128852",
-        "specimens": {
+        "specimens": [{
           "id": "SP124981",
           "specimen_type": "Primary tumour - lymph node",
           "submitter_specimen_id": "tumor_4128852",
-          "samples": {
+          "samples": [{
             "id": "SA557689",
             "submitter_sample_id": "tumor_4128852",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -109,17 +109,17 @@
         "id": "DO52693",
         "gender" : "Female",
         "submitter_donor_id": "4113191",
-        "specimens": {
+        "specimens": [{
           "id": "SP116718",
           "specimen_type": "Primary tumour - lymph node",
           "submitter_specimen_id": "tumor_4113191",
-          "samples": {
+          "samples": [{
             "id": "SA542152",
             "submitter_sample_id": "tumor_4113191",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -171,17 +171,17 @@
         "id": "DO52662",
         "gender" : "Female",
         "submitter_donor_id": "4166503",
-        "specimens": {
+        "specimens": [{
           "id": "SP116638",
           "specimen_type": "Primary tumour - lymph node",
           "submitter_specimen_id": "tumor_4166503",
-          "samples": {
+          "samples": [{
             "id": "SA542043",
             "submitter_sample_id": "tumor_4166503",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   }

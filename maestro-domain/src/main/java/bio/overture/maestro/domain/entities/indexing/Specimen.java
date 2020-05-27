@@ -19,6 +19,7 @@ package bio.overture.maestro.domain.entities.indexing;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import java.util.List;
 
 @Getter
 @Builder
@@ -35,7 +36,7 @@ public class Specimen {
     @NonNull
     private String submitterSpecimenId;
     @NonNull
-    private Sample samples;
+    private List<Sample> samples;
     private String tumourNormalDesignation;
     private String specimenTissueSource;
 }

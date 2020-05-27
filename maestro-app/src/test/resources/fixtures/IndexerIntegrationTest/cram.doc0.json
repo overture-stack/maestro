@@ -51,16 +51,16 @@
       "id": "DO232978",
       "gender": "Female",
       "submitter_donor_id": "MDT-AP-0749",
-      "specimens": {
+      "specimens": [{
         "id": "SP201301",
         "specimen_type": "Primary tumour - solid tissue",
         "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
-        "samples": {
+        "samples": [{
           "id": "SA604924",
           "submitter_sample_id": "MDT-AP-0749_tumor",
           "sample_type": "DNA"
-        }
-      }
+        }]
+      }]
     }
   ]
 }

@@ -18,6 +18,7 @@
 package bio.overture.maestro.domain.entities.indexing;
 
 import lombok.*;
+import java.util.List;
 
 @Builder
 @Getter
@@ -36,5 +37,5 @@ public class FileCentricDonor {
     private String submitterDonorId;
 
     @NonNull
-    private Specimen specimens;
+    private List<Specimen> specimens;
 }
