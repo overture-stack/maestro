@@ -226,7 +226,7 @@ final class FileCentricDocumentConverter {
 
       val specimenMap = specimenList.stream()
           .collect(Collectors.groupingBy(
-              Specimen :: getId, Collectors.toList()
+              Specimen ::getSpecimenId, Collectors.toList()
           ));
 
       val specimens = specimenMap.values()

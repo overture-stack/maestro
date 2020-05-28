@@ -52,7 +52,7 @@
       "gender" : "Female",
       "submitter_donor_id": "MDT-AP-0432",
       "specimens": [{
-        "id": "SP200947",
+        "specimen_id": "SP200947",
         "specimen_type": "Normal - blood derived",
         "submitter_specimen_id": "MDT-AP-0432_control_specimen",
         "samples": [{

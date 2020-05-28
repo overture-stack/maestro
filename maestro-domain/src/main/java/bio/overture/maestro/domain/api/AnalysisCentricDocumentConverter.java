@@ -87,7 +87,7 @@ final class AnalysisCentricDocumentConverter {
 
     val specimenMap = specimenList.stream()
               .collect(
-                  Collectors.groupingBy(bio.overture.maestro.domain.entities.indexing.Specimen :: getId, Collectors.toList()));
+                  Collectors.groupingBy(bio.overture.maestro.domain.entities.indexing.Specimen ::getSpecimenId, Collectors.toList()));
 
     val specimens = specimenMap.values()
         .stream()
@@ -116,7 +116,7 @@ final class AnalysisCentricDocumentConverter {
     if(list.size() > 1) {
       return bio.overture.maestro.domain.entities.indexing.Specimen.builder()
           .samples(samples)
-          .id(specimen.getId())
+          .specimenId(specimen.getSpecimenId())
           .specimenType(specimen.getSpecimenType())
           .tumourNormalDesignation(specimen.getTumourNormalDesignation())
           .specimenTissueSource(specimen.getSpecimenTissueSource())
@@ -151,7 +151,7 @@ final class AnalysisCentricDocumentConverter {
   public static List<bio.overture.maestro.domain.entities.indexing.Specimen> buildSpecimen(@NonNull Specimen specimen,
                                                                                             @NonNull Sample sample){
     return List.of(bio.overture.maestro.domain.entities.indexing.Specimen.builder()
-            .id(specimen.getSpecimenId())
+            .specimenId(specimen.getSpecimenId())
             .submitterSpecimenId(specimen.getSubmitterSpecimenId())
             .specimenType(specimen.getSpecimenType())
             .specimenTissueSource(specimen.getSpecimenTissueSource())

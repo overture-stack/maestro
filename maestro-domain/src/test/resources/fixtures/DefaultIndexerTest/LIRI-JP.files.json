@@ -49,7 +49,7 @@
         "submitter_donor_id": "RK202",
         "specimens": [
           {
-          "id": "SP107109",
+          "specimen_id": "SP107109",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK202_C01",
           "samples": [{
@@ -111,7 +111,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK202",
         "specimens": [{
-          "id": "SP107109",
+          "specimen_id": "SP107109",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK202_C01",
           "samples": [{
@@ -173,7 +173,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK202",
         "specimens": [{
-          "id": "SP107109",
+          "specimen_id": "SP107109",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK202_C01",
           "samples": [{
@@ -235,7 +235,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK202",
         "specimens": [{
-          "id": "SP107109",
+          "specimen_id": "SP107109",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK202_C01",
           "samples": [{
@@ -297,7 +297,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -359,7 +359,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -421,7 +421,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -483,7 +483,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -545,7 +545,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -607,7 +607,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -669,7 +669,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK156",
         "specimens": [{
-          "id": "SP50179",
+          "specimen_id": "SP50179",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK156_C01",
           "samples": [{
@@ -731,7 +731,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{
@@ -793,7 +793,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{
@@ -855,7 +855,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{
@@ -917,7 +917,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{
@@ -979,7 +979,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{
@@ -1041,7 +1041,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{
@@ -1103,7 +1103,7 @@
         "gender": "Female",
         "submitter_donor_id": "RK091",
         "specimens": [{
-          "id": "SP99145",
+          "specimen_id": "SP99145",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "RK091_C01",
           "samples": [{

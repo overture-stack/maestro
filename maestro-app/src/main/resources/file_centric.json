@@ -189,7 +189,7 @@
           "specimens": {
             "type": "nested",
             "properties": {
-              "id": {
+              "specimen_id": {
                 "type": "keyword",
                 "copy_to": [
                   "file_autocomplete"

@@ -30,7 +30,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Specimen {
     @NonNull
-    private String id;
+    private String specimenId;
     @NonNull
     private String specimenType;
     @NonNull

@@ -48,7 +48,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -110,7 +110,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -172,7 +172,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -234,7 +234,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -296,7 +296,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -358,7 +358,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -420,7 +420,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
-          "id": "SP125730",
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
@@ -482,7 +482,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
-          "id": "SP125791",
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
@@ -544,7 +544,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
-          "id": "SP125791",
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
@@ -606,7 +606,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
-          "id": "SP125791",
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
@@ -668,7 +668,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
-          "id": "SP125791",
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
@@ -730,7 +730,7 @@
         "gender": "Female",
         "submitter_donor_id": "PCSI_0083",
         "specimens": [{
-          "id": "SP125732",
+          "specimen_id": "SP125732",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0083_Pa_P_526",
           "samples": [{

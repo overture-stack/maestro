@@ -13,7 +13,7 @@ import java.util.List;
 public class EntityGenerator {
   public static List<Specimen> buildSpecimenListForDonor() {
     val specimen = Specimen.builder()
-        .id("SP1")
+        .specimenId("SP1")
         .specimenTissueSource("Other")
         .submitterSpecimenId("MDT-AP-0749_tumor_specimen")
         .tumourNormalDesignation("Tumour")
@@ -31,7 +31,7 @@ public class EntityGenerator {
 
   public static List<Specimen> buildSpecimenListForDonor1() {
     val specimen_1 = Specimen.builder()
-        .id("SP1")
+        .specimenId("SP1")
         .specimenTissueSource("Other")
         .submitterSpecimenId("MDT-AP-0749_tumor_specimen")
         .tumourNormalDesignation("Tumour")
@@ -46,7 +46,7 @@ public class EntityGenerator {
         .build();
 
     val specimen_2 = Specimen.builder()
-        .id("SP2")
+        .specimenId("SP2")
         .specimenTissueSource("Other")
         .submitterSpecimenId("MDT-AP-0749_tumor_specimen")
         .tumourNormalDesignation("Tumour")
@@ -68,7 +68,7 @@ public class EntityGenerator {
 
   public static List<Specimen> buildSpecimenListForDonor2() {
     val specimen_3 = Specimen.builder()
-        .id("SP3")
+        .specimenId("SP3")
         .specimenTissueSource("Other")
         .submitterSpecimenId("MDT-AP-0749_tumor_specimen")
         .tumourNormalDesignation("Tumour")
@@ -76,7 +76,7 @@ public class EntityGenerator {
         .samples(buuldSamplesForDonor2_sp3())
         .build();
     val specimen_4 = Specimen.builder()
-        .id("SP4")
+        .specimenId("SP4")
         .specimenTissueSource("Other")
         .submitterSpecimenId("MDT-AP-0749_tumor_specimen")
         .tumourNormalDesignation("Tumour")
