@@ -183,7 +183,7 @@ final class FileCentricDocumentConverter {
       val groupedByDonormap = analysis.getSamples()
           .stream()
           .map(sample -> extractDonor(sample))
-          .collect(Collectors.groupingBy(FileCentricDonor :: getId, Collectors.toList()));
+          .collect(Collectors.groupingBy(FileCentricDonor ::getDonorId, Collectors.toList()));
 
       return groupedByDonormap.values()
           .stream()
@@ -203,7 +203,7 @@ final class FileCentricDocumentConverter {
       val donor = sample.getDonor();
       val specimen = sample.getSpecimen();
       return FileCentricDonor.builder()
-          .id(donor.getDonorId())
+          .donorId(donor.getDonorId())
           .submitterDonorId(donor.getSubmitterDonorId())
           .gender(donor.getGender())
           .specimens(buildSpecimen(specimen, sample))
@@ -237,7 +237,7 @@ final class FileCentricDocumentConverter {
           .collect(Collectors.toList());
 
       return FileCentricDonor.builder()
-          .id(anyDonor.getId())
+          .donorId(anyDonor.getDonorId())
           .submitterDonorId(anyDonor.getSubmitterDonorId())
           .gender(anyDonor.getGender())
           .specimens(specimens)

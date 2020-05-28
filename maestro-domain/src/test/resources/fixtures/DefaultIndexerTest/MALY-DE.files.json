@@ -44,7 +44,7 @@
     ],
     "donors": [
       {
-        "id": "DO221129",
+        "donor_id": "DO221129",
         "gender" : "Female",
         "submitter_donor_id": "4128852",
         "specimens": [{
@@ -106,7 +106,7 @@
     ],
     "donors": [
       {
-        "id": "DO52693",
+        "donor_id": "DO52693",
         "gender" : "Female",
         "submitter_donor_id": "4113191",
         "specimens": [{
@@ -168,7 +168,7 @@
     ],
     "donors": [
       {
-        "id": "DO52662",
+        "donor_id": "DO52662",
         "gender" : "Female",
         "submitter_donor_id": "4166503",
         "specimens": [{

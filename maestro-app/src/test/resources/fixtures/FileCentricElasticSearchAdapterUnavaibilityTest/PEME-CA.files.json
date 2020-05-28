@@ -42,7 +42,7 @@
     ],
     "donors": [
       {
-        "id": "DO232978",
+        "donor_id": "DO232978",
         "gender": "Female",
         "submitter_donor_id": "MDT-AP-0749",
         "specimens": [{

@@ -44,7 +44,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -106,7 +106,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -168,7 +168,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -230,7 +230,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -292,7 +292,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -354,7 +354,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -416,7 +416,7 @@
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
         "specimens": [{
@@ -478,7 +478,7 @@
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
@@ -540,7 +540,7 @@
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
@@ -602,7 +602,7 @@
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
@@ -664,7 +664,7 @@
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
         "specimens": [{
@@ -726,7 +726,7 @@
     ],
     "donors": [
       {
-        "id": "DO35442",
+        "donor_id": "DO35442",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0083",
         "specimens": [{
