@@ -52,7 +52,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -114,7 +114,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -176,7 +176,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -238,7 +238,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -300,7 +300,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -362,7 +362,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -424,7 +424,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
           "samples": [{
-            "id": "SA533729",
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -486,7 +486,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
-            "id": "SA533758",
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -548,7 +548,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
-            "id": "SA533758",
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -610,7 +610,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
-            "id": "SA533758",
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -672,7 +672,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
           "samples": [{
-            "id": "SA533758",
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -734,7 +734,7 @@
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0083_Pa_P_526",
           "samples": [{
-            "id": "SA520221",
+            "sample_id": "SA520221",
             "submitter_sample_id": "PCSI_0083_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null

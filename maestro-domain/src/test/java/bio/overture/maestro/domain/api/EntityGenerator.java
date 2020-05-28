@@ -20,7 +20,7 @@ public class EntityGenerator {
         .specimenType("Primary tumour - solid tissue")
         .samples(List.of(
             Sample.builder()
-                .id("SA1")
+                .sampleId("SA1")
                 .sampleType("DNA")
                 .submitterSampleId("MDT-AP-0749_tumor")
                 .matchedNormalSubmitterSampleId("PCSI_0216_St_R")
@@ -38,7 +38,7 @@ public class EntityGenerator {
         .specimenType("Primary tumour - solid tissue")
         .samples(List.of(
             Sample.builder()
-                .id("SA1")
+                .sampleId("SA1")
                 .sampleType("DNA")
                 .submitterSampleId("MDT-AP-0749_tumor")
                 .matchedNormalSubmitterSampleId("PCSI_0216_St_R")
@@ -53,7 +53,7 @@ public class EntityGenerator {
         .specimenType("Primary tumour - solid tissue")
         .samples(List.of(
             Sample.builder()
-                .id("SA2")
+                .sampleId("SA2")
                 .sampleType("DNA")
                 .submitterSampleId("MDT-AP-0749_tumor")
                 .matchedNormalSubmitterSampleId("PCSI_0216_St_R")
@@ -92,13 +92,13 @@ public class EntityGenerator {
 
   public static List<Sample> buuldSamplesForDonor2_sp3() {
     val sample_3 = Sample.builder()
-        .id("SA3")
+        .sampleId("SA3")
         .sampleType("DNA")
         .submitterSampleId("MDT-AP-0749_tumor")
         .matchedNormalSubmitterSampleId("PCSI_0216_St_R")
         .build();
     val sample_4 = Sample.builder()
-        .id("SA4")
+        .sampleId("SA4")
         .sampleType("DNA")
         .submitterSampleId("MDT-AP-0749_tumor")
         .matchedNormalSubmitterSampleId("PCSI_0216_St_R")
@@ -108,13 +108,13 @@ public class EntityGenerator {
 
   public static List<Sample> buildSamplesForDonor2_sp4() {
     val sample_5 = Sample.builder()
-        .id("SA5")
+        .sampleId("SA5")
         .sampleType("DNA")
         .submitterSampleId("MDT-AP-0749_tumor")
         .matchedNormalSubmitterSampleId("PCSI_0216_St_R")
         .build();
     val sample_6 = Sample.builder()
-        .id("SA6")
+        .sampleId("SA6")
         .sampleType("DNA")
         .submitterSampleId("MDT-AP-0749_tumor")
         .matchedNormalSubmitterSampleId("PCSI_0216_St_R")

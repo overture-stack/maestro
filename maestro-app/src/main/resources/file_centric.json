@@ -213,7 +213,7 @@
               "samples": {
                 "type": "nested",
                 "properties": {
-                  "id": {
+                  "sample_id": {
                     "type": "keyword",
                     "copy_to": [
                       "file_autocomplete"

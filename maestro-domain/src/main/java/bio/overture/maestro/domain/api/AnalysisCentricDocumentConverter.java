@@ -158,7 +158,7 @@ final class AnalysisCentricDocumentConverter {
             .tumourNormalDesignation(specimen.getTumourNormalDesignation())
             .samples(List.of(
                 bio.overture.maestro.domain.entities.indexing.Sample.builder()
-                .id(sample.getSampleId())
+                .sampleId(sample.getSampleId())
                 .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
                 .submitterSampleId(sample.getSubmitterSampleId())
                 .sampleType(sample.getSampleType())

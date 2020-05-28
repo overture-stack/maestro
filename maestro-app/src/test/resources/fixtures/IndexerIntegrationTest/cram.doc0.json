@@ -56,7 +56,7 @@
         "specimen_type": "Primary tumour - solid tissue",
         "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
         "samples": [{
-          "id": "SA604924",
+          "sample_id": "SA604924",
           "submitter_sample_id": "MDT-AP-0749_tumor",
           "sample_type": "DNA"
         }]
