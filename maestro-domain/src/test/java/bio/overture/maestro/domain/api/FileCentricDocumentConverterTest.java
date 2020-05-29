@@ -26,7 +26,7 @@ public class FileCentricDocumentConverterTest {
 
     // expected:
     val donor = FileCentricDonor.builder()
-        .id("DO1")
+        .donorId("DO1")
         .gender("Female")
         .submitterDonorId("MDT-AP-0749")
         .specimens(buildSpecimenListForDonor())
@@ -49,14 +49,14 @@ public class FileCentricDocumentConverterTest {
 
     // expected results:
     val donor_1 = FileCentricDonor.builder()
-        .id("DO1")
+        .donorId("DO1")
         .gender("Female")
         .submitterDonorId("MDT-AP-0749")
         .specimens(buildSpecimenListForDonor1())
         .build();
 
     val donor_2 = FileCentricDonor.builder()
-        .id("DO2")
+        .donorId("DO2")
         .gender("Female")
         .submitterDonorId("MDT-AP-0749")
         .specimens(buildSpecimenListForDonor2())
