@@ -54,7 +54,7 @@ final class AnalysisCentricDocumentConverter {
     val groupedByDonorMap = analysis.getSamples()
             .stream()
             .map(sample -> extractDonor(sample))
-            .collect(Collectors.groupingBy(AnalysisCentricDonor :: getId, Collectors.toList()));
+            .collect(Collectors.groupingBy(AnalysisCentricDonor ::getDonorId, Collectors.toList()));
 
     return groupedByDonorMap.values()
             .stream()
@@ -97,7 +97,7 @@ final class AnalysisCentricDocumentConverter {
         .collect(Collectors.toList());
 
     return AnalysisCentricDonor.builder()
-            .id(anyDonor.getId())
+            .donorId(anyDonor.getDonorId())
             .submitterDonorId(anyDonor.getSubmitterDonorId())
             .gender(anyDonor.getGender())
             .specimens(specimens)
@@ -135,7 +135,7 @@ final class AnalysisCentricDocumentConverter {
     val donor = sample.getDonor();
     val specimen = sample.getSpecimen();
     return AnalysisCentricDonor.builder()
-            .id(donor.getDonorId())
+            .donorId(donor.getDonorId())
             .gender(donor.getGender())
             .submitterDonorId(donor.getSubmitterDonorId())
             .specimens(buildSpecimen(specimen, sample))

@@ -23,7 +23,7 @@ public class AnalysisCentricDocumentConverterTest {
 
     // expected:
     val donor = AnalysisCentricDonor.builder()
-        .id("DO1")
+        .donorId("DO1")
         .gender("Female")
         .submitterDonorId("MDT-AP-0749")
         .specimens(buildSpecimenListForDonor())
@@ -46,14 +46,14 @@ public class AnalysisCentricDocumentConverterTest {
 
     // expected results:
     val donor_1 = AnalysisCentricDonor.builder()
-            .id("DO1")
+            .donorId("DO1")
             .gender("Female")
             .submitterDonorId("MDT-AP-0749")
             .specimens(buildSpecimenListForDonor1())
             .build();
 
     val donor_2 = AnalysisCentricDonor.builder()
-            .id("DO2")
+            .donorId("DO2")
             .gender("Female")
             .submitterDonorId("MDT-AP-0749")
             .specimens(buildSpecimenListForDonor2())
