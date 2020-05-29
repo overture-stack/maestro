@@ -15,7 +15,7 @@ import java.util.List;
 @FieldNameConstants
 public class AnalysisCentricDonor {
   @NonNull
-  private String id;
+  private String donorId;
 
   @NonNull
   private String submitterDonorId;
