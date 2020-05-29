@@ -44,15 +44,15 @@
     ],
     "donors": [
       {
-        "id": "DO221129",
+        "donor_id": "DO221129",
         "gender" : "Female",
         "submitter_donor_id": "4128852",
         "specimens": [{
-          "id": "SP124981",
+          "specimen_id": "SP124981",
           "specimen_type": "Primary tumour - lymph node",
           "submitter_specimen_id": "tumor_4128852",
           "samples": [{
-            "id": "SA557689",
+            "sample_id": "SA557689",
             "submitter_sample_id": "tumor_4128852",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -106,15 +106,15 @@
     ],
     "donors": [
       {
-        "id": "DO52693",
+        "donor_id": "DO52693",
         "gender" : "Female",
         "submitter_donor_id": "4113191",
         "specimens": [{
-          "id": "SP116718",
+          "specimen_id": "SP116718",
           "specimen_type": "Primary tumour - lymph node",
           "submitter_specimen_id": "tumor_4113191",
           "samples": [{
-            "id": "SA542152",
+            "sample_id": "SA542152",
             "submitter_sample_id": "tumor_4113191",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
@@ -168,15 +168,15 @@
     ],
     "donors": [
       {
-        "id": "DO52662",
+        "donor_id": "DO52662",
         "gender" : "Female",
         "submitter_donor_id": "4166503",
         "specimens": [{
-          "id": "SP116638",
+          "specimen_id": "SP116638",
           "specimen_type": "Primary tumour - lymph node",
           "submitter_specimen_id": "tumor_4166503",
           "samples": [{
-            "id": "SA542043",
+            "sample_id": "SA542043",
             "submitter_sample_id": "tumor_4166503",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null

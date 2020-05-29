@@ -56,15 +56,15 @@
   ],
   "donors": [
     {
-      "id": "DO232959",
+      "donor_id": "DO232959",
       "gender" : "Female",
       "submitter_donor_id": "MDT-AP-0432",
       "specimens": [{
-        "id": "SP200947",
+        "specimen_id": "SP200947",
         "specimen_type": "Normal - blood derived",
         "submitter_specimen_id": "MDT-AP-0432_control_specimen",
         "samples": [{
-          "id": "SA604905",
+          "sample_id": "SA604905",
           "submitter_sample_id": "MDT-AP-0432_control",
           "sample_type": "DNA"
         }]

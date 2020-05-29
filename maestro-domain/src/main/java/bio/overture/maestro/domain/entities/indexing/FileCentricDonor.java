@@ -28,7 +28,7 @@ import java.util.List;
 @AllArgsConstructor
 public class FileCentricDonor {
     @NonNull
-    private String id;
+    private String donorId;
 
     @NonNull
     private String gender;
