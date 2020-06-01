@@ -22,7 +22,6 @@
   },
   "file": {
     "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam",
-    "format": "BAM",
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
     "size": 77675501639,
     "data_type": "AlignedReads",
@@ -30,7 +29,7 @@
     "index_file": {
       "object_id": "6aa8d318-e168-520e-9d1e-cef127ee6b65",
       "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam.bai",
-      "format": "BAI",
+      "file_type": "BAI",
       "data_type": "AlignedReads",
       "md5sum": "227a2a11d660a8a53a7375c6623034e2",
       "size": 8982928

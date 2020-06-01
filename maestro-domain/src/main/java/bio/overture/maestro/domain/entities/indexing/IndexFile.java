@@ -31,7 +31,7 @@ public class IndexFile {
     @NonNull
     private String name;
     @NonNull
-    private String format;
+    private String fileType;
     @NonNull
     private String md5sum;
     private String dataType;
