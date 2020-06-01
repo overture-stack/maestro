@@ -107,9 +107,6 @@
       },
       "file": {
         "properties": {
-          "format": {
-            "type": "keyword"
-          },
           "md5sum": {
             "type": "keyword"
           },

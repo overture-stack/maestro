@@ -131,7 +131,6 @@ final class FileCentricDocumentConverter {
     val indexFile = getIndexFile(analysis.getFiles(), fileName);
     return File.builder()
         .name(fileName)
-        .format(file.getFileType())
         .size(file.getFileSize())
         .md5sum(file.getFileMd5sum())
         .dataType(file.getDataType())

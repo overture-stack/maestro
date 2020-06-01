@@ -22,7 +22,6 @@
   },
   "file": {
     "name": "f5b822cfd81b4b9bbadfbd9b67f4ac4d.tumor_MDT-AP-0749_merged.mdup.cram",
-    "format": "CRAM",
     "md5sum": "f5b822cfd81b4b9bbadfbd9b67f4ac4d",
     "size": 88906416144,
     "data_type": "AlignedReads",

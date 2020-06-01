@@ -20,7 +20,6 @@
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "93354882b0fc014b49be1b24df8f435e",
       "size": 44440835,
       "last_modified": null,
@@ -49,16 +48,20 @@
         "donor_id": "DO48736",
         "gender": "Female",
         "submitter_donor_id": "RK202",
-        "specimens": [{
-          "specimen_id": "SP107109",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK202_C01",
-          "samples": [{
-            "sample_id": "SA515389",
-            "submitter_sample_id": "RK202_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP107109",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK202_C01",
+            "samples": [
+              {
+                "sample_id": "SA515389",
+                "submitter_sample_id": "RK202_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -83,7 +86,6 @@
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
       "size": 11431,
       "last_modified": null,
@@ -112,16 +114,20 @@
         "donor_id": "DO48736",
         "gender": "Female",
         "submitter_donor_id": "RK202",
-        "specimens": [{
-          "specimen_id": "SP107109",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK202_C01",
-          "samples": [{
-            "sample_id": "SA515389",
-            "submitter_sample_id": "RK202_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP107109",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK202_C01",
+            "samples": [
+              {
+                "sample_id": "SA515389",
+                "submitter_sample_id": "RK202_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -146,7 +152,6 @@
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "492989e81699bd5a56b7956e0be7416d",
       "size": 3648,
       "last_modified": null,
@@ -175,16 +180,20 @@
         "donor_id": "DO48736",
         "gender": "Female",
         "submitter_donor_id": "RK202",
-        "specimens": [{
-          "specimen_id": "SP107109",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK202_C01",
-          "samples": [{
-            "sample_id": "SA515389",
-            "submitter_sample_id": "RK202_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP107109",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK202_C01",
+            "samples": [
+              {
+                "sample_id": "SA515389",
+                "submitter_sample_id": "RK202_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -209,7 +218,6 @@
     },
     "file": {
       "name": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
       "size": 1418099,
       "last_modified": null,
@@ -238,16 +246,20 @@
         "donor_id": "DO48736",
         "gender": "Female",
         "submitter_donor_id": "RK202",
-        "specimens": [{
-          "specimen_id": "SP107109",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK202_C01",
-          "samples": [{
-            "sample_id": "SA515389",
-            "submitter_sample_id": "RK202_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP107109",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK202_C01",
+            "samples": [
+              {
+                "sample_id": "SA515389",
+                "submitter_sample_id": "RK202_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -272,7 +284,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "7d0676c6a85696e1cb2919836b0ab71e",
       "size": 10536170,
       "last_modified": null,
@@ -301,16 +312,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -335,7 +350,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
       "size": 59633,
       "last_modified": null,
@@ -364,16 +378,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -398,7 +416,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "fc246f5e1f670b1f756b8e4294f59504",
       "size": 51548,
       "last_modified": null,
@@ -427,16 +444,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -461,7 +482,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "1f22fff9e578244ba16762a4c82792e8",
       "size": 1710383,
       "last_modified": null,
@@ -490,16 +510,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -524,7 +548,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "e75eef7af227c5c80d0b499ffd39c43b",
       "size": 31242,
       "last_modified": null,
@@ -553,16 +576,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -587,7 +614,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "f199c6714f7a6880d30bf7aa56e00625",
       "size": 10191,
       "last_modified": null,
@@ -616,16 +642,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -650,7 +680,6 @@
     },
     "file": {
       "name": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
       "size": 382815,
       "last_modified": null,
@@ -679,16 +708,20 @@
         "donor_id": "DO23549",
         "gender": "Female",
         "submitter_donor_id": "RK156",
-        "specimens": [{
-          "specimen_id": "SP50179",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK156_C01",
-          "samples": [{
-            "sample_id": "SA270462",
-            "submitter_sample_id": "RK156_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP50179",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK156_C01",
+            "samples": [
+              {
+                "sample_id": "SA270462",
+                "submitter_sample_id": "RK156_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -713,7 +746,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "33b96c263be31852de8d5d15775561c9",
       "size": 404406,
       "last_modified": null,
@@ -742,16 +774,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -776,7 +812,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "d3227038bd37e74ff88b07e5408c76ed",
       "size": 1853889,
       "last_modified": null,
@@ -805,16 +840,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -839,7 +878,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "64ef1b8daf5b6eec161555f5cdad3420",
       "size": 10429379,
       "last_modified": null,
@@ -868,16 +906,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -902,7 +944,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
       "size": 400597,
       "last_modified": null,
@@ -931,16 +972,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -965,7 +1010,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "ee313d9cbe077063174d92050dde03e0",
       "size": 25270,
       "last_modified": null,
@@ -994,16 +1038,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1028,7 +1076,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "cbafecb01dea96496176bf7497cb9e80",
       "size": 2540,
       "last_modified": null,
@@ -1057,16 +1104,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1091,7 +1142,6 @@
     },
     "file": {
       "name": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "ca10e3bd248498c9427b2b5e324f0242",
       "size": 422502,
       "last_modified": null,
@@ -1120,16 +1170,20 @@
         "donor_id": "DO45211",
         "gender": "Female",
         "submitter_donor_id": "RK091",
-        "specimens": [{
-          "specimen_id": "SP99145",
-          "specimen_type": "Primary tumour - solid tissue",
-          "submitter_specimen_id": "RK091_C01",
-          "samples": [{
-            "sample_id": "SA501653",
-            "submitter_sample_id": "RK091_C01",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP99145",
+            "specimen_type": "Primary tumour - solid tissue",
+            "submitter_specimen_id": "RK091_C01",
+            "samples": [
+              {
+                "sample_id": "SA501653",
+                "submitter_sample_id": "RK091_C01",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1154,7 +1208,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "14ded2a7342f9124421ace5aa920510d",
       "size": 543337,
       "last_modified": null,
@@ -1183,16 +1236,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1217,7 +1274,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
       "size": 5565355,
       "last_modified": null,
@@ -1246,16 +1302,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1280,7 +1340,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
       "size": 101384873,
       "last_modified": null,
@@ -1309,16 +1368,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1343,7 +1406,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
       "size": 72850649,
       "last_modified": null,
@@ -1372,16 +1434,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1406,7 +1472,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "93b219c94687e12b5fda564399fa3319",
       "size": 23763,
       "last_modified": null,
@@ -1435,16 +1500,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1469,7 +1538,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "6ebd4aa8a821da40955d7fcb879be82a",
       "size": 18226,
       "last_modified": null,
@@ -1498,16 +1566,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1532,7 +1604,6 @@
     },
     "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "f3a99bd737b3b416aa34e131b939b2a0",
       "size": 161511,
       "last_modified": null,
@@ -1561,16 +1632,20 @@
         "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": [{
-          "specimen_id": "SP125730",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA533729",
-            "submitter_sample_id": "PCSI_0233_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125730",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0233_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA533729",
+                "submitter_sample_id": "PCSI_0233_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1595,7 +1670,6 @@
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
       "size": 58091383,
       "last_modified": null,
@@ -1624,16 +1698,20 @@
         "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": [{
-          "specimen_id": "SP125791",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": [{
-            "sample_id": "SA533758",
-            "submitter_sample_id": "ASHPC_0022_Pa_P",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125791",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "ASHPC_0022_Pa_P",
+            "samples": [
+              {
+                "sample_id": "SA533758",
+                "submitter_sample_id": "ASHPC_0022_Pa_P",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1658,7 +1736,6 @@
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
       "size": 59407,
       "last_modified": null,
@@ -1687,16 +1764,20 @@
         "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": [{
-          "specimen_id": "SP125791",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": [{
-            "sample_id": "SA533758",
-            "submitter_sample_id": "ASHPC_0022_Pa_P",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125791",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "ASHPC_0022_Pa_P",
+            "samples": [
+              {
+                "sample_id": "SA533758",
+                "submitter_sample_id": "ASHPC_0022_Pa_P",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1721,7 +1802,6 @@
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "bafebb1c613c348c696dc8f940ce1039",
       "size": 2964,
       "last_modified": null,
@@ -1750,16 +1830,20 @@
         "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": [{
-          "specimen_id": "SP125791",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": [{
-            "sample_id": "SA533758",
-            "submitter_sample_id": "ASHPC_0022_Pa_P",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125791",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "ASHPC_0022_Pa_P",
+            "samples": [
+              {
+                "sample_id": "SA533758",
+                "submitter_sample_id": "ASHPC_0022_Pa_P",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1784,7 +1868,6 @@
     },
     "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "37ee70b282788eb0660f7d965f355898",
       "size": 1704966,
       "last_modified": null,
@@ -1813,16 +1896,20 @@
         "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": [{
-          "specimen_id": "SP125791",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": [{
-            "sample_id": "SA533758",
-            "submitter_sample_id": "ASHPC_0022_Pa_P",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125791",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "ASHPC_0022_Pa_P",
+            "samples": [
+              {
+                "sample_id": "SA533758",
+                "submitter_sample_id": "ASHPC_0022_Pa_P",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1847,7 +1934,6 @@
     },
     "file": {
       "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "01e54034c70b85812e9aac58f2525594",
       "size": 329863,
       "last_modified": null,
@@ -1876,16 +1962,20 @@
         "donor_id": "DO35442",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0083",
-        "specimens": [{
-          "specimen_id": "SP125732",
-          "specimen_type": "Primary tumour - other",
-          "submitter_specimen_id": "PCSI_0083_Pa_P_526",
-          "samples": [{
-            "sample_id": "SA520221",
-            "submitter_sample_id": "PCSI_0083_Pa_P_526",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP125732",
+            "specimen_type": "Primary tumour - other",
+            "submitter_specimen_id": "PCSI_0083_Pa_P_526",
+            "samples": [
+              {
+                "sample_id": "SA520221",
+                "submitter_sample_id": "PCSI_0083_Pa_P_526",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1910,7 +2000,6 @@
     },
     "file": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "f83b0f9099e8594b589440819ab119cd",
       "size": 273787,
       "last_modified": null,
@@ -1939,16 +2028,20 @@
         "donor_id": "DO221129",
         "gender": "Female",
         "submitter_donor_id": "4128852",
-        "specimens": [{
-          "specimen_id": "SP124981",
-          "specimen_type": "Primary tumour - lymph node",
-          "submitter_specimen_id": "tumor_4128852",
-          "samples": [{
-            "sample_id": "SA557689",
-            "submitter_sample_id": "tumor_4128852",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP124981",
+            "specimen_type": "Primary tumour - lymph node",
+            "submitter_specimen_id": "tumor_4128852",
+            "samples": [
+              {
+                "sample_id": "SA557689",
+                "submitter_sample_id": "tumor_4128852",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1973,7 +2066,6 @@
     },
     "file": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
       "size": 38671,
       "last_modified": null,
@@ -2002,16 +2094,20 @@
         "donor_id": "DO52662",
         "gender": "Female",
         "submitter_donor_id": "4166503",
-        "specimens": [{
-          "specimen_id": "SP116638",
-          "specimen_type": "Primary tumour - lymph node",
-          "submitter_specimen_id": "tumor_4166503",
-          "samples": [{
-            "sample_id": "SA542043",
-            "submitter_sample_id": "tumor_4166503",
-            "sample_type": "DNA"
-          }]
-        }]
+        "specimens": [
+          {
+            "specimen_id": "SP116638",
+            "specimen_type": "Primary tumour - lymph node",
+            "submitter_specimen_id": "tumor_4166503",
+            "samples": [
+              {
+                "sample_id": "SA542043",
+                "submitter_sample_id": "tumor_4166503",
+                "sample_type": "DNA"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

@@ -29,8 +29,6 @@ public class File {
     @NonNull
     private String name;
     @NonNull
-    private String format;
-    @NonNull
     private String md5sum;
     private Long size;
     private Long lastModified;

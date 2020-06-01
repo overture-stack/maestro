@@ -18,7 +18,6 @@
     },
     "file": {
       "name": "e2fa7251-507e-4d76-95a3-a228adc3885a.MUSE_1-0rc-vcf.20151107.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "f83b0f9099e8594b589440819ab119cd",
       "size": 273787,
       "last_modified": null,
@@ -80,7 +79,6 @@
     },
     "file": {
       "name": "4e7e6e1f-c648-446f-bdf6-0b1fcc6dfa83.consensus.20160830.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "02b4602861de0a5529e42d3e66eaa2a6",
       "size": 188550,
       "last_modified": null,
@@ -142,7 +140,6 @@
     },
     "file": {
       "name": "866ecfe7-caa6-4565-9418-6b9d6c8a3b43.consensus.20161006.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "020a444fb10ec02b40e141aa9cd0de87",
       "size": 38671,
       "last_modified": null,
