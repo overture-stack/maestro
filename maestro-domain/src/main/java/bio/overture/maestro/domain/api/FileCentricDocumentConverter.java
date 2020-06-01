@@ -165,7 +165,7 @@ final class FileCentricDocumentConverter {
     return IndexFile.builder()
         .objectId(file.getObjectId())
         .name(file.getFileName())
-        .format(indexFileFormat(file.getFileName()))
+        .fileType(indexFileFormat(file.getFileName()))
         .size(file.getFileSize())
         .md5sum(file.getFileMd5sum())
         .dataType(file.getDataType())

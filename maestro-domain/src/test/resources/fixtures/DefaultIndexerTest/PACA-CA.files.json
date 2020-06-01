@@ -25,7 +25,7 @@
       "index_file": {
         "object_id": "bb949d15-334f-5712-9f04-41225a7beb8d",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "99f0b87f5113494e2fc2284c91dc15e0",
         "data_type": "AlignedReads",
         "size": 224729
@@ -86,7 +86,7 @@
       "index_file": {
         "object_id": "2910e07c-268b-57a5-877a-0cec35298319",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "1abed463bc92e0d8486699b37af73737",
         "data_type": "AlignedReads",
         "size": 546153
@@ -147,7 +147,7 @@
       "index_file": {
         "object_id": "425898fd-35d3-5ee2-ac00-50dfd724f4c6",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "a6113c54193fd7539dffd06f50f04779",
         "data_type": "AlignedReads",
         "size": 1541330
@@ -208,7 +208,7 @@
       "index_file": {
         "object_id": "04c24136-c19d-5042-a3cd-36f63c7b4d6b",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "156880f52b94b3119afa3ac6dd7b8ced",
         "data_type": "AlignedReads",
         "size": 1502241
@@ -269,7 +269,7 @@
       "index_file": {
         "object_id": "51306186-092d-5e3f-bb3c-028873052eb2",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "68d76af7c7b9b7c00fa0438101739798",
         "data_type": "AlignedReads",
         "size": 10691
@@ -330,7 +330,7 @@
       "index_file": {
         "object_id": "e5d387a1-3b51-5526-ae22-270df2e1fd2f",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "96b05a083d371ae8317651ceffb0f48b",
         "data_type": "AlignedReads",
         "size": 6134
@@ -391,7 +391,7 @@
       "index_file": {
         "object_id": "e8569e7c-6ae4-5aeb-ae50-b94366aae5df",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "cb856f2d5837c5f065c7c598dcd795b5",
         "data_type": "AlignedReads",
         "size": 19769
@@ -452,7 +452,7 @@
       "index_file": {
         "object_id": "b26a535c-3531-55ad-8725-17aa6afb22c2",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "894fa70742c16ed7f845abd68609f20c",
         "data_type": "AlignedReads",
         "size": 1524609
@@ -513,7 +513,7 @@
       "index_file": {
         "object_id": "b9800f14-13d5-55cf-9383-a65b5446116a",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "1ba234eb0c457dba2942215d3fc4741a",
         "data_type": "AlignedReads",
         "size": 2961
@@ -574,7 +574,7 @@
       "index_file": {
         "object_id": "52db8e51-5b3e-56ce-b939-0a96b4dfbce3",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "725becdd11e63c371e57a987420846bd",
         "data_type": "AlignedReads",
         "size": 4783
@@ -635,7 +635,7 @@
       "index_file": {
         "object_id": "6b32cfec-e82c-5528-b908-8e00ae927578",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "91dece67c383a67123caae382a130cb9",
         "data_type": "AlignedReads",
         "size": 303747
@@ -696,7 +696,7 @@
       "index_file": {
         "object_id": "08519ab5-8665-58dc-8476-1c40cae5b789",
         "name": "536dedba-46c4-4a21-b112-13c030b13069.consensus.20161006.somatic.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "5b83369174136b88f16a08ab87bb67f7",
         "data_type": "AlignedReads",
         "size": 148925

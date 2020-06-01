@@ -30,7 +30,7 @@
       "index_file": {
         "object_id": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
         "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
-        "format": "BAI",
+        "file_type": "BAI",
         "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
         "data_type": "AlignedReads",
         "size": 8939816
