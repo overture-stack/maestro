@@ -25,7 +25,6 @@
     "md5sum": "f5b822cfd81b4b9bbadfbd9b67f4ac4d",
     "size": 88906416144,
     "data_type": "AlignedReads",
-    "last_modified": null,
     "index_file": {
       "object_id": "fbf3e6da-3e1e-45f7-994c-970530365d40",
       "name": "f5b822cfd81b4b9bbadfbd9b67f4ac4d.tumor_MDT-AP-0749_merged.mdup.cram.crai",
