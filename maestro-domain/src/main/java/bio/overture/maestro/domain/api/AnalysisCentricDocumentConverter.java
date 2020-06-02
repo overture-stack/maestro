@@ -174,7 +174,7 @@ final class AnalysisCentricDocumentConverter {
 
   private static AnalysisCentricFile fromFile(@NonNull File file){
     return AnalysisCentricFile.builder()
-            .id(file.getObjectId())
+            .objectId(file.getObjectId())
             .fileAccess(file.getFileAccess())
             .dataType(file.getDataType())
             .md5Sum(file.getFileMd5sum())

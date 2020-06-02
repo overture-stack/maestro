@@ -160,7 +160,7 @@
       "files": {
         "type": "nested",
         "properties": {
-          "id": {
+          "object_id": {
             "type": "keyword",
             "copy_to": [
               "analysis_autocomplete"
