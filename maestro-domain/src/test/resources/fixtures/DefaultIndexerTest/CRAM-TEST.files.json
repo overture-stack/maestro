@@ -25,7 +25,6 @@
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.cram",
       "md5sum": "29ff9df727803d20834b9997bc17e970",
       "size": 88906416144,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "d819f154-2292-56f7-94f3-bbe03fb45bc5",

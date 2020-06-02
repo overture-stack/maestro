@@ -25,7 +25,6 @@
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
     "size": 77675501639,
     "data_type": "AlignedReads",
-    "last_modified": null,
     "index_file": {
       "object_id": "6aa8d318-e168-520e-9d1e-cef127ee6b65",
       "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam.bai",

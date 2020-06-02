@@ -119,9 +119,6 @@
           "size": {
             "type": "long"
           },
-          "last_modified": {
-            "type": "long"
-          },
           "index_file": {
             "properties": {
               "object_id": {
