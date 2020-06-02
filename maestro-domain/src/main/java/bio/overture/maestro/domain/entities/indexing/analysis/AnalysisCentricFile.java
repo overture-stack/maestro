@@ -12,7 +12,7 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 public class AnalysisCentricFile  {
 
-  @NonNull private String id;
+  @NonNull private String objectId;
 
   @NonNull private String name;
 
