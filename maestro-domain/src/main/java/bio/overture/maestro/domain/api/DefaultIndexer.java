@@ -66,6 +66,8 @@ class DefaultIndexer implements Indexer {
     private static final String REPO_URL = "repoUrl";
     private static final String FAILURE_DATA = "failureData";
     private static final String CONFLICTS = "conflicts";
+    private static final String FILE_CENTRIC_INDEX = "file_centric_1.0";
+    private static final String ANALYSIS_CENTRIC_INDEX = "analysis_centric_1.0";
 
     private boolean isFileCentricEnabled;
     private boolean isAnalysisCentricEnabled;
@@ -115,7 +117,7 @@ class DefaultIndexer implements Indexer {
             .flatMap(this :: getAnalysisCentricDocuments)
             .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
-            .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier));
+            .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier, ANALYSIS_CENTRIC_INDEX));
     }
 
     public Mono<IndexResult> indexAnalysisToFileCentric(@NonNull IndexAnalysisCommand indexAnalysisCommand) {
@@ -128,7 +130,7 @@ class DefaultIndexer implements Indexer {
             // because we know if we get this exception it was already logged and notified so we don't want that again.
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             // this handler handles uncaught exceptions
-            .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier));
+            .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier, FILE_CENTRIC_INDEX));
     }
 
     @Override
@@ -167,7 +169,7 @@ class DefaultIndexer implements Indexer {
             .flatMap(this :: batchUpsertFilesAndCollectFailures)
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             .onErrorResume((e) -> handleIndexStudyError(e, command.getStudyId(),
-                command.getRepositoryCode()));
+                command.getRepositoryCode(), FILE_CENTRIC_INDEX));
     }
 
     private Mono<IndexResult> indexStudyToAnalysisCentric(@NonNull IndexStudyCommand command,
@@ -178,7 +180,7 @@ class DefaultIndexer implements Indexer {
             .flatMap(this :: batchUpsertAnalysesAndCollectFailtures)
             .onErrorResume(IndexerException.class, (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
             .onErrorResume((e) -> handleIndexStudyError(e, command.getStudyId(),
-                command.getRepositoryCode()));
+                command.getRepositoryCode(), ANALYSIS_CENTRIC_INDEX));
     }
 
     @Override
@@ -365,17 +367,17 @@ class DefaultIndexer implements Indexer {
             .build();
     }
 
-    private Mono<IndexResult> handleIndexStudyError(Throwable e, String studyId, String repoCode) {
+    private Mono<IndexResult> handleIndexStudyError(Throwable e, String studyId, String repoCode, String indexName) {
         val context = Map.of(
             STUDY_ID, studyId,
             REPO_CODE, repoCode,
             ERR, getErrorMessageOrType(e)
         );
         val failingId = Map.of(STUDY_ID, Set.of(studyId));
-        return notifyAndReturnFallback(failingId, context);
+        return notifyAndReturnFallback(failingId, context, indexName);
     }
 
-    private Mono<IndexResult> handleIndexAnalysisError(Throwable e, @NonNull AnalysisIdentifier indexAnalysisCommand) {
+    private Mono<IndexResult> handleIndexAnalysisError(Throwable e, @NonNull AnalysisIdentifier indexAnalysisCommand, @NonNull String indexName) {
         log.error("unhandled exception while indexing analysis", e);
         val failureContext = Map.of(
             ANALYSIS_ID, indexAnalysisCommand.getAnalysisId(),
@@ -384,14 +386,15 @@ class DefaultIndexer implements Indexer {
             ERR, getErrorMessageOrType(e)
         );
         val failedAnalysisId = Map.of(ANALYSIS_ID, Set.of(indexAnalysisCommand.getAnalysisId()));
-        return notifyAndReturnFallback(failedAnalysisId, failureContext);
+        return notifyAndReturnFallback(failedAnalysisId, failureContext, indexName);
     }
 
     @NotNull
     private Mono<IndexResult> notifyAndReturnFallback(Map<String, Set<String>> failingIds,
-                                                      Map<String, ? extends Object> contextInfo) {
+                                                      Map<String, ? extends Object> contextInfo, String indexName) {
         this.notifier.notify(new IndexerNotification(NotificationName.UNHANDLED_ERROR, contextInfo));
         return Mono.just(IndexResult.builder()
+            .indexName(indexName)
             .failureData(FailureData.builder().failingIds(failingIds).build())
             .successful(false)
             .build()
@@ -468,6 +471,7 @@ class DefaultIndexer implements Indexer {
             .onErrorResume(
                 (ex) -> ex instanceof IndexerException,
                 (ex) -> Mono.just(IndexResult.builder()
+                    .indexName(FILE_CENTRIC_INDEX)
                     .successful(false)
                     .failureData(((IndexerException) ex).getFailureData())
                     .build())
@@ -702,7 +706,7 @@ class DefaultIndexer implements Indexer {
     private Mono<? extends IndexResult> handleIndexRepositoryError(Throwable e, String repositoryCode) {
         val failingId = Map.of(REPO_CODE, Set.of(repositoryCode));
         val contextInfo = Map.of(REPO_CODE, repositoryCode, ERR, e.getMessage());
-        return this.notifyAndReturnFallback(failingId, contextInfo);
+        return this.notifyAndReturnFallback(failingId, contextInfo, FILE_CENTRIC_INDEX + ANALYSIS_CENTRIC_INDEX);
     }
 
     private IndexResult reduceIndexResult(IndexResult accumulatedResult, IndexResult newResult) {
