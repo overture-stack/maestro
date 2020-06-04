@@ -25,7 +25,6 @@ import static java.util.Collections.singletonMap;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.entities.indexing.FileCentricAnalysis;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;

@@ -70,7 +70,7 @@ public class SearchAdapterHelper {
                                                            RestHighLevelClient client,
                                                            Function<T, String> documentAnalysisIdExtractor,
                                                            Function<T, UpdateRequest> mapper) {
-        log.trace("in AnalysisCentricElasticSearchAdapter - bulkUpsertAnalysisRepositories, analyses count : {} ", analyses.size());
+        log.trace("in SearchAdapterHelper - bulkUpsertAnalysisRepositories, analyses count : {} ", analyses.size());
         val failures =
             Parallel.blockingScatterGather(analyses,
                 documentsPerBulkRequest,
@@ -99,11 +99,11 @@ public class SearchAdapterHelper {
                 retry,
                 () -> {
                     log.trace(
-                        "AnalysisCentricElasticSearchAdapter - tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ",
+                        "SearchAdapterHelper - tryBulkUpsertRequestForPart, sending part#: {}, hash: {} ",
                         partNum,
                         listPartHash);
                     doRequestForPart(listPart, mapper, client);
-                    log.trace("AnalysisCentricElasticSearchAdapter - tryBulkUpsertRequestForPart: done bulk upsert all docs");
+                    log.trace("SearchAdapterHelper - tryBulkUpsertRequestForPart: done bulk upsert all docs");
                     return Set.of();
                 });
         val result =
