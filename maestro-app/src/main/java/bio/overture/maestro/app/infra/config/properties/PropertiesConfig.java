@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    DefaultApplicationProperties.class,
+  DefaultApplicationProperties.class,
 })
-public class PropertiesConfig {
-}
+public class PropertiesConfig {}

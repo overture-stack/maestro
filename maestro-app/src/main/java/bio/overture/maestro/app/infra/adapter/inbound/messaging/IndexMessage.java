@@ -26,10 +26,9 @@ import lombok.Value;
 @ToString
 @AllArgsConstructor
 class IndexMessage {
-    private String analysisId;
-    private String studyId;
-    @NonNull
-    private String repositoryCode;
-    /** if callers set this flag it will do a remove instead of add.*/
-    private Boolean removeAnalysis = false;
+  private String analysisId;
+  private String studyId;
+  @NonNull private String repositoryCode;
+  /** if callers set this flag it will do a remove instead of add. */
+  private Boolean removeAnalysis = false;
 }

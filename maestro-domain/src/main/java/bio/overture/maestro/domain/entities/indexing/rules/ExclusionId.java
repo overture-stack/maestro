@@ -23,9 +23,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A metadata annotation to indicate a field annotated with this
- * qualifies to be processed by {@link IDExclusionRule}
+ * A metadata annotation to indicate a field annotated with this qualifies to be processed by {@link
+ * IDExclusionRule}
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface ExclusionId { }
+public @interface ExclusionId {}

@@ -1,10 +1,9 @@
 package bio.overture.maestro.domain.entities.indexing.analysis;
 
 import bio.overture.maestro.domain.entities.indexing.Specimen;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
-
-import java.util.List;
 
 @Builder
 @Getter
@@ -14,16 +13,11 @@ import java.util.List;
 @EqualsAndHashCode
 @FieldNameConstants
 public class AnalysisCentricDonor {
-  @NonNull
-  private String donorId;
+  @NonNull private String donorId;
 
-  @NonNull
-  private String submitterDonorId;
+  @NonNull private String submitterDonorId;
 
-  @NonNull
-  private String gender;
+  @NonNull private String gender;
 
-  @NonNull
-  private List<Specimen> specimens;
-
+  @NonNull private List<Specimen> specimens;
 }

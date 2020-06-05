@@ -1,5 +1,10 @@
 package bio.overture.maestro.domain.api;
 
+import static bio.overture.maestro.domain.api.EntityGenerator.*;
+import static bio.overture.masestro.test.Fixture.loadConverterTestFixture;
+import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static org.junit.jupiter.api.Assertions.*;
+
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDonor;
 import bio.overture.maestro.domain.entities.metadata.study.*;
 import lombok.val;
@@ -7,11 +12,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static bio.overture.maestro.domain.api.EntityGenerator.*;
-import static bio.overture.masestro.test.Fixture.loadConverterTestFixture;
-import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @Tag(UNIT_TEST)
@@ -22,12 +22,13 @@ public class AnalysisCentricDocumentConverterTest {
     val analysisObj = loadConverterTestFixture("TEST-CA.analysis.json", Analysis.class);
 
     // expected:
-    val donor = AnalysisCentricDonor.builder()
-        .donorId("DO1")
-        .gender("Female")
-        .submitterDonorId("MDT-AP-0749")
-        .specimens(buildSpecimenListForDonor())
-        .build();
+    val donor =
+        AnalysisCentricDonor.builder()
+            .donorId("DO1")
+            .gender("Female")
+            .submitterDonorId("MDT-AP-0749")
+            .specimens(buildSpecimenListForDonor())
+            .build();
 
     val results = AnalysisCentricDocumentConverter.getDonors(analysisObj);
 
@@ -36,7 +37,7 @@ public class AnalysisCentricDocumentConverterTest {
   }
 
   @Test
-  void testGetDonors_multi_donor(){
+  void testGetDonors_multi_donor() {
     // Expected AnalysisCentricDonor data structure:
     // Analysis  => d1 -> sp1 -> [sa1]
     //              d1 -> sp2 -> [sa2]
@@ -45,14 +46,16 @@ public class AnalysisCentricDocumentConverterTest {
     val analysisObj = loadConverterTestFixture("TEST-CA.analysis.multi-donor.json", Analysis.class);
 
     // expected results:
-    val donor_1 = AnalysisCentricDonor.builder()
+    val donor_1 =
+        AnalysisCentricDonor.builder()
             .donorId("DO1")
             .gender("Female")
             .submitterDonorId("MDT-AP-0749")
             .specimens(buildSpecimenListForDonor1())
             .build();
 
-    val donor_2 = AnalysisCentricDonor.builder()
+    val donor_2 =
+        AnalysisCentricDonor.builder()
             .donorId("DO2")
             .gender("Female")
             .submitterDonorId("MDT-AP-0749")

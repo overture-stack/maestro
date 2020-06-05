@@ -1,5 +1,10 @@
 package bio.overture.maestro.domain.api;
 
+import static bio.overture.maestro.domain.api.EntityGenerator.*;
+import static bio.overture.masestro.test.Fixture.loadConverterTestFixture;
+import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import bio.overture.maestro.domain.entities.indexing.FileCentricDonor;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
@@ -8,12 +13,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static bio.overture.maestro.domain.api.EntityGenerator.*;
-import static bio.overture.masestro.test.Fixture.loadConverterTestFixture;
-import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @Tag(UNIT_TEST)
@@ -25,12 +24,13 @@ public class FileCentricDocumentConverterTest {
     val analysisObj = loadConverterTestFixture("TEST-CA.analysis.json", Analysis.class);
 
     // expected:
-    val donor = FileCentricDonor.builder()
-        .donorId("DO1")
-        .gender("Female")
-        .submitterDonorId("MDT-AP-0749")
-        .specimens(buildSpecimenListForDonor())
-        .build();
+    val donor =
+        FileCentricDonor.builder()
+            .donorId("DO1")
+            .gender("Female")
+            .submitterDonorId("MDT-AP-0749")
+            .specimens(buildSpecimenListForDonor())
+            .build();
 
     val results = FileCentricDocumentConverter.getDonors(analysisObj);
 
@@ -39,7 +39,7 @@ public class FileCentricDocumentConverterTest {
   }
 
   @Test
-  void testGetDonors_multi_donor(){
+  void testGetDonors_multi_donor() {
     // Expected FileCentricDonor data structure:
     // Analysis  => d1 -> sp1 -> [sa1]
     //              d1 -> sp2 -> [sa2]
@@ -48,19 +48,21 @@ public class FileCentricDocumentConverterTest {
     val analysisObj = loadConverterTestFixture("TEST-CA.analysis.multi-donor.json", Analysis.class);
 
     // expected results:
-    val donor_1 = FileCentricDonor.builder()
-        .donorId("DO1")
-        .gender("Female")
-        .submitterDonorId("MDT-AP-0749")
-        .specimens(buildSpecimenListForDonor1())
-        .build();
+    val donor_1 =
+        FileCentricDonor.builder()
+            .donorId("DO1")
+            .gender("Female")
+            .submitterDonorId("MDT-AP-0749")
+            .specimens(buildSpecimenListForDonor1())
+            .build();
 
-    val donor_2 = FileCentricDonor.builder()
-        .donorId("DO2")
-        .gender("Female")
-        .submitterDonorId("MDT-AP-0749")
-        .specimens(buildSpecimenListForDonor2())
-        .build();
+    val donor_2 =
+        FileCentricDonor.builder()
+            .donorId("DO2")
+            .gender("Female")
+            .submitterDonorId("MDT-AP-0749")
+            .specimens(buildSpecimenListForDonor2())
+            .build();
 
     val results = FileCentricDocumentConverter.getDonors(analysisObj);
 

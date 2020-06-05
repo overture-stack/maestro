@@ -26,6 +26,5 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class GetAllStudiesCommand {
-    @NonNull
-    private String filesRepositoryBaseUrl;
+  @NonNull private String filesRepositoryBaseUrl;
 }

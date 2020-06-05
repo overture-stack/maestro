@@ -10,7 +10,7 @@ import lombok.experimental.FieldNameConstants;
 @AllArgsConstructor
 @EqualsAndHashCode
 @FieldNameConstants
-public class AnalysisCentricFile  {
+public class AnalysisCentricFile {
 
   @NonNull private String objectId;
 

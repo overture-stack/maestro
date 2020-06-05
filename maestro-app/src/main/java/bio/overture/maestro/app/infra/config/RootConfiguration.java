@@ -35,70 +35,66 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.reactive.function.client.WebClient;
 
-/**
- * Aggregates all configuration in one place
- */
+/** Aggregates all configuration in one place */
 @Configuration
 @Import({
-    DomainApiConfig.class,
-    PortsConfig.class,
-    InfraConfig.class,
+  DomainApiConfig.class,
+  PortsConfig.class,
+  InfraConfig.class,
 })
 public class RootConfiguration {
-    public final static String ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER = "documentObjectMapper";
+  public static final String ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER = "documentObjectMapper";
 }
 
 /**
- * Configuration about domain related beans (ports implementations), delegated here to keep the domain module agnostic of injection framework .
+ * Configuration about domain related beans (ports implementations), delegated here to keep the
+ * domain module agnostic of injection framework .
  */
 @Configuration
 @Import({
-    ElasticSearchConfig.class,
-    ExclusionRulesConfig.class,
-    MessagingConfig.class,
-    WebConfig.class,
-    SongConfig.class,
-    RepositoryConfig.class,
-    NotificationConfig.class,
+  ElasticSearchConfig.class,
+  ExclusionRulesConfig.class,
+  MessagingConfig.class,
+  WebConfig.class,
+  SongConfig.class,
+  RepositoryConfig.class,
+  NotificationConfig.class,
 })
 class PortsConfig {}
 
 /**
- * Aggregator for all configurations related to
- * the infrastructure beans (I/O & networking, properties, datasources, etc)
+ * Aggregator for all configurations related to the infrastructure beans (I/O & networking,
+ * properties, datasources, etc)
  */
 @Configuration
 @Import({
-    PropertiesConfig.class,
+  PropertiesConfig.class,
 })
 class InfraConfig {
-    @Bean
-    WebClient webClient(ApplicationProperties properties) {
-        return WebClient.builder().codecs(
-            c -> c.defaultCodecs().maxInMemorySize(properties.webClientMaxInMemorySize())).build();
-    }
+  @Bean
+  WebClient webClient(ApplicationProperties properties) {
+    return WebClient.builder()
+        .codecs(c -> c.defaultCodecs().maxInMemorySize(properties.webClientMaxInMemorySize()))
+        .build();
+  }
 }
 
-/**
- * Configuration related to the indexer web api
- */
+/** Configuration related to the indexer web api */
 @Configuration
 @Import({
-    GlobalWebExceptionHandler.class,
-    ManagementController.class,
+  GlobalWebExceptionHandler.class,
+  ManagementController.class,
 })
 class WebConfig {
-    private static final String DEFAULT_DOCUMENT_JSON_MAPPER = "DEFAULT_DOCUMENT_JSON_MAPPER" ;
+  private static final String DEFAULT_DOCUMENT_JSON_MAPPER = "DEFAULT_DOCUMENT_JSON_MAPPER";
 
-    /**
-     * This bean is needed for spring webflux to not use the ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER
-     * marked as primary so by default callers who don't specify which bean they need, will get this.
-     */
-    @Primary
-    @Bean(name = DEFAULT_DOCUMENT_JSON_MAPPER)
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
+  /**
+   * This bean is needed for spring webflux to not use the ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER
+   * marked as primary so by default callers who don't specify which bean they need, will get this.
+   */
+  @Primary
+  @Bean(name = DEFAULT_DOCUMENT_JSON_MAPPER)
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
+  }
 }
-
-

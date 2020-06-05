@@ -27,7 +27,5 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class Study {
-    @NonNull
-    @ExclusionId
-    private String studyId;
+  @NonNull @ExclusionId private String studyId;
 }

@@ -116,8 +116,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         this.indexName,
         this.elasticsearchRestClient,
         this::getAnalysisId,
-        this::mapFileToUpsertRepositoryQuery
-    );
+        this::mapFileToUpsertRepositoryQuery);
   }
 
   private String getAnalysisId(FileCentricDocument d) {
@@ -197,8 +196,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         QueryBuilders.boolQuery()
             .must(
                 QueryBuilders.termQuery(
-                    FileCentricDocument.Fields.analysis + "." + "analysis_id",
-                    analysisId)));
+                    FileCentricDocument.Fields.analysis + "." + "analysis_id", analysisId)));
     this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
   }
 

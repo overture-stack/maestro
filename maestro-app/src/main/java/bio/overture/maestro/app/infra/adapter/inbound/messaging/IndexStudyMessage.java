@@ -23,8 +23,6 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 class IndexStudyMessage {
-    @NonNull
-    private String studyId;
-    @NonNull
-    private String repositoryCode;
+  @NonNull private String studyId;
+  @NonNull private String repositoryCode;
 }

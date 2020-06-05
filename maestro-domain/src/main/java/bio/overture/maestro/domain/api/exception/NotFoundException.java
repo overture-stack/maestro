@@ -17,29 +17,27 @@
 
 package bio.overture.maestro.domain.api.exception;
 
+import static java.lang.String.format;
+
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import static java.lang.String.format;
-
-/**
- * Indicates a required / requested resource / data is missing.
- */
+/** Indicates a required / requested resource / data is missing. */
 @NoArgsConstructor
 public class NotFoundException extends IndexerException {
-    public NotFoundException(String message) {
-        super(message);
-    }
+  public NotFoundException(String message) {
+    super(message);
+  }
 
-    public static NotFoundException buildNotFoundException(
-            @NonNull String formattedMessage, Object... args) {
-        return new NotFoundException(format(formattedMessage, args));
-    }
+  public static NotFoundException buildNotFoundException(
+      @NonNull String formattedMessage, Object... args) {
+    return new NotFoundException(format(formattedMessage, args));
+  }
 
-    public static void checkNotFound(
-            boolean expression, @NonNull String formattedMessage, @NonNull Object... args) {
-        if (!expression) {
-            throw new NotFoundException(format(formattedMessage, args));
-        }
+  public static void checkNotFound(
+      boolean expression, @NonNull String formattedMessage, @NonNull Object... args) {
+    if (!expression) {
+      throw new NotFoundException(format(formattedMessage, args));
     }
+  }
 }

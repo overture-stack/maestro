@@ -22,10 +22,9 @@ import org.springframework.context.annotation.Import;
 
 /**
  * Elasticsearch related configuration this allows us to keep the beans package private to avoid
- * other packages using them instead of the interface, and be more explicit about configuration scope.
+ * other packages using them instead of the interface, and be more explicit about configuration
+ * scope.
  */
 @Configuration
-@Import({
-    ApplicationPropertiesExclusionRulesDAO.class
-})
-public class ExclusionRulesConfig { }
+@Import({ApplicationPropertiesExclusionRulesDAO.class})
+public class ExclusionRulesConfig {}

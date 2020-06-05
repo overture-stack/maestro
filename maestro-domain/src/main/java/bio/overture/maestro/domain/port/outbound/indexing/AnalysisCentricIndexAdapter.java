@@ -4,8 +4,8 @@ import bio.overture.maestro.domain.api.message.IndexResult;
 import lombok.NonNull;
 import reactor.core.publisher.Mono;
 
-public interface AnalysisCentricIndexAdapter  {
+public interface AnalysisCentricIndexAdapter {
 
-  Mono<IndexResult> batchUpsertAnalysisRepositories(@NonNull BatchIndexAnalysisCommand batchIndexAnalysisCommand);
-
+  Mono<IndexResult> batchUpsertAnalysisRepositories(
+      @NonNull BatchIndexAnalysisCommand batchIndexAnalysisCommand);
 }

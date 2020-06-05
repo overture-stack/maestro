@@ -20,8 +20,7 @@ package bio.overture.maestro.domain.entities.indexing;
 import lombok.*;
 
 /**
- * Many samples can belong to an Analysis, a samples represents
- * a donor and a specimen composition.
+ * Many samples can belong to an Analysis, a samples represents a donor and a specimen composition.
  */
 @Getter
 @Builder
@@ -30,11 +29,8 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Sample {
-    @NonNull
-    private String sampleId;
-    @NonNull
-    private String submitterSampleId;
-    @NonNull
-    private String sampleType;
-    private String matchedNormalSubmitterSampleId;
+  @NonNull private String sampleId;
+  @NonNull private String submitterSampleId;
+  @NonNull private String sampleType;
+  private String matchedNormalSubmitterSampleId;
 }

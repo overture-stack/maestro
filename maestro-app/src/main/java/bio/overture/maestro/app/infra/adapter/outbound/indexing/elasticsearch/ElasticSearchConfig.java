@@ -17,9 +17,16 @@
 
 package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 
+import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER;
+
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import lombok.val;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -36,90 +43,85 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-import static bio.overture.maestro.app.infra.config.RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER;
-
 /**
  * Elasticsearch related configuration this allows us to keep the beans package private to avoid
- * other packages using them instead of the interface, and be more explicit about configuration scope.
+ * other packages using them instead of the interface, and be more explicit about configuration
+ * scope.
  */
 @Configuration
 @Import({
-    FileCentricElasticSearchAdapter.class,
-    AnalysisCentricElasticSearchAdapter.class,
-    SnakeCaseJacksonSearchResultMapper.class
+  FileCentricElasticSearchAdapter.class,
+  AnalysisCentricElasticSearchAdapter.class,
+  SnakeCaseJacksonSearchResultMapper.class
 })
 public class ElasticSearchConfig {
 
-    /**
-     * this bean executes when the application starts it's used to initialize the
-     * indexes in elastic search server, can be extended as needed.
-     */
-    @Bean
-    CommandLineRunner elasticsearchBootstrapper(FileCentricElasticSearchAdapter adapter) {
-        return (args) -> adapter.initialize();
-    }
+  /**
+   * this bean executes when the application starts it's used to initialize the indexes in elastic
+   * search server, can be extended as needed.
+   */
+  @Bean
+  CommandLineRunner elasticsearchBootstrapper(FileCentricElasticSearchAdapter adapter) {
+    return (args) -> adapter.initialize();
+  }
 
-    @Bean
-    CommandLineRunner analysisElasticsearchBootstrapper(AnalysisCentricElasticSearchAdapter adapter) {
-        return (args) -> adapter.initialize();
-    }
+  @Bean
+  CommandLineRunner analysisElasticsearchBootstrapper(AnalysisCentricElasticSearchAdapter adapter) {
+    return (args) -> adapter.initialize();
+  }
 
-    @Bean
-    RestHighLevelClient client(ApplicationProperties properties) {
-        val httpHostArrayList = new ArrayList<HttpHost>(properties.elasticSearchClusterNodes()
-            .stream()
-            .map(HttpHost::create)
-            .collect(Collectors.toUnmodifiableList()));
-        val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[]{}));
+  @Bean
+  RestHighLevelClient client(ApplicationProperties properties) {
+    val httpHostArrayList =
+        new ArrayList<HttpHost>(
+            properties.elasticSearchClusterNodes().stream()
+                .map(HttpHost::create)
+                .collect(Collectors.toUnmodifiableList()));
+    val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[] {}));
 
-        builder.setHttpClientConfigCallback((httpAsyncClientBuilder) -> {
-            val connectTimeout = properties.elasticSearchClientConnectionTimeoutMillis();
-            val timeout = properties.elasticSearchClientSocketTimeoutMillis();
-            val requestConfigBuilder = RequestConfig.custom();
+    builder.setHttpClientConfigCallback(
+        (httpAsyncClientBuilder) -> {
+          val connectTimeout = properties.elasticSearchClientConnectionTimeoutMillis();
+          val timeout = properties.elasticSearchClientSocketTimeoutMillis();
+          val requestConfigBuilder = RequestConfig.custom();
 
-            if (connectTimeout > 0) {
-                requestConfigBuilder.setConnectTimeout(connectTimeout);
-                requestConfigBuilder.setConnectionRequestTimeout(connectTimeout);
+          if (connectTimeout > 0) {
+            requestConfigBuilder.setConnectTimeout(connectTimeout);
+            requestConfigBuilder.setConnectionRequestTimeout(connectTimeout);
+          }
+          if (timeout > 0) {
+            requestConfigBuilder.setSocketTimeout(timeout);
+          }
+          httpAsyncClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
+
+          if (properties.elasticSearchTlsTrustSelfSigned()) {
+            SSLContextBuilder sslCtxBuilder = new SSLContextBuilder();
+            try {
+              sslCtxBuilder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+              httpAsyncClientBuilder.setSSLContext(sslCtxBuilder.build());
+            } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
+              throw new RuntimeException("failed to build Elastic rest client");
             }
-            if (timeout > 0) {
-                requestConfigBuilder.setSocketTimeout(timeout);
-            }
-            httpAsyncClientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
+          }
 
-            if (properties.elasticSearchTlsTrustSelfSigned()) {
-                SSLContextBuilder sslCtxBuilder = new SSLContextBuilder();
-                try {
-                    sslCtxBuilder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-                    httpAsyncClientBuilder.setSSLContext(sslCtxBuilder.build());
-                } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
-                    throw new RuntimeException("failed to build Elastic rest client");
-                }
-            }
-
-            // set the credentials provider for auth
-            if (properties.elasticSearchBasicAuthEnabled()) {
-                CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-                credentialsProvider.setCredentials(AuthScope.ANY,
-                    new UsernamePasswordCredentials(properties.elasticSearchAuthUser(),
-                        properties.elasticSearchAuthPassword()));
-                httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-            }
-            return httpAsyncClientBuilder;
+          // set the credentials provider for auth
+          if (properties.elasticSearchBasicAuthEnabled()) {
+            CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+            credentialsProvider.setCredentials(
+                AuthScope.ANY,
+                new UsernamePasswordCredentials(
+                    properties.elasticSearchAuthUser(), properties.elasticSearchAuthPassword()));
+            httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+          }
+          return httpAsyncClientBuilder;
         });
-        return new RestHighLevelClient(builder);
-    }
+    return new RestHighLevelClient(builder);
+  }
 
-    @Bean(name = ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
-    ObjectMapper documentObjectMapper() {
-        val mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        return mapper;
-    }
-
+  @Bean(name = ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
+  ObjectMapper documentObjectMapper() {
+    val mapper = new ObjectMapper();
+    mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    return mapper;
+  }
 }

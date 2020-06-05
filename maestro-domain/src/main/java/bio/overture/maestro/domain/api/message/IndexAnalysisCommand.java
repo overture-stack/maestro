@@ -26,6 +26,5 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class IndexAnalysisCommand {
-    @NonNull
-    private AnalysisIdentifier analysisIdentifier;
+  @NonNull private AnalysisIdentifier analysisIdentifier;
 }

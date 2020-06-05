@@ -19,5 +19,4 @@ public class AnalysisCentricSpecimen {
   @NonNull private Sample samples;
   private String tumourNormalDesignation;
   private String specimenTissueSource;
-
 }
