@@ -18,8 +18,8 @@
 package bio.overture.maestro.domain.entities.indexing;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
 import java.util.List;
+import lombok.*;
 
 @Getter
 @Builder
@@ -29,15 +29,10 @@ import java.util.List;
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Specimen {
-    @NonNull
-    private String specimenId;
-    @NonNull
-    private String specimenType;
-    @NonNull
-    private String submitterSpecimenId;
-    @NonNull
-    private List<Sample> samples;
-    private String tumourNormalDesignation;
-    private String specimenTissueSource;
+  @NonNull private String specimenId;
+  @NonNull private String specimenType;
+  @NonNull private String submitterSpecimenId;
+  @NonNull private List<Sample> samples;
+  private String tumourNormalDesignation;
+  private String specimenTissueSource;
 }
-

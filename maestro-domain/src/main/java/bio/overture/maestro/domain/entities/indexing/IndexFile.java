@@ -26,14 +26,10 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class IndexFile {
-    @NonNull
-    private String objectId;
-    @NonNull
-    private String name;
-    @NonNull
-    private String fileType;
-    @NonNull
-    private String md5sum;
-    private String dataType;
-    private Long size;
+  @NonNull private String objectId;
+  @NonNull private String name;
+  @NonNull private String fileType;
+  @NonNull private String md5sum;
+  private String dataType;
+  private Long size;
 }

@@ -18,14 +18,10 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
+import java.util.Map;
 import lombok.*;
 
-import java.util.Map;
-
-/**
- * This represents the samples donor
- * A donor is part of the {@link Sample} entity.
- */
+/** This represents the samples donor A donor is part of the {@link Sample} entity. */
 @Getter
 @Builder
 @ToString
@@ -33,33 +29,18 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Donor {
-    /**
-     * The id of this donor
-     */
-    @NonNull
-    @ExclusionId
-    private String donorId;
+  /** The id of this donor */
+  @NonNull @ExclusionId private String donorId;
 
-    /**
-     * the id as submitted by the analysis creator
-     */
-    @NonNull
-    private String submitterDonorId;
+  /** the id as submitted by the analysis creator */
+  @NonNull private String submitterDonorId;
 
-    /**
-     * the studyId which this donor belongs to
-     */
-    @NonNull
-    private String studyId;
+  /** the studyId which this donor belongs to */
+  @NonNull private String studyId;
 
-    /**
-     * can be Male, Female, Other
-     */
-    @NonNull
-    private String gender;
+  /** can be Male, Female, Other */
+  @NonNull private String gender;
 
-    /**
-     * for extra information if any.
-     */
-    private Map<String, Object> info;
+  /** for extra information if any. */
+  private Map<String, Object> info;
 }

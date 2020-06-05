@@ -17,38 +17,34 @@
 
 package bio.overture.maestro.app.infra.adapter.outbound.notification;
 
+import static bio.overture.maestro.app.infra.config.properties.ApplicationProperties.FAILURE_LOG_PROP_KEY;
+
 import bio.overture.maestro.domain.api.NotificationChannel;
 import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import reactor.core.publisher.Mono;
 
-import java.util.Set;
-
-import static bio.overture.maestro.app.infra.config.properties.ApplicationProperties.FAILURE_LOG_PROP_KEY;
-
 /**
- * This channel will store any failure in an append only log files
- * it uses logback loggers to do the write operation instead of manually
- * writing to files.
+ * This channel will store any failure in an append only log files it uses logback loggers to do the
+ * write operation instead of manually writing to files.
  *
- * the logs go to separate log files. see logback-spring.xml for the configs.
+ * <p>the logs go to separate log files. see logback-spring.xml for the configs.
  */
 @Slf4j
 @ConditionalOnProperty(value = FAILURE_LOG_PROP_KEY, havingValue = "true")
 public class FileBasedFailuresLogger implements NotificationChannel {
 
-    @Override
-    public Mono<Boolean> send(IndexerNotification notification) {
-        log.error("{}", notification);
-        return Mono.just(true);
-    }
+  @Override
+  public Mono<Boolean> send(IndexerNotification notification) {
+    log.error("{}", notification);
+    return Mono.just(true);
+  }
 
-    @Override
-    public Set<NotificationName> subscriptions() {
-        return Set.of(
-            NotificationName.ALL
-        );
-    }
+  @Override
+  public Set<NotificationName> subscriptions() {
+    return Set.of(NotificationName.ALL);
+  }
 }

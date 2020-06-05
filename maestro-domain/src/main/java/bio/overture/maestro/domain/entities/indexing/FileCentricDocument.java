@@ -17,14 +17,11 @@
 
 package bio.overture.maestro.domain.entities.indexing;
 
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
-import java.util.List;
-
-/**
- * Represents the structure of the index document that corresponds to an analysis "File".
- */
+/** Represents the structure of the index document that corresponds to an analysis "File". */
 @Builder
 @Getter
 @ToString
@@ -34,57 +31,48 @@ import java.util.List;
 @FieldNameConstants
 public class FileCentricDocument {
 
-    @NonNull
-    private String objectId;
+  @NonNull private String objectId;
 
-    @NonNull
-    private String studyId;
+  @NonNull private String studyId;
 
-    private String dataType;
+  private String dataType;
 
-    private String fileType;
+  private String fileType;
 
-    private String fileAccess;
+  private String fileAccess;
 
-    @NonNull
-    private FileCentricAnalysis analysis;
+  @NonNull private FileCentricAnalysis analysis;
 
-    /**
-     * The actual genome analysis files information.
-     */
-    @NonNull
-    private File file;
+  /** The actual genome analysis files information. */
+  @NonNull private File file;
 
-    /**
-     * Each files can be hosted in more than one files repository, this references the other repositories (locations)
-     * where this files can be fetched from.
-     */
-    @NonNull
-    private List<Repository> repositories;
+  /**
+   * Each files can be hosted in more than one files repository, this references the other
+   * repositories (locations) where this files can be fetched from.
+   */
+  @NonNull private List<Repository> repositories;
 
-    @NonNull
-    private List<FileCentricDonor> donors;
+  @NonNull private List<FileCentricDonor> donors;
 
-    /**
-     * This method is to check if the files is a valid replica of another files.
-     * by replication we mean that an analysis can be copied to a different metadata repository to make downloading
-     * the files faster for different geographical locations.
-     * it checks all attributes except for the repository (since the repository is expected to be different)
-     *
-     * @param fileCentricDocument the other files we compare to
-     * @return flag indicates if this is a valid replica.
-     */
-    public boolean isValidReplica(FileCentricDocument fileCentricDocument) {
-        if (fileCentricDocument == null) return false;
-        if (this.equals(fileCentricDocument)) return true;
-        return this.objectId.equals(fileCentricDocument.getObjectId())
-            && this.studyId.equals(fileCentricDocument.getStudyId())
-            && this.dataType.equals(fileCentricDocument.getDataType())
-            && this.fileType.equals(fileCentricDocument.getFileType())
-            && this.fileAccess.equals(fileCentricDocument.getFileAccess())
-            && this.donors.equals(fileCentricDocument.getDonors())
-            && this.analysis.equals(fileCentricDocument.getAnalysis())
-            && this.file.equals(fileCentricDocument.getFile());
-    }
+  /**
+   * This method is to check if the files is a valid replica of another files. by replication we
+   * mean that an analysis can be copied to a different metadata repository to make downloading the
+   * files faster for different geographical locations. it checks all attributes except for the
+   * repository (since the repository is expected to be different)
+   *
+   * @param fileCentricDocument the other files we compare to
+   * @return flag indicates if this is a valid replica.
+   */
+  public boolean isValidReplica(FileCentricDocument fileCentricDocument) {
+    if (fileCentricDocument == null) return false;
+    if (this.equals(fileCentricDocument)) return true;
+    return this.objectId.equals(fileCentricDocument.getObjectId())
+        && this.studyId.equals(fileCentricDocument.getStudyId())
+        && this.dataType.equals(fileCentricDocument.getDataType())
+        && this.fileType.equals(fileCentricDocument.getFileType())
+        && this.fileAccess.equals(fileCentricDocument.getFileAccess())
+        && this.donors.equals(fileCentricDocument.getDonors())
+        && this.analysis.equals(fileCentricDocument.getAnalysis())
+        && this.file.equals(fileCentricDocument.getFile());
+  }
 }
-

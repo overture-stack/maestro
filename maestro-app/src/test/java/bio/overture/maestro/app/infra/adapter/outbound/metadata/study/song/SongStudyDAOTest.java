@@ -17,6 +17,13 @@
 
 package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
 
+import static bio.overture.masestro.test.Fixture.loadJsonFixture;
+import static bio.overture.masestro.test.Fixture.loadJsonString;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
@@ -25,6 +32,7 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.masestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import java.util.List;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -42,189 +50,164 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.retry.RetryExhaustedException;
 import reactor.test.StepVerifier;
 
-import java.util.List;
-import static bio.overture.masestro.test.Fixture.loadJsonFixture;
-import static bio.overture.masestro.test.Fixture.loadJsonString;
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @Slf4j
 @Tag(TestCategory.INT_TEST)
-@SpringBootTest(properties = {
-    "embedded.elasticsearch.enabled=false"
-})
+@SpringBootTest(properties = {"embedded.elasticsearch.enabled=false"})
 @ContextConfiguration(classes = {SongStudyDAOTest.Config.class})
 @AutoConfigureWireMock(port = 0)
 class SongStudyDAOTest {
 
-    @Value("${wiremock.server.port}")
-    private int wiremockPort;
+  @Value("${wiremock.server.port}")
+  private int wiremockPort;
 
-    @Autowired
-    private StudyDAO songStudyDAO;
+  @Autowired private StudyDAO songStudyDAO;
 
-    @Test
-    void fetchingAnalysisShouldReturnMonoErrorIfRetriesExhausted() {
+  @Test
+  void fetchingAnalysisShouldReturnMonoErrorIfRetriesExhausted() {
 
-        //given
-        val analysisId = "EGAZ00001254247";
-        val command = GetAnalysisCommand.builder()
-            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
+    // given
+    val analysisId = "EGAZ00001254247";
+    val command =
+        GetAnalysisCommand.builder()
+            .filesRepositoryBaseUrl("http://localhost:" + wiremockPort)
             .studyId("PEME-CA")
             .analysisId(analysisId)
             .build();
 
-        stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
-                .willReturn(aResponse()
+    stubFor(
+        request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
+            .willReturn(
+                aResponse()
                     .withStatus(400)
                     .withBody("<p> Some wierd unexpected text </p>")
-                    .withHeader("content-type", "text/html")
-                )
-        );
+                    .withHeader("content-type", "text/html")));
 
-        //when
-        val analysesMono = songStudyDAO.getAnalysis(command);
+    // when
+    val analysesMono = songStudyDAO.getAnalysis(command);
 
-        //then
-        StepVerifier.create(analysesMono)
-            .expectErrorSatisfies((e) -> {
-                assertTrue(e instanceof RetryExhaustedException);
-            }).verify();
-    }
+    // then
+    StepVerifier.create(analysesMono)
+        .expectErrorSatisfies(
+            (e) -> {
+              assertTrue(e instanceof RetryExhaustedException);
+            })
+        .verify();
+  }
 
-    @Test
-    @SneakyThrows
-    void shouldRetryFetchingAnalysisOnFailure() {
-        val analysis = loadJsonString(this.getClass(),
-            "PEME-CA.analysis.json");
-        val analysisObj = loadJsonFixture(this.getClass(),
-            "PEME-CA.analysis.json", Analysis.class);
-        val analysisId = "EGAZ00001254247";
-        stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
-                .inScenario("RANDOM_FAILURE")
-                .whenScenarioStateIs(Scenario.STARTED)
-                .willReturn(aResponse()
+  @Test
+  @SneakyThrows
+  void shouldRetryFetchingAnalysisOnFailure() {
+    val analysis = loadJsonString(this.getClass(), "PEME-CA.analysis.json");
+    val analysisObj = loadJsonFixture(this.getClass(), "PEME-CA.analysis.json", Analysis.class);
+    val analysisId = "EGAZ00001254247";
+    stubFor(
+        request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
+            .inScenario("RANDOM_FAILURE")
+            .whenScenarioStateIs(Scenario.STARTED)
+            .willReturn(
+                aResponse()
                     .withStatus(400)
                     .withBody("<p> some wierd unexpected text </p>")
-                    .withHeader("content-type", "text/html")
-                )
-                .willSetStateTo("WORKING")
-        );
+                    .withHeader("content-type", "text/html"))
+            .willSetStateTo("WORKING"));
 
-        stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
-                .inScenario("RANDOM_FAILURE")
-                .whenScenarioStateIs("WORKING")
-                .willReturn(aResponse()
+    stubFor(
+        request("GET", urlEqualTo("/studies/PEME-CA/analysis/" + analysisId))
+            .inScenario("RANDOM_FAILURE")
+            .whenScenarioStateIs("WORKING")
+            .willReturn(
+                aResponse()
                     .withBody(analysis)
                     .withStatus(200)
-                    .withHeader("content-type", "application/json")
-                )
-        );
+                    .withHeader("content-type", "application/json")));
 
-        val analysesMono = songStudyDAO.getAnalysis(GetAnalysisCommand.builder()
-            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
-            .studyId("PEME-CA")
-            .analysisId(analysisId)
-            .build()
-        );
+    val analysesMono =
+        songStudyDAO.getAnalysis(
+            GetAnalysisCommand.builder()
+                .filesRepositoryBaseUrl("http://localhost:" + wiremockPort)
+                .studyId("PEME-CA")
+                .analysisId(analysisId)
+                .build());
 
-        StepVerifier.create(analysesMono)
-            .expectNext(analysisObj)
-            .verifyComplete();
+    StepVerifier.create(analysesMono).expectNext(analysisObj).verifyComplete();
+  }
 
-    }
-
-    @Test
-    @SneakyThrows
-    void shouldRetryFetchingStudyAnalysesOnFailure() {
-        val analyses = loadJsonString(this.getClass(),
-            "PEME-CA.study.json");
-        val analysesList = loadJsonFixture(this.getClass(),
-            "PEME-CA.study.json",  new TypeReference<List<Analysis>>() {});
-        stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-                .inScenario("RANDOM_FAILURE")
-                .whenScenarioStateIs(Scenario.STARTED)
-                .willReturn(aResponse()
+  @Test
+  @SneakyThrows
+  void shouldRetryFetchingStudyAnalysesOnFailure() {
+    val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val analysesList =
+        loadJsonFixture(
+            this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
+    stubFor(
+        request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .inScenario("RANDOM_FAILURE")
+            .whenScenarioStateIs(Scenario.STARTED)
+            .willReturn(
+                aResponse()
                     .withStatus(400)
                     .withBody("<p> some wierd unexpected text </p>")
-                    .withHeader("content-type", "text/html")
-                )
-                .willSetStateTo("WORKING")
-        );
+                    .withHeader("content-type", "text/html"))
+            .willSetStateTo("WORKING"));
 
-        stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-                .inScenario("RANDOM_FAILURE")
-                .whenScenarioStateIs("WORKING")
-                .willReturn(aResponse()
+    stubFor(
+        request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .inScenario("RANDOM_FAILURE")
+            .whenScenarioStateIs("WORKING")
+            .willReturn(
+                aResponse()
                     .withBody(analyses)
                     .withStatus(200)
-                    .withHeader("content-type", "application/json")
-                )
-        );
+                    .withHeader("content-type", "application/json")));
 
-        val analysesMono = songStudyDAO.getStudyAnalyses(GetStudyAnalysesCommand.builder()
-            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
-            .studyId("PEME-CA")
-            .build()
-        );
+    val analysesMono =
+        songStudyDAO.getStudyAnalyses(
+            GetStudyAnalysesCommand.builder()
+                .filesRepositoryBaseUrl("http://localhost:" + wiremockPort)
+                .studyId("PEME-CA")
+                .build());
 
-        StepVerifier.create(analysesMono)
-            .expectNext(analysesList)
-            .verifyComplete();
+    StepVerifier.create(analysesMono).expectNext(analysesList).verifyComplete();
+  }
 
-    }
-
-    @Test
-    void fetchingStudyAnalysesShouldReturnRetryExhaustedException() {
-        //given
-        val command = GetStudyAnalysesCommand.builder()
-            .filesRepositoryBaseUrl("http://localhost:"+ wiremockPort)
+  @Test
+  void fetchingStudyAnalysesShouldReturnRetryExhaustedException() {
+    // given
+    val command =
+        GetStudyAnalysesCommand.builder()
+            .filesRepositoryBaseUrl("http://localhost:" + wiremockPort)
             .studyId("PEME-CA")
             .build();
-        stubFor(
-            request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-                .willReturn(aResponse()
+    stubFor(
+        request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+            .willReturn(
+                aResponse()
                     .withStatus(400)
                     .withBody("<p> Some wierd unexpected text </p>")
-                    .withHeader("content-type", "text/html")
-                )
-        );
+                    .withHeader("content-type", "text/html")));
 
-        //when
-        val analysesMono = songStudyDAO.getStudyAnalyses(command);
+    // when
+    val analysesMono = songStudyDAO.getStudyAnalyses(command);
 
-        //then
-        StepVerifier.create(analysesMono)
-            .expectError(RetryExhaustedException.class)
-            .verify();
+    // then
+    StepVerifier.create(analysesMono).expectError(RetryExhaustedException.class).verify();
+  }
+
+  @Import({SongConfig.class})
+  @Configuration
+  static class Config {
+    @Bean
+    WebClient webClient() {
+      return WebClient.builder().build();
     }
 
-    @Import({
-        SongConfig.class
-    })
-    @Configuration
-    static class Config {
-        @Bean
-        WebClient webClient() {
-            return WebClient.builder().build();
-        }
-
-        @Bean
-        ApplicationProperties properties() {
-            ApplicationProperties properties = mock(ApplicationProperties.class);
-            when(properties.songMaxRetries()).thenReturn(3);
-            when(properties.songStudyCallTimeoutSeconds()).thenReturn(20);
-            when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED");
-            return properties;
-        }
+    @Bean
+    ApplicationProperties properties() {
+      ApplicationProperties properties = mock(ApplicationProperties.class);
+      when(properties.songMaxRetries()).thenReturn(3);
+      when(properties.songStudyCallTimeoutSeconds()).thenReturn(20);
+      when(properties.indexableStudyStatuses()).thenReturn("PUBLISHED");
+      return properties;
     }
-
+  }
 }
-

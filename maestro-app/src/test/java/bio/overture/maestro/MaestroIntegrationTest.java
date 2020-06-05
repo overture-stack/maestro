@@ -34,41 +34,39 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ContextConfiguration;
 
-
 /**
- * Base class for full integration tests.
- * it will create an elasticsearch container (using test containers).
+ * Base class for full integration tests. it will create an elasticsearch container (using test
+ * containers).
  *
- * if you need a more light weight faster tests, avoid using this class, this is meant for full end to end.
+ * <p>if you need a more light weight faster tests, avoid using this class, this is meant for full
+ * end to end.
  */
 @Slf4j
 @Tag(TestCategory.INT_TEST)
 @ContextConfiguration(classes = {Maestro.class})
 @AutoConfigureWireMock(port = 0) // we bind the port in the application.yml ${wiremock.server.port}
-@SpringBootTest(classes = {Maestro.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
-    "embedded.elasticsearch.enabled=true"
-})
+@SpringBootTest(
+    classes = {Maestro.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = {"embedded.elasticsearch.enabled=true"})
 public abstract class MaestroIntegrationTest {
 
-    /** wait time for elastic search to update */
-    @Value("${maestro.test.elasticsearch.sleep_millis:2500}")
-    protected int sleepMillis;
+  /** wait time for elastic search to update */
+  @Value("${maestro.test.elasticsearch.sleep_millis:2500}")
+  protected int sleepMillis;
 
-    @Autowired
-    private ApplicationProperties properties;
+  @Autowired private ApplicationProperties properties;
 
-    @Autowired
-    private RestHighLevelClient client;
+  @Autowired private RestHighLevelClient client;
 
-    @AfterEach
-    @SneakyThrows
-    void tearDown() {
-        // clean indexes after each test to keep tests isolated
-        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest();
-        deleteByQueryRequest.indices(properties.fileCentricAlias());
-        deleteByQueryRequest.setQuery(QueryBuilders.matchAllQuery());
-        client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
-        Thread.sleep(sleepMillis);
-    }
-
+  @AfterEach
+  @SneakyThrows
+  void tearDown() {
+    // clean indexes after each test to keep tests isolated
+    DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest();
+    deleteByQueryRequest.indices(properties.fileCentricAlias());
+    deleteByQueryRequest.setQuery(QueryBuilders.matchAllQuery());
+    client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
+    Thread.sleep(sleepMillis);
+  }
 }

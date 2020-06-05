@@ -18,14 +18,10 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Map;
 import lombok.*;
 
-import java.util.Map;
-
-/**
- * A Specimen provides information about the source of the samples
- */
+/** A Specimen provides information about the source of the samples */
 @Getter
 @Builder
 @ToString
@@ -33,12 +29,11 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Specimen {
-    @ExclusionId
-    private String specimenId;
-    private String donorId;
-    private String submitterSpecimenId;
-    private String tumourNormalDesignation;
-    private String specimenTissueSource;
-    private String specimenType;
-    private Map<String, Object> info;
+  @ExclusionId private String specimenId;
+  private String donorId;
+  private String submitterSpecimenId;
+  private String tumourNormalDesignation;
+  private String specimenTissueSource;
+  private String specimenType;
+  private Map<String, Object> info;
 }

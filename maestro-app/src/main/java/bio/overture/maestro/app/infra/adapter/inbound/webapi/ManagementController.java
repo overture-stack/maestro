@@ -71,8 +71,7 @@ public class ManagementController {
             .build());
   }
 
-  @PostMapping(
-      "/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+  @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
   @ResponseStatus(HttpStatus.CREATED)
   public Flux<IndexResult> indexAnalysis(
       @PathVariable String analysisId,

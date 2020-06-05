@@ -16,5 +16,3 @@
  */
 
 package bio.overture.maestro.app.infra.adapter.outbound.notification;
-
-

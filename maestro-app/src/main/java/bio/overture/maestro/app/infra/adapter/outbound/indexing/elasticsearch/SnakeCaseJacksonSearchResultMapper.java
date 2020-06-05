@@ -19,38 +19,37 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import java.util.LinkedList;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.elasticsearch.action.get.MultiGetResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-
-
 class SnakeCaseJacksonSearchResultMapper {
 
-    private ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
 
-    public SnakeCaseJacksonSearchResultMapper(@Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
-                                                  ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+  public SnakeCaseJacksonSearchResultMapper(
+      @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
 
-    @SneakyThrows
-    <T> LinkedList<T> mapResults(MultiGetResponse responses, Class<T> clazz) {
-        val list = new LinkedList<T>();
-        Arrays.stream(responses.getResponses())
-            .filter((response) -> !response.isFailed() && response.getResponse().isExists())
-            .forEach((response) -> {
-                T result = convertSourceToObject(clazz, response.getResponse().getSourceAsString());
-                list.add(result);
+  @SneakyThrows
+  <T> LinkedList<T> mapResults(MultiGetResponse responses, Class<T> clazz) {
+    val list = new LinkedList<T>();
+    Arrays.stream(responses.getResponses())
+        .filter((response) -> !response.isFailed() && response.getResponse().isExists())
+        .forEach(
+            (response) -> {
+              T result = convertSourceToObject(clazz, response.getResponse().getSourceAsString());
+              list.add(result);
             });
-        return list;
-    }
+    return list;
+  }
 
-    @SneakyThrows
-    private <T> T convertSourceToObject(Class<T> clazz, String source) {
-        return objectMapper.readValue(source, clazz);
-    }
+  @SneakyThrows
+  private <T> T convertSourceToObject(Class<T> clazz, String source) {
+    return objectMapper.readValue(source, clazz);
+  }
 }

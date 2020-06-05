@@ -17,8 +17,8 @@
 
 package bio.overture.maestro.domain.entities.indexing;
 
-import lombok.*;
 import java.util.List;
+import lombok.*;
 
 @Builder
 @Getter
@@ -27,15 +27,11 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class FileCentricDonor {
-    @NonNull
-    private String donorId;
+  @NonNull private String donorId;
 
-    @NonNull
-    private String gender;
+  @NonNull private String gender;
 
-    @NonNull
-    private String submitterDonorId;
+  @NonNull private String submitterDonorId;
 
-    @NonNull
-    private List<Specimen> specimens;
+  @NonNull private List<Specimen> specimens;
 }

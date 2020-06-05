@@ -26,6 +26,5 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class IndexStudyRepositoryCommand {
-    @NonNull
-    private String repositoryCode;
+  @NonNull private String repositoryCode;
 }

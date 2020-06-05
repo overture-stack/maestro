@@ -17,6 +17,16 @@
 
 package bio.overture.maestro.domain.api;
 
+import static bio.overture.maestro.domain.api.DefaultIndexer.REPO_CODE;
+import static bio.overture.masestro.test.Fixture.loadJsonFixture;
+import static bio.overture.masestro.test.Fixture.loadJsonFixtureSnakeCase;
+import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.exception.IndexerException;
 import bio.overture.maestro.domain.api.message.*;
@@ -39,6 +49,11 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisComma
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
@@ -53,22 +68,6 @@ import org.mockito.quality.Strictness;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static bio.overture.maestro.domain.api.DefaultIndexer.REPO_CODE;
-import static bio.overture.masestro.test.Fixture.loadJsonFixture;
-import static bio.overture.masestro.test.Fixture.loadJsonFixtureSnakeCase;
-import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)

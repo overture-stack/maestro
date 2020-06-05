@@ -18,16 +18,15 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
-import lombok.*;
-
 import java.util.Map;
+import lombok.*;
 
 /**
  * A file represents an analysis output that results from the experiment on the Donor specimen.
  * multiple files belong to one Analysis and reside in an object store.
  *
- * A file can reside in multiple repositories and it can have relations to other files in a single analysis
- * like BAM and its index file BAI.
+ * <p>A file can reside in multiple repositories and it can have relations to other files in a
+ * single analysis like BAM and its index file BAI.
  */
 @Getter
 @Builder
@@ -36,22 +35,14 @@ import java.util.Map;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class File {
-    @NonNull
-    @ExclusionId
-    private String objectId;
-    @NonNull
-    private String studyId;
-    @NonNull
-    private String analysisId;
-    @NonNull
-    private String fileName;
-    @NonNull
-    private String fileType;
-    @NonNull
-    private String fileMd5sum;
-    @NonNull
-    private String fileAccess;
-    private String dataType;
-    private long fileSize;
-    private Map<String, Object> info;
+  @NonNull @ExclusionId private String objectId;
+  @NonNull private String studyId;
+  @NonNull private String analysisId;
+  @NonNull private String fileName;
+  @NonNull private String fileType;
+  @NonNull private String fileMd5sum;
+  @NonNull private String fileAccess;
+  private String dataType;
+  private long fileSize;
+  private Map<String, Object> info;
 }

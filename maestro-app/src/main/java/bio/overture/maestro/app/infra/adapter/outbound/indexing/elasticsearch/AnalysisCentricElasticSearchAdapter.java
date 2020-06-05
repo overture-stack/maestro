@@ -14,7 +14,6 @@ import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexAnalysisComm
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-
 import java.util.*;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -92,8 +91,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
         this.indexName,
         this.elasticsearchRestClient,
         AnalysisCentricDocument::getAnalysisId,
-        this::mapAnalysisToUpsertRepositoryQuery
-    );
+        this::mapAnalysisToUpsertRepositoryQuery);
   }
 
   @SneakyThrows

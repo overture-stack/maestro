@@ -26,11 +26,9 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class File {
-    @NonNull
-    private String name;
-    @NonNull
-    private String md5sum;
-    private Long size;
-    private String dataType;
-    private IndexFile indexFile;
+  @NonNull private String name;
+  @NonNull private String md5sum;
+  private Long size;
+  private String dataType;
+  private IndexFile indexFile;
 }

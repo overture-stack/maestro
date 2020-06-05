@@ -20,50 +20,45 @@ package bio.overture.maestro.app.infra.adapter.outbound.notification;
 import bio.overture.maestro.domain.api.NotificationChannel;
 import bio.overture.maestro.domain.api.NotificationName;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.core.annotation.Order;
 import reactor.core.publisher.Mono;
 
-import java.util.Set;
-
-
 /**
- * This channel is to log the failures to the standard logger (console).
- * it's different than the FileBasedFailuresLogger in the fact that this is
- * not persistent or for failures review.
+ * This channel is to log the failures to the standard logger (console). it's different than the
+ * FileBasedFailuresLogger in the fact that this is not persistent or for failures review.
  */
 @Slf4j
 @Order(1)
 public class LoggingNotificationChannel implements NotificationChannel {
 
-    private static final int MAX_NOTIFICATION_STRING_LENGTH = 1024;
+  private static final int MAX_NOTIFICATION_STRING_LENGTH = 1024;
 
-    @Override
-    public Mono<Boolean> send(IndexerNotification notification) {
-        val notificationString = notification.toString();
-        val notificationStringTruncated = notificationString.substring(0,
-            Math.min(notificationString.length(), MAX_NOTIFICATION_STRING_LENGTH));
+  @Override
+  public Mono<Boolean> send(IndexerNotification notification) {
+    val notificationString = notification.toString();
+    val notificationStringTruncated =
+        notificationString.substring(
+            0, Math.min(notificationString.length(), MAX_NOTIFICATION_STRING_LENGTH));
 
-        switch (notification.getNotificationName().getCategory()) {
-            case ERROR:
-                log.error("{}", notificationStringTruncated);
-                break;
-            case WARN:
-                log.warn("{}", notificationStringTruncated);
-                break;
-            default:
-                log.info("{}", notificationStringTruncated);
-        }
-
-        return Mono.just(true);
+    switch (notification.getNotificationName().getCategory()) {
+      case ERROR:
+        log.error("{}", notificationStringTruncated);
+        break;
+      case WARN:
+        log.warn("{}", notificationStringTruncated);
+        break;
+      default:
+        log.info("{}", notificationStringTruncated);
     }
 
-    @Override
-    public Set<NotificationName> subscriptions() {
-        return Set.of(
-            NotificationName.ALL
-        );
-    }
+    return Mono.just(true);
+  }
 
+  @Override
+  public Set<NotificationName> subscriptions() {
+    return Set.of(NotificationName.ALL);
+  }
 }

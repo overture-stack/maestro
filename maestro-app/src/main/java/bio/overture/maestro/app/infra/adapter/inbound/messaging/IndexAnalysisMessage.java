@@ -23,13 +23,10 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 class IndexAnalysisMessage {
-    @NonNull
-    private String analysisId;
-    @NonNull
-    private String studyId;
-    @NonNull
-    private String repositoryCode;
+  @NonNull private String analysisId;
+  @NonNull private String studyId;
+  @NonNull private String repositoryCode;
 
-    /** if callers set this flag it will do a remove instead of add.*/
-    private Boolean removeAnalysis = false;
+  /** if callers set this flag it will do a remove instead of add. */
+  private Boolean removeAnalysis = false;
 }

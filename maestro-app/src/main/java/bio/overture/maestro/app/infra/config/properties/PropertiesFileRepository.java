@@ -18,19 +18,19 @@
 package bio.overture.maestro.app.infra.config.properties;
 
 public interface PropertiesFileRepository {
-    String getName();
+  String getName();
 
-    String getCode();
+  String getCode();
 
-    String getUrl();
+  String getUrl();
 
-    String getDataPath();
+  String getDataPath();
 
-    String getMetadataPath();
+  String getMetadataPath();
 
-    String getOrganization();
+  String getOrganization();
 
-    String getCountry();
+  String getCountry();
 
-    bio.overture.maestro.domain.entities.indexing.StorageType getStorageType();
+  bio.overture.maestro.domain.entities.indexing.StorageType getStorageType();
 }

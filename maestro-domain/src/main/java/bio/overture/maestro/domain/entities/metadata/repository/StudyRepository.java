@@ -17,13 +17,12 @@
 
 package bio.overture.maestro.domain.entities.metadata.repository;
 
-
 import bio.overture.maestro.domain.entities.indexing.StorageType;
 import lombok.*;
 
 /**
- * This represents a studyId (including analyses & files) metadata repository, holds information about sources where this
- * indexer can pull metadata from.
+ * This represents a studyId (including analyses & files) metadata repository, holds information
+ * about sources where this indexer can pull metadata from.
  */
 @Builder
 @Getter
@@ -32,39 +31,21 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class StudyRepository {
-    /**
-     * display name of the repository
-     */
-    @NonNull
-    private String name;
+  /** display name of the repository */
+  @NonNull private String name;
 
-    /**
-     * a unique code for the repository
-     */
-    @NonNull
-    private String code;
+  /** a unique code for the repository */
+  @NonNull private String code;
 
-    /**
-     * the country where this files repository resides
-     */
-    @NonNull
-    private String country;
+  /** the country where this files repository resides */
+  @NonNull private String country;
 
-    /**
-     * based url of the host of this repository metadata
-     */
-    @NonNull
-    private String url;
+  /** based url of the host of this repository metadata */
+  @NonNull private String url;
 
-    /**
-     * the block storage type of files (s3 usually)
-     */
-    @NonNull
-    private StorageType storageType;
+  /** the block storage type of files (s3 usually) */
+  @NonNull private StorageType storageType;
 
-    /**
-     * the organization the owns this files repository
-     */
-    @NonNull
-    private String organization;
+  /** the organization the owns this files repository */
+  @NonNull private String organization;
 }
