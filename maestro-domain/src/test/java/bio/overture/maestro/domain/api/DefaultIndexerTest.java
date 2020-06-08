@@ -407,7 +407,7 @@ class DefaultIndexerTest {
     val studyId = "PEME-CA";
     val analysisId = "EGAZ00001254368";
     val filesRepository = getStubFilesRepository();
-    val result = IndexResult.builder().successful(true).build();
+    val result = IndexResult.builder().indexName("file_centric_1.0").successful(true).build();
     val monoResult = Mono.<Void>fromSupplier(() -> null);
 
     given(indexServerAdapter.removeAnalysisFiles(eq(analysisId))).willReturn(monoResult);

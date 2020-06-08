@@ -8,4 +8,6 @@ public interface AnalysisCentricIndexAdapter {
 
   Mono<IndexResult> batchUpsertAnalysisRepositories(
       @NonNull BatchIndexAnalysisCommand batchIndexAnalysisCommand);
+
+  Mono<Void> removeAnalysisDocs(String analysisId);
 }

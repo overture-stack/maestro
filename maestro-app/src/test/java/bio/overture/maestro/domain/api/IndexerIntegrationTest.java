@@ -416,7 +416,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                 .build());
 
     StepVerifier.create(result)
-        .expectNext(IndexResult.builder().successful(true).build())
+        .expectNext(IndexResult.builder().indexName("file_centric_1.0").successful(true).build())
         .verifyComplete();
     Thread.sleep(sleepMillis);
 
