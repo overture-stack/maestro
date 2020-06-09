@@ -1,5 +1,6 @@
 package bio.overture.maestro.domain.entities.indexing.analysis;
 
+import bio.overture.maestro.domain.entities.indexing.Donor;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -28,7 +29,7 @@ public class AnalysisCentricDocument {
 
   @NonNull private String studyId;
 
-  @NonNull private List<AnalysisCentricDonor> donors;
+  @NonNull private List<Donor> donors;
 
   @NonNull private List<AnalysisCentricFile> files;
 
