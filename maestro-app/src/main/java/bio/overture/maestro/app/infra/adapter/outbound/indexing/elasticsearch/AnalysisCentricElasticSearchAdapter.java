@@ -14,6 +14,10 @@ import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexAnalysisComm
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
+import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -28,11 +32,14 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndexAdapter {
@@ -94,6 +101,12 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
         this::mapAnalysisToUpsertRepositoryQuery);
   }
 
+  @Override
+  public Mono<Void> removeAnalysisDocs(String analysisId) {
+    return Mono.fromSupplier(() -> this.deleteByAnalysisId(analysisId))
+        .subscribeOn(Schedulers.elastic());
+  }
+
   @SneakyThrows
   private UpdateRequest mapAnalysisToUpsertRepositoryQuery(
       AnalysisCentricDocument analysisCentricDocument) {
@@ -152,5 +165,29 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   private String loadIndexSourceAsString(String typeName) {
     log.trace("in loadIndexSourceAsString: {}", typeName);
     return inputStreamToString(analysisCentricIndex.getInputStream());
+  }
+
+  @SneakyThrows
+  private Void deleteByAnalysisId(String analysisId) {
+    val retryConfig =
+        RetryConfig.custom()
+            .maxAttempts(this.maxRetriesAttempts)
+            .retryExceptions(IOException.class)
+            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
+            .build();
+    val retry = Retry.of("deleteByAnalysisId", retryConfig);
+    val decorated =
+        Retry.decorateCheckedRunnable(retry, () -> this.deleteByAnalysisIdRunnable(analysisId));
+    decorated.run();
+    return null;
+  }
+
+  @SneakyThrows
+  private void deleteByAnalysisIdRunnable(@NonNull String analysisId) {
+    log.trace("deleteByAnalysisId called, analysis_id {} ", analysisId);
+    DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(this.alias);
+    deleteByQueryRequest.setQuery(
+        QueryBuilders.boolQuery().must(QueryBuilders.termQuery("analysis_id", analysisId)));
+    this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
   }
 }

@@ -144,12 +144,32 @@ class DefaultIndexer implements Indexer {
   }
 
   @Override
-  public Mono<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand) {
+  public Flux<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand) {
     val analysisIdentifier = removeAnalysisCommand.getAnalysisIdentifier();
-    return this.fileCentricIndexAdapter
-        .removeAnalysisFiles(analysisIdentifier.getAnalysisId())
-        .thenReturn(IndexResult.builder().successful(true).build())
-        .onErrorResume((e) -> handleRemoveAnalysisError(analysisIdentifier));
+    List<Mono<IndexResult>> monos = new ArrayList<>();
+
+    if (isFileCentricEnabled) {
+      val mono =
+          this.fileCentricIndexAdapter
+              .removeAnalysisFiles(analysisIdentifier.getAnalysisId())
+              .thenReturn(
+                  IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+              .onErrorResume(
+                  (e) -> handleRemoveAnalysisError(FILE_CENTRIC_INDEX, analysisIdentifier));
+      monos.add(mono);
+    }
+
+    if (isAnalysisCentricEnabled) {
+      val mono =
+          this.analysisCentricIndexAdapter
+              .removeAnalysisDocs(analysisIdentifier.getAnalysisId())
+              .thenReturn(
+                  IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
+              .onErrorResume(
+                  (e) -> handleRemoveAnalysisError(ANALYSIS_CENTRIC_INDEX, analysisIdentifier));
+      monos.add(mono);
+    }
+    return Flux.merge(monos);
   }
 
   @Override
@@ -264,12 +284,13 @@ class DefaultIndexer implements Indexer {
   }
 
   private Mono<? extends IndexResult> handleRemoveAnalysisError(
-      @NonNull AnalysisIdentifier analysisIdentifier) {
+      String indexName, @NonNull AnalysisIdentifier analysisIdentifier) {
     val failureInfo = Map.of(ANALYSIS_ID, Set.of(analysisIdentifier.getAnalysisId()));
     this.notifier.notify(
         new IndexerNotification(NotificationName.FAILED_TO_REMOVE_ANALYSIS, failureInfo));
     return Mono.just(
         IndexResult.builder()
+            .indexName(indexName)
             .failureData(FailureData.builder().failingIds(failureInfo).build())
             .build());
   }

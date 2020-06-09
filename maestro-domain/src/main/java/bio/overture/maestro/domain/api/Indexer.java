@@ -41,7 +41,7 @@ public interface Indexer {
    * @param removeAnalysisCommand specify repo studyId and analysis id
    * @return flag indicating success and failure info if any
    */
-  Mono<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand);
+  Flux<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand);
 
   /**
    * A generic method to index a study.

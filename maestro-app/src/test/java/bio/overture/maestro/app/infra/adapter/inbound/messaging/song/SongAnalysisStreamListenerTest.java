@@ -41,7 +41,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.test.context.ContextConfiguration;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /*
  * This test is based on : https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/#_testing
@@ -108,7 +107,7 @@ class SongAnalysisStreamListenerTest {
         "{ \"analysisId\" : \"EGAZ00001254368\", \"studyId\" : \"PEME-CA\", "
             + "\"songServerId\": \"collab\", \"state\": \"UNPUBLISHED\" }";
     when(indexer.removeAnalysis(any()))
-        .thenReturn(Mono.just(IndexResult.builder().successful(true).build()));
+        .thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
     sink.songInput().send(new GenericMessage<>(analysisPublishedMessage));
     Thread.sleep(2000);
     then(indexer)

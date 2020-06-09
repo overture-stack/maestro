@@ -94,7 +94,7 @@ public class IndexingMessagesStreamListener {
     }
   }
 
-  private Mono<Tuple2<IndexAnalysisMessage, IndexResult>> removeAnalysis(IndexAnalysisMessage msg) {
+  private Flux<Tuple2<IndexAnalysisMessage, IndexResult>> removeAnalysis(IndexAnalysisMessage msg) {
     return indexer
         .removeAnalysis(
             RemoveAnalysisCommand.builder()
