@@ -37,7 +37,12 @@
       "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
       "size": 8939816,
       "dcc_project_code": "PEME-CA",
-      "isPcawg": false
+      "isPcawg": false,
+      "nested": {
+        "nestedAgain": [
+          {"theeNested": "word"}
+        ]
+      }
     }
   },
   "repositories": [

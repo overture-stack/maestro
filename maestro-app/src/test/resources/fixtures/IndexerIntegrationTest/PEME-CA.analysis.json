@@ -68,7 +68,12 @@
       "dataType": "AlignedReads",
       "info": {
         "dcc_project_code": "PEME-CA",
-        "isPcawg": false
+        "isPcawg": false,
+        "nested": {
+          "nestedAgain": [
+            {"theeNested": "word"}
+          ]
+        }
       }
     },
     {

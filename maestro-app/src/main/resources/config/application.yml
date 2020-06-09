@@ -63,7 +63,6 @@ maestro:
     - code: song.overture1
       url: http://localhost:8080
       name: local song
-      metadataPath: /oicr.icgc.meta/metadata
       # optional
       storageType: S3
       organization: overture
