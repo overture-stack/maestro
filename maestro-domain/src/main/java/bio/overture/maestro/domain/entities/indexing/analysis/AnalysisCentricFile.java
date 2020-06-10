@@ -51,7 +51,8 @@ public class AnalysisCentricFile {
 
   public void replaceInfo(Map<String, Object> data) {
     if (data == null) {
-      this.info.clear();;
+      this.info.clear();
+      return;
     }
     this.info.clear();
     this.info.putAll(data);
