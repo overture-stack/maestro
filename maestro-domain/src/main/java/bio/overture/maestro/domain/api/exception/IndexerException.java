@@ -27,13 +27,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IndexerException extends RuntimeException {
-    protected FailureData failureData;
-    public IndexerException(String message) {
-        super(message);
-    }
+  protected FailureData failureData;
 
-    public IndexerException(String message, Throwable cause, FailureData failureData) {
-        super(message, cause);
-        this.failureData = failureData;
-    }
+  public IndexerException(String message) {
+    super(message);
+  }
+
+  public IndexerException(String message, Throwable cause, FailureData failureData) {
+    super(message, cause);
+    this.failureData = failureData;
+  }
 }

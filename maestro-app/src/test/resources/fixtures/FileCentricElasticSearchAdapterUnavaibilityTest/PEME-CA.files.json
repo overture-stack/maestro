@@ -3,29 +3,27 @@
     "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
     "file_access": "controlled",
     "file_type": "BAM",
+    "data_type": "AlignedReads",
     "study_id": "PEME-CA",
     "analysis": {
       "analysis_id": "EGAZ00001254368",
       "analysis_type": "sequencingRead",
       "analysis_version": "1",
-      "state": "PUBLISHED",
-      "study_id": "PEME-CA",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "EGAZ00001254368",
         "aligned": true,
         "libraryStrategy": "WGS"
       }
     },
-    "files": {
+    "file": {
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
-      "format": "BAM",
       "md5sum": "29ff9df727803d20834b9997bc17e970",
       "size": 88906416144,
-      "last_modified": null,
       "index_file": {
         "object_id": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
         "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
-        "format": "BAI",
+        "file_type": "BAI",
         "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
         "size": 8939816
       }
@@ -37,26 +35,24 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO232978",
+        "donor_id": "DO232978",
         "gender": "Female",
         "submitter_donor_id": "MDT-AP-0749",
-        "specimens": {
-          "id": "SP201301",
+        "specimens": [{
+          "specimen_id": "SP201301",
           "specimen_type": "Primary tumour - solid tissue",
           "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
-          "samples": {
-            "id": "SA604924",
+          "samples": [{
+            "sample_id": "SA604924",
             "submitter_sample_id": "MDT-AP-0749_tumor",
             "sample_type": "DNA"
-          }
-        }
+          }]
+        }]
       }
     ]
   }

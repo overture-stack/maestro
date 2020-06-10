@@ -22,14 +22,16 @@ import lombok.NonNull;
 import reactor.core.publisher.Mono;
 
 /**
- * Provides access to data about the studies repositories that the indexer should read metadata from to get information
- * like: url, repository storage type, urls etc
+ * Provides access to data about the studies repositories that the indexer should read metadata from
+ * to get information like: url, repository storage type, urls etc
  */
 public interface StudyRepositoryDAO {
-    /**
-     * Gets a files repository by code
-     * @param code the unique code of the repository
-     * @return the repository or empty null if not found
-     */
-    @NonNull Mono<StudyRepository> getFilesRepository(@NonNull String code);
+  /**
+   * Gets a files repository by code
+   *
+   * @param code the unique code of the repository
+   * @return the repository or empty null if not found
+   */
+  @NonNull
+  Mono<StudyRepository> getFilesRepository(@NonNull String code);
 }

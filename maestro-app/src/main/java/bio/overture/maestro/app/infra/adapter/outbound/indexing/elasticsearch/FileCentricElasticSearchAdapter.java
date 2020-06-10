@@ -25,7 +25,6 @@ import static java.util.Collections.singletonMap;
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.message.IndexResult;
-import bio.overture.maestro.domain.entities.indexing.FileCentricAnalysis;
 import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexFilesCommand;
 import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
@@ -117,8 +116,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         this.indexName,
         this.elasticsearchRestClient,
         this::getAnalysisId,
-        this::mapFileToUpsertRepositoryQuery
-    );
+        this::mapFileToUpsertRepositoryQuery);
   }
 
   private String getAnalysisId(FileCentricDocument d) {
@@ -198,8 +196,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         QueryBuilders.boolQuery()
             .must(
                 QueryBuilders.termQuery(
-                    FileCentricDocument.Fields.analysis + "." + "analysis_id",
-                    analysisId)));
+                    FileCentricDocument.Fields.analysis + "." + "analysis_id", analysisId)));
     this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
   }
 

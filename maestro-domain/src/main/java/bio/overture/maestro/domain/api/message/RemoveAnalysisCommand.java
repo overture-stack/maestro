@@ -26,6 +26,5 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class RemoveAnalysisCommand {
-    @NonNull
-    private AnalysisIdentifier analysisIdentifier;
+  @NonNull private AnalysisIdentifier analysisIdentifier;
 }

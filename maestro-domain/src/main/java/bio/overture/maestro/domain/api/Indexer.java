@@ -19,47 +19,49 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
-import bio.overture.maestro.domain.port.outbound.indexing.FileCentricIndexAdapter;
+import java.util.List;
 import lombok.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-/**
- * Main entry point for the Indexer API
- */
+/** Main entry point for the Indexer API */
 public interface Indexer {
 
-    /**
-     * A generic method to index a single analysis to all indices
-     * @param indexAnalysisCommand
-     * @return failure info and success flag of all indices
-     */
-    Flux<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
+  /**
+   * A generic method to index a single analysis to all indices
+   *
+   * @param indexAnalysisCommand
+   * @return failure info and success flag of all indices
+   */
+  Flux<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
 
-    /**
-     * Used to remove all files documents for an analysis.
-     * @param removeAnalysisCommand specify repo studyId and analysis id
-     * @return flag indicating success and failure info if any
-     */
-    Mono<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand);
+  /**
+   * Used to remove all files documents for an analysis.
+   *
+   * @param removeAnalysisCommand specify repo studyId and analysis id
+   * @return flag indicating success and failure info if any
+   */
+  Flux<IndexResult> removeAnalysis(@NonNull RemoveAnalysisCommand removeAnalysisCommand);
 
-    /**
-     * A generic method to index a study.
-     * @param command
-     * @return failure info and success flag of all indices
-     */
-    Flux<IndexResult> indexStudy(@NonNull IndexStudyCommand command);
+  /**
+   * A generic method to index a study.
+   *
+   * @param command
+   * @return failure info and success flag of all indices
+   */
+  Flux<IndexResult> indexStudy(@NonNull IndexStudyCommand command);
 
-    /**
-     * A generic method to index the entire repository to all indices.
-     * @param command contains repository code
-     * @return result indicating success/fail and failure information
-     */
-    Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command);
+  /**
+   * A generic method to index the entire repository to all indices.
+   *
+   * @param command contains repository code
+   * @return result indicating success/fail and failure information
+   */
+  Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command);
 
-    void addRule(AddRuleCommand addRuleCommand);
-    void deleteRule(DeleteRuleCommand deleteRuleCommand);
-    List<? extends ExclusionRule> getAllRules();
+  void addRule(AddRuleCommand addRuleCommand);
+
+  void deleteRule(DeleteRuleCommand deleteRuleCommand);
+
+  List<? extends ExclusionRule> getAllRules();
 }

@@ -27,58 +27,58 @@ import org.springframework.core.io.Resource;
  * the original properties
  */
 public interface ApplicationProperties {
-    String FAILURE_LOG_PROP_KEY = "maestro.failureLog.enabled";
-    String MAESTRO_NOTIFICATIONS_SLACK_ENABLED_PROP_KEY = "maestro.notifications.slack.enabled";
+  String FAILURE_LOG_PROP_KEY = "maestro.failureLog.enabled";
+  String MAESTRO_NOTIFICATIONS_SLACK_ENABLED_PROP_KEY = "maestro.notifications.slack.enabled";
 
-    int webClientMaxInMemorySize();
+  int webClientMaxInMemorySize();
 
-    List<String> elasticSearchClusterNodes();
+  List<String> elasticSearchClusterNodes();
 
-    String fileCentricAlias();
+  String fileCentricAlias();
 
-    String fileCentricIndexName();
+  String fileCentricIndexName();
 
-    boolean isFileCentricIndexEnabled();
+  boolean isFileCentricIndexEnabled();
 
-    String analysisCentricAlias();
+  String analysisCentricAlias();
 
-    String analysisCentricIndexName();
+  String analysisCentricIndexName();
 
-    boolean isAnalysisCentricIndexEnabled();
+  boolean isAnalysisCentricIndexEnabled();
 
-    int maxDocsPerBulkRequest();
+  int maxDocsPerBulkRequest();
 
-    int elasticSearchClientConnectionTimeoutMillis();
+  int elasticSearchClientConnectionTimeoutMillis();
 
-    int elasticSearchClientSocketTimeoutMillis();
+  int elasticSearchClientSocketTimeoutMillis();
 
-    boolean elasticSearchTlsTrustSelfSigned();
+  boolean elasticSearchTlsTrustSelfSigned();
 
-    boolean elasticSearchBasicAuthEnabled();
+  boolean elasticSearchBasicAuthEnabled();
 
-    String elasticSearchAuthUser();
+  String elasticSearchAuthUser();
 
-    String elasticSearchAuthPassword();
+  String elasticSearchAuthPassword();
 
-    List<PropertiesFileRepository> repositories();
+  List<PropertiesFileRepository> repositories();
 
-    Resource fileCentricIndex();
+  Resource fileCentricIndex();
 
-    Resource analysisCentricIndex();
+  Resource analysisCentricIndex();
 
-    Map<String, List<String>> idExclusionRules();
+  Map<String, List<String>> idExclusionRules();
 
-    int songMaxRetries();
+  int songMaxRetries();
 
-    int songStudyCallTimeoutSeconds();
+  int songStudyCallTimeoutSeconds();
 
-    long elasticSearchRetryWaitDurationMillis();
+  long elasticSearchRetryWaitDurationMillis();
 
-    int elasticSearchRetryMaxAttempts();
+  int elasticSearchRetryMaxAttempts();
 
-    String indexableStudyStatuses();
+  String indexableStudyStatuses();
 
-    int songAnalysisCallTimeoutSeconds();
+  int songAnalysisCallTimeoutSeconds();
 
-    Slack.SlackChannelInfo getSlackChannelInfo();
+  Slack.SlackChannelInfo getSlackChannelInfo();
 }

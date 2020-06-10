@@ -3,30 +3,28 @@
     "object_id": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "14ded2a7342f9124421ace5aa920510d",
       "size": 543337,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "bb949d15-334f-5712-9f04-41225a7beb8d",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.somatic.snv_mnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "99f0b87f5113494e2fc2284c91dc15e0",
         "data_type": "AlignedReads",
         "size": 224729
@@ -39,27 +37,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -67,30 +63,28 @@
     "object_id": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "state": "PUBLISHED",
-      "study_id": "PACA-CA",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "0e1e3c924b37d90c99bb04f719a56ce4",
       "size": 5565355,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "2910e07c-268b-57a5-877a-0cec35298319",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.somatic.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "1abed463bc92e0d8486699b37af73737",
         "data_type": "AlignedReads",
         "size": 546153
@@ -103,27 +97,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -131,30 +123,28 @@
     "object_id": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "19b56e546bdcdb7f68dfd603b1b7a8d7",
       "size": 101384873,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "425898fd-35d3-5ee2-ac00-50dfd724f4c6",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-snvCalling_1-0-132-1.20150722.germline.snv_mnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "a6113c54193fd7539dffd06f50f04779",
         "data_type": "AlignedReads",
         "size": 1541330
@@ -167,27 +157,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -195,30 +183,28 @@
     "object_id": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "c102abc0bfa0b63b2e1ea2ae62e18b80",
       "size": 72850649,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "04c24136-c19d-5042-a3cd-36f63c7b4d6b",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-indelCalling_1-0-132-1.20150722.germline.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "156880f52b94b3119afa3ac6dd7b8ced",
         "data_type": "AlignedReads",
         "size": 1502241
@@ -231,27 +217,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -259,30 +243,28 @@
     "object_id": "432779b5-95db-5caf-a529-85a36a707c04",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "93b219c94687e12b5fda564399fa3319",
       "size": 23763,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "51306186-092d-5e3f-bb3c-028873052eb2",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.dkfz-copyNumberEstimation_1-0-189-hpc-fix.1508271702.somatic.cnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "68d76af7c7b9b7c00fa0438101739798",
         "data_type": "AlignedReads",
         "size": 10691
@@ -295,27 +277,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -323,30 +303,28 @@
     "object_id": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "6ebd4aa8a821da40955d7fcb879be82a",
       "size": 18226,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "e5d387a1-3b51-5526-ae22-270df2e1fd2f",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.somatic.sv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "96b05a083d371ae8317651ceffb0f48b",
         "data_type": "AlignedReads",
         "size": 6134
@@ -359,27 +337,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -387,30 +363,28 @@
     "object_id": "3f571505-3bea-5065-956a-4b5a793ad1ed",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "744c62bf-4747-4ab2-aca9-50879cea82e0",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
         "variantCallingTool": "DKFZ/EMBL variant call pipeline",
         "matchedNormalSampleSubmitterId": "PCSI_0233_Ly_R"
       }
     },
-    "files": {
+    "file": {
       "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "f3a99bd737b3b416aa34e131b939b2a0",
       "size": 161511,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "e8569e7c-6ae4-5aeb-ae50-b94366aae5df",
         "name": "bcef0b6c-6584-4090-9d28-ef784a7e5fbb.embl-delly_1-0-0-preFilter.20150722.germline.sv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "cb856f2d5837c5f065c7c598dcd795b5",
         "data_type": "AlignedReads",
         "size": 19769
@@ -423,27 +397,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/bbbbc35b-9ea3-5191-b6c8-9092975d8033"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51523",
+        "donor_id": "DO51523",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0233",
-        "specimens": {
-          "id": "SP125730",
+        "specimens": [{
+          "specimen_id": "SP125730",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "PCSI_0233_Pa_P_526",
-          "samples": {
-            "id": "SA533729",
+          "samples": [{
+            "sample_id": "SA533729",
             "submitter_sample_id": "PCSI_0233_Pa_P_526",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -451,30 +423,28 @@
     "object_id": "e122b153-c98b-530d-879a-11871a427d1b",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz",
-      "format": "VCF",
       "md5sum": "4824d68baf7c2b06f5a652bb5462b9b4",
       "size": 58091383,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "b26a535c-3531-55ad-8725-17aa6afb22c2",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.indel.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "894fa70742c16ed7f845abd68609f20c",
         "data_type": "AlignedReads",
         "size": 1524609
@@ -487,27 +457,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
-          "id": "SP125791",
+        "specimens": [{
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
-            "id": "SA533758",
+          "samples": [{
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -515,30 +483,28 @@
     "object_id": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz",
-      "format": "VCF",
       "md5sum": "0502184e75c3a3fb83e2aa6ab536e78a",
       "size": 59407,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "b9800f14-13d5-55cf-9383-a65b5446116a",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svfix2_4-0-12.20160208.somatic.sv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "1ba234eb0c457dba2942215d3fc4741a",
         "data_type": "AlignedReads",
         "size": 2961
@@ -551,27 +517,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
-          "id": "SP125791",
+        "specimens": [{
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
-            "id": "SA533758",
+          "samples": [{
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -579,30 +543,28 @@
     "object_id": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "bafebb1c613c348c696dc8f940ce1039",
       "size": 2964,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "52db8e51-5b3e-56ce-b939-0a96b4dfbce3",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.cnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "725becdd11e63c371e57a987420846bd",
         "data_type": "AlignedReads",
         "size": 4783
@@ -615,27 +577,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
-          "id": "SP125791",
+        "specimens": [{
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
-            "id": "SA533758",
+          "samples": [{
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   },
@@ -643,31 +603,28 @@
     "object_id": "e704d3f5-1274-5cdd-924f-609159e121cc",
     "file_access": "controlled",
     "file_type": "VCF",
+    "data_type": "AlignedReads",
     "study_id": "PACA-CA",
     "analysis": {
       "analysis_id": "916b5a92-cea6-11e5-af30-d4714d100685",
       "analysis_type": "variantCall",
       "analysis_version": "1",
-      "study_id": "PACA-CA",
-      "state": "PUBLISHED",
-      "study_id": "PACA-CA",
+      "analysis_state": "PUBLISHED",
       "experiment": {
         "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
         "variantCallingTool": "Sanger variant call pipeline",
         "matchedNormalSampleSubmitterId": "ASHPC_0022_Pa_R"
       }
     },
-    "files": {
+    "file": {
       "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz",
-      "format": "VCF",
       "md5sum": "37ee70b282788eb0660f7d965f355898",
       "size": 1704966,
-      "last_modified": null,
       "data_type": "AlignedReads",
       "index_file": {
         "object_id": "6b32cfec-e82c-5528-b908-8e00ae927578",
         "name": "94652d14-2e4d-4f4a-a4f7-8df77df788c0.svcp_1-0-8.20150911.somatic.snv_mnv.vcf.gz.tbi",
-        "format": "TBI",
+        "file_type": "TBI",
         "md5sum": "91dece67c383a67123caae382a130cb9",
         "data_type": "AlignedReads",
         "size": 303747
@@ -680,27 +637,25 @@
         "name": "singer",
         "type": "S3",
         "country": "CA",
-        "url": "http://song.sing.sung",
-        "data_path": "/p1/p2",
-        "metadata_path": "/m1/m2/47fc8458-df52-5ad1-a0fc-cd2c277ecb93"
+        "url": "http://song.sing.sung"
       }
     ],
     "donors": [
       {
-        "id": "DO51498",
+        "donor_id": "DO51498",
         "gender": "Female",
         "submitter_donor_id": "PCSI_0450",
-        "specimens": {
-          "id": "SP125791",
+        "specimens": [{
+          "specimen_id": "SP125791",
           "specimen_type": "Primary tumour - other",
           "submitter_specimen_id": "ASHPC_0022_Pa_P",
-          "samples": {
-            "id": "SA533758",
+          "samples": [{
+            "sample_id": "SA533758",
             "submitter_sample_id": "ASHPC_0022_Pa_P",
             "sample_type": "DNA",
             "matched_normal_submitter_sample_id": null
-          }
-        }
+          }]
+        }]
       }
     ]
   }

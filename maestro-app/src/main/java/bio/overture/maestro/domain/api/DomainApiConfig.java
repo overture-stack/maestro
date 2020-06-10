@@ -25,17 +25,16 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-    DefaultIndexer.class,
-    Notifier.class,
+  DefaultIndexer.class,
+  Notifier.class,
 })
 public class DomainApiConfig {
 
   @Bean
   IndexEnabled indexEnabled(@Autowired ApplicationProperties applicationProperties) {
-    return new IndexEnabled
-            .IndexEnabledBuilder()
-            .isAnalysisCentricEnabled(applicationProperties.isAnalysisCentricIndexEnabled())
-            .isFileCentricEnabled(applicationProperties.isFileCentricIndexEnabled())
-            .build();
+    return new IndexEnabled.IndexEnabledBuilder()
+        .isAnalysisCentricEnabled(applicationProperties.isAnalysisCentricIndexEnabled())
+        .isFileCentricEnabled(applicationProperties.isFileCentricIndexEnabled())
+        .build();
   }
 }

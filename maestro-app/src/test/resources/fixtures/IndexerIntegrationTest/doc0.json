@@ -1,15 +1,16 @@
 {
   "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
-  "file_type" : "BAM",
   "file_access": "controlled",
   "file_type": "BAM",
+  "data_type": "AlignedReads",
   "study_id": "PEME-CA",
+  "dcc_project_code": "PEME-CA",
+  "isPcawg": false,
   "analysis": {
     "analysis_id": "EGAZ00001254368",
+    "analysis_state": "PUBLISHED",
     "analysis_type": "sequencingRead",
     "analysis_version": "1",
-    "state": "PUBLISHED",
-    "study_id": "PEME-CA",
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
@@ -21,20 +22,27 @@
       "info": {}
     }
   },
-  "files": {
+  "file": {
     "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam",
-    "format": "BAM",
     "md5sum": "29ff9df727803d20834b9997bc17e970",
     "size": 88906416144,
+    "dcc_project_code": "PEME-CA",
+    "isPcawg": false,
     "data_type": "AlignedReads",
-    "last_modified": null,
     "index_file": {
       "object_id": "d819f154-2292-56f7-94f3-bbe03fb45bc5",
       "name": "29ff9df727803d20834b9997bc17e970.tumor_MDT-AP-0749_merged.mdup.bam.bai",
-      "format": "BAI",
+      "file_type": "BAI",
       "data_type": "AlignedReads",
       "md5sum": "e2a83668aa4cfe4f4048e75212d44f19",
-      "size": 8939816
+      "size": 8939816,
+      "dcc_project_code": "PEME-CA",
+      "isPcawg": false,
+      "nested": {
+        "nestedAgain": [
+          {"theeNested": "word"}
+        ]
+      }
     }
   },
   "repositories": [
@@ -44,26 +52,30 @@
       "name": "collaboratory",
       "type": "S3",
       "country": "CA",
-      "url": "##COLLAB_REPO_URL##",
-      "data_path": "/oicr.icgc/data",
-      "metadata_path": "/oicr.icgc.meta/metadata/41ba4fb3-9428-50b5-af6c-d779cd59b04d"
+      "url": "##COLLAB_REPO_URL##"
     }
   ],
   "donors": [
     {
-      "id": "DO232978",
-      "gender" : "Female",
+      "donor_id": "DO232978",
+      "gender": "Female",
       "submitter_donor_id": "MDT-AP-0749",
-      "specimens": {
-        "id": "SP201301",
+      "dcc_project_code": "PEME-CA",
+      "isPcawg": false,
+      "specimens": [{
+        "specimen_id": "SP201301",
         "specimen_type": "Primary tumour - solid tissue",
         "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
-        "samples": {
-          "id": "SA604924",
+        "dcc_project_code": "PEME-CA",
+        "isPcawg": false,
+        "samples": [{
+          "sample_id": "SA604924",
           "submitter_sample_id": "MDT-AP-0749_tumor",
-          "sample_type": "DNA"
-        }
-      }
+          "sample_type": "DNA",
+          "dcc_project_code": "PEME-CA",
+          "isPcawg": false
+        }]
+      }]
     }
   ]
 }

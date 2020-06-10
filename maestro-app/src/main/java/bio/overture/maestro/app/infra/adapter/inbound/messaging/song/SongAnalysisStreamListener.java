@@ -17,12 +17,16 @@
 
 package bio.overture.maestro.app.infra.adapter.inbound.messaging.song;
 
+import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
+
+import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
 import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.RemoveAnalysisCommand;
 import io.vavr.Tuple2;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -30,51 +34,55 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import reactor.core.publisher.Flux;
 
-import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMessagesHelper.handleIndexResult;
-
 @Slf4j
 @EnableBinding(SongAnalysisSink.class)
 public class SongAnalysisStreamListener {
 
-    private static final String PUBLISHED = "PUBLISHED";
+  private Indexer indexer;
+  private final List<String> indexableStudyStatuses;
 
-    private Indexer indexer;
+  public SongAnalysisStreamListener(Indexer indexer, ApplicationProperties properties) {
+    this.indexer = indexer;
+    this.indexableStudyStatuses = List.of(properties.indexableStudyStatuses().split(","));
+  }
 
-    public SongAnalysisStreamListener(Indexer indexer) {
-        this.indexer = indexer;
-    }
+  @StreamListener(SongAnalysisSink.NAME)
+  public void handleMessage(@Payload AnalysisMessage analysisMessage) {
+    log.info("received message : {}", analysisMessage);
+    handleIndexResult(() -> this.doHandle(analysisMessage));
+  }
 
-    @StreamListener(SongAnalysisSink.NAME)
-    public void handleMessage(@Payload AnalysisMessage analysisMessage) {
-        log.info("received message : {}", analysisMessage);
-        handleIndexResult(() -> this.doHandle(analysisMessage));
-    }
-
-    private Flux<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
-        Flux<IndexResult> result;
-        try {
-            if (msg.getState().equals(PUBLISHED)) {
-                result = indexer.indexAnalysis(IndexAnalysisCommand.builder()
-                    .analysisIdentifier(AnalysisIdentifier.builder()
-                        .repositoryCode(msg.getSongServerId())
-                        .studyId(msg.getStudyId())
-                        .analysisId(msg.getAnalysisId())
-                        .build())
+  private Flux<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
+    Flux<IndexResult> result;
+    try {
+      if (this.indexableStudyStatuses.contains(msg.getState())) {
+        result =
+            indexer.indexAnalysis(
+                IndexAnalysisCommand.builder()
+                    .analysisIdentifier(
+                        AnalysisIdentifier.builder()
+                            .repositoryCode(msg.getSongServerId())
+                            .studyId(msg.getStudyId())
+                            .analysisId(msg.getAnalysisId())
+                            .build())
                     .build());
-            } else { // UNPUBLISHED, SUPPRESSED
-                val mono = indexer.removeAnalysis(RemoveAnalysisCommand.builder()
-                    .analysisIdentifier(AnalysisIdentifier.builder()
-                        .analysisId(msg.getAnalysisId())
-                        .studyId(msg.getStudyId())
-                        .repositoryCode(msg.getSongServerId())
-                        .build()
-                    ).build());
-                result = Flux.from(mono);
-            }
-            return result.map(indexResult -> new Tuple2<>(msg, indexResult));
-        } catch (Exception e) {
-            log.error("failed reading message: {} ", msg, e);
-            return Flux.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
-        }
+      } else {
+        val mono =
+            indexer.removeAnalysis(
+                RemoveAnalysisCommand.builder()
+                    .analysisIdentifier(
+                        AnalysisIdentifier.builder()
+                            .analysisId(msg.getAnalysisId())
+                            .studyId(msg.getStudyId())
+                            .repositoryCode(msg.getSongServerId())
+                            .build())
+                    .build());
+        result = Flux.from(mono);
+      }
+      return result.map(indexResult -> new Tuple2<>(msg, indexResult));
+    } catch (Exception e) {
+      log.error("failed reading message: {} ", msg, e);
+      return Flux.just(new Tuple2<>(msg, IndexResult.builder().successful(false).build()));
     }
+  }
 }

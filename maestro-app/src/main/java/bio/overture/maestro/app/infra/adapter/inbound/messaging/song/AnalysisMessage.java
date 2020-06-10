@@ -26,12 +26,8 @@ import lombok.Value;
 @ToString
 @AllArgsConstructor
 class AnalysisMessage {
-  @NonNull
-  private final String analysisId;
-  @NonNull
-  private final String studyId;
-  @NonNull
-  private final String state;
-  @NonNull
-  private final String songServerId;
+  @NonNull private final String analysisId;
+  @NonNull private final String studyId;
+  @NonNull private final String state;
+  @NonNull private final String songServerId;
 }

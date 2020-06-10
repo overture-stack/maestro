@@ -17,5 +17,4 @@
 
 package bio.overture.maestro.domain.api.message;
 
-public class DeleteRuleCommand {
-}
+public class DeleteRuleCommand {}

@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class AnalysisType {
-    private String name;
-    private Integer version;
+  private String name;
+  private Integer version;
 }

@@ -51,7 +51,7 @@ public class ManagementController {
 
   @DeleteMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<IndexResult> removeAnalysis(
+  public Flux<IndexResult> removeAnalysis(
       @PathVariable String analysisId,
       @PathVariable String studyId,
       @PathVariable String repositoryCode) {
@@ -71,8 +71,7 @@ public class ManagementController {
             .build());
   }
 
-  @PostMapping(
-      "/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
+  @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
   @ResponseStatus(HttpStatus.CREATED)
   public Flux<IndexResult> indexAnalysis(
       @PathVariable String analysisId,

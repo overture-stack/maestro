@@ -18,13 +18,11 @@
 package bio.overture.maestro.domain.entities.metadata.study;
 
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
+import java.util.Map;
 import lombok.*;
 
-import java.util.Map;
-
 /**
- * Many samples can belong to an Analysis, a samples represents
- * a donor and a specimen composition.
+ * Many samples can belong to an Analysis, a samples represents a donor and a specimen composition.
  */
 @Getter
 @Builder
@@ -33,13 +31,12 @@ import java.util.Map;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class Sample {
-    @ExclusionId
-    private String sampleId;
-    private String specimenId;
-    private String submitterSampleId;
-    private String matchedNormalSubmitterSampleId;
-    private String sampleType;
-    private Donor donor;
-    private Specimen specimen;
-    private Map<String, Object> info;
+  @ExclusionId private String sampleId;
+  private String specimenId;
+  private String submitterSampleId;
+  private String matchedNormalSubmitterSampleId;
+  private String sampleType;
+  private Donor donor;
+  private Specimen specimen;
+  private Map<String, Object> info;
 }

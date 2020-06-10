@@ -2,17 +2,17 @@
   "object_id": "9ce9358d-c93a-5f83-8032-4addcb84b51a",
   "file_access": "controlled",
   "file_type": "BAM",
+  "data_type": "AlignedReads",
   "study_id": "PEME-CA",
   "analysis": {
     "analysis_id": "EGAZ00001254247",
     "analysis_type": "sequencingRead",
     "analysis_version": "1",
-    "state": "PUBLISHED",
+    "analysis_state": "PUBLISHED",
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
     },
-    "study_id": "PEME-CA",
     "experiment": {
       "analysisId": "EGAZ00001254247",
       "aligned": true,
@@ -20,17 +20,15 @@
       "info": {}
     }
   },
-  "files": {
+  "file": {
     "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam",
-    "format": "BAM",
     "md5sum": "b2e40ebb719e1754e99be2e752239639",
     "size": 77675501639,
-    "last_modified": null,
     "data_type": "AlignedReads",
     "index_file": {
       "object_id": "6aa8d318-e168-520e-9d1e-cef127ee6b65",
       "name": "b2e40ebb719e1754e99be2e752239639.control_MDT-AP-0432_merged.mdup.bam.bai",
-      "format": "BAI",
+      "file_type": "BAI",
       "data_type": "AlignedReads",
       "md5sum": "227a2a11d660a8a53a7375c6623034e2",
       "size": 8982928
@@ -43,26 +41,24 @@
       "name": "collaboratory",
       "type": "S3",
       "country": "CA",
-      "url": "##COLLAB_REPO_URL##",
-      "data_path": "/oicr.icgc/data",
-      "metadata_path": "/oicr.icgc.meta/metadata/464116e4-afc9-5879-b567-6f54513a32dc"
+      "url": "##COLLAB_REPO_URL##"
     }
   ],
   "donors": [
     {
-      "id": "DO232959",
+      "donor_id": "DO232959",
       "gender" : "Female",
       "submitter_donor_id": "MDT-AP-0432",
-      "specimens": {
-        "id": "SP200947",
+      "specimens": [{
+        "specimen_id": "SP200947",
         "specimen_type": "Normal - blood derived",
         "submitter_specimen_id": "MDT-AP-0432_control_specimen",
-        "samples": {
-          "id": "SA604905",
+        "samples": [{
+          "sample_id": "SA604905",
           "submitter_sample_id": "MDT-AP-0432_control",
           "sample_type": "DNA"
-        }
-      }
+        }]
+      }]
     }
   ]
 }
