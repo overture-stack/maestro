@@ -55,8 +55,6 @@ maestro:
     - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
       url: https://song.domain.com # Change this to a valid domain where the song exists in your setup
       name: local song
-      dataPath: /oicr.icgc/data
-      metadataPath: /oicr.icgc.meta/metadata
       # optional
       storageType: S3
       organization: ICGC
@@ -65,7 +63,6 @@ maestro:
     - code: song.overture1
       url: http://localhost:8080
       name: local song
-      metadataPath: /oicr.icgc.meta/metadata
       # optional
       storageType: S3
       organization: overture
