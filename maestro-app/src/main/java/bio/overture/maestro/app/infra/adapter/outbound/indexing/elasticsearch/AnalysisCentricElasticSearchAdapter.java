@@ -119,11 +119,11 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
 
     return new UpdateRequest()
         .id(analysisCentricDocument.getAnalysisId())
-        .index(this.alias)
+        .index(this.indexName)
         .script(inline)
         .upsert(
             new IndexRequest()
-                .index(this.alias)
+                .index(this.indexName)
                 .id(analysisCentricDocument.getAnalysisId())
                 .source(
                     analysisCentricJSONWriter.writeValueAsString(analysisCentricDocument),

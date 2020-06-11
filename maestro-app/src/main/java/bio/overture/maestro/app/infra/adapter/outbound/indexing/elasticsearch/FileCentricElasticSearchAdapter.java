@@ -191,7 +191,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   @SneakyThrows
   private void deleteByAnalysisIdRunnable(String analysisId) {
     log.trace("deleteByAnalysisId called, analysis_id {} ", analysisId);
-    DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(this.alias);
+    DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(this.indexName);
     deleteByQueryRequest.setQuery(
         QueryBuilders.boolQuery()
             .must(
@@ -224,7 +224,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   @SneakyThrows
   private void doDeleteByIds(Set<String> ids) {
     log.trace("deleteByIds called, ids {} ", ids);
-    val deleteReq = new DeleteByQueryRequest(this.alias);
+    val deleteReq = new DeleteByQueryRequest(this.indexName);
     deleteReq.setQuery(QueryBuilders.idsQuery().addIds(ids.toArray(new String[] {})));
     this.elasticsearchRestClient.deleteByQuery(deleteReq, RequestOptions.DEFAULT);
   }
@@ -265,7 +265,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     log.debug("fetch called ids {} ", entry.getValue().size());
     val request = new MultiGetRequest();
     for (String id : entry.getValue()) {
-      request.add(new MultiGetRequest.Item(this.alias, id));
+      request.add(new MultiGetRequest.Item(this.indexName, id));
     }
     val result = elasticsearchRestClient.mget(request, RequestOptions.DEFAULT);
     val docs = this.searchResultMapper.mapResults(result, FileCentricDocument.class);
@@ -284,11 +284,11 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
     return new UpdateRequest()
         .id(fileCentricDocument.getObjectId())
-        .index(this.alias)
+        .index(this.indexName)
         .script(inline)
         .upsert(
             new IndexRequest()
-                .index(this.alias)
+                .index(this.indexName)
                 .id(fileCentricDocument.getObjectId())
                 .source(
                     fileCentricJSONWriter.writeValueAsString(fileCentricDocument),

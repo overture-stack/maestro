@@ -17,7 +17,7 @@
 
 package bio.overture.maestro.domain.api;
 
-import static bio.overture.maestro.domain.api.DefaultIndexer.REPO_CODE;
+import static bio.overture.maestro.domain.api.DefaultIndexer.*;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static bio.overture.masestro.test.Fixture.loadJsonFixtureSnakeCase;
 import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
@@ -84,16 +84,19 @@ class DefaultIndexerTest {
 
   @Mock private AnalysisCentricIndexAdapter analysisCentricIndexAdapter;
 
-  @Mock private IndexEnabledProperties indexEnabledProperties;
+  @Mock private IndexProperties indexProperties;
 
   private DefaultIndexer indexer;
 
   @Mock private Notifier notifier;
 
+  static final String FILE_CENTRIC_INDEX = "file_centric_1.0";
+
   @BeforeEach
   void setUp() {
     reset(studyRepositoryDao, studyDAO, indexServerAdapter, analysisCentricIndexAdapter, notifier);
-    given(indexEnabledProperties.isFileCentricEnabled()).willReturn(Boolean.TRUE);
+    given(indexProperties.isFileCentricEnabled()).willReturn(Boolean.TRUE);
+    given(indexProperties.fileCentricIndexName()).willReturn(FILE_CENTRIC_INDEX);
     this.indexer =
         new DefaultIndexer(
             indexServerAdapter,
@@ -102,7 +105,7 @@ class DefaultIndexerTest {
             studyRepositoryDao,
             exclusionRulesDAO,
             notifier,
-            indexEnabledProperties);
+            indexProperties);
   }
 
   @Test
@@ -111,7 +114,12 @@ class DefaultIndexerTest {
     val filesRepository = getStubFilesRepository();
     val repositoryMono = Mono.just(filesRepository);
     val failure = FailureData.builder().failingIds(Map.of("studyId", Set.of("anyStudy"))).build();
-    val output = IndexResult.builder().failureData(failure).successful(false).build();
+    val output =
+        IndexResult.builder()
+            .indexName(FILE_CENTRIC_INDEX)
+            .failureData(failure)
+            .successful(false)
+            .build();
 
     given(studyRepositoryDao.getFilesRepository(eq(repoCode))).willReturn(repositoryMono);
     given(studyDAO.getStudyAnalyses(any(GetStudyAnalysesCommand.class)))
@@ -138,7 +146,10 @@ class DefaultIndexerTest {
     val filesRepository = getStubFilesRepository();
     val fileRepo = Mono.just(getStubFilesRepository());
     val failure = FailureData.builder().failingIds(Map.of(REPO_CODE, Set.of(repoCode))).build();
-    val failedIndexResult = IndexResult.builder().failureData(failure).successful(false).build();
+    val failedIndexResult =
+        Map.of(
+            ALL,
+            IndexResult.builder().indexName(ALL).failureData(failure).successful(false).build());
     val getStudiesCmd =
         GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getUrl()).build();
 
@@ -407,7 +418,7 @@ class DefaultIndexerTest {
     val studyId = "PEME-CA";
     val analysisId = "EGAZ00001254368";
     val filesRepository = getStubFilesRepository();
-    val result = IndexResult.builder().indexName("file_centric_1.0").successful(true).build();
+    val result = IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build();
     val monoResult = Mono.<Void>fromSupplier(() -> null);
 
     given(indexServerAdapter.removeAnalysisFiles(eq(analysisId))).willReturn(monoResult);
@@ -494,7 +505,10 @@ class DefaultIndexerTest {
     val filesRepository = getStubFilesRepository();
     val fileRepo = Mono.just(getStubFilesRepository());
     val failure = FailureData.builder().failingIds(Map.of("studyId", Set.of("PACA-CA"))).build();
-    val failedIndexResult = IndexResult.builder().failureData(failure).successful(false).build();
+    val failedIndexResult =
+        Map.of(
+            ALL,
+            IndexResult.builder().indexName(ALL).failureData(failure).successful(false).build());
     val getStudiesCmd =
         GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getUrl()).build();
 
@@ -521,7 +535,7 @@ class DefaultIndexerTest {
     val filesRepository = getStubFilesRepository();
     val studies = getExpectedStudies();
     val fileRepo = Mono.just(getStubFilesRepository());
-    val result = IndexResult.builder().successful(true).build();
+    val result = IndexResult.builder().indexName("file_centric").successful(true).build();
     val monoResult = Mono.just(result);
     val getStudiesCmd =
         GetAllStudiesCommand.builder().filesRepositoryBaseUrl(filesRepository.getUrl()).build();
@@ -554,7 +568,10 @@ class DefaultIndexerTest {
             IndexStudyRepositoryCommand.builder().repositoryCode("TEST-REPO").build());
 
     // Then
-    StepVerifier.create(indexResultMono).expectNext(result).expectComplete().verify();
+    StepVerifier.create(indexResultMono)
+        .expectNext(Map.of("file_centric", result))
+        .expectComplete()
+        .verify();
 
     then(studyRepositoryDao).should(times(4)).getFilesRepository(repoCode);
     then(studyDAO).should(times(3)).getStudyAnalyses(any());

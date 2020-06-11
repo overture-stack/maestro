@@ -31,10 +31,12 @@ import org.springframework.context.annotation.Import;
 public class DomainApiConfig {
 
   @Bean
-  IndexEnabled indexEnabled(@Autowired ApplicationProperties applicationProperties) {
-    return new IndexEnabled.IndexEnabledBuilder()
+  IndexProperties indexEnabled(@Autowired ApplicationProperties applicationProperties) {
+    return new IndexPropertiesImpl.IndexPropertiesImplBuilder()
         .isAnalysisCentricEnabled(applicationProperties.isAnalysisCentricIndexEnabled())
         .isFileCentricEnabled(applicationProperties.isFileCentricIndexEnabled())
+        .analysisCentricIndexName(applicationProperties.analysisCentricIndexName())
+        .fileCentricIndexName(applicationProperties.fileCentricIndexName())
         .build();
   }
 }
