@@ -24,6 +24,7 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.*;
 import io.vavr.Tuple2;
+import java.util.Map;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -134,13 +135,12 @@ public class IndexingMessagesStreamListener {
         .map(out -> new Tuple2<>(msg, out));
   }
 
-  private Mono<Tuple2<IndexRepositoryMessage, IndexResult>> indexRepository(
+  private Mono<Tuple2<IndexRepositoryMessage, Map<String, IndexResult>>> indexRepository(
       IndexRepositoryMessage msg) {
     return indexer
         .indexRepository(
             IndexStudyRepositoryCommand.builder().repositoryCode(msg.getRepositoryCode()).build())
-        .map(out -> new Tuple2<>(msg, out))
-        .onErrorResume((e) -> catchUnhandledErrors(msg, e));
+        .map(out -> new Tuple2<>(msg, out));
   }
 
   private <T> Mono<Tuple2<T, IndexResult>> catchUnhandledErrors(T msg, Throwable e) {

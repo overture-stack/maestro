@@ -19,6 +19,7 @@ package bio.overture.maestro.app.infra.adapter.inbound.messaging;
 
 import bio.overture.maestro.domain.api.message.IndexResult;
 import io.vavr.Tuple2;
+import java.util.Map;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -27,13 +28,18 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 public class IndexMessagesHelper {
+
   public static <T> void handleIndexRepository(
-      Supplier<Mono<Tuple2<T, IndexResult>>> resultSupplier) {
+      Supplier<Mono<Tuple2<T, Map<String, IndexResult>>>> resultSupplier) {
     val result = resultSupplier.get().blockOptional();
     val tuple = result.orElseThrow(() -> new RuntimeException("failed to obtain result"));
-    if (!tuple._2().isSuccessful()) {
-      log.error("failed to process message : {} successfully", tuple._1());
-      throw new RuntimeException("failed to process the message");
+    for (val resultEntry : tuple._2().entrySet()) {
+      if (!resultEntry.getValue().isSuccessful()) {
+        log.error("failed to process message : {} successfully", tuple._1());
+        // we throw the exception here to avoid marking the message as processed successfully and to
+        // push it to a DLQ
+        throw new RuntimeException("failed to process the message");
+      }
     }
   }
 
@@ -57,6 +63,8 @@ public class IndexMessagesHelper {
         tuple -> {
           if (!tuple._2().isSuccessful()) {
             log.error("failed to process message : {} successfully", tuple._1());
+            // we throw the exception here to avoid marking the message as processed successfully
+            // and to push it to a DLQ
             throw new RuntimeException("failed to process the message");
           }
         });
