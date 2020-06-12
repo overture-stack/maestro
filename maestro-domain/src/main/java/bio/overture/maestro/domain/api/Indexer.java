@@ -20,6 +20,7 @@ package bio.overture.maestro.domain.api;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import java.util.List;
+import java.util.Map;
 import lombok.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -57,7 +58,7 @@ public interface Indexer {
    * @param command contains repository code
    * @return result indicating success/fail and failure information
    */
-  Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command);
+  Mono<Map<String, IndexResult>> indexRepository(@NonNull IndexStudyRepositoryCommand command);
 
   void addRule(AddRuleCommand addRuleCommand);
 

@@ -67,9 +67,9 @@ class DefaultIndexer implements Indexer {
   private static final String REPO_URL = "repoUrl";
   private static final String FAILURE_DATA = "failureData";
   private static final String CONFLICTS = "conflicts";
-  private static final String FILE_CENTRIC_INDEX = "file_centric_1.0";
-  private static final String ANALYSIS_CENTRIC_INDEX = "analysis_centric_1.0";
-
+  public static final String ALL = "ALL";
+  private final String fileCentricIndexName;
+  private final String analysisCentricIndexName;
   private boolean isFileCentricEnabled;
   private boolean isAnalysisCentricEnabled;
 
@@ -88,15 +88,17 @@ class DefaultIndexer implements Indexer {
       StudyRepositoryDAO studyRepositoryDao,
       ExclusionRulesDAO exclusionRulesDAO,
       Notifier notifier,
-      IndexEnabledProperties indexEnabled) {
+      IndexProperties indexProperties) {
     this.fileCentricIndexAdapter = fileCentricIndexAdapter;
     this.analysisCentricIndexAdapter = analysisCentricIndexAdapter;
     this.studyDAO = studyDAO;
     this.studyRepositoryDao = studyRepositoryDao;
     this.exclusionRulesDAO = exclusionRulesDAO;
     this.notifier = notifier;
-    this.isAnalysisCentricEnabled = indexEnabled.isAnalysisCentricEnabled();
-    this.isFileCentricEnabled = indexEnabled.isFileCentricEnabled();
+    this.isAnalysisCentricEnabled = indexProperties.isAnalysisCentricEnabled();
+    this.isFileCentricEnabled = indexProperties.isFileCentricEnabled();
+    this.fileCentricIndexName = indexProperties.fileCentricIndexName();
+    this.analysisCentricIndexName = indexProperties.analysisCentricIndexName();
   }
 
   @Override
@@ -120,9 +122,11 @@ class DefaultIndexer implements Indexer {
         .flatMap(this::batchUpsertAnalysesAndCollectFailtures)
         .onErrorResume(
             IndexerException.class,
-            (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            (ex) ->
+                Mono.just(
+                    this.convertIndexerExceptionToIndexResult(ex, this.analysisCentricIndexName)))
         .onErrorResume(
-            (e) -> handleIndexAnalysisError(e, analysisIdentifier, ANALYSIS_CENTRIC_INDEX));
+            (e) -> handleIndexAnalysisError(e, analysisIdentifier, this.analysisCentricIndexName));
   }
 
   public Mono<IndexResult> indexAnalysisToFileCentric(
@@ -138,9 +142,11 @@ class DefaultIndexer implements Indexer {
         // want that again.
         .onErrorResume(
             IndexerException.class,
-            (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            (ex) ->
+                Mono.just(this.convertIndexerExceptionToIndexResult(ex, this.fileCentricIndexName)))
         // this handler handles uncaught exceptions
-        .onErrorResume((e) -> handleIndexAnalysisError(e, analysisIdentifier, FILE_CENTRIC_INDEX));
+        .onErrorResume(
+            (e) -> handleIndexAnalysisError(e, analysisIdentifier, this.fileCentricIndexName));
   }
 
   @Override
@@ -153,9 +159,12 @@ class DefaultIndexer implements Indexer {
           this.fileCentricIndexAdapter
               .removeAnalysisFiles(analysisIdentifier.getAnalysisId())
               .thenReturn(
-                  IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+                  IndexResult.builder()
+                      .indexName(this.fileCentricIndexName)
+                      .successful(true)
+                      .build())
               .onErrorResume(
-                  (e) -> handleRemoveAnalysisError(FILE_CENTRIC_INDEX, analysisIdentifier));
+                  (e) -> handleRemoveAnalysisError(this.fileCentricIndexName, analysisIdentifier));
       monos.add(mono);
     }
 
@@ -164,9 +173,13 @@ class DefaultIndexer implements Indexer {
           this.analysisCentricIndexAdapter
               .removeAnalysisDocs(analysisIdentifier.getAnalysisId())
               .thenReturn(
-                  IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
+                  IndexResult.builder()
+                      .indexName(this.analysisCentricIndexName)
+                      .successful(true)
+                      .build())
               .onErrorResume(
-                  (e) -> handleRemoveAnalysisError(ANALYSIS_CENTRIC_INDEX, analysisIdentifier));
+                  (e) ->
+                      handleRemoveAnalysisError(this.analysisCentricIndexName, analysisIdentifier));
       monos.add(mono);
     }
     return Flux.merge(monos);
@@ -203,11 +216,15 @@ class DefaultIndexer implements Indexer {
         .flatMap(this::batchUpsertFilesAndCollectFailures)
         .onErrorResume(
             IndexerException.class,
-            (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            (ex) ->
+                Mono.just(this.convertIndexerExceptionToIndexResult(ex, this.fileCentricIndexName)))
         .onErrorResume(
             (e) ->
                 handleIndexStudyError(
-                    e, command.getStudyId(), command.getRepositoryCode(), FILE_CENTRIC_INDEX));
+                    e,
+                    command.getStudyId(),
+                    command.getRepositoryCode(),
+                    this.fileCentricIndexName));
   }
 
   private Mono<IndexResult> indexStudyToAnalysisCentric(
@@ -219,38 +236,50 @@ class DefaultIndexer implements Indexer {
         .flatMap(this::batchUpsertAnalysesAndCollectFailtures)
         .onErrorResume(
             IndexerException.class,
-            (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            (ex) ->
+                Mono.just(
+                    this.convertIndexerExceptionToIndexResult(ex, this.analysisCentricIndexName)))
         .onErrorResume(
             (e) ->
                 handleIndexStudyError(
-                    e, command.getStudyId(), command.getRepositoryCode(), ANALYSIS_CENTRIC_INDEX));
+                    e,
+                    command.getStudyId(),
+                    command.getRepositoryCode(),
+                    this.analysisCentricIndexName));
   }
 
   @Override
-  public Mono<IndexResult> indexRepository(@NonNull IndexStudyRepositoryCommand command) {
+  public Mono<Map<String, IndexResult>> indexRepository(
+      @NonNull IndexStudyRepositoryCommand command) {
     log.trace("in indexRepository, args: {} ", command);
     return tryGetStudyRepository(command.getRepositoryCode())
         .flatMapMany(this::getAllStudies)
         .flatMap(
             studyAndRepository ->
+                // I had to put this block inside this flatMap to allow these operations to bubble
+                // up
+                // their exceptions to this onErrorResume handler without interrupting the main
+                // flux,
+                // and terminating it with error signals.
+                // for example if fetchAnalyses down stream throws error for a studyId the studies
+                // flux
+                // will continue emitting studies
                 this.indexStudy(
                     IndexStudyCommand.builder()
                         .studyId(studyAndRepository.getStudy().getStudyId())
                         .repositoryCode(studyAndRepository.studyRepository.getCode())
-                        .build())
-            // I had to put this block inside this flatMap to allow these operations to bubble up
-            // their exceptions
-            // to this onErrorResume handler without interrupting the main flux, and terminating it
-            // with error signals.
-            // for example if fetchAnalyses down stream throws error for a studyId the studies flux
-            // will
-            // continue emitting studies
-            )
+                        .build()))
         .onErrorResume(
             IndexerException.class,
-            (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex)))
+            (ex) -> Mono.just(this.convertIndexerExceptionToIndexResult(ex, ALL)))
         .onErrorResume((e) -> handleIndexRepositoryError(e, command.getRepositoryCode()))
-        .reduce(this::reduceIndexResult);
+        .reduce(
+            new HashMap<>(),
+            (map, indexResult2) -> {
+              val indexName = indexResult2.getIndexName();
+              map.put(indexName, reduceIndexResult(map.get(indexName), indexResult2));
+              return map;
+            });
   }
 
   @Override
@@ -418,8 +447,12 @@ class DefaultIndexer implements Indexer {
         .onErrorMap((e) -> handleFetchAnalysisError(tuple, e));
   }
 
-  private IndexResult convertIndexerExceptionToIndexResult(IndexerException e) {
-    return IndexResult.builder().failureData(e.getFailureData()).successful(false).build();
+  private IndexResult convertIndexerExceptionToIndexResult(IndexerException e, String indexName) {
+    return IndexResult.builder()
+        .indexName(indexName)
+        .failureData(e.getFailureData())
+        .successful(false)
+        .build();
   }
 
   private Mono<IndexResult> handleIndexStudyError(
@@ -543,7 +576,7 @@ class DefaultIndexer implements Indexer {
             (ex) ->
                 Mono.just(
                     IndexResult.builder()
-                        .indexName(FILE_CENTRIC_INDEX)
+                        .indexName(this.fileCentricIndexName)
                         .successful(false)
                         .failureData(((IndexerException) ex).getFailureData())
                         .build()))
@@ -796,14 +829,13 @@ class DefaultIndexer implements Indexer {
       Throwable e, String repositoryCode) {
     val failingId = Map.of(REPO_CODE, Set.of(repositoryCode));
     val contextInfo = Map.of(REPO_CODE, repositoryCode, ERR, e.getMessage());
-    return this.notifyAndReturnFallback(
-        failingId, contextInfo, FILE_CENTRIC_INDEX + ANALYSIS_CENTRIC_INDEX);
+    return this.notifyAndReturnFallback(failingId, contextInfo, ALL);
   }
 
   private IndexResult reduceIndexResult(IndexResult accumulatedResult, IndexResult newResult) {
     log.trace("In reduceIndexResult, newResult {} ", newResult);
     val both = FailureData.builder().build();
-    if (!accumulatedResult.isSuccessful()) {
+    if (accumulatedResult != null && !accumulatedResult.isSuccessful()) {
       both.addFailures(accumulatedResult.getFailureData());
     }
     if (!newResult.isSuccessful()) {
