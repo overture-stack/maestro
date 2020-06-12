@@ -1,5 +1,6 @@
 {
   "object_id": "43d29864-6756-51f0-bb2a-ba7cff860778",
+  "variant_class" : null,
   "file_access": "controlled",
   "file_type": "BAM",
   "data_type": "AlignedReads",

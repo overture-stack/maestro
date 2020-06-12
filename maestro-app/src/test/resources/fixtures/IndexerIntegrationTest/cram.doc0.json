@@ -1,5 +1,6 @@
 {
   "object_id": "1e576567-9b70-4038-8580-88047f2e157f",
+  "variant_class" : null,
   "file_access": "controlled",
   "file_type": "CRAM",
   "data_type": "AlignedReads",

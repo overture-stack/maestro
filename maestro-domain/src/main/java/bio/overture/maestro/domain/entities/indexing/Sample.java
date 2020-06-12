@@ -19,10 +19,9 @@ package bio.overture.maestro.domain.entities.indexing;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import lombok.*;
-
 import java.util.Map;
 import java.util.TreeMap;
+import lombok.*;
 
 /**
  * Many samples can belong to an Analysis, a samples represents a donor and a specimen composition.

@@ -19,10 +19,9 @@ package bio.overture.maestro.domain.entities.indexing;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import lombok.*;
-
 import java.util.Map;
 import java.util.TreeMap;
+import lombok.*;
 
 @Builder
 @Getter

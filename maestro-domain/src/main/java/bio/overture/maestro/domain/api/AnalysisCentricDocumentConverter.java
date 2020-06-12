@@ -1,6 +1,7 @@
 package bio.overture.maestro.domain.api;
 
 import static bio.overture.maestro.domain.api.DocumentConverterHelper.getDonors;
+
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricFile;
@@ -48,21 +49,23 @@ final class AnalysisCentricDocumentConverter {
     return doc;
   }
 
-
   private static List<AnalysisCentricFile> buildAnalysisCentricFiles(@NonNull List<File> files) {
-    return files.stream().map(AnalysisCentricDocumentConverter::fromFile).collect(Collectors.toList());
+    return files.stream()
+        .map(AnalysisCentricDocumentConverter::fromFile)
+        .collect(Collectors.toList());
   }
 
   private static AnalysisCentricFile fromFile(@NonNull File file) {
-    val fileDoc = AnalysisCentricFile.builder()
-        .objectId(file.getObjectId())
-        .fileAccess(file.getFileAccess())
-        .dataType(file.getDataType())
-        .md5Sum(file.getFileMd5sum())
-        .name(file.getFileName())
-        .size(file.getFileSize())
-        .fileType(file.getFileType())
-        .build();
+    val fileDoc =
+        AnalysisCentricFile.builder()
+            .objectId(file.getObjectId())
+            .fileAccess(file.getFileAccess())
+            .dataType(file.getDataType())
+            .md5Sum(file.getFileMd5sum())
+            .name(file.getFileName())
+            .size(file.getFileSize())
+            .fileType(file.getFileType())
+            .build();
     fileDoc.replaceInfo(file.getInfo());
     return fileDoc;
   }

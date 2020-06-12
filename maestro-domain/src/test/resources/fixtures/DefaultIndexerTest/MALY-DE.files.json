@@ -1,6 +1,7 @@
 [
   {
     "object_id": "316612a4-4c23-5434-976a-810f8cde06b7",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -61,6 +62,7 @@
   },
   {
     "object_id": "0bafbb56-728e-5e6c-bb87-88e7bb789dab",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -121,6 +123,7 @@
   },
   {
     "object_id": "7b32b455-d8e2-5e51-bcad-dad7945c8b15",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",

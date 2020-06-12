@@ -1,6 +1,7 @@
 [
   {
     "object_id": "b63dff38-e239-5a5d-9c36-ec851049fd12",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -62,6 +63,7 @@
   },
   {
     "object_id": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -122,6 +124,7 @@
   },
   {
     "object_id": "3106300b-3666-52b7-a3fa-a5096a51814b",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -182,6 +185,7 @@
   },
   {
     "object_id": "bed33bd4-eec1-5905-8480-5def36d7f6de",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -242,6 +246,7 @@
   },
   {
     "object_id": "24329157-e218-5854-8f45-7fa6b9e046c6",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -302,6 +307,7 @@
   },
   {
     "object_id": "4d070189-bd33-5391-b7af-ea32c6782875",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -362,6 +368,7 @@
   },
   {
     "object_id": "107c83c7-595e-5b36-957b-ae706611d5b9",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -422,6 +429,7 @@
   },
   {
     "object_id": "da524891-37af-5a21-9867-c6812018aa22",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -482,6 +490,7 @@
   },
   {
     "object_id": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -542,6 +551,7 @@
   },
   {
     "object_id": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -602,6 +612,7 @@
   },
   {
     "object_id": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -662,6 +673,7 @@
   },
   {
     "object_id": "316177db-022d-5121-aba8-ce72a92ee778",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -722,6 +734,7 @@
   },
   {
     "object_id": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -782,6 +795,7 @@
   },
   {
     "object_id": "5c222a32-a79d-55e0-a490-440217c63393",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -842,6 +856,7 @@
   },
   {
     "object_id": "2af2e398-c27b-5645-b60b-b932a916184d",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -902,6 +917,7 @@
   },
   {
     "object_id": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -962,6 +978,7 @@
   },
   {
     "object_id": "60307755-185e-536e-aa3b-190fb9934844",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -1022,6 +1039,7 @@
   },
   {
     "object_id": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",

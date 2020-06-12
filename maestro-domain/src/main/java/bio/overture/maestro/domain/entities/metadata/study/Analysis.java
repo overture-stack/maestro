@@ -51,6 +51,9 @@ public class Analysis {
   /** An analysis can have one or more samples */
   @NonNull private List<Sample> samples;
 
+  /** A dynamic field, variant_class is only applicable to variant_calling analysisType */
+  private String variant_class;
+
   /**
    * extra information about the analysis type. this will contain attributes that change by the
    * analysis type.

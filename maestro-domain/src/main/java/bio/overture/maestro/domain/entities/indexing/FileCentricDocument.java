@@ -17,12 +17,11 @@
 
 package bio.overture.maestro.domain.entities.indexing;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
@@ -39,6 +38,8 @@ public class FileCentricDocument {
   @NonNull private String objectId;
 
   @NonNull private String studyId;
+
+  private String variantClass;
 
   private String dataType;
 
@@ -99,11 +100,20 @@ public class FileCentricDocument {
     if (this.equals(fileCentricDocument)) return true;
     return this.objectId.equals(fileCentricDocument.getObjectId())
         && this.studyId.equals(fileCentricDocument.getStudyId())
+        && isVariantClassEqual(this.variantClass, fileCentricDocument.getVariantClass())
         && this.dataType.equals(fileCentricDocument.getDataType())
         && this.fileType.equals(fileCentricDocument.getFileType())
         && this.fileAccess.equals(fileCentricDocument.getFileAccess())
         && this.donors.equals(fileCentricDocument.getDonors())
         && this.analysis.equals(fileCentricDocument.getAnalysis())
         && this.file.equals(fileCentricDocument.getFile());
+  }
+
+  private boolean isVariantClassEqual(String variantClass, String toCompare) {
+    if (variantClass == null && toCompare == null) {
+      return true;
+    } else if (variantClass != null && toCompare != null) {
+      return variantClass.equals(toCompare);
+    } else return false;
   }
 }

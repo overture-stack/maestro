@@ -1,6 +1,7 @@
 [
   {
     "object_id": "e86158ec-0eb6-50e2-bbb5-7bfed4745db0",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -61,6 +62,7 @@
   },
   {
     "object_id": "0474e5f1-3b49-5ec5-8186-a1ffc6952f37",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -121,6 +123,7 @@
   },
   {
     "object_id": "54abbcb5-485f-5acd-88e9-50261e0c8e17",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -181,6 +184,7 @@
   },
   {
     "object_id": "0d7ee358-01fe-59ce-b62b-0663bec8596d",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -241,6 +245,7 @@
   },
   {
     "object_id": "432779b5-95db-5caf-a529-85a36a707c04",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -301,6 +306,7 @@
   },
   {
     "object_id": "4f2bee69-e66e-5af5-856a-a0f3c34b12ff",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -361,6 +367,7 @@
   },
   {
     "object_id": "3f571505-3bea-5065-956a-4b5a793ad1ed",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -421,6 +428,7 @@
   },
   {
     "object_id": "e122b153-c98b-530d-879a-11871a427d1b",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -481,6 +489,7 @@
   },
   {
     "object_id": "36ede5a5-fcde-5b6a-95c1-af28321fbd39",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -541,6 +550,7 @@
   },
   {
     "object_id": "5c1fcacb-7c66-53a6-8fb6-93d1281e55b8",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
@@ -601,6 +611,7 @@
   },
   {
     "object_id": "e704d3f5-1274-5cdd-924f-609159e121cc",
+    "variant_class" : null,
     "file_access": "controlled",
     "file_type": "VCF",
     "data_type": "AlignedReads",
