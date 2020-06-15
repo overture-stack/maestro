@@ -46,10 +46,13 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+<!-- dont uncomment, when this is added it throws async req timeout that doesn't get handled after 30 sec -->
+<!-- https://github.com/codecentric/spring-boot-admin/issues/286 -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--        </dependency>-->
+
         <!-- Vault -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
