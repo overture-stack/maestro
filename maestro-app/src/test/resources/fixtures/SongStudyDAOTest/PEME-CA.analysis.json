@@ -1,5 +1,8 @@
 {
-  "analysisType": { "name": "sequencingRead", "version": 1 },
+  "analysisType": {
+    "name": "sequencingRead",
+    "version": 1
+  },
   "info": {
     "dcc_project_code": "PEME-CA",
     "isPcawg": false
@@ -19,7 +22,6 @@
         "specimenId": "SP200947",
         "donorId": "DO232959",
         "submitterSpecimenId": "MDT-AP-0432_control_specimen",
-
         "specimenType": "Normal - blood derived"
       },
       "donor": {
@@ -41,8 +43,8 @@
       "fileSize": 6352,
       "fileType": "XML",
       "fileMd5sum": "cad2b396e0f7dc5384a5275f89ccad3a",
-       "fileAccess": "open",
-       "dataType": "AlignedReads"
+      "fileAccess": "open",
+      "dataType": "AlignedReads"
     },
     {
       "info": {},

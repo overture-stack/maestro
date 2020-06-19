@@ -1,6 +1,9 @@
 [
   {
-    "analysisType": { "name": "sequencingRead", "version": 1 },
+    "analysisType": {
+      "name": "sequencingRead",
+      "version": 1
+    },
     "info": {
       "dcc_project_code": "LIAD-FR",
       "isPcawg": false
@@ -20,7 +23,6 @@
           "specimenId": "SP109375",
           "donorId": "DO49691",
           "submitterSpecimenId": "CHC1124T",
-
           "specimenType": "Primary tumour - solid tissue"
         },
         "donor": {
