@@ -54,7 +54,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 class DefaultIndexer implements Indexer {
@@ -589,8 +588,15 @@ class DefaultIndexer implements Indexer {
   }
 
   private Mono<IndexResult> batchUpsertAnalysis(List<AnalysisCentricDocument> analyses) {
-    return Mono.fromSupplier(() -> analyses)
-        .subscribeOn(Schedulers.elastic())
+    return getIndexedAnalyses(analyses)
+        .map(storedAnalyses -> findAnalysisConflicts(analyses, storedAnalyses))
+        .flatMap(
+            conflictsCheckResult -> {
+              handleAnalysisConflicts(conflictsCheckResult);
+              return Mono.just(conflictsCheckResult);
+            })
+        .map(
+            analysesConflictsResult -> removeConflictingAnalysis(analyses, analysesConflictsResult))
         .flatMap(this::callBatchUpsertAnalysis)
         .doOnNext(this::notifyIndexRequestFailures)
         .onErrorResume(
@@ -607,6 +613,21 @@ class DefaultIndexer implements Indexer {
                     "finished batch upsert analysis, list size {}, hashcode {}",
                     analyses.size(),
                     Objects.hashCode(analyses)));
+  }
+
+  private Mono<Map<String, AnalysisCentricDocument>> getIndexedAnalyses(
+      List<AnalysisCentricDocument> analyses) {
+    return analysisCentricIndexAdapter
+        .fetchByIds(
+            analyses.stream()
+                .map(AnalysisCentricDocument::getAnalysisId)
+                .collect(Collectors.toList()))
+        .map(
+            (fetchResult) -> {
+              val idToFileMap = new HashMap<String, AnalysisCentricDocument>();
+              fetchResult.forEach(item -> idToFileMap.put(item.getAnalysisId(), item));
+              return Collections.unmodifiableMap(idToFileMap);
+            });
   }
 
   private List<Analysis> filterExcludedAnalyses(
@@ -676,6 +697,30 @@ class DefaultIndexer implements Indexer {
     return ConflictsCheckResult.builder().conflictingFiles(conflictingPairs).build();
   }
 
+  private AnalysesConflictsResult findAnalysisConflicts(
+      List<AnalysisCentricDocument> toIndex, Map<String, AnalysisCentricDocument> stored) {
+    val conflictingPairs =
+        toIndex.stream()
+            .map(analysisToIndex -> findIfStoredAnalysisConflicts(stored, analysisToIndex))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    return AnalysesConflictsResult.builder().conflictingAnalyses(conflictingPairs).build();
+  }
+
+  private Tuple2<AnalysisCentricDocument, AnalysisCentricDocument> findIfStoredAnalysisConflicts(
+      Map<String, AnalysisCentricDocument> storedAnalyses, AnalysisCentricDocument toIndex) {
+    if (storedAnalyses.containsKey(toIndex.getAnalysisId())) {
+      val existingAnalysis = storedAnalyses.get(toIndex.getAnalysisId());
+      if (toIndex.isValidReplica(existingAnalysis)) {
+        return null;
+      }
+      // the analysis to be indexed is a conflict to existing analysis
+      return new Tuple2<>(toIndex, storedAnalyses.get(toIndex.getAnalysisId()));
+    }
+    // there is no conflict when the analysis to be indexed does not exist
+    else return null;
+  }
+
   private Throwable handleFetchAnalysisError(StudyAnalysisRepositoryTuple tuple, Throwable e) {
     log.error("failed to fetch analysis", e);
     val notificationInfo =
@@ -696,11 +741,25 @@ class DefaultIndexer implements Indexer {
     this.notifyConflicts(conflictingFiles);
   }
 
+  private void handleAnalysisConflicts(AnalysesConflictsResult conflictingAnalyses) {
+    if (conflictingAnalyses == null || conflictingAnalyses.getConflictingAnalyses().isEmpty())
+      return;
+    this.notifyAnalysesConflicts(conflictingAnalyses);
+  }
+
   private List<FileCentricDocument> removeConflictingFromInputFilesList(
       List<FileCentricDocument> files, ConflictsCheckResult conflictsCheckResult) {
     return files.stream()
         .filter(
             fileCentricDocument -> !isInConflictsList(conflictsCheckResult, fileCentricDocument))
+        .collect(Collectors.toUnmodifiableList());
+  }
+
+  private List<AnalysisCentricDocument> removeConflictingAnalysis(
+      List<AnalysisCentricDocument> analyses, AnalysesConflictsResult result) {
+    return analyses.stream()
+        .filter(
+            analysisCentricDocument -> !isInAnalysisConflictsList(result, analysisCentricDocument))
         .collect(Collectors.toUnmodifiableList());
   }
 
@@ -773,6 +832,17 @@ class DefaultIndexer implements Indexer {
     this.notifier.notify(notification);
   }
 
+  private void notifyAnalysesConflicts(AnalysesConflictsResult analysesConflictsResult) {
+    val conflictList =
+        analysesConflictsResult.getConflictingAnalyses().stream()
+            .map(tuple -> tuple.apply(this::toAnalysisConflict))
+            .collect(Collectors.toUnmodifiableList());
+    val notification =
+        new IndexerNotification(
+            NotificationName.ANALYSIS_CONFLICT, Map.of(CONFLICTS, conflictList));
+    this.notifier.notify(notification);
+  }
+
   private boolean isInConflictsList(
       ConflictsCheckResult conflictsCheckResult, FileCentricDocument fileCentricDocument) {
     return conflictsCheckResult.getConflictingFiles().stream()
@@ -780,6 +850,18 @@ class DefaultIndexer implements Indexer {
         .anyMatch(
             conflictingFile ->
                 conflictingFile.getObjectId().equals(fileCentricDocument.getObjectId()));
+  }
+
+  private boolean isInAnalysisConflictsList(
+      AnalysesConflictsResult analysesConflictsResult,
+      AnalysisCentricDocument analysisCentricDocument) {
+    return analysesConflictsResult.getConflictingAnalyses().stream()
+        .map(Tuple2::_1)
+        .anyMatch(
+            conflictingAnalysis ->
+                conflictingAnalysis
+                    .getAnalysisId()
+                    .equals(analysisCentricDocument.getAnalysisId()));
   }
 
   private FileConflict toFileConflict(FileCentricDocument f1, FileCentricDocument f2) {
@@ -803,6 +885,30 @@ class DefaultIndexer implements Indexer {
                     f2.getRepositories().stream()
                         .map(Repository::getCode)
                         .collect(Collectors.toUnmodifiableSet()))
+                .build())
+        .build();
+  }
+
+  private AnalysisConflict toAnalysisConflict(
+      AnalysisCentricDocument a1, AnalysisCentricDocument a2) {
+    return AnalysisConflict.builder()
+        .newAnalysis(
+            ConflictingAnalysis.builder()
+                .analysisId(a1.getAnalysisId())
+                .studyId(a1.getStudyId())
+                .repoCode(
+                    a1.getRepositories().stream()
+                        .map(Repository::getCode)
+                        .collect(Collectors.toUnmodifiableSet()))
+                .build())
+        .indexedAnalysis(
+            ConflictingAnalysis.builder()
+                .analysisId(a2.getAnalysisId())
+                .studyId(a2.getStudyId())
+                .repoCode(
+                    a2.getRepositories().stream()
+                        .map(Repository::getCode)
+                        .collect(Collectors.toSet()))
                 .build())
         .build();
   }
@@ -865,6 +971,15 @@ class DefaultIndexer implements Indexer {
   @Builder
   @ToString
   @EqualsAndHashCode
+  static class AnalysisConflict {
+    private ConflictingAnalysis newAnalysis;
+    private ConflictingAnalysis indexedAnalysis;
+  }
+
+  @Getter
+  @Builder
+  @ToString
+  @EqualsAndHashCode
   static class ConflictingFile {
     private String objectId;
     private String analysisId;
@@ -876,8 +991,26 @@ class DefaultIndexer implements Indexer {
   @Builder
   @ToString
   @EqualsAndHashCode
+  static class ConflictingAnalysis {
+    private String analysisId;
+    private String studyId;
+    private Set<String> repoCode;
+  }
+
+  @Getter
+  @Builder
+  @ToString
+  @EqualsAndHashCode
   private static class ConflictsCheckResult {
     private List<Tuple2<FileCentricDocument, FileCentricDocument>> conflictingFiles;
+  }
+
+  @Getter
+  @Builder
+  @ToString
+  @EqualsAndHashCode
+  private static class AnalysesConflictsResult {
+    private List<Tuple2<AnalysisCentricDocument, AnalysisCentricDocument>> conflictingAnalyses;
   }
 
   @Getter

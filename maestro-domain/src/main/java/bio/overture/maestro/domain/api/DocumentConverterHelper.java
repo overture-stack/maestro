@@ -1,41 +1,41 @@
 package bio.overture.maestro.domain.api;
 
+import static bio.overture.maestro.domain.api.exception.NotFoundException.checkNotFound;
+
 import bio.overture.maestro.domain.entities.indexing.Donor;
 import bio.overture.maestro.domain.entities.indexing.Specimen;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Sample;
-import lombok.NonNull;
-import lombok.val;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static bio.overture.maestro.domain.api.exception.NotFoundException.checkNotFound;
+import lombok.NonNull;
+import lombok.val;
 
 final class DocumentConverterHelper {
-  /**
-   * Converts metadata Specimen pojo and metadata Sample pojo to an indexing Specimen pojo.
-   */
+  /** Converts metadata Specimen pojo and metadata Sample pojo to an indexing Specimen pojo. */
   static List<Specimen> buildSpecimen(
-      @NonNull bio.overture.maestro.domain.entities.metadata.study.Specimen specimen, @NonNull Sample sample) {
+      @NonNull bio.overture.maestro.domain.entities.metadata.study.Specimen specimen,
+      @NonNull Sample sample) {
 
-    val sampleDoc = bio.overture.maestro.domain.entities.indexing.Sample.builder()
-        .sampleId(sample.getSampleId())
-        .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
-        .submitterSampleId(sample.getSubmitterSampleId())
-        .sampleType(sample.getSampleType())
-        .build();
+    val sampleDoc =
+        bio.overture.maestro.domain.entities.indexing.Sample.builder()
+            .sampleId(sample.getSampleId())
+            .matchedNormalSubmitterSampleId(sample.getMatchedNormalSubmitterSampleId())
+            .submitterSampleId(sample.getSubmitterSampleId())
+            .sampleType(sample.getSampleType())
+            .build();
     sampleDoc.replaceInfo(sample.getInfo());
 
-    val specimenDoc = bio.overture.maestro.domain.entities.indexing.Specimen.builder()
-        .specimenId(specimen.getSpecimenId())
-        .submitterSpecimenId(specimen.getSubmitterSpecimenId())
-        .specimenType(specimen.getSpecimenType())
-        .specimenTissueSource(specimen.getSpecimenTissueSource())
-        .tumourNormalDesignation(specimen.getTumourNormalDesignation())
-        .samples(List.of(sampleDoc))
-        .build();
+    val specimenDoc =
+        bio.overture.maestro.domain.entities.indexing.Specimen.builder()
+            .specimenId(specimen.getSpecimenId())
+            .submitterSpecimenId(specimen.getSubmitterSpecimenId())
+            .specimenType(specimen.getSpecimenType())
+            .specimenTissueSource(specimen.getSpecimenTissueSource())
+            .tumourNormalDesignation(specimen.getTumourNormalDesignation())
+            .samples(List.of(sampleDoc))
+            .build();
     specimenDoc.replaceInfo(specimen.getInfo());
     return List.of(specimenDoc);
   }
@@ -50,12 +50,13 @@ final class DocumentConverterHelper {
   static Donor extractDonor(@NonNull Sample sample) {
     val donor = sample.getDonor();
     val specimen = sample.getSpecimen();
-    val donorDoc = Donor.builder()
-        .donorId(donor.getDonorId())
-        .gender(donor.getGender())
-        .submitterDonorId(donor.getSubmitterDonorId())
-        .specimens(buildSpecimen(specimen, sample))
-        .build();
+    val donorDoc =
+        Donor.builder()
+            .donorId(donor.getDonorId())
+            .gender(donor.getGender())
+            .submitterDonorId(donor.getSubmitterDonorId())
+            .specimens(buildSpecimen(specimen, sample))
+            .build();
     donorDoc.replaceInfo(donor.getInfo());
     return donorDoc;
   }
@@ -64,8 +65,8 @@ final class DocumentConverterHelper {
    * Groups specimens belonging to a AnalysisCentricDonor
    *
    * @param list a grouped list with each AnalysisCentricDonor element having exactly one Specimen
-   * @return a fully assembled Donor object with a list of specimens that belongs to
-   *     the current donor
+   * @return a fully assembled Donor object with a list of specimens that belongs to the current
+   *     donor
    */
   static Donor mergeDonorBySpecimen(@NonNull List<Donor> list) {
     checkNotFound(
@@ -90,20 +91,20 @@ final class DocumentConverterHelper {
     val specimens =
         new ArrayList<>(specimenMap.values())
             .stream()
-            .map(DocumentConverterHelper::groupSpecimensBySample)
-            .collect(Collectors.toList());
+                .map(DocumentConverterHelper::groupSpecimensBySample)
+                .collect(Collectors.toList());
 
-    val donorDoc = Donor.builder()
-        .donorId(anyDonor.getDonorId())
-        .submitterDonorId(anyDonor.getSubmitterDonorId())
-        .gender(anyDonor.getGender())
-        .specimens(specimens)
-        .build();
+    val donorDoc =
+        Donor.builder()
+            .donorId(anyDonor.getDonorId())
+            .submitterDonorId(anyDonor.getSubmitterDonorId())
+            .gender(anyDonor.getGender())
+            .specimens(specimens)
+            .build();
 
     donorDoc.replaceInfo(anyDonor.getInfo());
     return donorDoc;
   }
-
 
   static bio.overture.maestro.domain.entities.indexing.Specimen groupSpecimensBySample(
       @NonNull List<bio.overture.maestro.domain.entities.indexing.Specimen> list) {
@@ -115,14 +116,15 @@ final class DocumentConverterHelper {
 
     // if there is more than one sample in the list, merge samples under one specimen
     if (list.size() > 1) {
-      val specimenDoc = bio.overture.maestro.domain.entities.indexing.Specimen.builder()
-          .samples(samples)
-          .specimenId(specimen.getSpecimenId())
-          .specimenType(specimen.getSpecimenType())
-          .tumourNormalDesignation(specimen.getTumourNormalDesignation())
-          .specimenTissueSource(specimen.getSpecimenTissueSource())
-          .submitterSpecimenId(specimen.getSubmitterSpecimenId())
-          .build();
+      val specimenDoc =
+          bio.overture.maestro.domain.entities.indexing.Specimen.builder()
+              .samples(samples)
+              .specimenId(specimen.getSpecimenId())
+              .specimenType(specimen.getSpecimenType())
+              .tumourNormalDesignation(specimen.getTumourNormalDesignation())
+              .specimenTissueSource(specimen.getSpecimenTissueSource())
+              .submitterSpecimenId(specimen.getSubmitterSpecimenId())
+              .build();
       specimenDoc.replaceInfo(specimen.getInfo());
       return specimenDoc;
     } else return specimen;
@@ -135,8 +137,6 @@ final class DocumentConverterHelper {
             .collect(Collectors.groupingBy(Donor::getDonorId, Collectors.toList()));
 
     return new ArrayList<>(groupedByDonorMap.values())
-        .stream()
-        .map(DocumentConverterHelper::mergeDonorBySpecimen)
-        .collect(Collectors.toList());
+        .stream().map(DocumentConverterHelper::mergeDonorBySpecimen).collect(Collectors.toList());
   }
 }

@@ -1,4 +1,5 @@
-{
+[
+  {
   "analysisId": "d0b62734-d955-4b74-b627-34d955eb745e",
   "studyId": "TEST-CA",
   "analysisState": "PUBLISHED",
@@ -64,3 +65,4 @@
     "matchedNormalSampleSubmitterId": "sample_x24_11a"
   }
 }
+]

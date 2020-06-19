@@ -1,0 +1,56 @@
+{
+  "analysis_id" : "f7b2bb0c-f92d-49be-b2bb-0cf92d49be06",
+  "analysis_type" : "variantCall",
+  "analysis_version" : 1,
+  "analysis_state" : "PUBLISHED",
+  "study_id" : "TEST-CA",
+  "donors" : [
+    {
+      "donor_id" : "DO255857",
+      "submitter_donor_id" : "donor1",
+      "gender" : "Male",
+      "specimens" : [
+        {
+          "specimen_id" : "SP216042",
+          "specimen_type" : "Primary tumour",
+          "submitter_specimen_id" : "specimen1",
+          "samples" : [
+            {
+              "sample_id" : "SA616046",
+              "submitter_sample_id" : "sample2",
+              "sample_type" : "Amplified DNA",
+              "matched_normal_submitter_sample_id" : "sample-2.normal"
+            }
+          ],
+          "tumour_normal_designation" : "Tumour",
+          "specimen_tissue_source" : "Bone marrow"
+        }
+      ]
+    }
+  ],
+  "files" : [
+    {
+      "object_id" : "8d765f84-f1d8-5ddc-a87b-0e93709d4f04",
+      "name" : "tumour2.bam",
+      "size" : 70,
+      "file_type" : "BAM",
+      "md5_sum" : "1b8a851b50d223debf7c738fd45ebf89",
+      "file_access" : "controlled",
+      "data_type" : "submittedReads"
+    }
+  ],
+  "repositories" : [
+    {
+      "code": "collab",
+      "organization": "ICGC",
+      "name": "collaboratory",
+      "type": "S3",
+      "country": "CA",
+      "url": "##COLLAB_REPO_URL##"
+    }
+  ],
+  "experiment" : {
+    "variantCallingTool" : "silver bullet",
+    "matchedNormalSampleSubmitterId" : "sample_x24_11a"
+  }
+}

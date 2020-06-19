@@ -2,11 +2,10 @@ package bio.overture.maestro.domain.entities.indexing.analysis;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import lombok.*;
-import lombok.experimental.FieldNameConstants;
-
 import java.util.Map;
 import java.util.TreeMap;
+import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 @Builder
 @Getter

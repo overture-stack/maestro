@@ -22,8 +22,8 @@ import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static bio.overture.masestro.test.Fixture.loadJsonString;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.text.MessageFormat.format;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -66,7 +66,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import reactor.test.StepVerifier;
 
 @Tag(TestCategory.INT_TEST)
-class IndexerIntegrationTest extends MaestroIntegrationTest {
+class FileCentricIntegrationTest extends MaestroIntegrationTest {
 
   static final String FILE_CENTRIC_INDEX = "file_centric_1.0";
 
@@ -89,6 +89,8 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
   @BeforeEach
   void setUp() {
     alias = applicationProperties.fileCentricAlias();
+    assertFalse(applicationProperties.isAnalysisCentricIndexEnabled());
+    assertTrue(applicationProperties.isFileCentricIndexEnabled());
   }
 
   @Test

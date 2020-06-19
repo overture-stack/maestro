@@ -1,0 +1,86 @@
+{
+  "analysis_id" : "43f07e4d-e26b-4f4a-b07e-4de26b9f4a50",
+  "analysis_type" : "variant_calling",
+  "analysis_version" : 2,
+  "analysis_state" : "PUBLISHED",
+  "study_id" : "EUCANCAN-BE",
+  "donors" : [
+    {
+      "donor_id" : "DO250284",
+      "submitter_donor_id" : "insilico_2",
+      "gender" : "Female",
+      "specimens" : [
+        {
+          "specimen_id" : "SP210307",
+          "specimen_type" : "Primary tumour",
+          "submitter_specimen_id" : "insilico_2_tumor",
+          "samples" : [
+            {
+              "sample_id" : "SA610334",
+              "submitter_sample_id" : "insilico_2_tumor",
+              "sample_type" : "Total DNA",
+              "matched_normal_submitter_sample_id" : "insilico_2_normal"
+            }
+          ],
+          "tumour_normal_designation" : "Tumour",
+          "specimen_tissue_source" : "Blood derived"
+        }
+      ]
+    }
+  ],
+  "files" : [
+    {
+      "object_id" : "882e4591-b004-5564-b2ec-1a210f8cba6b",
+      "name" : "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.snv.vcf.gz",
+      "size" : 927567,
+      "file_type" : "VCF",
+      "md5_sum" : "0d38c7ed8d5ca347deca7b5ef155823b",
+      "file_access" : "controlled",
+      "data_type" : "somatic_snv"
+    },
+    {
+      "object_id" : "c6d6eee4-a2cd-513d-a8e5-4d06098d54fe",
+      "name" : "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.snv.vcf.gz.tbi",
+      "size" : 168704,
+      "file_type" : "TBI",
+      "md5_sum" : "acd5e3780a91ed0364af7ce8106edd3d",
+      "file_access" : "controlled",
+      "data_type" : "vcf_index"
+    }
+  ],
+  "repositories" : [
+    {
+      "code" : "collab",
+      "organization" : "ICGC",
+      "name" : "collaboratory",
+      "type" : "S3",
+      "country" : "CA",
+      "url" : "##COLLAB_REPO_URL##"
+    }
+  ],
+  "experiment" : {
+    "library_strategy" : "WGS"
+  },
+  "variant_class" : [
+    "somatic"
+  ],
+  "variant_type" : [
+    "snv"
+  ],
+  "workflow" : {
+    "name" : "sanger-wgs-variant-calling",
+    "inputs" : [
+      {
+        "analysis_type" : "sequencing_alignment",
+        "tumour_analysis_id" : "13b13548-6e32-412d-b135-486e32512dbe"
+      },
+      {
+        "analysis_type" : "sequencing_alignment",
+        "normal_analysis_id" : "0efe5aeb-3e21-48a5-be5a-eb3e2118a502"
+      }
+    ],
+    "run_id" : "wise_brown",
+    "version" : "0.1.0-dev",
+    "short_name" : "sanger-wgs"
+  }
+}

@@ -17,11 +17,11 @@
 
 package bio.overture.maestro.domain.api;
 
+import static bio.overture.maestro.domain.api.DocumentConverterHelper.getDonors;
 
 import bio.overture.maestro.domain.entities.indexing.*;
 import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,8 +30,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-
-import static bio.overture.maestro.domain.api.DocumentConverterHelper.getDonors;
 
 /**
  * This class holds the structural changes that the indexer applies to prepare the File documents
@@ -128,13 +126,14 @@ final class FileCentricDocumentConverter {
       Analysis analysis, bio.overture.maestro.domain.entities.metadata.study.File file) {
     val fileName = file.getFileName();
     val indexFile = getIndexFile(analysis.getFiles(), fileName);
-    val fileDocument = File.builder()
-        .name(fileName)
-        .size(file.getFileSize())
-        .md5sum(file.getFileMd5sum())
-        .dataType(file.getDataType())
-        .indexFile(indexFile)
-        .build();
+    val fileDocument =
+        File.builder()
+            .name(fileName)
+            .size(file.getFileSize())
+            .md5sum(file.getFileMd5sum())
+            .dataType(file.getDataType())
+            .indexFile(indexFile)
+            .build();
     fileDocument.replaceInfo(file.getInfo());
     return fileDocument;
   }
@@ -164,14 +163,15 @@ final class FileCentricDocumentConverter {
 
   private static IndexFile createIndexFile(
       bio.overture.maestro.domain.entities.metadata.study.File file) {
-    val indexFileDocument = IndexFile.builder()
-        .objectId(file.getObjectId())
-        .name(file.getFileName())
-        .fileType(indexFileFormat(file.getFileName()))
-        .size(file.getFileSize())
-        .md5sum(file.getFileMd5sum())
-        .dataType(file.getDataType())
-        .build();
+    val indexFileDocument =
+        IndexFile.builder()
+            .objectId(file.getObjectId())
+            .name(file.getFileName())
+            .fileType(indexFileFormat(file.getFileName()))
+            .size(file.getFileSize())
+            .md5sum(file.getFileMd5sum())
+            .dataType(file.getDataType())
+            .build();
 
     indexFileDocument.replaceInfo(file.getInfo());
     return indexFileDocument;
