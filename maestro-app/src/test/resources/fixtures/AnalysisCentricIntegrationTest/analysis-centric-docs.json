@@ -69,77 +69,77 @@
     }
   },
   {
-    "analysis_id" : "a07fe97f-80e1-4e69-bfe9-7f80e18e6969",
-    "analysis_type" : "sequencing_experiment",
-    "analysis_version" : 3,
-    "analysis_state" : "PUBLISHED",
-    "study_id" : "DASH-CA",
-    "donors" : [
+    "analysis_id": "a07fe97f-80e1-4e69-bfe9-7f80e18e6969",
+    "analysis_type": "sequencing_experiment",
+    "analysis_version": 3,
+    "analysis_state": "PUBLISHED",
+    "study_id": "DASH-CA",
+    "donors": [
       {
-        "donor_id" : "DO259142",
-        "submitter_donor_id" : "DASH-1",
-        "gender" : "Male",
-        "specimens" : [
+        "donor_id": "DO259142",
+        "submitter_donor_id": "DASH-1",
+        "gender": "Male",
+        "specimens": [
           {
-            "specimen_id" : "SP219218",
-            "specimen_type" : "Normal",
-            "submitter_specimen_id" : "dashsp-1",
-            "samples" : [
+            "specimen_id": "SP219218",
+            "specimen_type": "Normal",
+            "submitter_specimen_id": "dashsp-1",
+            "samples": [
               {
-                "sample_id" : "SA619219",
-                "submitter_sample_id" : "dashsa-1",
-                "sample_type" : "Amplified DNA",
-                "matched_normal_submitter_sample_id" : null
+                "sample_id": "SA619219",
+                "submitter_sample_id": "dashsa-1",
+                "sample_type": "Amplified DNA",
+                "matched_normal_submitter_sample_id": null
               }
             ],
-            "tumour_normal_designation" : "Normal",
-            "specimen_tissue_source" : "Blood derived"
+            "tumour_normal_designation": "Normal",
+            "specimen_tissue_source": "Blood derived"
           }
         ]
       }
     ],
-    "files" : [
+    "files": [
       {
-        "object_id" : "fc019c84-dc29-5362-8069-dee7aea67735",
-        "name" : "dash-1-normal.bam",
-        "size" : 24,
-        "file_type" : "BAM",
-        "md5_sum" : "4d6e35e3290ccce08c8c7517dc29d624",
-        "file_access" : "controlled",
-        "data_type" : "Submitted Reads"
+        "object_id": "fc019c84-dc29-5362-8069-dee7aea67735",
+        "name": "dash-1-normal.bam",
+        "size": 24,
+        "file_type": "BAM",
+        "md5_sum": "4d6e35e3290ccce08c8c7517dc29d624",
+        "file_access": "controlled",
+        "data_type": "Submitted Reads"
       }
     ],
-    "repositories" : [
+    "repositories": [
       {
-        "code" : "collab",
-        "organization" : "ICGC",
-        "name" : "collaboratory",
-        "type" : "S3",
-        "country" : "CA",
-        "url" : "##COLLAB_REPO_URL##"
+        "code": "collab",
+        "organization": "ICGC",
+        "name": "collaboratory",
+        "type": "S3",
+        "country": "CA",
+        "url": "##COLLAB_REPO_URL##"
       }
     ],
-    "experiment" : {
-      "platform" : "ILLUMINA",
-      "platform_model" : null,
-      "sequencing_date" : null,
-      "sequencing_center" : null,
-      "experimental_strategy" : "WGS",
-      "submitter_sequencing_experiment_id" : "DASH-SE-1"
+    "experiment": {
+      "platform": "ILLUMINA",
+      "platform_model": null,
+      "sequencing_date": null,
+      "sequencing_center": null,
+      "experimental_strategy": "WGS",
+      "submitter_sequencing_experiment_id": "DASH-SE-1"
     },
-    "read_group_count" : 1,
-    "read_groups" : [
+    "read_group_count": 1,
+    "read_groups": [
       {
-        "file_r1" : "dash-1-normal.bam",
-        "file_r2" : null,
-        "insert_size" : null,
-        "library_name" : "Dashboard-Testing",
-        "is_paired_end" : false,
-        "platform_unit" : "Dashboard-Testing",
-        "read_length_r1" : null,
-        "read_length_r2" : null,
-        "sample_barcode" : null,
-        "submitter_read_group_id" : "dash-1-rg-1"
+        "file_r1": "dash-1-normal.bam",
+        "file_r2": null,
+        "insert_size": null,
+        "library_name": "Dashboard-Testing",
+        "is_paired_end": false,
+        "platform_unit": "Dashboard-Testing",
+        "read_length_r1": null,
+        "read_length_r2": null,
+        "sample_barcode": null,
+        "submitter_read_group_id": "dash-1-rg-1"
       }
     ]
   }

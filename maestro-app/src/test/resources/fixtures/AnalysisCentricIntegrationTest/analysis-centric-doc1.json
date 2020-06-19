@@ -1,86 +1,86 @@
 {
-  "analysis_id" : "cf1432f7-985e-4858-9432-f7985ee858e4",
-  "analysis_type" : "variant_calling",
-  "analysis_version" : 2,
-  "analysis_state" : "PUBLISHED",
-  "study_id" : "EUCANCAN-BE",
-  "donors" : [
+  "analysis_id": "cf1432f7-985e-4858-9432-f7985ee858e4",
+  "analysis_type": "variant_calling",
+  "analysis_version": 2,
+  "analysis_state": "PUBLISHED",
+  "study_id": "EUCANCAN-BE",
+  "donors": [
     {
-      "donor_id" : "DO250284",
-      "submitter_donor_id" : "insilico_2",
-      "gender" : "Female",
-      "specimens" : [
+      "donor_id": "DO250284",
+      "submitter_donor_id": "insilico_2",
+      "gender": "Female",
+      "specimens": [
         {
-          "specimen_id" : "SP210307",
-          "specimen_type" : "Primary tumour",
-          "submitter_specimen_id" : "insilico_2_tumor",
-          "samples" : [
+          "specimen_id": "SP210307",
+          "specimen_type": "Primary tumour",
+          "submitter_specimen_id": "insilico_2_tumor",
+          "samples": [
             {
-              "sample_id" : "SA610334",
-              "submitter_sample_id" : "insilico_2_tumor",
-              "sample_type" : "Total DNA",
-              "matched_normal_submitter_sample_id" : "insilico_2_normal"
+              "sample_id": "SA610334",
+              "submitter_sample_id": "insilico_2_tumor",
+              "sample_type": "Total DNA",
+              "matched_normal_submitter_sample_id": "insilico_2_normal"
             }
           ],
-          "tumour_normal_designation" : "Tumour",
-          "specimen_tissue_source" : "Blood derived"
+          "tumour_normal_designation": "Tumour",
+          "specimen_tissue_source": "Blood derived"
         }
       ]
     }
   ],
-  "files" : [
+  "files": [
     {
-      "object_id" : "94ef9598-537f-574b-842d-1486fac84ade",
-      "name" : "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.sv.vcf.gz",
-      "size" : 695576,
-      "file_type" : "VCF",
-      "md5_sum" : "f8f8dc5a4899b927fe565183a0798a2a",
-      "file_access" : "controlled",
-      "data_type" : "somatic_sv"
+      "object_id": "94ef9598-537f-574b-842d-1486fac84ade",
+      "name": "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.sv.vcf.gz",
+      "size": 695576,
+      "file_type": "VCF",
+      "md5_sum": "f8f8dc5a4899b927fe565183a0798a2a",
+      "file_access": "controlled",
+      "data_type": "somatic_sv"
     },
     {
-      "object_id" : "f215e48c-2d76-5c32-b920-20a95305801f",
-      "name" : "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.sv.vcf.gz.tbi",
-      "size" : 11732,
-      "file_type" : "TBI",
-      "md5_sum" : "a48ef040c536807e6bf7107a216b54f2",
-      "file_access" : "controlled",
-      "data_type" : "vcf_index"
+      "object_id": "f215e48c-2d76-5c32-b920-20a95305801f",
+      "name": "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.sv.vcf.gz.tbi",
+      "size": 11732,
+      "file_type": "TBI",
+      "md5_sum": "a48ef040c536807e6bf7107a216b54f2",
+      "file_access": "controlled",
+      "data_type": "vcf_index"
     }
   ],
-  "repositories" : [
+  "repositories": [
     {
-      "code" : "collab",
-      "organization" : "ICGC",
-      "name" : "collaboratory",
-      "type" : "S3",
-      "country" : "CA",
-      "url" : "##COLLAB_REPO_URL##"
+      "code": "collab",
+      "organization": "ICGC",
+      "name": "collaboratory",
+      "type": "S3",
+      "country": "CA",
+      "url": "##COLLAB_REPO_URL##"
     }
   ],
-  "experiment" : {
-    "library_strategy" : "WGS"
+  "experiment": {
+    "library_strategy": "WGS"
   },
-  "variant_class" : [
+  "variant_class": [
     "somatic"
   ],
-  "variant_type" : [
+  "variant_type": [
     "sv"
   ],
-  "workflow" : {
-    "name" : "sanger-wgs-variant-calling",
-    "inputs" : [
+  "workflow": {
+    "name": "sanger-wgs-variant-calling",
+    "inputs": [
       {
-        "analysis_type" : "sequencing_alignment",
-        "tumour_analysis_id" : "13b13548-6e32-412d-b135-486e32512dbe"
+        "analysis_type": "sequencing_alignment",
+        "tumour_analysis_id": "13b13548-6e32-412d-b135-486e32512dbe"
       },
       {
-        "analysis_type" : "sequencing_alignment",
-        "normal_analysis_id" : "0efe5aeb-3e21-48a5-be5a-eb3e2118a502"
+        "analysis_type": "sequencing_alignment",
+        "normal_analysis_id": "0efe5aeb-3e21-48a5-be5a-eb3e2118a502"
       }
     ],
-    "run_id" : "wise_brown",
-    "version" : "0.1.0-dev",
-    "short_name" : "sanger-wgs"
+    "run_id": "wise_brown",
+    "version": "0.1.0-dev",
+    "short_name": "sanger-wgs"
   }
 }

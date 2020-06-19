@@ -1,79 +1,81 @@
-[{
-  "analysisId": "6332d367-dc6a-4994-b2d3-67dc6a9994d0",
-  "studyId": "OCCAMS-GB",
-  "analysisState": "PUBLISHED",
-  "samples": [
-    {
-      "sampleId": "SA528813",
-      "specimenId": "SP111002",
-      "submitterSampleId": "LP6007504-DNA_A01",
-      "matchedNormalSubmitterSampleId": "LP6007566-DNA_A01",
-      "sampleType": "Total DNA",
-      "specimen": {
+[
+  {
+    "analysisId": "6332d367-dc6a-4994-b2d3-67dc6a9994d0",
+    "studyId": "OCCAMS-GB",
+    "analysisState": "PUBLISHED",
+    "samples": [
+      {
+        "sampleId": "SA528813",
         "specimenId": "SP111002",
-        "donorId": "DO50327",
-        "submitterSpecimenId": "COU1-0084-lesion-30-3-11-A-",
-        "tumourNormalDesignation": "Tumour",
-        "specimenTissueSource": "Solid tissue",
-        "specimenType": "Primary tumour"
-      },
-      "donor": {
-        "donorId": "DO50327",
-        "studyId": "OCCAMS-GB",
-        "gender": "Male",
-        "submitterDonorId": "OCCAMS-AH-021"
-      }
-    }
-  ],
-  "files": [
-    {
-      "objectId": "43d4f83b-1a18-5868-8a44-5e3a6930e89c",
-      "studyId": "OCCAMS-GB",
-      "analysisId": "6332d367-dc6a-4994-b2d3-67dc6a9994d0",
-      "fileName": "OCCAMS-GB.DO50327.SA528813.wgs.20200409.sanger-wgs.somatic.snv.vcf.gz",
-      "fileSize": 8857968,
-      "fileType": "VCF",
-      "fileMd5sum": "2d43e6fa316aa12db74fd6c862939139",
-      "fileAccess": "controlled",
-      "dataType": "somatic_snv"
-    },
-    {
-      "objectId": "7c943e62-7d92-545a-837a-c6b7b57bb930",
-      "studyId": "OCCAMS-GB",
-      "analysisId": "6332d367-dc6a-4994-b2d3-67dc6a9994d0",
-      "fileName": "OCCAMS-GB.DO50327.SA528813.wgs.20200409.sanger-wgs.somatic.snv.vcf.gz.tbi",
-      "fileSize": 536077,
-      "fileType": "TBI",
-      "fileMd5sum": "6fc6cda076c91f909174b9df69c939d7",
-      "fileAccess": "controlled",
-      "dataType": "vcf_index"
-    }
-  ],
-  "analysisType": {
-    "name": "variant_calling",
-    "version": 2
-  },
-  "workflow": {
-    "name": "sanger-wgs-variant-calling",
-    "inputs": [
-      {
-        "analysis_type": "sequencing_alignment",
-        "tumour_analysis_id": "04a2db76-f3ef-415d-a2db-76f3ef615d1b"
-      },
-      {
-        "analysis_type": "sequencing_alignment",
-        "normal_analysis_id": "77e7ba17-2aee-40f9-a7ba-172aee60f92c"
+        "submitterSampleId": "LP6007504-DNA_A01",
+        "matchedNormalSubmitterSampleId": "LP6007566-DNA_A01",
+        "sampleType": "Total DNA",
+        "specimen": {
+          "specimenId": "SP111002",
+          "donorId": "DO50327",
+          "submitterSpecimenId": "COU1-0084-lesion-30-3-11-A-",
+          "tumourNormalDesignation": "Tumour",
+          "specimenTissueSource": "Solid tissue",
+          "specimenType": "Primary tumour"
+        },
+        "donor": {
+          "donorId": "DO50327",
+          "studyId": "OCCAMS-GB",
+          "gender": "Male",
+          "submitterDonorId": "OCCAMS-AH-021"
+        }
       }
     ],
-    "run_id": "naughty_galileo",
-    "version": "0.1.0-dev",
-    "short_name": "sanger-wgs"
-  },
-  "experiment": {
-    "library_strategy": "WGS"
-  },
-  "variant_type": [
-    "snv"
-  ],
-  "variant_class": "somatic"
-}]
+    "files": [
+      {
+        "objectId": "43d4f83b-1a18-5868-8a44-5e3a6930e89c",
+        "studyId": "OCCAMS-GB",
+        "analysisId": "6332d367-dc6a-4994-b2d3-67dc6a9994d0",
+        "fileName": "OCCAMS-GB.DO50327.SA528813.wgs.20200409.sanger-wgs.somatic.snv.vcf.gz",
+        "fileSize": 8857968,
+        "fileType": "VCF",
+        "fileMd5sum": "2d43e6fa316aa12db74fd6c862939139",
+        "fileAccess": "controlled",
+        "dataType": "somatic_snv"
+      },
+      {
+        "objectId": "7c943e62-7d92-545a-837a-c6b7b57bb930",
+        "studyId": "OCCAMS-GB",
+        "analysisId": "6332d367-dc6a-4994-b2d3-67dc6a9994d0",
+        "fileName": "OCCAMS-GB.DO50327.SA528813.wgs.20200409.sanger-wgs.somatic.snv.vcf.gz.tbi",
+        "fileSize": 536077,
+        "fileType": "TBI",
+        "fileMd5sum": "6fc6cda076c91f909174b9df69c939d7",
+        "fileAccess": "controlled",
+        "dataType": "vcf_index"
+      }
+    ],
+    "analysisType": {
+      "name": "variant_calling",
+      "version": 2
+    },
+    "workflow": {
+      "name": "sanger-wgs-variant-calling",
+      "inputs": [
+        {
+          "analysis_type": "sequencing_alignment",
+          "tumour_analysis_id": "04a2db76-f3ef-415d-a2db-76f3ef615d1b"
+        },
+        {
+          "analysis_type": "sequencing_alignment",
+          "normal_analysis_id": "77e7ba17-2aee-40f9-a7ba-172aee60f92c"
+        }
+      ],
+      "run_id": "naughty_galileo",
+      "version": "0.1.0-dev",
+      "short_name": "sanger-wgs"
+    },
+    "experiment": {
+      "library_strategy": "WGS"
+    },
+    "variant_type": [
+      "snv"
+    ],
+    "variant_class": "somatic"
+  }
+]
