@@ -69,7 +69,6 @@ import reactor.test.StepVerifier;
 class IndexerIntegrationTest extends MaestroIntegrationTest {
 
   static final String FILE_CENTRIC_INDEX = "file_centric_1.0";
-  static final String ANALYSIS_CENTRIC_INDEX = "analysis_centric_1.0";
 
   @Autowired private RestHighLevelClient restHighLevelClient;
 
@@ -261,6 +260,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
   @Test
   void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException, IOException {
+    // study LIAD-FR and donor DO52693 should be excluded
     // Given
     val studiesArray = loadJsonFixture(this.getClass(), "studies.json", String[].class);
     val studies =
@@ -507,7 +507,10 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         .verifyComplete();
     Thread.sleep(sleepMillis);
 
-    // assertions
+    // expected results: doc0 should be indexed;
+    // analysis EGAZ00001254247 from PEME-CA exists in both aws and collab repositories,
+    // after index, the file docs should be merged into one doc with both aws and collab under
+    // 'repositories' field.
     val docs = getFileCentricDocuments();
     assertNotNull(docs);
     assertEquals(2L, docs.size());
