@@ -332,11 +332,8 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
 
   @Test
   void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
-    // Given
     @SuppressWarnings("all")
     val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
-    //    @SuppressWarnings("all")
-    //    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
@@ -359,13 +356,6 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")
                     .withStatus(200)));
-    //    stubFor(
-    //        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-    //            .willReturn(
-    //                aResponse()
-    //                    .withBody(awsStudyAnalyses)
-    //                    .withHeader("Content-Type", "application/json")
-    //                    .withStatus(200)));
 
     populateIndexWithCollabStudy(expectedDoc0, expectedDoc1, "EUCANCAN-BE");
 
