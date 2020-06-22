@@ -19,6 +19,7 @@ import lombok.val;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.get.MultiGetRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -33,6 +34,15 @@ import reactor.core.scheduler.Schedulers;
 @NoArgsConstructor
 public class SearchAdapterHelper {
   private static final String ANALYSIS_ID = "analysisId";
+
+  public static MultiGetRequest buildMultiGetRequest(
+      @NonNull Map.Entry<Integer, List<String>> entry, @NonNull String index) {
+    val request = new MultiGetRequest();
+    for (String id : entry.getValue()) {
+      request.add(new MultiGetRequest.Item(index, id));
+    }
+    return request;
+  }
 
   public static <T> Mono<IndexResult> batchUpsertDocuments(
       @NonNull List<T> documents,
@@ -100,7 +110,7 @@ public class SearchAdapterHelper {
     val partNum = entry.getKey();
     val listPart = entry.getValue();
     val listPartHash = Objects.hashCode(listPart);
-    val retry = buildRetry(maxRetriesAttempts, retriesWaitDuration);
+    val retry = buildRetry("tryBulkUpsertRequestForPart", maxRetriesAttempts, retriesWaitDuration);
     val decorated =
         Retry.<Set<String>>decorateCheckedSupplier(
             retry,
@@ -157,14 +167,15 @@ public class SearchAdapterHelper {
         .build();
   }
 
-  public static Retry buildRetry(int maxRetriesAttempts, long retriesWaitDuration) {
+  public static Retry buildRetry(
+      String retryName, int maxRetriesAttempts, long retriesWaitDuration) {
     val retryConfig =
         RetryConfig.custom()
             .maxAttempts(maxRetriesAttempts)
             .retryExceptions(IOException.class)
             .waitDuration(Duration.ofMillis(retriesWaitDuration))
             .build();
-    val retry = Retry.of("tryBulkUpsertRequestForPart", retryConfig);
+    val retry = Retry.of(retryName, retryConfig);
     return retry;
   }
 

@@ -53,4 +53,16 @@ public class AnalysisCentricDocument {
     this.data.clear();
     this.data.putAll(data);
   }
+
+  public boolean isValidReplica(AnalysisCentricDocument analysisCentricDocument) {
+    if (analysisCentricDocument == null) return false;
+    if (this.equals(analysisCentricDocument)) return true;
+    return this.analysisId.equals(analysisCentricDocument.getAnalysisId())
+        && this.analysisType.equals(analysisCentricDocument.getAnalysisType())
+        && this.analysisState.equals(analysisCentricDocument.getAnalysisState())
+        && this.analysisVersion.equals(analysisCentricDocument.getAnalysisVersion())
+        && this.studyId.equals(analysisCentricDocument.getStudyId())
+        && this.donors.equals(analysisCentricDocument.getDonors())
+        && this.files.equals(analysisCentricDocument.getFiles());
+  }
 }

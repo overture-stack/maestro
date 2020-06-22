@@ -1,6 +1,9 @@
 [
   {
-    "analysisType": { "name": "sequencingRead", "version": 1 },
+    "analysisType": {
+      "name": "sequencingRead",
+      "version": 1
+    },
     "info": {
       "dcc_project_code": "PEME-CA",
       "isPcawg": false
@@ -71,7 +74,9 @@
           "isPcawg": false,
           "nested": {
             "nestedAgain": [
-              {"theeNested": "word"}
+              {
+                "theeNested": "word"
+              }
             ]
           }
         }

@@ -11,6 +11,7 @@ import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.port.outbound.indexing.AnalysisCentricIndexAdapter;
 import bio.overture.maestro.domain.port.outbound.indexing.BatchIndexAnalysisCommand;
+import bio.overture.maestro.domain.utility.Parallel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -19,6 +20,7 @@ import io.github.resilience4j.retry.RetryConfig;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -62,6 +64,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   private static final int FALLBACK_MAX_RETRY_ATTEMPTS = 0;
   private static final int FALL_BACK_WAIT_DURATION = 100;
   private final long retriesWaitDuration;
+  private static final int MAX_PAGESIZE = 2000;
 
   @Inject
   public AnalysisCentricElasticSearchAdapter(
@@ -105,6 +108,38 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   public Mono<Void> removeAnalysisDocs(String analysisId) {
     return Mono.fromSupplier(() -> this.deleteByAnalysisId(analysisId))
         .subscribeOn(Schedulers.elastic());
+  }
+
+  @Override
+  public Mono<List<AnalysisCentricDocument>> fetchByIds(List<String> ids) {
+    log.debug("in fetchByIds, total ids: {} ", ids.size());
+    return Mono.fromSupplier(() -> this.fetch(ids)).subscribeOn(Schedulers.elastic());
+  }
+
+  @SneakyThrows
+  private List<AnalysisCentricDocument> fetch(List<String> ids) {
+    return Parallel.blockingScatterGather(ids, MAX_PAGESIZE, this::doFetchByIdQuery).stream()
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+  }
+
+  @SneakyThrows
+  private List<AnalysisCentricDocument> doFetchByIdQuery(Map.Entry<Integer, List<String>> entry) {
+    val retry = buildRetry("doFetchByIdQuery", this.maxRetriesAttempts, this.retriesWaitDuration);
+    val decorated =
+        Retry.<List<AnalysisCentricDocument>>decorateCheckedSupplier(
+            retry, () -> getAnalysisCentricDocuments(entry));
+    return decorated.apply();
+  }
+
+  @SneakyThrows
+  private List<AnalysisCentricDocument> getAnalysisCentricDocuments(
+      Map.Entry<Integer, List<String>> entry) {
+    log.debug("fetch called ids {} ", entry.getValue().size());
+    val request = buildMultiGetRequest(entry, this.indexName);
+    val result = elasticsearchRestClient.mget(request, RequestOptions.DEFAULT);
+    val docs = this.searchResultMapper.mapResults(result, AnalysisCentricDocument.class);
+    return List.copyOf(docs);
   }
 
   @SneakyThrows

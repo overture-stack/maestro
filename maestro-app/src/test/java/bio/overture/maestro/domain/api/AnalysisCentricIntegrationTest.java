@@ -1,29 +1,14 @@
-/*
- *  Copyright (c) 2019. Ontario Institute for Cancer Research
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Affero General Public License as
- *   published by the Free Software Foundation, either version 3 of the
- *   License, or (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Affero General Public License for more details.
- *
- *   You should have received a copy of the GNU Affero General Public License
- *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package bio.overture.maestro.domain.api;
 
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
+import static bio.overture.maestro.domain.api.DefaultIndexer.ERR;
 import static bio.overture.masestro.test.Fixture.loadJsonFixture;
 import static bio.overture.masestro.test.Fixture.loadJsonString;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static java.text.MessageFormat.format;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -34,8 +19,8 @@ import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.FailureData;
 import bio.overture.maestro.domain.api.message.*;
-import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.Repository;
+import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
@@ -63,17 +48,22 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
 @Tag(TestCategory.INT_TEST)
-class IndexerIntegrationTest extends MaestroIntegrationTest {
-
-  static final String FILE_CENTRIC_INDEX = "file_centric_1.0";
-  static final String ANALYSIS_CENTRIC_INDEX = "analysis_centric_1.0";
+@TestPropertySource(
+    properties = {
+      "maestro.elasticsearch.indexes.fileCentric.enabled=false",
+      "maestro.elasticsearch.indexes.analysisCentric.enabled=true"
+    })
+public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
 
   @Autowired private RestHighLevelClient restHighLevelClient;
 
   @Autowired private ApplicationProperties applicationProperties;
+
+  @Autowired private DefaultIndexer indexer;
 
   @Autowired
   @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER)
@@ -85,11 +75,60 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
   private String alias;
 
-  @Autowired private DefaultIndexer indexer;
+  static final String ANALYSIS_CENTRIC_INDEX = "analysis_centric_1.0";
 
   @BeforeEach
   void setUp() {
-    alias = applicationProperties.fileCentricAlias();
+    alias = applicationProperties.analysisCentricAlias();
+    assertTrue(applicationProperties.isAnalysisCentricIndexEnabled());
+    assertFalse(applicationProperties.isFileCentricIndexEnabled());
+  }
+
+  @Test
+  void shouldIndexAnalysis() throws InterruptedException, IOException {
+    // Given
+    val analyses = loadJsonString(this.getClass(), "TEST-CA.analysis-1.json");
+    val expectedDoc0 =
+        loadJsonFixture(
+            this.getClass(),
+            "analysis-centric-doc4.json",
+            AnalysisCentricDocument.class,
+            elasticSearchJsonMapper,
+            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
+
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo("/collab/studies/TEST-CA/analysis/f7b2bb0c-f92d-49be-b2bb-0cf92d49be06"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(analyses)
+                    .withHeader("Content-Type", "application/json")));
+
+    val result =
+        indexer.indexAnalysisToAnalysisCentric(
+            IndexAnalysisCommand.builder()
+                .analysisIdentifier(
+                    AnalysisIdentifier.builder()
+                        .analysisId("f7b2bb0c-f92d-49be-b2bb-0cf92d49be06")
+                        .studyId("TEST-CA")
+                        .repositoryCode("collab")
+                        .build())
+                .build());
+
+    StepVerifier.create(result)
+        .expectNext(
+            IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
+        .verifyComplete();
+
+    Thread.sleep(sleepMillis);
+
+    // assertions
+    val docs = getAnalysisCentricDocuments();
+    assertNotNull(docs);
+    assertEquals(1L, docs.size());
+    assertEquals(expectedDoc0, docs.get(0));
   }
 
   @Test
@@ -133,7 +172,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     // test
     val result =
-        indexer.indexAnalysisToFileCentric(
+        indexer.indexAnalysisToAnalysisCentric(
             IndexAnalysisCommand.builder()
                 .analysisIdentifier(
                     AnalysisIdentifier.builder()
@@ -151,7 +190,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                         .failingIds(Map.of(ANALYSIS_ID, Set.of(analysisId)))
                         .build())
                 .successful(false)
-                .indexName(FILE_CENTRIC_INDEX)
+                .indexName(ANALYSIS_CENTRIC_INDEX)
                 .build())
         .verifyComplete();
 
@@ -168,99 +207,8 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
   }
 
   @Test
-  void shouldIndexAnalysis() throws InterruptedException, IOException {
-    // Given
-    val analyses = loadJsonString(this.getClass(), "PEME-CA.analysis.json");
-    val expectedDoc0 =
-        loadJsonFixture(
-            this.getClass(),
-            "doc0.json",
-            FileCentricDocument.class,
-            elasticSearchJsonMapper,
-            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
-
-    stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis/EGAZ00001254368"))
-            .willReturn(
-                aResponse()
-                    .withStatus(200)
-                    .withBody(analyses)
-                    .withHeader("Content-Type", "application/json")));
-
-    // test
-    val result =
-        indexer.indexAnalysisToFileCentric(
-            IndexAnalysisCommand.builder()
-                .analysisIdentifier(
-                    AnalysisIdentifier.builder()
-                        .analysisId("EGAZ00001254368")
-                        .studyId("PEME-CA")
-                        .repositoryCode("collab")
-                        .build())
-                .build());
-
-    StepVerifier.create(result)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
-        .verifyComplete();
-
-    Thread.sleep(sleepMillis);
-
-    // assertions
-    val docs = getFileCentricDocuments();
-
-    assertNotNull(docs);
-    assertEquals(1L, docs.size());
-    assertEquals(expectedDoc0, docs.get(0));
-  }
-
-  @Test
-  void shouldIndexCRAMAnalysis() throws InterruptedException, IOException {
-    // Given
-    val analyses = loadJsonString(this.getClass(), "CRAM-TEST.analysis.json");
-    val expectedDoc =
-        loadJsonFixture(
-            this.getClass(),
-            "cram.doc0.json",
-            FileCentricDocument.class,
-            elasticSearchJsonMapper,
-            Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
-
-    stubFor(
-        request("GET", urlEqualTo("/collab/studies/CRAM-TEST/analysis/EGAZ00001254369"))
-            .willReturn(
-                aResponse()
-                    .withStatus(200)
-                    .withBody(analyses)
-                    .withHeader("Content-Type", "application/json")));
-
-    // test
-    val result =
-        indexer.indexAnalysisToFileCentric(
-            IndexAnalysisCommand.builder()
-                .analysisIdentifier(
-                    AnalysisIdentifier.builder()
-                        .analysisId("EGAZ00001254369")
-                        .studyId("CRAM-TEST")
-                        .repositoryCode("collab")
-                        .build())
-                .build());
-
-    StepVerifier.create(result)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
-        .verifyComplete();
-
-    Thread.sleep(sleepMillis);
-
-    // assertions
-    val docs = getFileCentricDocuments();
-
-    assertNotNull(docs);
-    assertEquals(1L, docs.size());
-    assertEquals(expectedDoc, docs.get(0));
-  }
-
-  @Test
   void shouldIndexStudyRepositoryWithExclusionsApplied() throws InterruptedException, IOException {
+    // study OCCAMS-GB should be excluded.
     // Given
     val studiesArray = loadJsonFixture(this.getClass(), "studies.json", String[].class);
     val studies =
@@ -271,8 +219,8 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
         Arrays.asList(
             loadJsonFixture(
                 this.getClass(),
-                "docs.json",
-                FileCentricDocument[].class,
+                "analysis-centric-docs.json",
+                AnalysisCentricDocument[].class,
                 elasticSearchJsonMapper,
                 Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl())));
 
@@ -302,23 +250,23 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     StepVerifier.create(result)
         .expectNext(
             Map.of(
-                FILE_CENTRIC_INDEX,
-                IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build()))
+                ANALYSIS_CENTRIC_INDEX,
+                IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build()))
         .verifyComplete();
 
     Thread.sleep(sleepMillis);
 
     // assertions
-    val docs = getFileCentricDocuments();
+    val docs = getAnalysisCentricDocuments();
     assertNotNull(docs);
-    assertEquals(32L, docs.size());
+    assertEquals(2L, docs.size());
     val sortedExpected =
         expectedDocs.stream()
-            .sorted(Comparator.comparing(FileCentricDocument::getObjectId))
+            .sorted(Comparator.comparing(AnalysisCentricDocument::getAnalysisId))
             .collect(Collectors.toList());
     val sortedDocs =
         docs.stream()
-            .sorted(Comparator.comparing(FileCentricDocument::getObjectId))
+            .sorted(Comparator.comparing(AnalysisCentricDocument::getAnalysisId))
             .collect(Collectors.toList());
     assertEquals(sortedExpected, sortedDocs);
   }
@@ -327,24 +275,24 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
   void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val analyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
-            "doc0.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc1.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
     val expectedDoc1 =
         loadJsonFixture(
             this.getClass(),
-            "doc1.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc2.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -354,71 +302,62 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     // test
     val result =
         indexer.indexStudy(
-            IndexStudyCommand.builder().repositoryCode("collab").studyId("PEME-CA").build());
+            IndexStudyCommand.builder().repositoryCode("collab").studyId("EUCANCAN-BE").build());
 
     StepVerifier.create(result)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+        .expectNext(
+            IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
         .verifyComplete();
 
     Thread.sleep(sleepMillis);
 
     // assertions
-    val docs = getFileCentricDocuments();
+    val docs = getAnalysisCentricDocuments();
 
     assertNotNull(docs);
     assertEquals(2L, docs.size());
     assertEquals(
         expectedDoc1,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc1.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc1.getAnalysisId()))
             .findFirst()
             .orElseThrow());
     assertEquals(
         expectedDoc0,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc0.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc0.getAnalysisId()))
             .findFirst()
             .orElseThrow());
   }
 
   @Test
   void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
-    // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
-    @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
-            "doc0.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc1.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
     val expectedDoc1 =
         loadJsonFixture(
             this.getClass(),
-            "doc1.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc2.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
             .willReturn(
                 aResponse()
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")
                     .withStatus(200)));
-    stubFor(
-        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
-            .willReturn(
-                aResponse()
-                    .withBody(awsStudyAnalyses)
-                    .withHeader("Content-Type", "application/json")
-                    .withStatus(200)));
 
-    populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
+    populateIndexWithCollabStudy(expectedDoc0, expectedDoc1, "EUCANCAN-BE");
 
     // test
     val result =
@@ -426,59 +365,60 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
             RemoveAnalysisCommand.builder()
                 .analysisIdentifier(
                     AnalysisIdentifier.builder()
-                        .analysisId("EGAZ00001254247")
-                        .studyId("PEME-CA")
-                        .repositoryCode("aws")
+                        .analysisId("43f07e4d-e26b-4f4a-b07e-4de26b9f4a50")
+                        .studyId("EUCANCAN-BE")
+                        .repositoryCode("collab")
                         .build())
                 .build());
 
     StepVerifier.create(result)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+        .expectNext(
+            IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
         .verifyComplete();
     Thread.sleep(sleepMillis);
 
     // assertions
-    val docs = getFileCentricDocuments();
+    val docs = getAnalysisCentricDocuments();
     assertNotNull(docs);
     assertEquals(1L, docs.size());
     assertEquals(expectedDoc0, docs.get(0));
   }
 
   @Test
-  void shouldUpdateExistingFileDocRepository() throws InterruptedException, IOException {
+  void shouldUpdateExistingDocRepository() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
     @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
+    val awsStudyAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.aws.analysis.json");
 
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
-            "doc0.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc1.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     val expectedDoc1 =
         loadJsonFixture(
             this.getClass(),
-            "doc1.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc2.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     val multiRepoDoc =
         loadJsonFixture(
             this.getClass(),
-            "doc2.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc3.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of(
                 "COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl(),
                 "AWS_REPO_URL", applicationProperties.repositories().get(1).getUrl()));
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -486,7 +426,7 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                     .withHeader("Content-Type", "application/json")));
 
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request("GET", urlEqualTo("/aws/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -495,32 +435,37 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
     // test
     // step 1
-    populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
+    populateIndexWithCollabStudy(expectedDoc0, expectedDoc1, "EUCANCAN-BE");
 
-    // step 2 index the same files from another repository:
+    // step 2 index the same analysis from another repository:
     val secondResult =
         indexer.indexStudy(
-            IndexStudyCommand.builder().repositoryCode("aws").studyId("PEME-CA").build());
+            IndexStudyCommand.builder().repositoryCode("aws").studyId("EUCANCAN-BE").build());
 
     StepVerifier.create(secondResult)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+        .expectNext(
+            IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
         .verifyComplete();
     Thread.sleep(sleepMillis);
 
-    // assertions
-    val docs = getFileCentricDocuments();
+    // expected results: doc0 should be indexed;
+    // analysis 43f07e4d-e26b-4f4a-b07e-4de26b9f4a50 from EUCANCAN-BE exists in both aws and collab
+    // repositories,
+    // after index, the docs should be merged into one doc with both aws and collab under
+    // 'repositories' field.
+    val docs = getAnalysisCentricDocuments();
     assertNotNull(docs);
     assertEquals(2L, docs.size());
     assertEquals(
         multiRepoDoc,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(multiRepoDoc.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(multiRepoDoc.getAnalysisId()))
             .findFirst()
             .orElseThrow());
     assertEquals(
         expectedDoc0,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc0.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc0.getAnalysisId()))
             .findFirst()
             .orElseThrow());
   }
@@ -529,45 +474,46 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
   void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
 
-    // this has a different analysis id than the one in previous files
+    // Conflicting analysis 43f07e4d-e26b-4f4a-b07e-4de26b9f4a50 has a different analysis state:
     @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.study.json");
+    val awsStudyAnalyses =
+        loadJsonString(this.getClass(), "EUCANCAN-BE.aws.conflicting.study.json");
     val awsStudyAnalysesList =
         loadJsonFixture(
             this.getClass(),
-            "PEME-CA.aws.conflicting.study.json",
+            "EUCANCAN-BE.aws.conflicting.study.json",
             new TypeReference<List<Analysis>>() {});
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
-            "doc0.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc1.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
     val expectedDoc1 =
         loadJsonFixture(
             this.getClass(),
-            "doc1.json",
-            FileCentricDocument.class,
+            "analysis-centric-doc2.json",
+            AnalysisCentricDocument.class,
             elasticSearchJsonMapper,
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     val expectedNotification =
         new IndexerNotification(
-            NotificationName.INDEX_FILE_CONFLICT,
+            NotificationName.ANALYSIS_CONFLICT,
             getConflicts(expectedDoc1, awsStudyAnalysesList.get(0).getAnalysisId()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")));
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request("GET", urlEqualTo("/aws/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -575,21 +521,22 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
                     .withHeader("Content-Type", "application/json")));
 
     // test
-    populateIndexWithCollabStudy(expectedDoc0, expectedDoc1);
+    populateIndexWithCollabStudy(expectedDoc0, expectedDoc1, "EUCANCAN-BE");
 
-    // index the same files from another repository:
+    // index the same analysis from another repository:
     // test
     val secondResult =
         indexer.indexStudy(
-            IndexStudyCommand.builder().repositoryCode("aws").studyId("PEME-CA").build());
+            IndexStudyCommand.builder().repositoryCode("aws").studyId("EUCANCAN-BE").build());
 
     StepVerifier.create(secondResult)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+        .expectNext(
+            IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
         .verifyComplete();
     Thread.sleep(sleepMillis);
 
     // assertions
-    val docs = getFileCentricDocuments();
+    val docs = getAnalysisCentricDocuments();
     assertNotNull(docs);
     then(notifier).should(times(1)).notify(eq(expectedNotification));
     assertEquals(2L, docs.size());
@@ -597,39 +544,37 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     assertEquals(
         expectedDoc1,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc1.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc1.getAnalysisId()))
             .findFirst()
             .orElseThrow());
     assertEquals(
         expectedDoc0,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc0.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc0.getAnalysisId()))
             .findFirst()
             .orElseThrow());
   }
 
   @NotNull
   private Map<String, ? extends Object> getConflicts(
-      FileCentricDocument document, String differentAnalysisId) {
+      AnalysisCentricDocument document, String differentAnalysisId) {
     return Map.of(
         "conflicts",
         List.of(
-            DefaultIndexer.FileConflict.builder()
-                .indexedFile(
-                    DefaultIndexer.ConflictingFile.builder()
+            DefaultIndexer.AnalysisConflict.builder()
+                .indexedAnalysis(
+                    DefaultIndexer.ConflictingAnalysis.builder()
                         .studyId(document.getStudyId())
-                        .analysisId(document.getAnalysis().getAnalysisId())
-                        .objectId(document.getObjectId())
+                        .analysisId(document.getAnalysisId())
                         .repoCode(
                             document.getRepositories().stream()
                                 .map(Repository::getCode)
                                 .collect(Collectors.toUnmodifiableSet()))
                         .build())
-                .newFile(
-                    DefaultIndexer.ConflictingFile.builder()
+                .newAnalysis(
+                    DefaultIndexer.ConflictingAnalysis.builder()
                         .studyId(document.getStudyId())
                         .analysisId(differentAnalysisId)
-                        .objectId(document.getObjectId())
                         .repoCode(Set.of("aws"))
                         .build())
                 .build()));
@@ -637,39 +582,44 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
 
   @SneakyThrows
   private void populateIndexWithCollabStudy(
-      FileCentricDocument expectedDoc0, FileCentricDocument expectedDoc1)
+      AnalysisCentricDocument expectedDoc0, AnalysisCentricDocument expectedDoc1, String studyId)
       throws InterruptedException {
     val result =
         indexer.indexStudy(
-            IndexStudyCommand.builder().repositoryCode("COLLAB").studyId("PEME-CA").build());
-
+            IndexStudyCommand.builder().repositoryCode("COLLAB").studyId(studyId).build());
     StepVerifier.create(result)
-        .expectNext(IndexResult.builder().indexName(FILE_CENTRIC_INDEX).successful(true).build())
+        .expectNext(
+            IndexResult.builder().indexName(ANALYSIS_CENTRIC_INDEX).successful(true).build())
         .verifyComplete();
 
     Thread.sleep(sleepMillis);
 
     // assertions
-    List<FileCentricDocument> docs = getFileCentricDocuments();
+    List<AnalysisCentricDocument> docs = getAnalysisCentricDocuments();
 
     assertNotNull(docs);
     assertEquals(2L, docs.size());
     assertEquals(
         expectedDoc1,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc1.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc1.getAnalysisId()))
             .findFirst()
             .orElseThrow());
     assertEquals(
         expectedDoc0,
         docs.stream()
-            .filter(d -> d.getObjectId().equals(expectedDoc0.getObjectId()))
+            .filter(d -> d.getAnalysisId().equals(expectedDoc0.getAnalysisId()))
             .findFirst()
             .orElseThrow());
   }
 
+  @SneakyThrows
+  private String getStudyAnalysesAsString(String studyId) {
+    return loadJsonString(getClass(), studyId + ".analysis.json");
+  }
+
   @NotNull
-  private List<FileCentricDocument> getFileCentricDocuments() throws IOException {
+  private List<AnalysisCentricDocument> getAnalysisCentricDocuments() throws IOException {
     val searchRequest = new SearchRequest(alias);
     val searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(QueryBuilders.matchAllQuery());
@@ -677,18 +627,13 @@ class IndexerIntegrationTest extends MaestroIntegrationTest {
     searchSourceBuilder.size(100);
     searchRequest.source(searchSourceBuilder);
     val response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-    val docs = new ArrayList<FileCentricDocument>();
+    val docs = new ArrayList<AnalysisCentricDocument>();
 
     for (SearchHit hit : response.getHits().getHits()) {
       String source = hit.getSourceAsString();
-      val doc = elasticSearchJsonMapper.readValue(source, FileCentricDocument.class);
+      val doc = elasticSearchJsonMapper.readValue(source, AnalysisCentricDocument.class);
       docs.add(doc);
     }
     return docs;
-  }
-
-  @SneakyThrows
-  private String getStudyAnalysesAsString(String studyId) {
-    return loadJsonString(getClass(), studyId + ".analysis.json");
   }
 }
