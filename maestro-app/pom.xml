@@ -195,6 +195,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webflux-ui</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
     </dependencies>
 
     <properties>

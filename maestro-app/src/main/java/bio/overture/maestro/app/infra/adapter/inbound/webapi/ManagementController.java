@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,7 @@ public class ManagementController {
   }
 
   @GetMapping
+  @Hidden
   public Mono<Map<String, String>> ping() {
     val response = new HashMap<String, String>();
     response.put("status", "up");
