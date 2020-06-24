@@ -113,16 +113,19 @@ public class ManagementController {
   }
 
   @GetMapping("/rules/")
+  @Hidden
   public List<? extends ExclusionRule> getRules() {
     return indexer.getAllRules();
   }
 
   @PostMapping("/rules/byId/{type}")
+  @Hidden
   public void addExclusionRule(@RequestBody List<String> ids) {
     indexer.addRule(null);
   }
 
   @DeleteMapping("/rules/byId/{type}")
+  @Hidden
   public void deleteExclusionRule(@RequestParam List<String> ids) {
     indexer.deleteRule(null);
   }
