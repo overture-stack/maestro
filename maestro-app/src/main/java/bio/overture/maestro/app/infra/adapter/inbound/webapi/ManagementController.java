@@ -20,14 +20,14 @@ package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
+import io.swagger.v3.oas.annotations.Hidden;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-
-import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -35,6 +35,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
+@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
 public class ManagementController {
 
   private final Indexer indexer;

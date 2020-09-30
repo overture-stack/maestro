@@ -81,4 +81,6 @@ public interface ApplicationProperties {
   int songAnalysisCallTimeoutSeconds();
 
   Slack.SlackChannelInfo getSlackChannelInfo();
+
+  boolean disableIndexing();
 }

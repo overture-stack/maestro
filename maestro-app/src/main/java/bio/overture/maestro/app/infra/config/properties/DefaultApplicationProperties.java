@@ -218,6 +218,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     };
   }
 
+  @Override
+  public boolean disableIndexing() {
+    return this.disableIndexing;
+  }
+
   @Value("classpath:file_centric.json")
   private Resource fileCentricIndex;
 
@@ -229,6 +234,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   private List<DefaultPropertiesFileRepository> repositories;
   private ExclusionRules exclusionRules = new ExclusionRules();
   private Notifications notifications = new Notifications();
+  private boolean disableIndexing = false;
 
   @Data
   @ToString

@@ -18,8 +18,7 @@
 package bio.overture.maestro.domain.api;
 
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
-import static bio.overture.masestro.test.Fixture.loadJsonFixture;
-import static bio.overture.masestro.test.Fixture.loadJsonFixtureSnakeCase;
+import static bio.overture.masestro.test.Fixture.*;
 import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -109,7 +108,7 @@ class DefaultIndexerTest {
   }
 
   @Test
-  void indexStudyshouldNotifyOnStudyFetchError() {
+  void indexStudyShouldNotifyOnStudyFetchError() {
     val repoCode = "TEST-REPO";
     val filesRepository = getStubFilesRepository();
     val repositoryMono = Mono.just(filesRepository);
@@ -312,13 +311,14 @@ class DefaultIndexerTest {
   void shouldIndexSingleAnalysis() {
     // Given
     val studyId = "PEME-CA";
-    val repoCode = "TEST-REPO";
     val analysisId = "EGAZ00001254368";
+    val repoCode = "TEST-REPO";
     val filesRepository = getStubFilesRepository();
+    val fileRepo = Mono.just(getStubFilesRepository());
     val a1 =
         loadJsonFixture(getClass(), studyId + ".analysis.EGAZ00001254368.json", Analysis.class);
     val fileCentricDocuments = getExpectedFileCentricDocument(studyId);
-    val fileRepo = Mono.just(getStubFilesRepository());
+
     val studyAnalysis = Mono.just(a1);
     val result = IndexResult.builder().successful(true).build();
     val monoResult = Mono.just(result);
