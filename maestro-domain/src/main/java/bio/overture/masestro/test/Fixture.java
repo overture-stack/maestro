@@ -128,15 +128,15 @@ public class Fixture {
   }
 
   public static String loadJsonString(Class clazz, String fileName) throws IOException {
+    val path = BASE_PATH + clazz.getSimpleName() + File.separator + fileName;
     return inputStreamToString(
-        Optional.ofNullable(
-                clazz
-                    .getClassLoader()
-                    .getResource(BASE_PATH + clazz.getSimpleName() + File.separator + fileName))
+        Optional.ofNullable(clazz.getClassLoader().getResource(path))
             .orElseThrow(
                 () ->
                     new RuntimeException(
-                        "fixture not found. make sure you created the correct "
+                        "fixture not found in path "
+                            + path
+                            + ". make sure you created the correct "
                             + "folder if this is a new class or if you renamed the class"))
             .openStream());
   }

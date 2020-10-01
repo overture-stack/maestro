@@ -44,7 +44,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.admin.indices.alias.Alias;
-import org.elasticsearch.action.get.MultiGetRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -246,13 +245,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
   @SneakyThrows
   private List<FileCentricDocument> doFetchByIdQuery(Map.Entry<Integer, List<String>> entry) {
-    val retryConfig =
-        RetryConfig.custom()
-            .maxAttempts(this.maxRetriesAttempts)
-            .retryExceptions(IOException.class)
-            .waitDuration(Duration.ofMillis(this.retriesWaitDuration))
-            .build();
-    val retry = Retry.of("doFetchByIdQuery", retryConfig);
+    val retry = buildRetry("doFetchByIdQuery", this.maxRetriesAttempts, this.retriesWaitDuration);
     val decorated =
         Retry.<List<FileCentricDocument>>decorateCheckedSupplier(
             retry, () -> getFileCentricDocuments(entry));
@@ -263,10 +256,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   private List<FileCentricDocument> getFileCentricDocuments(
       Map.Entry<Integer, List<String>> entry) {
     log.debug("fetch called ids {} ", entry.getValue().size());
-    val request = new MultiGetRequest();
-    for (String id : entry.getValue()) {
-      request.add(new MultiGetRequest.Item(this.indexName, id));
-    }
+    val request = buildMultiGetRequest(entry, this.indexName);
     val result = elasticsearchRestClient.mget(request, RequestOptions.DEFAULT);
     val docs = this.searchResultMapper.mapResults(result, FileCentricDocument.class);
     return List.copyOf(docs);

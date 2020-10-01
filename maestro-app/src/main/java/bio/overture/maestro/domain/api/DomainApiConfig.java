@@ -19,13 +19,15 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-  DefaultIndexer.class,
+  IndexerConfig.class,
+  Converter.class,
   Notifier.class,
 })
 public class DomainApiConfig {
@@ -40,3 +42,10 @@ public class DomainApiConfig {
         .build();
   }
 }
+
+@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
+@Configuration
+@Import({
+  DefaultIndexer.class,
+})
+class IndexerConfig {}

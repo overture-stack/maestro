@@ -39,6 +39,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -48,6 +49,7 @@ import org.springframework.context.annotation.Import;
  * other packages using them instead of the interface, and be more explicit about configuration
  * scope.
  */
+@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
 @Configuration
 @Import({
   FileCentricElasticSearchAdapter.class,

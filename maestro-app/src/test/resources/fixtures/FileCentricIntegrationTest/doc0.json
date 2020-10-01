@@ -40,7 +40,9 @@
       "isPcawg": false,
       "nested": {
         "nestedAgain": [
-          {"theeNested": "word"}
+          {
+            "theeNested": "word"
+          }
         ]
       }
     }
@@ -62,20 +64,24 @@
       "submitter_donor_id": "MDT-AP-0749",
       "dcc_project_code": "PEME-CA",
       "isPcawg": false,
-      "specimens": [{
-        "specimen_id": "SP201301",
-        "specimen_type": "Primary tumour - solid tissue",
-        "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
-        "dcc_project_code": "PEME-CA",
-        "isPcawg": false,
-        "samples": [{
-          "sample_id": "SA604924",
-          "submitter_sample_id": "MDT-AP-0749_tumor",
-          "sample_type": "DNA",
+      "specimens": [
+        {
+          "specimen_id": "SP201301",
+          "specimen_type": "Primary tumour - solid tissue",
+          "submitter_specimen_id": "MDT-AP-0749_tumor_specimen",
           "dcc_project_code": "PEME-CA",
-          "isPcawg": false
-        }]
-      }]
+          "isPcawg": false,
+          "samples": [
+            {
+              "sample_id": "SA604924",
+              "submitter_sample_id": "MDT-AP-0749_tumor",
+              "sample_type": "DNA",
+              "dcc_project_code": "PEME-CA",
+              "isPcawg": false
+            }
+          ]
+        }
+      ]
     }
   ]
 }

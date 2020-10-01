@@ -1,0 +1,49 @@
+{
+  "analysisId": "f7b2bb0c-f92d-49be-b2bb-0cf92d49be06",
+  "studyId": "TEST-CA",
+  "analysisState": "PUBLISHED",
+  "samples": [
+    {
+      "sampleId": "SA616046",
+      "specimenId": "SP216042",
+      "submitterSampleId": "sample2",
+      "matchedNormalSubmitterSampleId": "sample-2.normal",
+      "sampleType": "Amplified DNA",
+      "specimen": {
+        "specimenId": "SP216042",
+        "donorId": "DO255857",
+        "submitterSpecimenId": "specimen1",
+        "tumourNormalDesignation": "Tumour",
+        "specimenTissueSource": "Bone marrow",
+        "specimenType": "Primary tumour"
+      },
+      "donor": {
+        "donorId": "DO255857",
+        "studyId": "TEST-CA",
+        "gender": "Male",
+        "submitterDonorId": "donor1"
+      }
+    }
+  ],
+  "files": [
+    {
+      "objectId": "8d765f84-f1d8-5ddc-a87b-0e93709d4f04",
+      "studyId": "TEST-CA",
+      "analysisId": "f7b2bb0c-f92d-49be-b2bb-0cf92d49be06",
+      "fileName": "tumour2.bam",
+      "fileSize": 70,
+      "fileType": "BAM",
+      "fileMd5sum": "1b8a851b50d223debf7c738fd45ebf89",
+      "fileAccess": "controlled",
+      "dataType": "submittedReads"
+    }
+  ],
+  "analysisType": {
+    "name": "variantCall",
+    "version": 1
+  },
+  "experiment": {
+    "variantCallingTool": "silver bullet",
+    "matchedNormalSampleSubmitterId": "sample_x24_11a"
+  }
+}

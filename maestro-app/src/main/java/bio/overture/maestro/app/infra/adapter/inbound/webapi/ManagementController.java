@@ -20,12 +20,16 @@ package bio.overture.maestro.app.infra.adapter.inbound.webapi;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
+import io.swagger.v3.oas.annotations.Hidden;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -33,6 +37,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
+@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
 public class ManagementController {
 
   private final Indexer indexer;
@@ -43,6 +48,7 @@ public class ManagementController {
   }
 
   @GetMapping
+  @Hidden
   public Mono<Map<String, String>> ping() {
     val response = new HashMap<String, String>();
     response.put("status", "up");
@@ -71,6 +77,9 @@ public class ManagementController {
             .build());
   }
 
+  @Operation(summary = "Index Single Analysis",
+      description = "Indexes single analysis on demand ",
+      tags = { "Indexing" })
   @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
   @ResponseStatus(HttpStatus.CREATED)
   public Flux<IndexResult> indexAnalysis(
@@ -110,16 +119,19 @@ public class ManagementController {
   }
 
   @GetMapping("/rules/")
+  @Hidden
   public List<? extends ExclusionRule> getRules() {
     return indexer.getAllRules();
   }
 
   @PostMapping("/rules/byId/{type}")
+  @Hidden
   public void addExclusionRule(@RequestBody List<String> ids) {
     indexer.addRule(null);
   }
 
   @DeleteMapping("/rules/byId/{type}")
+  @Hidden
   public void deleteExclusionRule(@RequestParam List<String> ids) {
     indexer.deleteRule(null);
   }

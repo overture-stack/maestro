@@ -64,7 +64,15 @@ public abstract class MaestroIntegrationTest {
   void tearDown() {
     // clean indexes after each test to keep tests isolated
     DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest();
-    deleteByQueryRequest.indices(properties.fileCentricAlias());
+
+    if (properties.isFileCentricIndexEnabled()) {
+      deleteByQueryRequest.indices(properties.fileCentricAlias());
+    }
+
+    if (properties.isAnalysisCentricIndexEnabled()) {
+      deleteByQueryRequest.indices(properties.analysisCentricAlias());
+    }
+
     deleteByQueryRequest.setQuery(QueryBuilders.matchAllQuery());
     client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
     Thread.sleep(sleepMillis);

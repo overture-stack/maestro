@@ -2,6 +2,11 @@ server:
   port: 11235
 
 maestro:
+  # runs maestro without indexing functionality, i.e. just document conversion APIs
+  # if this is set to true, no need to configure kafka, elasticsearch, song
+  # but you still need to define the repositories
+  disableIndexing: false
+
   webclient:
     # -1 = unlimited memory size
     maxInMemorySize: -1
@@ -116,6 +121,9 @@ logging:
 
 # spring boot actuator endpoints
 management:
+  health:
+    elasticsearch:
+      enabled: false
   endpoints:
     web:
       exposure:
@@ -160,3 +168,6 @@ spring:
           consumer:
             maxAttempts: 1
 
+springdoc:
+  swagger-ui:
+    path: /api-docs

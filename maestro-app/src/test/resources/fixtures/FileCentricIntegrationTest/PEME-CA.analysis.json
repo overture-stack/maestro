@@ -1,5 +1,8 @@
 {
-  "analysisType": { "name": "sequencingRead", "version": 1 },
+  "analysisType": {
+    "name": "sequencingRead",
+    "version": 1
+  },
   "info": {
     "dcc_project_code": "PEME-CA",
     "isPcawg": false
@@ -9,7 +12,6 @@
   "analysisState": "PUBLISHED",
   "samples": [
     {
-
       "sampleId": "SA604924",
       "specimenId": "SP201301",
       "submitterSampleId": "MDT-AP-0749_tumor",
@@ -71,13 +73,14 @@
         "isPcawg": false,
         "nested": {
           "nestedAgain": [
-            {"theeNested": "word"}
+            {
+              "theeNested": "word"
+            }
           ]
         }
       }
     },
     {
-
       "objectId": "43d29864-6756-51f0-bb2a-ba7cff860778",
       "studyId": "PEME-CA",
       "analysisId": "EGAZ00001254368",

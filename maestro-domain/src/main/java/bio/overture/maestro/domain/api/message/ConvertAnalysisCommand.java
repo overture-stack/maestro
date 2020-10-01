@@ -15,13 +15,19 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
+package bio.overture.maestro.domain.api.message;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import java.util.List;
+import lombok.*;
 
-@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
-@Configuration
-@Import({SongStudyDAO.class})
-public class SongConfig {}
+@Getter
+@Builder
+@ToString
+@NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+public class ConvertAnalysisCommand {
+  @NonNull private List<Analysis> analyses;
+  @NonNull private String repoCode;
+}

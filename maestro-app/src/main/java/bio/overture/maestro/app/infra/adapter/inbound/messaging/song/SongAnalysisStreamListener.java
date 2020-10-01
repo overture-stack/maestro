@@ -29,6 +29,7 @@ import io.vavr.Tuple2;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -36,6 +37,7 @@ import reactor.core.publisher.Flux;
 
 @Slf4j
 @EnableBinding(SongAnalysisSink.class)
+@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
 public class SongAnalysisStreamListener {
 
   private Indexer indexer;

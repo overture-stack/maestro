@@ -92,6 +92,9 @@ for SONG please check the SONG github repo [here](https://github.com/overture-st
 on how to run it with docker. Or you can run it as jar.
 
 ## How to:
+- Swagger API access: 
+    - localhost:11235/api-docs
+
 Note: if you don't/can't use the Makefile, look inside it for the shell commands and replicate them.
 - Compile: `make` 
 - Test: `make test`

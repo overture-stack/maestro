@@ -1,6 +1,9 @@
 [
   {
-    "analysisType": { "name": "variantCall", "version": 1 },
+    "analysisType": {
+      "name": "variantCall",
+      "version": 1
+    },
     "info": {},
     "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
     "studyId": "LIRI-JP",
@@ -17,7 +20,6 @@
           "specimenId": "SP107109",
           "donorId": "DO48736",
           "submitterSpecimenId": "RK202_C01",
-
           "specimenType": "Primary tumour - solid tissue"
         },
         "donor": {
@@ -39,8 +41,8 @@
         "fileSize": 44440835,
         "fileType": "VCF",
         "fileMd5sum": "93354882b0fc014b49be1b24df8f435e",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -51,8 +53,8 @@
         "fileSize": 1458418,
         "fileType": "TBI",
         "fileMd5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -63,8 +65,8 @@
         "fileSize": 11431,
         "fileType": "VCF",
         "fileMd5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -75,8 +77,8 @@
         "fileSize": 1756,
         "fileType": "TBI",
         "fileMd5sum": "9ce7cdedb7450a05c03e419235ed56a6",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -87,8 +89,8 @@
         "fileSize": 3648,
         "fileType": "VCF",
         "fileMd5sum": "492989e81699bd5a56b7956e0be7416d",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -99,8 +101,8 @@
         "fileSize": 5539,
         "fileType": "TBI",
         "fileMd5sum": "acdf137ad635f95ee93412fa9153d066",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -111,8 +113,8 @@
         "fileSize": 1418099,
         "fileType": "VCF",
         "fileMd5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -123,8 +125,8 @@
         "fileSize": 236926,
         "fileType": "TBI",
         "fileMd5sum": "2233fb90872d759d279395b1a7ad3461",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -135,8 +137,8 @@
         "fileSize": 58853,
         "fileType": "XML",
         "fileMd5sum": "4f8a5a5a1a040f7538760c3b8b944c86",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       }
     ],
     "experiment": {
@@ -163,7 +165,6 @@
           "specimenId": "SP50179",
           "donorId": "DO23549",
           "submitterSpecimenId": "RK156_C01",
-
           "specimenType": "Primary tumour - solid tissue"
         },
         "donor": {
@@ -185,8 +186,8 @@
         "fileSize": 10536170,
         "fileType": "VCF",
         "fileMd5sum": "7d0676c6a85696e1cb2919836b0ab71e",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -197,8 +198,8 @@
         "fileSize": 1031078,
         "fileType": "IDX",
         "fileMd5sum": "8269ee64b80e6ec66e590767f697d37b",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -209,8 +210,8 @@
         "fileSize": 59633,
         "fileType": "VCF",
         "fileMd5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -221,8 +222,8 @@
         "fileSize": 11325,
         "fileType": "IDX",
         "fileMd5sum": "fdb961feac82a7912bf657450e02c44d",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -233,8 +234,8 @@
         "fileSize": 51548,
         "fileType": "VCF",
         "fileMd5sum": "fc246f5e1f670b1f756b8e4294f59504",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -245,8 +246,8 @@
         "fileSize": 10447,
         "fileType": "IDX",
         "fileMd5sum": "5aeb4749609bd0a4d81ecffd673a36e1",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -257,8 +258,8 @@
         "fileSize": 1710383,
         "fileType": "VCF",
         "fileMd5sum": "1f22fff9e578244ba16762a4c82792e8",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -269,8 +270,8 @@
         "fileSize": 61514,
         "fileType": "IDX",
         "fileMd5sum": "ade5449b588c81496e4e7d2b0b49e3d0",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -281,8 +282,8 @@
         "fileSize": 31242,
         "fileType": "VCF",
         "fileMd5sum": "e75eef7af227c5c80d0b499ffd39c43b",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -293,8 +294,8 @@
         "fileSize": 14606,
         "fileType": "IDX",
         "fileMd5sum": "8cae7bbcd28b6a78ad5c53642ae9695c",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -305,8 +306,8 @@
         "fileSize": 10191,
         "fileType": "VCF",
         "fileMd5sum": "f199c6714f7a6880d30bf7aa56e00625",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -317,8 +318,8 @@
         "fileSize": 4212,
         "fileType": "IDX",
         "fileMd5sum": "139ce5f29fc0e877d5ae5a5d5e03c3f0",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -329,8 +330,8 @@
         "fileSize": 382815,
         "fileType": "VCF",
         "fileMd5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -341,8 +342,8 @@
         "fileSize": 151104,
         "fileType": "IDX",
         "fileMd5sum": "797e4ef5c348d4a23e9e83790812d857",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -353,8 +354,8 @@
         "fileSize": 38858,
         "fileType": "XML",
         "fileMd5sum": "486853e9fc33dd7f1429c90a6b526b0d",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       }
     ],
     "experiment": {
@@ -363,7 +364,10 @@
       "variantCallingTool": "Broad variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK156_B01"
     },
-    "analysisType": { "name": "variantCall", "version": 1 }
+    "analysisType": {
+      "name": "variantCall",
+      "version": 1
+    }
   },
   {
     "info": {},
@@ -382,7 +386,6 @@
           "specimenId": "SP99145",
           "donorId": "DO45211",
           "submitterSpecimenId": "RK091_C01",
-
           "specimenType": "Primary tumour - solid tissue"
         },
         "donor": {
@@ -404,8 +407,8 @@
         "fileSize": 404406,
         "fileType": "VCF",
         "fileMd5sum": "33b96c263be31852de8d5d15775561c9",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -416,8 +419,8 @@
         "fileSize": 27885,
         "fileType": "IDX",
         "fileMd5sum": "3ed262dbc3b1c427177bdd5af5ef5633",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -428,8 +431,8 @@
         "fileSize": 1853889,
         "fileType": "VCF",
         "fileMd5sum": "d3227038bd37e74ff88b07e5408c76ed",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -440,8 +443,8 @@
         "fileSize": 67312,
         "fileType": "IDX",
         "fileMd5sum": "a7cf0d572f1649c8791cda7892c7be55",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -452,8 +455,8 @@
         "fileSize": 10429379,
         "fileType": "VCF",
         "fileMd5sum": "64ef1b8daf5b6eec161555f5cdad3420",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -464,8 +467,8 @@
         "fileSize": 1032907,
         "fileType": "IDX",
         "fileMd5sum": "78b2dd0696a1f2ea8ac8e25a77c4e239",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -476,8 +479,8 @@
         "fileSize": 400597,
         "fileType": "VCF",
         "fileMd5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -488,8 +491,8 @@
         "fileSize": 27877,
         "fileType": "IDX",
         "fileMd5sum": "130e37274d3c7bebcb41d027eea9148d",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -500,8 +503,8 @@
         "fileSize": 25270,
         "fileType": "VCF",
         "fileMd5sum": "ee313d9cbe077063174d92050dde03e0",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -512,8 +515,8 @@
         "fileSize": 12044,
         "fileType": "IDX",
         "fileMd5sum": "941a7d48a3250de6edcbbde1cbb4b7e1",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -524,8 +527,8 @@
         "fileSize": 2540,
         "fileType": "VCF",
         "fileMd5sum": "cbafecb01dea96496176bf7497cb9e80",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -536,8 +539,8 @@
         "fileSize": 1336,
         "fileType": "IDX",
         "fileMd5sum": "de502cd9a25efe6f868f3156e8fd302e",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -548,8 +551,8 @@
         "fileSize": 422502,
         "fileType": "VCF",
         "fileMd5sum": "ca10e3bd248498c9427b2b5e324f0242",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -560,8 +563,8 @@
         "fileSize": 160972,
         "fileType": "IDX",
         "fileMd5sum": "9029f92d2d1ea6d76b3a88795756aacc",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       },
       {
         "info": {},
@@ -572,8 +575,8 @@
         "fileSize": 41214,
         "fileType": "XML",
         "fileMd5sum": "080be308183242812e07359f7c9c1566",
- "fileAccess": "controlled",
-  "dataType": "AlignedReads"
+        "fileAccess": "controlled",
+        "dataType": "AlignedReads"
       }
     ],
     "experiment": {
@@ -582,6 +585,9 @@
       "variantCallingTool": "Broad variant call pipeline",
       "matchedNormalSampleSubmitterId": "RK091_B01"
     },
-    "analysisType": { "name": "variantCall", "version": 1 }
+    "analysisType": {
+      "name": "variantCall",
+      "version": 1
+    }
   }
 ]

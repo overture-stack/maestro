@@ -28,6 +28,7 @@ import java.util.Map;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -38,6 +39,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @EnableBinding(Sink.class)
+@ConditionalOnProperty(name = "maestro.disableIndexing", havingValue = "false")
 public class IndexingMessagesStreamListener {
 
   private final Indexer indexer;

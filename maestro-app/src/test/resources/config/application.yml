@@ -2,9 +2,11 @@ server.port:
   50000
 
 maestro:
+  disableIndexing: false
   exclusionRules:
     byId:
       studyId:
+        - OCCAMS-GB
         - LIAD-FR
       donor:
         - DO52693
@@ -47,14 +49,13 @@ maestro:
       # port is injected by @AutoConfigureWireMock in the MaestroIntegrationTest
       url: http://localhost:${wiremock.server.port}/collab
       name: collaboratory
-      dataPath: /oicr.icgc/data
-      metadataPath: /oicr.icgc.meta/metadata
       storageType: S3
       organization: ICGC
       country: CA
     - code: aws
       url: http://localhost:${wiremock.server.port}/aws
       name: aws repo
+      storageType: S3
       organization: ICGC
       country: US
   failureLog:
