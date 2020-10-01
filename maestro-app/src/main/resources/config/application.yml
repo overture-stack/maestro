@@ -168,3 +168,6 @@ spring:
           consumer:
             maxAttempts: 1
 
+springdoc:
+  swagger-ui:
+    path: /api-docs

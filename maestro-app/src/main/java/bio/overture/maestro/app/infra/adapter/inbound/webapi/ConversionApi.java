@@ -23,6 +23,9 @@ import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +43,11 @@ public class ConversionApi {
 
   @PostMapping("/convert")
   @ResponseStatus(HttpStatus.CREATED)
+  @ApiResponses()
+  @Operation(summary = "Convert Analyses to file centric documents",
+    description = "Converts the passed array of analyses to a map of analysis Id -> Array of files of that analysis",
+    tags = { "Conversion" }
+  )
   public Mono<Map<String, List<FileCentricDocument>>> convertAnalyses(
       @RequestBody ConvertAnalysisCommand convertAnalysisCommand) {
     return converter.convertAnalysesToFileDocuments(convertAnalysisCommand);
