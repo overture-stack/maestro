@@ -2,6 +2,7 @@ server.port:
   50000
 
 maestro:
+  disableIndexing: false
   exclusionRules:
     byId:
       studyId:
