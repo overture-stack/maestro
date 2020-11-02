@@ -157,7 +157,8 @@ spec:
 					   [$class: 'StringParameterValue', name: 'OVERTURE_RELEASE_NAME', value: 'maestro'],
 					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_CHART_VERSION', value: ''], // use latest
 					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REPO_URL', value: "https://overture-stack.github.io/charts-server/"],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: "false" ]
+					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: "true" ],
+					   [$class: 'StringParameterValue', name: 'OVERTURE_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
 			   ])
 		   }
 	   }
@@ -173,7 +174,8 @@ spec:
 					   [$class: 'StringParameterValue', name: 'OVERTURE_RELEASE_NAME', value: 'maestro'],
 					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_CHART_VERSION', value: ''], // use latest
 					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REPO_URL', value: "https://overture-stack.github.io/charts-server/"],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: "false" ]
+					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: "true" ],
+					   [$class: 'StringParameterValue', name: 'OVERTURE_ARGS_LINE', value: "--set-string image.tag=${version}" ]
 			   ])
 		   }
 	   }
