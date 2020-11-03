@@ -263,6 +263,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   private static class Song {
     private SongTimeouts timeoutSec = new SongTimeouts();
     private int maxRetries = 3;
+    // FIXME: This configuration is called three different things in this codebase
     private String indexableStudyStatesCsv = "PUBLISHED";
   }
 
