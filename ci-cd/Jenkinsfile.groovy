@@ -17,6 +17,7 @@
 
 def commit = "UNKNOWN"
 def version = "UNKNOWN"
+def dockerRepo = "ghcr.io/overture-stack/maestro"
 pipeline {
     agent {
         kubernetes {
@@ -85,6 +86,17 @@ spec:
             }
         }
 
+        // run tests and package
+        stage('build') {
+            steps {
+                container('docker') {
+                    // the network=host needed to download dependencies using the host network (since we are inside 'docker'
+                    // container)
+                    sh "docker build --network=host -f ci-cd/Dockerfile . -t overture/maestro:${version}-${commit} -t ${dockerRepo}:${version}-${commit}"
+                }
+            }
+        }
+
         // publish the edge tag
         stage('Publish Develop') {
             when {
@@ -92,33 +104,20 @@ spec:
             }
             steps {
                 container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
+                    withCredentials([usernamePassword(credentialsId:'OvertureBioGithub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'docker login ghcr.io -u $USERNAME -p $PASSWORD'
                     }
-
-                    // the network=host needed to download dependencies using the host network (since we are inside 'docker'
-                    // container)
-                    sh "docker build --network=host -f ci-cd/Dockerfile . -t overture/maestro:edge -t overture/maestro:${version}-${commit}"
-                    sh "docker push overture/maestro:${version}-${commit}"
-                    sh "docker push overture/maestro:edge"
-               }
-            }
-        }
-
-        // Publish the release candidate artifacts
-        // to create a release candidate branch see tasks folder under ci-cd
-        stage('Publish Release Candidate') {
-            when {
-                branch "rc/${version}-${commit}"
-            }
-            steps {
+                    sh "docker tag ${dockerRepo}:${version}-${commit} ${dockerRepo}:edge"
+                    sh "docker push ${dockerRepo}:${version}-${commit}"
+                    sh "docker push ${dockerRepo}:edge"
+                }
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh 'docker login -u $USERNAME -p $PASSWORD'
                     }
-                    sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:${version}.${commit}-RC"
-                    sh "docker push overture/maestro:${version}.${commit}-RC"
-
+                    sh "docker tag overture/maestro:${version}-${commit} overture/maestro:edge"
+                    sh "docker push overture/maestro:${version}-${commit}"
+                    sh "docker push overture/maestro:edge"
                }
             }
         }
@@ -128,20 +127,27 @@ spec:
                branch "master"
            }
            steps {
-//                container('jdk') {
-//                    sh "./mvnw -Dsha1= -Dchangelist= -DskipTests deploy"
-//                }
                container('docker') {
-                   withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                       sh 'docker login -u $USERNAME -p $PASSWORD'
+                   withCredentials([usernamePassword(credentialsId:'OvertureBioGithub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                       sh 'docker login ghcr.io -u $USERNAME -p $PASSWORD'
                    }
-                   sh "docker  build --network=host -f ci-cd/Dockerfile . -t overture/maestro:latest -t overture/maestro:${version}"
-                   sh "docker push overture/maestro:${version}"
-                   sh "docker push overture/maestro:latest"
+                   sh "docker tag ${dockerRepo}:${version}-${commit} ${dockerRepo}:${version}"
+                   sh "docker tag ${dockerRepo}:${version}-${commit} ${dockerRepo}:latest"
+                   sh "docker push ${dockerRepo}:${version}"
+                   sh "docker push ${dockerRepo}:latest"
+               }
+               container('docker') {
                    withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                        sh "git tag ${version}"
                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
                    }
+                   withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                       sh 'docker login -u $USERNAME -p $PASSWORD'
+                   }
+                   sh "docker tag overture/maestro:${version}-${commit} overture/maestro:${version}"
+                   sh "docker tag overture/maestro:${version}-${commit} overture/maestro:latest"
+                   sh "docker push overture/maestro:${version}"
+                   sh "docker push overture/maestro:latest"
               }
            }
        }
