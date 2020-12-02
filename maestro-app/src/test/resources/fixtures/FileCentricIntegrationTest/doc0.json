@@ -9,6 +9,9 @@
   "analysis": {
     "analysis_id": "EGAZ00001254368",
     "analysis_state": "PUBLISHED",
+    "updated_at": "2020-12-02T17:18:32.353334",
+    "first_published_at": "2020-12-02T17:18:32.353334",
+    "published_at": "2020-12-02T17:18:32.353334",
     "analysis_type": "sequencingRead",
     "analysis_version": "1",
     "info": {

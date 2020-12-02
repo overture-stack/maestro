@@ -76,6 +76,15 @@
       "analysis_state": {
         "type": "keyword"
       },
+      "updated_at": {
+        "type": "date"
+      },
+      "first_published_at": {
+        "type": "date"
+      },
+      "published_at": {
+        "type": "date"
+      },
       "experiment": {
         "type": "object"
       },

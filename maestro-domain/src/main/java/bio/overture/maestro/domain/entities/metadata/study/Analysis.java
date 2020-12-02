@@ -20,9 +20,7 @@ package bio.overture.maestro.domain.entities.metadata.study;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import lombok.*;
 
 /** This corresponds to the analysis entity in the file metadata repository. */
@@ -41,6 +39,12 @@ public class Analysis {
 
   /** the status of the analysis (published or other values) */
   @NonNull private String analysisState;
+
+  @NonNull private Date updatedAt;
+
+  private Date publishedAt;
+
+  private Date firstPublishedAt;
 
   /** the studyId Id that this analysis belongs to. */
   @NonNull private String studyId;

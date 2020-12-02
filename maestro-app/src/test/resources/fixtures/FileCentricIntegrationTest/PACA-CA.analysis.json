@@ -8,6 +8,9 @@
     "analysisId": "744c62bf-4747-4ab2-aca9-50879cea82e0",
     "studyId": "PACA-CA",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "info": {},
@@ -229,6 +232,9 @@
     "analysisId": "916b5a92-cea6-11e5-af30-d4714d100685",
     "studyId": "PACA-CA",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "info": {},
@@ -378,6 +384,9 @@
     "analysisId": "b8e09611-225a-4de6-87dc-104753072252",
     "studyId": "PACA-CA",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "info": {},

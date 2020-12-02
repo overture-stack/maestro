@@ -19,6 +19,7 @@ package bio.overture.maestro.domain.entities.indexing;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 import lombok.*;
@@ -37,6 +38,10 @@ public class FileCentricAnalysis {
   @NonNull private String analysisType;
   @NonNull private Integer analysisVersion;
   @NonNull private String analysisState;
+  @NonNull private Date updatedAt;
+  private Date firstPublishedAt;
+  private Date publishedAt;
+
   @NonNull private Map<String, Object> experiment;
   /**
    * this field is to capture the dynamic fields in the analysis. it's the responsibility of the
