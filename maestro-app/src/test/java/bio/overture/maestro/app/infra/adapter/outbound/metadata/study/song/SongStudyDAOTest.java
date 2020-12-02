@@ -17,8 +17,8 @@
 
 package bio.overture.maestro.app.infra.adapter.outbound.metadata.study.song;
 
-import static bio.overture.masestro.test.Fixture.loadJsonFixture;
-import static bio.overture.masestro.test.Fixture.loadJsonString;
+import static bio.overture.maestro.test.Fixture.loadJsonFixture;
+import static bio.overture.maestro.test.Fixture.loadJsonString;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -29,7 +29,7 @@ import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalysesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
-import bio.overture.masestro.test.TestCategory;
+import bio.overture.maestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import java.util.List;

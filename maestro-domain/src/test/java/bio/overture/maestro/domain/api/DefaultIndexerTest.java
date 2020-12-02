@@ -18,8 +18,8 @@
 package bio.overture.maestro.domain.api;
 
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
-import static bio.overture.masestro.test.Fixture.*;
-import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static bio.overture.maestro.test.Fixture.*;
+import static bio.overture.maestro.test.TestCategory.UNIT_TEST;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
