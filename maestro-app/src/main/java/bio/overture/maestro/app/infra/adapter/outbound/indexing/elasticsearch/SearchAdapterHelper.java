@@ -209,7 +209,7 @@ public class SearchAdapterHelper {
             "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) } \n"
                 + "ctx._source.analysis_state = params.analysis_state;\n"
                 + "ctx._source.updated_at = ZonedDateTime.parse(params.updated_at).toInstant().toEpochMilli();\n"
-                + "ctx._source.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli();\n",
+                + "if (params.published_at != null) { ctx._source.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli(); }\n",
             parameters);
     return inline;
   }
@@ -222,7 +222,7 @@ public class SearchAdapterHelper {
             "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }\n"
                 + "ctx._source.analysis.analysis_state = params.analysis_state;\n"
                 + "ctx._source.analysis.updated_at = ZonedDateTime.parse(params.updated_at).toInstant().toEpochMilli();\n"
-                + "ctx._source.analysis.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli();\n",
+                + "if (params.published_at != null) { ctx._source.analysis.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli(); }\n",
             parameters);
     return inline;
   }

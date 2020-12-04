@@ -30,7 +30,7 @@ public class AnalysisCentricDocument {
 
   @NonNull private Date updatedAt;
 
-  @NonNull private Date publishedAt;
+  private Date publishedAt;
 
   private Date firstPublishedAt;
 
