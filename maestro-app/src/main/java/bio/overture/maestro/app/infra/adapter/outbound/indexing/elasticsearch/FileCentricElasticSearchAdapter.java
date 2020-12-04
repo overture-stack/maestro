@@ -20,7 +20,6 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import static bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.SearchAdapterHelper.*;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 import static java.lang.String.format;
-import static java.util.Collections.singletonMap;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
@@ -266,11 +265,17 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     Map<String, Object> parameters =
-        singletonMap(
+        Map.of(
             "repository",
-            mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
+            mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class),
+            "analysis_state",
+            fileCentricDocument.getAnalysis().getAnalysisState(),
+            "updated_at",
+            fileCentricDocument.getAnalysis().getUpdatedAt(),
+            "published_at",
+            fileCentricDocument.getAnalysis().getPublishedAt());
 
-    val inline = getInlineFile(parameters);
+    val inline = getInlineForFile(parameters);
 
     return new UpdateRequest()
         .id(fileCentricDocument.getObjectId())
