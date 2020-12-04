@@ -270,7 +270,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
             "repository",
             mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
 
-    val inline = getInline(parameters);
+    val inline = getInlineFile(parameters);
 
     return new UpdateRequest()
         .id(fileCentricDocument.getObjectId())

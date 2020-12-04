@@ -206,6 +206,19 @@ public class SearchAdapterHelper {
         new Script(
             ScriptType.INLINE,
             "painless",
+            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) } \n"
+                + "ctx._source.analysis_state = params.analysis_state;\n"
+                + "ctx._source.updated_at = params.updated_at;\n"
+                + "ctx._source.published_at = params.published_at;\n",
+            parameters);
+    return inline;
+  }
+
+  public static Script getInlineFile(Map<String, Object> parameters) {
+    val inline =
+        new Script(
+            ScriptType.INLINE,
+            "painless",
             "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }",
             parameters);
     return inline;

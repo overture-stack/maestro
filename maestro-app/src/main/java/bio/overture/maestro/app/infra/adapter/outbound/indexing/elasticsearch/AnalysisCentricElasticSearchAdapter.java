@@ -3,7 +3,6 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import static bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.SearchAdapterHelper.*;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 import static java.lang.String.format;
-import static java.util.Collections.singletonMap;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
@@ -147,9 +146,15 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
       AnalysisCentricDocument analysisCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     Map<String, Object> parameters =
-        singletonMap(
+        Map.of(
             "repository",
-            mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
+            mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class),
+            "analysis_state",
+            analysisCentricDocument.getAnalysisState(),
+            "updated_at",
+            analysisCentricDocument.getUpdatedAt(),
+            "published_at",
+            analysisCentricDocument.getPublishedAt());
     val inline = getInline(parameters);
 
     return new UpdateRequest()
