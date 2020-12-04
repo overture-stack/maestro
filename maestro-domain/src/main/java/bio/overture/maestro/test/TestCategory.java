@@ -15,7 +15,7 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package bio.overture.masestro.test;
+package bio.overture.maestro.test;
 
 import lombok.experimental.UtilityClass;
 

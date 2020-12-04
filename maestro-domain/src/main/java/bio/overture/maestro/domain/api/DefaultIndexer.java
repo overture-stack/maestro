@@ -118,7 +118,7 @@ class DefaultIndexer implements Indexer {
 
     return prepareTuple(indexAnalysisCommand)
         .flatMap(this::getAnalysisCentricDocuments)
-        .flatMap(this::batchUpsertAnalysesAndCollectFailtures)
+        .flatMap(this::batchUpsertAnalysesAndCollectFailures)
         .onErrorResume(
             IndexerException.class,
             (ex) ->
@@ -232,7 +232,7 @@ class DefaultIndexer implements Indexer {
     log.trace("in indexStudyToAnalysisCentric, args: {} ", command);
     return tuple2
         .map(t -> buildAnalysisCentricDocuments(t._2().getStudyRepository(), t._1()))
-        .flatMap(this::batchUpsertAnalysesAndCollectFailtures)
+        .flatMap(this::batchUpsertAnalysesAndCollectFailures)
         .onErrorResume(
             IndexerException.class,
             (ex) ->
@@ -922,7 +922,7 @@ class DefaultIndexer implements Indexer {
                     IndexResult.builder().failureData(tuple._1()).build(), upsertResult));
   }
 
-  private Mono<IndexResult> batchUpsertAnalysesAndCollectFailtures(
+  private Mono<IndexResult> batchUpsertAnalysesAndCollectFailures(
       Tuple2<FailureData, List<AnalysisCentricDocument>> tuple) {
     return this.batchUpsertAnalysis(tuple._2())
         .map(

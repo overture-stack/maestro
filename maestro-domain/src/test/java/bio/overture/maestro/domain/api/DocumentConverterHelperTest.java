@@ -1,8 +1,8 @@
 package bio.overture.maestro.domain.api;
 
 import static bio.overture.maestro.domain.api.EntityGenerator.*;
-import static bio.overture.masestro.test.Fixture.loadConverterTestFixture;
-import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static bio.overture.maestro.test.Fixture.loadConverterTestFixture;
+import static bio.overture.maestro.test.TestCategory.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

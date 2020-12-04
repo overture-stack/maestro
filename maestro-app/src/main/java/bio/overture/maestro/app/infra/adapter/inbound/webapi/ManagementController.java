@@ -21,12 +21,11 @@ import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -77,9 +76,10 @@ public class ManagementController {
             .build());
   }
 
-  @Operation(summary = "Index Single Analysis",
+  @Operation(
+      summary = "Index Single Analysis",
       description = "Indexes single analysis on demand ",
-      tags = { "Indexing" })
+      tags = {"Indexing"})
   @PostMapping("/index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}")
   @ResponseStatus(HttpStatus.CREATED)
   public Flux<IndexResult> indexAnalysis(

@@ -11,6 +11,9 @@
     "analysisId": "EGAZ00001254245",
     "studyId": "PEME-CA",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "info": {},

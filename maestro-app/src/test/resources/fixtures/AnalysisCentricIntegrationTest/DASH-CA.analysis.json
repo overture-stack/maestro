@@ -3,6 +3,9 @@
     "analysisId": "a07fe97f-80e1-4e69-bfe9-7f80e18e6969",
     "studyId": "DASH-CA",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "sampleId": "SA619219",

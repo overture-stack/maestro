@@ -4,6 +4,7 @@ import bio.overture.maestro.domain.entities.indexing.Donor;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,6 +27,12 @@ public class AnalysisCentricDocument {
   @NonNull private Integer analysisVersion;
 
   @NonNull private String analysisState;
+
+  @NonNull private Date updatedAt;
+
+  @NonNull private Date publishedAt;
+
+  private Date firstPublishedAt;
 
   @NonNull private String studyId;
 
