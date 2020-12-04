@@ -3,6 +3,7 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import static bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.SearchAdapterHelper.*;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 import static java.lang.String.format;
+import static java.util.Collections.unmodifiableMap;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
@@ -145,16 +146,19 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   private UpdateRequest mapAnalysisToUpsertRepositoryQuery(
       AnalysisCentricDocument analysisCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-    Map<String, Object> parameters =
-        Map.of(
-            "repository",
-            mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class),
-            "analysis_state",
-            analysisCentricDocument.getAnalysisState(),
-            "updated_at",
-            analysisCentricDocument.getUpdatedAt(),
-            "published_at",
-            analysisCentricDocument.getPublishedAt());
+
+    val paramsBuilder = new HashMap<String, Object>();
+    paramsBuilder.put(
+        "repository",
+        mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
+    paramsBuilder.put("analysis_state", analysisCentricDocument.getAnalysisState());
+    paramsBuilder.put("updated_at", analysisCentricDocument.getUpdatedAt());
+    if (analysisCentricDocument.getPublishedAt()
+        != null) { // Nullable as may not have been published
+      paramsBuilder.put("published_at", analysisCentricDocument.getPublishedAt());
+    }
+
+    val parameters = unmodifiableMap(paramsBuilder);
     val inline = getInline(parameters);
 
     return new UpdateRequest()
