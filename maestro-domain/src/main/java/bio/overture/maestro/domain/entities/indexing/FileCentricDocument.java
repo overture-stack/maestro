@@ -102,9 +102,12 @@ public class FileCentricDocument {
         && this.fileType.equals(fileCentricDocument.getFileType())
         && this.fileAccess.equals(fileCentricDocument.getFileAccess())
         && this.donors.equals(fileCentricDocument.getDonors())
-        // FIXME: Might need a rethink of the replica problem as we need to be able to upsert more fields
+        // FIXME: Might need a rethink of the replica problem as we need to be able to upsert more
+        // fields
         && this.analysis.getAnalysisId().equals(fileCentricDocument.getAnalysis().getAnalysisId())
-        && this.analysis.getAnalysisType().equals(fileCentricDocument.getAnalysis().getAnalysisType())
+        && this.analysis
+            .getAnalysisType()
+            .equals(fileCentricDocument.getAnalysis().getAnalysisType())
         && this.file.equals(fileCentricDocument.getFile());
   }
 }

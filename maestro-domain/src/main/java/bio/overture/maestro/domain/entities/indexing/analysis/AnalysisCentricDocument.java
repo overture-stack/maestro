@@ -66,7 +66,8 @@ public class AnalysisCentricDocument {
     if (this.equals(analysisCentricDocument)) return true;
     return this.analysisId.equals(analysisCentricDocument.getAnalysisId())
         && this.analysisType.equals(analysisCentricDocument.getAnalysisType())
-        // FIXME: Might need a rethink of the replica problem as we need to be able to upsert more fields
+        // FIXME: Might need a rethink of the replica problem as we need to be able to upsert more
+        // fields
         // && this.analysisState.equals(analysisCentricDocument.getAnalysisState())
         // && this.analysisVersion.equals(analysisCentricDocument.getAnalysisVersion())
         && this.studyId.equals(analysisCentricDocument.getStudyId())
