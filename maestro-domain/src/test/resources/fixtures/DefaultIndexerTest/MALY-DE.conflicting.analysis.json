@@ -1,7 +1,7 @@
 [
   {
     "analysisType": {
-      "name": "variantCall",
+      "name": "sequencingRead",
       "version": 1
     },
     "analysisId": "0a1df2a2-029d-48cc-839c-0a7c89ff972f",

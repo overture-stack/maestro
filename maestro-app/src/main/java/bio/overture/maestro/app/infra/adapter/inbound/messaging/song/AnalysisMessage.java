@@ -17,6 +17,7 @@
 
 package bio.overture.maestro.app.infra.adapter.inbound.messaging.song;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
@@ -25,6 +26,7 @@ import lombok.Value;
 @Value
 @ToString
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 class AnalysisMessage {
   @NonNull private final String analysisId;
   @NonNull private final String studyId;
