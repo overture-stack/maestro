@@ -1,7 +1,7 @@
 package bio.overture.maestro.domain.api;
 
-import static bio.overture.masestro.test.Fixture.loadJsonFixture;
-import static bio.overture.masestro.test.TestCategory.UNIT_TEST;
+import static bio.overture.maestro.test.Fixture.loadJsonFixture;
+import static bio.overture.maestro.test.TestCategory.UNIT_TEST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;

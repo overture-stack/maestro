@@ -3,6 +3,9 @@
     "analysisId": "cf1432f7-985e-4858-9432-f7985ee858e4",
     "studyId": "EUCANCAN-BE",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "sampleId": "SA610334",
@@ -84,6 +87,9 @@
     "analysisId": "43f07e4d-e26b-4f4a-b07e-4de26b9f4a50",
     "studyId": "EUCANCAN-BE",
     "analysisState": "PUBLISHED",
+    "updatedAt": "2020-12-02T17:18:32.353334",
+    "firstPublishedAt": "2020-12-02T17:18:32.353334",
+    "publishedAt": "2020-12-02T17:18:32.353334",
     "samples": [
       {
         "sampleId": "SA610334",

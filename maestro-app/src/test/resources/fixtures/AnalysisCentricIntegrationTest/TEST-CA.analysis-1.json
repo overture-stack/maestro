@@ -2,6 +2,9 @@
   "analysisId": "f7b2bb0c-f92d-49be-b2bb-0cf92d49be06",
   "studyId": "TEST-CA",
   "analysisState": "PUBLISHED",
+  "updatedAt": "2020-12-02T17:18:32.353334",
+  "firstPublishedAt": "2020-12-02T17:18:32.353334",
+  "publishedAt": "2020-12-02T17:18:32.353334",
   "samples": [
     {
       "sampleId": "SA616046",

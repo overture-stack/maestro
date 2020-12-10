@@ -2,8 +2,8 @@ package bio.overture.maestro.domain.api;
 
 import static bio.overture.maestro.domain.api.DefaultIndexer.*;
 import static bio.overture.maestro.domain.api.DefaultIndexer.ERR;
-import static bio.overture.masestro.test.Fixture.loadJsonFixture;
-import static bio.overture.masestro.test.Fixture.loadJsonString;
+import static bio.overture.maestro.test.Fixture.loadJsonFixture;
+import static bio.overture.maestro.test.Fixture.loadJsonString;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static java.text.MessageFormat.format;
@@ -24,7 +24,7 @@ import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDoc
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.notification.IndexerNotification;
-import bio.overture.masestro.test.TestCategory;
+import bio.overture.maestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;

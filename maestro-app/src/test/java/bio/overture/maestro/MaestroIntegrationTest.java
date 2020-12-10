@@ -19,7 +19,7 @@ package bio.overture.maestro;
 
 import bio.overture.maestro.app.Maestro;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
-import bio.overture.masestro.test.TestCategory;
+import bio.overture.maestro.test.TestCategory;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.RequestOptions;

@@ -20,7 +20,7 @@ package bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch;
 import static bio.overture.maestro.app.infra.adapter.outbound.indexing.elasticsearch.SearchAdapterHelper.*;
 import static bio.overture.maestro.domain.utility.StringUtilities.inputStreamToString;
 import static java.lang.String.format;
-import static java.util.Collections.singletonMap;
+import static java.util.Collections.unmodifiableMap;
 
 import bio.overture.maestro.app.infra.config.RootConfiguration;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
@@ -265,12 +265,19 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   @SneakyThrows
   private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-    Map<String, Object> parameters =
-        singletonMap(
-            "repository",
-            mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
 
-    val inline = getInline(parameters);
+    val paramsBuilder = new HashMap<String, Object>();
+    paramsBuilder.put(
+        "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
+    paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
+    paramsBuilder.put("updated_at", fileCentricDocument.getAnalysis().getUpdatedAt());
+    if (fileCentricDocument.getAnalysis().getPublishedAt()
+        != null) { // Nullable as may not have been published
+      paramsBuilder.put("published_at", fileCentricDocument.getAnalysis().getPublishedAt());
+    }
+
+    val parameters = unmodifiableMap(paramsBuilder);
+    val inline = getInlineForFile(parameters);
 
     return new UpdateRequest()
         .id(fileCentricDocument.getObjectId())
