@@ -5,7 +5,10 @@ maestro:
   # runs maestro without indexing functionality, i.e. just document conversion APIs
   # if this is set to true, no need to configure kafka, elasticsearch, song
   # but you still need to define the repositories
-  disableIndexing: false
+  disableIndexing: true
+
+  # this can be used to disable kafka integration, this option is preceded by disableIndexing
+  disableEventIndexing: false
 
   webclient:
     # -1 = unlimited memory size
