@@ -3,6 +3,8 @@ server.port:
 
 maestro:
   disableIndexing: false
+  disableEventIndexing: false
+
   exclusionRules:
     byId:
       studyId:
