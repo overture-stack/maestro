@@ -7,6 +7,9 @@ maestro:
   # but you still need to define the repositories
   disableIndexing: false
 
+  # this can be used to disable kafka integration, this option is preceded by disableIndexing
+  disableEventIndexing: false
+
   webclient:
     # -1 = unlimited memory size
     maxInMemorySize: -1
