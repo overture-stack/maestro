@@ -40,7 +40,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @EnableBinding(Sink.class)
 @ConditionalOnExpression(
-    "${maestro.disableIndexing:false} && ${maestro.disableEventIndexing:false}"
+    "${maestro.disableIndexing} eq false && ${maestro.disableEventIndexing} eq false"
 )
 public class IndexingMessagesStreamListener {
 

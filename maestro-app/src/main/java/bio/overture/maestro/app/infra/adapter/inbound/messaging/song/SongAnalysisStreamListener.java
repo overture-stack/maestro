@@ -38,7 +38,7 @@ import reactor.core.publisher.Flux;
 @Slf4j
 @EnableBinding(SongAnalysisSink.class)
 @ConditionalOnExpression(
-    "${maestro.disableIndexing:false} && ${maestro.disableEventIndexing:false}"
+    "${maestro.disableIndexing} eq false && ${maestro.disableEventIndexing} eq false"
 )
 public class SongAnalysisStreamListener {
 
