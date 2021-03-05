@@ -106,7 +106,7 @@ class WebConfig {
 
   @Bean
   @ConditionalOnProperty(name = "springdoc.serverOverride.enabled", havingValue = "true")
-  public OpenAPI springShopOpenAPI(@Value("${springdoc.serverOverride.value}") String serverOverride) {
+  public OpenAPI maestroOpenApi(@Value("${springdoc.serverOverride.value}") String serverOverride) {
     return new OpenAPI()
         .servers(List.of(new Server().url(serverOverride)));
   }
