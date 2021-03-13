@@ -32,7 +32,6 @@ import bio.overture.maestro.domain.utility.Parallel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import java.io.IOException;
@@ -273,17 +272,15 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     // there seem to be a class loader issue that cannot load the date transfomers in
     // org.elasticsearch.common.xcontent.XContentBuilder
     // root cause not found.
-    val df = new StdDateFormat();
-
     val paramsBuilder = new HashMap<String, Object>();
     paramsBuilder.put(
         "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
     paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
-    paramsBuilder.put("updated_at", df.format(fileCentricDocument.getAnalysis().getUpdatedAt()));
+    paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
     if (fileCentricDocument.getAnalysis().getPublishedAt()
         != null) { // Nullable as may not have been published
       paramsBuilder.put(
-          "published_at", df.format(fileCentricDocument.getAnalysis().getPublishedAt()));
+          "published_at", getDateIso(fileCentricDocument.getAnalysis().getPublishedAt()));
     }
 
     val parameters = unmodifiableMap(paramsBuilder);
