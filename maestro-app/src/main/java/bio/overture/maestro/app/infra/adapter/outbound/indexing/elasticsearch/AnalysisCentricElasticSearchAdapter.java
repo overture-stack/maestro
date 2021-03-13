@@ -15,6 +15,7 @@ import bio.overture.maestro.domain.utility.Parallel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
 
   @Inject
   public AnalysisCentricElasticSearchAdapter(
-      RestHighLevelClient elasticsearchRestClient,
+      @Qualifier("ES_CLIENT") RestHighLevelClient elasticsearchRestClient,
       @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
       SnakeCaseJacksonSearchResultMapper searchResultMapper,
       ApplicationProperties properties) {
@@ -146,16 +147,16 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   private UpdateRequest mapAnalysisToUpsertRepositoryQuery(
       AnalysisCentricDocument analysisCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-
+    val df = new StdDateFormat();
     val paramsBuilder = new HashMap<String, Object>();
     paramsBuilder.put(
         "repository",
         mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
     paramsBuilder.put("analysis_state", analysisCentricDocument.getAnalysisState());
-    paramsBuilder.put("updated_at", analysisCentricDocument.getUpdatedAt());
+    paramsBuilder.put("updated_at", df.format(analysisCentricDocument.getUpdatedAt()));
     if (analysisCentricDocument.getPublishedAt()
         != null) { // Nullable as may not have been published
-      paramsBuilder.put("published_at", analysisCentricDocument.getPublishedAt());
+      paramsBuilder.put("published_at", df.format(analysisCentricDocument.getPublishedAt()));
     }
 
     val parameters = unmodifiableMap(paramsBuilder);

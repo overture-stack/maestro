@@ -72,7 +72,7 @@ public class ElasticSearchConfig {
     return (args) -> adapter.initialize();
   }
 
-  @Bean
+  @Bean("ES_CLIENT")
   RestHighLevelClient client(ApplicationProperties properties) {
     val httpHostArrayList =
         new ArrayList<HttpHost>(
