@@ -81,7 +81,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
   @Inject
   public FileCentricElasticSearchAdapter(
-      @Qualifier("ES_CLIENT") RestHighLevelClient elasticsearchRestClient,
+      RestHighLevelClient elasticsearchRestClient,
       @Qualifier(RootConfiguration.ELASTIC_SEARCH_DOCUMENT_JSON_MAPPER) ObjectMapper objectMapper,
       SnakeCaseJacksonSearchResultMapper searchResultMapper,
       ApplicationProperties properties) {
