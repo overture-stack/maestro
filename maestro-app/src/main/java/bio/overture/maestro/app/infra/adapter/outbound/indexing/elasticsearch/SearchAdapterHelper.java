@@ -7,6 +7,8 @@ import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.vavr.control.Try;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Function;
@@ -233,5 +235,12 @@ public class SearchAdapterHelper {
     Assert.notNull(indexName, "No index defined for Query");
     Assert.notNull(req.id(), "No Id define for Query");
     return req;
+  }
+
+  static String getDateIso(Date date)
+  {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    return dateFormat.format(date);
   }
 }

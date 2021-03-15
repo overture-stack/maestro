@@ -172,5 +172,13 @@ spring:
             maxAttempts: 1
 
 springdoc:
+  ## The reason this was added to support reverse proxy url rewrites like: http://xyz.com/maestro
+  ## otherwise the swagger urls will not be sent to the correct url since swagger ui depends
+  ## on the server definition and springdoc needs forward headers to be enabled by spring
+  ## enabling forward headers in maestro caused it to conflict with disabling kafka
+  ## and forced an autoconfigure for kafka client.
+  serverOverride:
+    enabled: false
+    value: http://localhost:11235/custom
   swagger-ui:
     path: /api-docs
