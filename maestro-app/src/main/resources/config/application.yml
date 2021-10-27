@@ -166,7 +166,7 @@ spring:
           consumer:
             maxAttempts: 1
         songInput:
-          destination: song-analysis
+          destination: song_analysis
           group: songConsumerGrp
           consumer:
             maxAttempts: 1

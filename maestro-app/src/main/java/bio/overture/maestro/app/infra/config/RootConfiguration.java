@@ -31,6 +31,7 @@ import bio.overture.maestro.domain.api.DomainApiConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -38,8 +39,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.List;
 
 /** Aggregates all configuration in one place */
 @Configuration
@@ -107,8 +106,6 @@ class WebConfig {
   @Bean
   @ConditionalOnProperty(name = "springdoc.serverOverride.enabled", havingValue = "true")
   public OpenAPI maestroOpenApi(@Value("${springdoc.serverOverride.value}") String serverOverride) {
-    return new OpenAPI()
-        .servers(List.of(new Server().url(serverOverride)));
+    return new OpenAPI().servers(List.of(new Server().url(serverOverride)));
   }
-
 }

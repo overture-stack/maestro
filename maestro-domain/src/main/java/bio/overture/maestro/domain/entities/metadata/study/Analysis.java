@@ -20,6 +20,7 @@ package bio.overture.maestro.domain.entities.metadata.study;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionId;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.*;
 import lombok.*;
 
@@ -30,6 +31,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Analysis {
 
   @NonNull @ExclusionId private String analysisId;
@@ -41,6 +43,8 @@ public class Analysis {
   @NonNull private String analysisState;
 
   @NonNull private Date updatedAt;
+
+  private String songServerId;
 
   private Date publishedAt;
 

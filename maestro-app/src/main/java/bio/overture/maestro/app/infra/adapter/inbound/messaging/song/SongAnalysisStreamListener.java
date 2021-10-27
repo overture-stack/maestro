@@ -22,9 +22,9 @@ import static bio.overture.maestro.app.infra.adapter.inbound.messaging.IndexMess
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.Indexer;
 import bio.overture.maestro.domain.api.message.AnalysisIdentifier;
-import bio.overture.maestro.domain.api.message.IndexAnalysisCommand;
 import bio.overture.maestro.domain.api.message.IndexResult;
 import bio.overture.maestro.domain.api.message.RemoveAnalysisCommand;
+import bio.overture.maestro.domain.entities.message.AnalysisMessage;
 import io.vavr.Tuple2;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +38,7 @@ import reactor.core.publisher.Flux;
 @Slf4j
 @EnableBinding(SongAnalysisSink.class)
 @ConditionalOnExpression(
-    "${maestro.disableIndexing} eq false && ${maestro.disableEventIndexing} eq false"
-)
+    "${maestro.disableIndexing} eq false && ${maestro.disableEventIndexing} eq false")
 public class SongAnalysisStreamListener {
 
   private Indexer indexer;
@@ -51,25 +50,17 @@ public class SongAnalysisStreamListener {
   }
 
   @StreamListener(SongAnalysisSink.NAME)
-  public void handleMessage(@Payload AnalysisMessage analysisMessage) {
-    log.info("received message : {}", analysisMessage);
-    handleIndexResult(() -> this.doHandle(analysisMessage));
+  public void handleMessage(@Payload AnalysisMessage msg) {
+    log.info("received message : {}", msg);
+    handleIndexResult(() -> this.doHandle(msg));
   }
 
   private Flux<Tuple2<AnalysisMessage, IndexResult>> doHandle(AnalysisMessage msg) {
     Flux<IndexResult> result;
     try {
+      // only index the analysis when it has a PUBLISHED state.
       if (this.indexableStudyStatuses.contains(msg.getState())) {
-        result =
-            indexer.indexAnalysis(
-                IndexAnalysisCommand.builder()
-                    .analysisIdentifier(
-                        AnalysisIdentifier.builder()
-                            .repositoryCode(msg.getSongServerId())
-                            .studyId(msg.getStudyId())
-                            .analysisId(msg.getAnalysisId())
-                            .build())
-                    .build());
+        result = indexer.indexAnalysisFromKafka(msg);
       } else {
         val mono =
             indexer.removeAnalysis(

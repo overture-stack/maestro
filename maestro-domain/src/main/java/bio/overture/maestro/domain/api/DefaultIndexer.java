@@ -29,6 +29,7 @@ import bio.overture.maestro.domain.entities.indexing.FileCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.Repository;
 import bio.overture.maestro.domain.entities.indexing.analysis.AnalysisCentricDocument;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
+import bio.overture.maestro.domain.entities.message.AnalysisMessage;
 import bio.overture.maestro.domain.entities.metadata.repository.StudyRepository;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
@@ -110,6 +111,78 @@ class DefaultIndexer implements Indexer {
       monos.add(indexAnalysisToAnalysisCentric(command));
     }
     return Flux.merge(monos);
+  }
+
+  @Override
+  public Flux<IndexResult> indexAnalysisFromKafka(@NonNull AnalysisMessage analysis) {
+    List<Mono<IndexResult>> monos = new ArrayList<>();
+    IndexAnalysisCommand indexAnalysisCommand =
+        IndexAnalysisCommand.builder()
+            .analysisIdentifier(
+                AnalysisIdentifier.builder()
+                    .repositoryCode(analysis.getSongServerId())
+                    .studyId(analysis.getStudyId())
+                    .analysisId(analysis.getAnalysisId())
+                    .build())
+            .build();
+    if (isFileCentricEnabled) {
+      monos.add(indexToFileCentricFromKafka(analysis, indexAnalysisCommand));
+    }
+
+    if (isAnalysisCentricEnabled) {
+      monos.add(indexToAnalysisCentricFromKafka(analysis, indexAnalysisCommand));
+    }
+    return Flux.merge(monos);
+  }
+
+  /**
+   * Builds file centric document from analysisPayload, indexes the document to file centric index.
+   *
+   * @param analysisPayload Kafka message body that contains analysis, files, samples.
+   * @param command A command that has analysis identifier.
+   * @return Index result indicating if documents have been successfully indexed.
+   */
+  private Mono<IndexResult> indexToFileCentricFromKafka(
+      @NonNull AnalysisMessage analysisPayload, @NonNull IndexAnalysisCommand command) {
+    val analysisIdentifier = command.getAnalysisIdentifier();
+    return prepareTuple(command)
+        .map(
+            tuple ->
+                buildFileCentricDocuments(
+                    tuple.studyRepository, List.of(analysisPayload.getAnalysis())))
+        .flatMap(this::batchUpsertFilesAndCollectFailures)
+        .onErrorResume(
+            IndexerException.class,
+            (ex) ->
+                Mono.just(this.convertIndexerExceptionToIndexResult(ex, this.fileCentricIndexName)))
+        .onErrorResume(
+            (e) -> handleIndexAnalysisError(e, analysisIdentifier, this.fileCentricIndexName));
+  }
+
+  /**
+   * Builds analysis centric document from analysisPayload, indexes the document to analysis centric
+   * index.
+   *
+   * @param analysisPayload Kafka message body that contains analysis, files, samples.
+   * @param command A command that has analysis identifier.
+   * @return Index result indicating if documents have been successfully indexed.
+   */
+  private Mono<IndexResult> indexToAnalysisCentricFromKafka(
+      @NonNull AnalysisMessage analysisPayload, @NonNull IndexAnalysisCommand command) {
+    val analysisIdentifier = command.getAnalysisIdentifier();
+    return prepareTuple(command)
+        .map(
+            tuple ->
+                buildAnalysisCentricDocuments(
+                    tuple.studyRepository, List.of(analysisPayload.getAnalysis())))
+        .flatMap(this::batchUpsertAnalysesAndCollectFailures)
+        .onErrorResume(
+            IndexerException.class,
+            (ex) ->
+                Mono.just(
+                    this.convertIndexerExceptionToIndexResult(ex, this.analysisCentricIndexName)))
+        .onErrorResume(
+            (e) -> handleIndexAnalysisError(e, analysisIdentifier, this.analysisCentricIndexName));
   }
 
   public Mono<IndexResult> indexAnalysisToAnalysisCentric(
