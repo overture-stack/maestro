@@ -43,7 +43,7 @@ public interface Indexer {
    * @param analysis Kafka message payload.
    * @return Failure info and success flag of al indices.
    */
-  Flux<IndexResult> indexAnalysisFromKafka(@NonNull AnalysisMessage analysis);
+  Flux<IndexResult> indexAnalysisPayload(@NonNull AnalysisMessage analysis);
 
   /**
    * Used to remove all files documents for an analysis.

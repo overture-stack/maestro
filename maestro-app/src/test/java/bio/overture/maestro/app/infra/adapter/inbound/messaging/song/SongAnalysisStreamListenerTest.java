@@ -107,7 +107,7 @@ class SongAnalysisStreamListenerTest {
             + "    ]\n"
             + "  }\n"
             + "}\n";
-    when(indexer.indexAnalysisFromKafka(any()))
+    when(indexer.indexAnalysisPayload(any()))
         .thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
     sink.songInput().send(new GenericMessage<>(payload));
     Thread.sleep(2000);
@@ -117,7 +117,7 @@ class SongAnalysisStreamListenerTest {
     val updatedAt = df1.parse(updatedAtString);
     then(indexer)
         .should(times(1))
-        .indexAnalysisFromKafka(
+        .indexAnalysisPayload(
             eq(
                 AnalysisMessage.builder()
                     .analysisId(ANALYSIS_ID)
@@ -187,7 +187,7 @@ class SongAnalysisStreamListenerTest {
             + "    ]\n"
             + "  }\n"
             + "}\n";
-    when(indexer.indexAnalysisFromKafka(any()))
+    when(indexer.indexAnalysisPayload(any()))
         .thenReturn(Flux.just(IndexResult.builder().successful(true).build()));
     sink.songInput().send(new GenericMessage<>(payload));
     Thread.sleep(2000);
@@ -198,7 +198,7 @@ class SongAnalysisStreamListenerTest {
 
     then(indexer)
         .should(times(1))
-        .indexAnalysisFromKafka(
+        .indexAnalysisPayload(
             eq(
                 AnalysisMessage.builder()
                     .analysisId(ANALYSIS_ID)

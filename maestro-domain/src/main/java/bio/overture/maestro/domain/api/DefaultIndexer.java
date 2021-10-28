@@ -114,7 +114,7 @@ class DefaultIndexer implements Indexer {
   }
 
   @Override
-  public Flux<IndexResult> indexAnalysisFromKafka(@NonNull AnalysisMessage analysis) {
+  public Flux<IndexResult> indexAnalysisPayload(@NonNull AnalysisMessage analysis) {
     List<Mono<IndexResult>> monos = new ArrayList<>();
     IndexAnalysisCommand indexAnalysisCommand =
         IndexAnalysisCommand.builder()
@@ -126,11 +126,11 @@ class DefaultIndexer implements Indexer {
                     .build())
             .build();
     if (isFileCentricEnabled) {
-      monos.add(indexToFileCentricFromKafka(analysis, indexAnalysisCommand));
+      monos.add(indexAnalysisPayloadToFileCentric(analysis, indexAnalysisCommand));
     }
 
     if (isAnalysisCentricEnabled) {
-      monos.add(indexToAnalysisCentricFromKafka(analysis, indexAnalysisCommand));
+      monos.add(indexAnalysisPayloadToAnalysisCentric(analysis, indexAnalysisCommand));
     }
     return Flux.merge(monos);
   }
@@ -142,7 +142,7 @@ class DefaultIndexer implements Indexer {
    * @param command A command that has analysis identifier.
    * @return Index result indicating if documents have been successfully indexed.
    */
-  private Mono<IndexResult> indexToFileCentricFromKafka(
+  private Mono<IndexResult> indexAnalysisPayloadToFileCentric(
       @NonNull AnalysisMessage analysisPayload, @NonNull IndexAnalysisCommand command) {
     val analysisIdentifier = command.getAnalysisIdentifier();
     return prepareTuple(command)
@@ -167,7 +167,7 @@ class DefaultIndexer implements Indexer {
    * @param command A command that has analysis identifier.
    * @return Index result indicating if documents have been successfully indexed.
    */
-  private Mono<IndexResult> indexToAnalysisCentricFromKafka(
+  private Mono<IndexResult> indexAnalysisPayloadToAnalysisCentric(
       @NonNull AnalysisMessage analysisPayload, @NonNull IndexAnalysisCommand command) {
     val analysisIdentifier = command.getAnalysisIdentifier();
     return prepareTuple(command)

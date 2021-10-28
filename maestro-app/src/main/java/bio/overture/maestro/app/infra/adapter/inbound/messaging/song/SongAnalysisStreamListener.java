@@ -60,7 +60,7 @@ public class SongAnalysisStreamListener {
     try {
       // only index the analysis when it has a PUBLISHED state.
       if (this.indexableStudyStatuses.contains(msg.getState())) {
-        result = indexer.indexAnalysisFromKafka(msg);
+        result = indexer.indexAnalysisPayload(msg);
       } else {
         val mono =
             indexer.removeAnalysis(
