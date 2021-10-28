@@ -1,3 +1,5 @@
+package bio.overture.maestro.domain.entities.message;
+
 /*
  *  Copyright (c) 2019. Ontario Institute for Cancer Research
  *
@@ -15,21 +17,19 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package bio.overture.maestro.app.infra.adapter.inbound.messaging.song;
-
+import bio.overture.maestro.domain.entities.metadata.study.Analysis;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.Value;
+import lombok.*;
 
 @Value
+@Builder
 @ToString
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-class AnalysisMessage {
+public class AnalysisMessage {
   @NonNull private final String analysisId;
   @NonNull private final String studyId;
   @NonNull private final String state;
   @NonNull private final String songServerId;
+  @NonNull private final Analysis analysis;
 }

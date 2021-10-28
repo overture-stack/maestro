@@ -19,6 +19,7 @@ package bio.overture.maestro.domain.api;
 
 import bio.overture.maestro.domain.api.message.*;
 import bio.overture.maestro.domain.entities.indexing.rules.ExclusionRule;
+import bio.overture.maestro.domain.entities.message.AnalysisMessage;
 import java.util.List;
 import java.util.Map;
 import lombok.NonNull;
@@ -35,6 +36,14 @@ public interface Indexer {
    * @return failure info and success flag of all indices
    */
   Flux<IndexResult> indexAnalysis(@NonNull IndexAnalysisCommand indexAnalysisCommand);
+
+  /**
+   * Method to index a single analysis from kafka payload.
+   *
+   * @param analysis Kafka message payload.
+   * @return Failure info and success flag of al indices.
+   */
+  Flux<IndexResult> indexAnalysisPayload(@NonNull AnalysisMessage analysis);
 
   /**
    * Used to remove all files documents for an analysis.

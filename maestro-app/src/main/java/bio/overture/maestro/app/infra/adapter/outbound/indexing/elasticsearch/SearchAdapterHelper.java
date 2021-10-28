@@ -237,8 +237,7 @@ public class SearchAdapterHelper {
     return req;
   }
 
-  static String getDateIso(Date date)
-  {
+  static String getDateIso(Date date) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     return dateFormat.format(date);
