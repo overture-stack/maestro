@@ -29,7 +29,7 @@
     <groupId>bio.overture</groupId>
     <artifactId>maestro</artifactId>
     <!-- from .mvn/maven.config -->
-    <version>3.8.0</version>
+    <version>${revision}${sha1}${changelist}</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
