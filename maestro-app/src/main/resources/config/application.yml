@@ -8,7 +8,7 @@ maestro:
   disableIndexing: false
 
   # this can be used to disable kafka integration, this option is preceded by disableIndexing
-  disableEventIndexing: false
+  disableEventIndexing: true
 
   webclient:
     # -1 = unlimited memory size
@@ -24,26 +24,26 @@ maestro:
   elasticsearch:
     # elasticsearch server nodes to send requests to
     clusterNodes:
-      - http://localhost:9200
-
+      - https://dms.brandon.cancercollaboratory.org
+    pathPrefix: elasticsearch
     # the index name to store documents in (will be created if not existing)
     indexes:
       fileCentric:
-          name: file_centric_1.0
-          alias: file_centric
+          name: file_centric_fed_1
+          alias: file_centric_fed
           enabled: true
       analysisCentric:
           name: analysis_centric_1.0
           alias: analysis_centric
-          enabled: true
+          enabled: false
 
     # elasticsearch client properties
     client:
       basicAuth:
-        enabled: false
+        enabled: true
         user: elastic
-        password: dummy-pass
-      trustSelfSignedCert: false
+        password: abc123
+      trustSelfSignedCert: true
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
       # max time to wait for a connection to be established
@@ -60,21 +60,21 @@ maestro:
   # List of Genomic files repositories (SONGs)
   repositories:
     # these properties will be used in the document (see ../file_centric.json)
-    - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
-      url: https://song.domain.com # Change this to a valid domain where the song exists in your setup
-      name: local song
+    - code: song.felix # must be unique & must match song.serverId if using kafka integration with song
+      url: https://dms.felix.cancercollaboratory.org/song-api # Change this to a valid domain where the song exists in your setup
+      name: felix
       # optional
       storageType: S3
-      organization: ICGC
+      organization: felix
       country: CA
     # you can other SONGs as needed
-    - code: song.overture1
-      url: http://localhost:8080
-      name: local song
+    - code: song.brandon
+      url: https://dms.brandon.cancercollaboratory.org/song-api
+      name: brandon
       # optional
       storageType: S3
-      organization: overture
-      country: LH
+      organization: brandon
+      country: CA
 
   # last resort fallback file system log in case of retries exhaustion.
   failureLog:

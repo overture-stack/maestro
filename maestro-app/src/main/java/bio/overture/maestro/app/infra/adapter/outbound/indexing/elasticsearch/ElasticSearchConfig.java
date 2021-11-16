@@ -77,9 +77,10 @@ public class ElasticSearchConfig {
     val httpHostArrayList =
         new ArrayList<HttpHost>(
             properties.elasticSearchClusterNodes().stream()
-                .map(HttpHost::create)
+                .map(n -> HttpHost.create(n))
                 .collect(Collectors.toUnmodifiableList()));
-    val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[] {}));
+    val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[] {}))
+        .setPathPrefix(properties.elasticSearchPathPrefix());
 
     builder.setHttpClientConfigCallback(
         (httpAsyncClientBuilder) -> {

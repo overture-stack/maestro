@@ -60,6 +60,8 @@ public interface ApplicationProperties {
 
   String elasticSearchAuthPassword();
 
+  String elasticSearchPathPrefix();
+
   List<PropertiesFileRepository> repositories();
 
   Resource fileCentricIndex();
