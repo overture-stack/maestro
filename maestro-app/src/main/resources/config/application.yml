@@ -24,8 +24,8 @@ maestro:
   elasticsearch:
     # elasticsearch server nodes to send requests to
     clusterNodes:
-      - https://dms.brandon.cancercollaboratory.org
-    pathPrefix: elasticsearch
+      - http://localhost:9200
+    pathPrefix:
     # the index name to store documents in (will be created if not existing)
     indexes:
       fileCentric:

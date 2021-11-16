@@ -77,7 +77,7 @@ public class ElasticSearchConfig {
     val httpHostArrayList =
         new ArrayList<HttpHost>(
             properties.elasticSearchClusterNodes().stream()
-                .map(n -> HttpHost.create(n))
+                .map(HttpHost::create)
                 .collect(Collectors.toUnmodifiableList()));
     val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[] {}))
         .setPathPrefix(properties.elasticSearchPathPrefix());
