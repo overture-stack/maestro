@@ -122,6 +122,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   }
 
   @Override
+  public String elasticSearchPathPrefix() {
+    return this.elasticsearch.getPathPrefix();
+  }
+
+  @Override
   public long elasticSearchRetryWaitDurationMillis() {
     return this.elasticsearch.getClient().getRetry().getWaitDurationMillis();
   }
@@ -288,7 +293,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   private static class Elasticsearch {
     private List<String> clusterNodes = List.of("localhost:9200");
     private Indexes indexes = new Indexes();
-
+    private String pathPrefix = "";
     private ElasticsearchClient client = new ElasticsearchClient();
   }
 

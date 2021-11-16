@@ -43,6 +43,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.util.StringUtils;
 
 /**
  * Elasticsearch related configuration this allows us to keep the beans package private to avoid
@@ -80,6 +81,10 @@ public class ElasticSearchConfig {
                 .map(HttpHost::create)
                 .collect(Collectors.toUnmodifiableList()));
     val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[] {}));
+
+    if (!StringUtils.isEmpty(properties.elasticSearchPathPrefix().trim())) {
+      builder.setPathPrefix(properties.elasticSearchPathPrefix());
+    }
 
     builder.setHttpClientConfigCallback(
         (httpAsyncClientBuilder) -> {
