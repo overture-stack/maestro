@@ -82,7 +82,7 @@ public class ElasticSearchConfig {
                 .collect(Collectors.toUnmodifiableList()));
     val builder = RestClient.builder(httpHostArrayList.toArray(new HttpHost[] {}));
 
-    if (!StringUtils.isEmpty(properties.elasticSearchPathPrefix())) {
+    if (!StringUtils.isEmpty(properties.elasticSearchPathPrefix().trim())) {
       builder.setPathPrefix(properties.elasticSearchPathPrefix());
     }
 
