@@ -25,7 +25,7 @@ maestro:
     # elasticsearch server nodes to send requests to
     clusterNodes:
       - http://localhost:9200
-
+    pathPrefix:
     # the index name to store documents in (will be created if not existing)
     indexes:
       fileCentric:
@@ -42,7 +42,7 @@ maestro:
       basicAuth:
         enabled: false
         user: elastic
-        password: dummy-pass
+        password:
       trustSelfSignedCert: false
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
