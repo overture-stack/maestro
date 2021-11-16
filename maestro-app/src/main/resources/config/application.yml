@@ -8,7 +8,7 @@ maestro:
   disableIndexing: false
 
   # this can be used to disable kafka integration, this option is preceded by disableIndexing
-  disableEventIndexing: true
+  disableEventIndexing: false
 
   webclient:
     # -1 = unlimited memory size
@@ -29,21 +29,21 @@ maestro:
     # the index name to store documents in (will be created if not existing)
     indexes:
       fileCentric:
-          name: file_centric_fed_1
-          alias: file_centric_fed
+          name: file_centric_1.0
+          alias: file_centric
           enabled: true
       analysisCentric:
           name: analysis_centric_1.0
           alias: analysis_centric
-          enabled: false
+          enabled: true
 
     # elasticsearch client properties
     client:
       basicAuth:
-        enabled: true
+        enabled: false
         user: elastic
-        password: abc123
-      trustSelfSignedCert: true
+        password:
+      trustSelfSignedCert: false
       # this is to control the number of documents per bulk request in elasticsearch
       docsPerBulkReqMax: 5000
       # max time to wait for a connection to be established
@@ -60,21 +60,21 @@ maestro:
   # List of Genomic files repositories (SONGs)
   repositories:
     # these properties will be used in the document (see ../file_centric.json)
-    - code: song.felix # must be unique & must match song.serverId if using kafka integration with song
-      url: https://dms.felix.cancercollaboratory.org/song-api # Change this to a valid domain where the song exists in your setup
-      name: felix
+    - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
+      url: https://song.domain.com # Change this to a valid domain where the song exists in your setup
+      name: local song
       # optional
       storageType: S3
-      organization: felix
+      organization: ICGC
       country: CA
     # you can other SONGs as needed
-    - code: song.brandon
-      url: https://dms.brandon.cancercollaboratory.org/song-api
-      name: brandon
+    - code: song.overture1
+      url: http://localhost:8080
+      name: local song
       # optional
       storageType: S3
-      organization: brandon
-      country: CA
+      organization: overture
+      country: LH
 
   # last resort fallback file system log in case of retries exhaustion.
   failureLog:
