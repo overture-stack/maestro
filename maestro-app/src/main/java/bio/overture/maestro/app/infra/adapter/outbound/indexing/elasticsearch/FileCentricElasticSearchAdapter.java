@@ -277,10 +277,17 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
     paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
-    if (fileCentricDocument.getAnalysis().getPublishedAt()
-        != null) { // Nullable as may not have been published
+
+    if (fileCentricDocument.getAnalysis().getPublishedAt() != null) {
+      // Nullable as may not have been published
       paramsBuilder.put(
           "published_at", getDateIso(fileCentricDocument.getAnalysis().getPublishedAt()));
+    }
+
+    if (fileCentricDocument.getAnalysis().getFirstPublishedAt() != null) {
+      paramsBuilder.put(
+          "first_published_at",
+          getDateIso(fileCentricDocument.getAnalysis().getFirstPublishedAt()));
     }
 
     val parameters = unmodifiableMap(paramsBuilder);
