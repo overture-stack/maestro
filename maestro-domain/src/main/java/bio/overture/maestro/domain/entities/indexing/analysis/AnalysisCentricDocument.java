@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import org.apache.commons.collections4.CollectionUtils;
 
 @Builder
 @Getter
@@ -71,7 +72,7 @@ public class AnalysisCentricDocument {
         // && this.analysisState.equals(analysisCentricDocument.getAnalysisState())
         // && this.analysisVersion.equals(analysisCentricDocument.getAnalysisVersion())
         && this.studyId.equals(analysisCentricDocument.getStudyId())
-        && this.donors.equals(analysisCentricDocument.getDonors())
-        && this.files.equals(analysisCentricDocument.getFiles());
+        && CollectionUtils.isEqualCollection(this.donors, analysisCentricDocument.getDonors())
+        && CollectionUtils.isEqualCollection(this.files, analysisCentricDocument.getFiles());
   }
 }
