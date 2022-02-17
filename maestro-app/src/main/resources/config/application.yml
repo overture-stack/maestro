@@ -16,7 +16,7 @@ maestro:
   song:
     indexableStudyStatesCsv: PUBLISHED
     # page limit for getting analysis from song
-    pageLimit: 50
+    pageLimit: 100
     maxRetries: 3
     timeoutSec:
         study: 100 # some studies take really long, +30 secs, to be downloaded
