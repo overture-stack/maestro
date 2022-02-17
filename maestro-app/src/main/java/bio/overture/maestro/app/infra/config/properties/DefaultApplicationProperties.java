@@ -172,6 +172,11 @@ final class DefaultApplicationProperties implements ApplicationProperties {
   }
 
   @Override
+  public int pageLimit() {
+    return this.song.getPageLimit();
+  }
+
+  @Override
   public int songAnalysisCallTimeoutSeconds() {
     return this.song.getTimeoutSec().getAnalysis();
   }
@@ -270,6 +275,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private int maxRetries = 3;
     // FIXME: This configuration is called three different things in this codebase
     private String indexableStudyStatesCsv = "PUBLISHED";
+    private int pageLimit = 100;
   }
 
   @Data

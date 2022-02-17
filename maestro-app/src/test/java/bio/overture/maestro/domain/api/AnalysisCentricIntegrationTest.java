@@ -224,17 +224,33 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
                 elasticSearchJsonMapper,
                 Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl())));
 
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     for (Study study : studies) {
       val studyId = study.getStudyId();
-      val studyAnalyses = getStudyAnalysesAsString(studyId);
+      val resp = getAnalysisResponse(studyId);
       stubFor(
           request(
                   "GET",
-                  urlEqualTo("/collab/studies/" + studyId + "/analysis?analysisStates=PUBLISHED"))
+                  urlEqualTo(
+                      "/collab/studies/"
+                          + studyId
+                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
               .willReturn(
                   aResponse()
                       .withStatus(200)
-                      .withBody(studyAnalyses)
+                      .withBody(resp)
+                      .withHeader("Content-Type", "application/json")));
+      stubFor(
+          request(
+                  "GET",
+                  urlEqualTo(
+                      "/collab/studies/"
+                          + studyId
+                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+              .willReturn(
+                  aResponse()
+                      .withStatus(200)
+                      .withBody(emptyResp)
                       .withHeader("Content-Type", "application/json")));
     }
 
@@ -275,7 +291,8 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val analyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
+    val analyses = loadJsonString(this.getClass(), "EUCANCAN-BE.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
@@ -292,11 +309,24 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(analyses)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")));
 
     // test
@@ -334,6 +364,8 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
     @SuppressWarnings("all")
     val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
+    val resp = loadJsonString(this.getClass(), "EUCANCAN-BE.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
@@ -350,10 +382,23 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
-                    .withBody(collabAnalyses)
+                    .withBody(resp)
+                    .withHeader("Content-Type", "application/json")
+                    .withStatus(200)));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")
                     .withStatus(200)));
 
@@ -388,9 +433,11 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldUpdateExistingDocRepository() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.response.json");
     @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.aws.analysis.json");
+    val awsStudyAnalyses =
+        loadJsonString(this.getClass(), "EUCANCAN-BE.aws.analysis.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
 
     val expectedDoc0 =
         loadJsonFixture(
@@ -418,19 +465,45 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
                 "COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl(),
                 "AWS_REPO_URL", applicationProperties.repositories().get(1).getUrl()));
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
+                    .withHeader("Content-Type", "application/json")));
 
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(awsStudyAnalyses)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")));
 
     // test
@@ -475,11 +548,15 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
     // Given
     @SuppressWarnings("all")
     val collabAnalyses = loadJsonString(this.getClass(), "EUCANCAN-BE.studies.json");
+    val resp = loadJsonString(this.getClass(), "EUCANCAN-BE.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
 
     // Conflicting analysis 43f07e4d-e26b-4f4a-b07e-4de26b9f4a50 has a different analysis state:
     @SuppressWarnings("all")
     val awsStudyAnalyses =
         loadJsonString(this.getClass(), "EUCANCAN-BE.aws.conflicting.study.json");
+    val awsAnalysisResp =
+        loadJsonString(this.getClass(), "EUCANCAN-BE.aws.conflicting.response.json");
     val awsStudyAnalysesList =
         loadJsonFixture(
             this.getClass(),
@@ -505,19 +582,47 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
             NotificationName.ANALYSIS_CONFLICT,
             getConflicts(expectedDoc1, awsStudyAnalysesList.get(0).getAnalysisId()));
 
+    // stub collab requests:
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
-                    .withBody(collabAnalyses)
+                    .withBody(resp)
                     .withHeader("Content-Type", "application/json")));
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/EUCANCAN-BE/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
-                    .withBody(awsStudyAnalyses)
+                    .withBody(emptyResp)
+                    .withHeader("Content-Type", "application/json")));
+    // stub aws repo requests:
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(awsAnalysisResp)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")));
 
     // test
@@ -616,6 +721,11 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
   @SneakyThrows
   private String getStudyAnalysesAsString(String studyId) {
     return loadJsonString(getClass(), studyId + ".analysis.json");
+  }
+
+  @SneakyThrows
+  private String getAnalysisResponse(String studyId) {
+    return loadJsonString(getClass(), studyId + ".analysis.response.json");
   }
 
   @NotNull

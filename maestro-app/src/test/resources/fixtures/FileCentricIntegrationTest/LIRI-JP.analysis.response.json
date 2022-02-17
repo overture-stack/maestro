@@ -1,0 +1,607 @@
+{
+  "analyses":
+  [
+    {
+      "analysisType": {
+        "name": "variantCall",
+        "version": 1
+      },
+      "info": {},
+      "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+      "studyId": "LIRI-JP",
+      "analysisState": "PUBLISHED",
+      "updatedAt": "2020-12-02T17:18:32.353334",
+      "firstPublishedAt": "2020-12-02T17:18:32.353334",
+      "publishedAt": "2020-12-02T17:18:32.353334",
+      "samples": [
+        {
+          "info": {},
+          "sampleId": "SA515389",
+          "specimenId": "SP107109",
+          "submitterSampleId": "RK202_C01",
+          "sampleType": "DNA",
+          "specimen": {
+            "info": {},
+            "specimenId": "SP107109",
+            "donorId": "DO48736",
+            "submitterSpecimenId": "RK202_C01",
+            "specimenType": "Primary tumour - solid tissue"
+          },
+          "donor": {
+            "donorId": "DO48736",
+            "submitterDonorId": "RK202",
+            "studyId": "LIRI-JP",
+            "gender": "Female",
+            "info": {}
+          }
+        }
+      ],
+      "files": [
+        {
+          "info": {},
+          "objectId": "b63dff38-e239-5a5d-9c36-ec851049fd12",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz",
+          "fileSize": 44440835,
+          "fileType": "VCF",
+          "fileMd5sum": "93354882b0fc014b49be1b24df8f435e",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "eb2832eb-ad54-574b-bb60-1abf74489ed8",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.indel.vcf.gz.tbi",
+          "fileSize": 1458418,
+          "fileType": "TBI",
+          "fileMd5sum": "ade04a5fd0e9d4052b0ec0b280a9be60",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "feecfb7d-2aa9-5434-a0a0-56a6c5ee4a70",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz",
+          "fileSize": 11431,
+          "fileType": "VCF",
+          "fileMd5sum": "ae2e0a8eb02414569fa06cd56a3e809e",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "e14e73a5-a869-5b9a-a89c-be77fa54135e",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svfix2_4-0-12.20160209.somatic.sv.vcf.gz.tbi",
+          "fileSize": 1756,
+          "fileType": "TBI",
+          "fileMd5sum": "9ce7cdedb7450a05c03e419235ed56a6",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "3106300b-3666-52b7-a3fa-a5096a51814b",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz",
+          "fileSize": 3648,
+          "fileType": "VCF",
+          "fileMd5sum": "492989e81699bd5a56b7956e0be7416d",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "ad4e821d-1908-5e37-8b09-f2bcbe841a6b",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.cnv.vcf.gz.tbi",
+          "fileSize": 5539,
+          "fileType": "TBI",
+          "fileMd5sum": "acdf137ad635f95ee93412fa9153d066",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "bed33bd4-eec1-5905-8480-5def36d7f6de",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz",
+          "fileSize": 1418099,
+          "fileType": "VCF",
+          "fileMd5sum": "1f3cfd1e1ad462cff9871eb2373935ac",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "deab15a3-6820-5bcc-926a-bca2ab5ddaa0",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "1fd69adc-c623-11e3-bf01-24c6515278c0.svcp_1-0-6.20150511.somatic.snv_mnv.vcf.gz.tbi",
+          "fileSize": 236926,
+          "fileType": "TBI",
+          "fileMd5sum": "2233fb90872d759d279395b1a7ad3461",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "233bc863-114c-5ec4-842b-7f44d189eab0",
+          "studyId": "LIRI-JP",
+          "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+          "fileName": "909614f0-ceeb-11e5-8498-af7e4d100685.xml",
+          "fileSize": 58853,
+          "fileType": "XML",
+          "fileMd5sum": "4f8a5a5a1a040f7538760c3b8b944c86",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        }
+      ],
+      "experiment": {
+        "info": {},
+        "analysisId": "909614f0-ceeb-11e5-8498-af7e4d100685",
+        "variantCallingTool": "Sanger variant call pipeline",
+        "matchedNormalSampleSubmitterId": "RK202_B01"
+      }
+    },
+    {
+      "info": {},
+      "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+      "studyId": "LIRI-JP",
+      "analysisState": "PUBLISHED",
+      "updatedAt": "2020-12-02T17:18:32.353334",
+      "firstPublishedAt": "2020-12-02T17:18:32.353334",
+      "publishedAt": "2020-12-02T17:18:32.353334",
+      "samples": [
+        {
+          "info": {},
+          "sampleId": "SA270462",
+          "specimenId": "SP50179",
+          "submitterSampleId": "RK156_C01",
+          "sampleType": "DNA",
+          "specimen": {
+            "info": {},
+            "specimenId": "SP50179",
+            "donorId": "DO23549",
+            "submitterSpecimenId": "RK156_C01",
+            "specimenType": "Primary tumour - solid tissue"
+          },
+          "donor": {
+            "donorId": "DO23549",
+            "submitterDonorId": "RK156",
+            "studyId": "LIRI-JP",
+            "gender": "Female",
+            "info": {}
+          }
+        }
+      ],
+      "files": [
+        {
+          "info": {},
+          "objectId": "24329157-e218-5854-8f45-7fa6b9e046c6",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz",
+          "fileSize": 10536170,
+          "fileType": "VCF",
+          "fileMd5sum": "7d0676c6a85696e1cb2919836b0ab71e",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "ad8a45f3-ec8d-5391-ae93-b19dc982698a",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.indel.vcf.gz.idx",
+          "fileSize": 1031078,
+          "fileType": "IDX",
+          "fileMd5sum": "8269ee64b80e6ec66e590767f697d37b",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "4d070189-bd33-5391-b7af-ea32c6782875",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz",
+          "fileSize": 59633,
+          "fileType": "VCF",
+          "fileMd5sum": "1d0a8bcf2abf8373c6f8cc63cb748aa8",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "14e94abe-1fd1-5a85-8d26-a7291edd80ef",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-10.20151220.somatic.sv.vcf.gz.idx",
+          "fileSize": 11325,
+          "fileType": "IDX",
+          "fileMd5sum": "fdb961feac82a7912bf657450e02c44d",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "107c83c7-595e-5b36-957b-ae706611d5b9",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz",
+          "fileSize": 51548,
+          "fileType": "VCF",
+          "fileMd5sum": "fc246f5e1f670b1f756b8e4294f59504",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "c5496778-0d72-5cc6-aac4-98777cfbc0c2",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.sv.vcf.gz.idx",
+          "fileSize": 10447,
+          "fileType": "IDX",
+          "fileMd5sum": "5aeb4749609bd0a4d81ecffd673a36e1",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "da524891-37af-5a21-9867-c6812018aa22",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz",
+          "fileSize": 1710383,
+          "fileType": "VCF",
+          "fileMd5sum": "1f22fff9e578244ba16762a4c82792e8",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "d87c4599-bba4-5c23-b7a2-57bbeed7eacb",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.germline.sv.vcf.gz.idx",
+          "fileSize": 61514,
+          "fileType": "IDX",
+          "fileMd5sum": "ade5449b588c81496e4e7d2b0b49e3d0",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "46194bd5-b131-55f7-b7b1-99293ba1d6b9",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz",
+          "fileSize": 31242,
+          "fileType": "VCF",
+          "fileMd5sum": "e75eef7af227c5c80d0b499ffd39c43b",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "55283d00-b1a2-521c-99e1-e9d8d88c660d",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-snowman-10.20151220.somatic.indel.vcf.gz.idx",
+          "fileSize": 14606,
+          "fileType": "IDX",
+          "fileMd5sum": "8cae7bbcd28b6a78ad5c53642ae9695c",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "ae5b1daf-05d5-5e41-be2a-9f1d3369d517",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz",
+          "fileSize": 10191,
+          "fileType": "VCF",
+          "fileMd5sum": "f199c6714f7a6880d30bf7aa56e00625",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "c4d10f9f-7e9e-5cb3-a30a-0ff8865952ce",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-dRanger-10.20151220.somatic.sv.vcf.gz.idx",
+          "fileSize": 4212,
+          "fileType": "IDX",
+          "fileMd5sum": "139ce5f29fc0e877d5ae5a5d5e03c3f0",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "8b28796a-1630-5d12-92a7-d8264ee57bc6",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
+          "fileSize": 382815,
+          "fileType": "VCF",
+          "fileMd5sum": "d641e6e373d21d2fc882f2e4550b7b2c",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "a99d2a9c-96c4-5788-9149-79a146f0f925",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "f064f762-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
+          "fileSize": 151104,
+          "fileType": "IDX",
+          "fileMd5sum": "797e4ef5c348d4a23e9e83790812d857",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "bd7aa748-d781-523e-99dc-cb7e3469ddc6",
+          "studyId": "LIRI-JP",
+          "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+          "fileName": "0a3c8def-5ef9-4470-b64d-91f62da29abf.xml",
+          "fileSize": 38858,
+          "fileType": "XML",
+          "fileMd5sum": "486853e9fc33dd7f1429c90a6b526b0d",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        }
+      ],
+      "experiment": {
+        "info": {},
+        "analysisId": "0a3c8def-5ef9-4470-b64d-91f62da29abf",
+        "variantCallingTool": "Broad variant call pipeline",
+        "matchedNormalSampleSubmitterId": "RK156_B01"
+      },
+      "analysisType": {
+        "name": "variantCall",
+        "version": 1
+      }
+    },
+    {
+      "info": {},
+      "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+      "studyId": "LIRI-JP",
+      "analysisState": "PUBLISHED",
+      "updatedAt": "2020-12-02T17:18:32.353334",
+      "firstPublishedAt": "2020-12-02T17:18:32.353334",
+      "publishedAt": "2020-12-02T17:18:32.353334",
+      "samples": [
+        {
+          "info": {},
+          "sampleId": "SA501653",
+          "specimenId": "SP99145",
+          "submitterSampleId": "RK091_C01",
+          "sampleType": "DNA",
+          "specimen": {
+            "info": {},
+            "specimenId": "SP99145",
+            "donorId": "DO45211",
+            "submitterSpecimenId": "RK091_C01",
+            "specimenType": "Primary tumour - solid tissue"
+          },
+          "donor": {
+            "donorId": "DO45211",
+            "submitterDonorId": "RK091",
+            "studyId": "LIRI-JP",
+            "gender": "Female",
+            "info": {}
+          }
+        }
+      ],
+      "files": [
+        {
+          "info": {},
+          "objectId": "316177db-022d-5121-aba8-ce72a92ee778",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz",
+          "fileSize": 404406,
+          "fileType": "VCF",
+          "fileMd5sum": "33b96c263be31852de8d5d15775561c9",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "97c3147f-dd1d-507f-a73d-8646f7ce2a0b",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.sv.vcf.gz.idx",
+          "fileSize": 27885,
+          "fileType": "IDX",
+          "fileMd5sum": "3ed262dbc3b1c427177bdd5af5ef5633",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "18917df0-2cc6-5ac5-88d8-f48acf24c92e",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz",
+          "fileSize": 1853889,
+          "fileType": "VCF",
+          "fileMd5sum": "d3227038bd37e74ff88b07e5408c76ed",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "9abe4aad-9d35-5d4f-955c-8bceb559827e",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.sv.vcf.gz.idx",
+          "fileSize": 67312,
+          "fileType": "IDX",
+          "fileMd5sum": "a7cf0d572f1649c8791cda7892c7be55",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "5c222a32-a79d-55e0-a490-440217c63393",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz",
+          "fileSize": 10429379,
+          "fileType": "VCF",
+          "fileMd5sum": "64ef1b8daf5b6eec161555f5cdad3420",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "ad68b7cb-e91c-506e-acae-812ae2ea7678",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.germline.indel.vcf.gz.idx",
+          "fileSize": 1032907,
+          "fileType": "IDX",
+          "fileMd5sum": "78b2dd0696a1f2ea8ac8e25a77c4e239",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "2af2e398-c27b-5645-b60b-b932a916184d",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz",
+          "fileSize": 400597,
+          "fileType": "VCF",
+          "fileMd5sum": "7e7f3e23aa8869bfd82ce16382b7bc7d",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "bbb31cb3-f175-52c4-ba66-569e1a1d2ed7",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger_snowman-11.20160302.somatic.sv.vcf.gz.idx",
+          "fileSize": 27877,
+          "fileType": "IDX",
+          "fileMd5sum": "130e37274d3c7bebcb41d027eea9148d",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "d9388ed4-1603-584f-9b18-5ff53b9bffeb",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz",
+          "fileSize": 25270,
+          "fileType": "VCF",
+          "fileMd5sum": "ee313d9cbe077063174d92050dde03e0",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "95e7563e-e8d1-5377-8cfc-1c45a72448da",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-snowman-11.20160302.somatic.indel.vcf.gz.idx",
+          "fileSize": 12044,
+          "fileType": "IDX",
+          "fileMd5sum": "941a7d48a3250de6edcbbde1cbb4b7e1",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "60307755-185e-536e-aa3b-190fb9934844",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz",
+          "fileSize": 2540,
+          "fileType": "VCF",
+          "fileMd5sum": "cbafecb01dea96496176bf7497cb9e80",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "221e532c-a0c8-5573-8399-81f785423e57",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-dRanger-11.20160302.somatic.sv.vcf.gz.idx",
+          "fileSize": 1336,
+          "fileType": "IDX",
+          "fileMd5sum": "de502cd9a25efe6f868f3156e8fd302e",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "2664e052-ba85-5be4-89e0-4f2f06a998c0",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz",
+          "fileSize": 422502,
+          "fileType": "VCF",
+          "fileMd5sum": "ca10e3bd248498c9427b2b5e324f0242",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "87d9f1f2-3d13-5dd2-8ed5-d175952e2586",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "aabddb20-c622-11e3-bf01-24c6515278c0.broad-mutect-v3.20160222.somatic.snv_mnv.vcf.gz.idx",
+          "fileSize": 160972,
+          "fileType": "IDX",
+          "fileMd5sum": "9029f92d2d1ea6d76b3a88795756aacc",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "8d8a4db8-071d-5385-9266-06e93ca029d0",
+          "studyId": "LIRI-JP",
+          "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+          "fileName": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9.xml",
+          "fileSize": 41214,
+          "fileType": "XML",
+          "fileMd5sum": "080be308183242812e07359f7c9c1566",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        }
+      ],
+      "experiment": {
+        "info": {},
+        "analysisId": "cbc64c23-1d6f-40db-a49e-dc54ef222ae9",
+        "variantCallingTool": "Broad variant call pipeline",
+        "matchedNormalSampleSubmitterId": "RK091_B01"
+      },
+      "analysisType": {
+        "name": "variantCall",
+        "version": 1
+      }
+    }
+  ],
+  "totalAnalyses": 3,
+  "currentTotalAnalyses": 3
+}

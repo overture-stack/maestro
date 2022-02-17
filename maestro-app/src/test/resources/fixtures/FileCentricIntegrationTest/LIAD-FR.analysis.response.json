@@ -1,0 +1,78 @@
+{
+  "analyses":
+  [
+    {
+      "analysisType": {
+        "name": "sequencingRead",
+        "version": 1
+      },
+      "info": {
+        "dcc_project_code": "LIAD-FR",
+        "isPcawg": false
+      },
+      "analysisId": "EGAR00001165965",
+      "studyId": "LIAD-FR",
+      "analysisState": "PUBLISHED",
+      "updatedAt": "2020-12-02T17:18:32.353334",
+      "firstPublishedAt": "2020-12-02T17:18:32.353334",
+      "publishedAt": "2020-12-02T17:18:32.353334",
+      "samples": [
+        {
+          "info": {},
+          "sampleId": "SA520689",
+          "specimenId": "SP109375",
+          "submitterSampleId": "CHC1124T",
+          "sampleType": "DNA",
+          "specimen": {
+            "info": {},
+            "specimenId": "SP109375",
+            "donorId": "DO49691",
+            "submitterSpecimenId": "CHC1124T",
+            "specimenType": "Primary tumour - solid tissue"
+          },
+          "donor": {
+            "donorId": "DO49691",
+            "submitterDonorId": "CHC1124",
+            "studyId": "LIAD-FR",
+            "gender": "Female",
+            "info": {}
+          }
+        }
+      ],
+      "files": [
+        {
+          "info": {},
+          "objectId": "71729c60-d87a-5458-a88c-38e6dc294733",
+          "studyId": "LIAD-FR",
+          "analysisId": "EGAR00001165965",
+          "fileName": "bundle.EGAR00001165965.xml",
+          "fileSize": 8904,
+          "fileType": "XML",
+          "fileMd5sum": "7243c2e2fa5cbabea1ad9d5e9972524a",
+          "fileAccess": "open",
+          "dataType": "AlignedReads"
+        },
+        {
+          "info": {},
+          "objectId": "cf8d06de-f994-5b32-ad1d-ea815f037fd2",
+          "studyId": "LIAD-FR",
+          "analysisId": "EGAR00001165965",
+          "fileName": "d309e3cdd1fc38b0fa8b5486a48e4b94.CHC1124T.sorted.bam",
+          "fileSize": 7494108451,
+          "fileType": "BAM",
+          "fileMd5sum": "d309e3cdd1fc38b0fa8b5486a48e4b94",
+          "fileAccess": "controlled",
+          "dataType": "AlignedReads"
+        }
+      ],
+      "experiment": {
+        "analysisId": "EGAR00001165965",
+        "aligned": false,
+        "libraryStrategy": "WXS",
+        "info": {}
+      }
+    }
+  ],
+  "totalAnalyses": 1,
+  "currentTotalAnalyses": 1
+}

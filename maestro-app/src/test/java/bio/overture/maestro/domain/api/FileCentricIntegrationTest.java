@@ -265,6 +265,7 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
     // study LIAD-FR and donor DO52693 should be excluded
     // Given
     val studiesArray = loadJsonFixture(this.getClass(), "studies.json", String[].class);
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     val studies =
         Arrays.stream(studiesArray)
             .map(s -> Study.builder().studyId(s).build())
@@ -284,11 +285,26 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
       stubFor(
           request(
                   "GET",
-                  urlEqualTo("/collab/studies/" + studyId + "/analysis?analysisStates=PUBLISHED"))
+                  urlEqualTo(
+                      "/collab/studies/"
+                          + studyId
+                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
               .willReturn(
                   aResponse()
                       .withStatus(200)
                       .withBody(studyAnalyses)
+                      .withHeader("Content-Type", "application/json")));
+      stubFor(
+          request(
+                  "GET",
+                  urlEqualTo(
+                      "/collab/studies/"
+                          + studyId
+                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+              .willReturn(
+                  aResponse()
+                      .withStatus(200)
+                      .withBody(emptyResp)
                       .withHeader("Content-Type", "application/json")));
     }
 
@@ -329,7 +345,8 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldIndexStudyWithExclusionsApplied() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val analyses = loadJsonString(this.getClass(), "PEME-CA.study.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
@@ -346,11 +363,24 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(analyses)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")));
 
     // test
@@ -387,9 +417,11 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldDeleteSingleAnalysis() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.response.json");
     @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
+    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
+
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
@@ -406,17 +438,43 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
             Map.of("COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")
                     .withStatus(200)));
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withBody(emptyResp)
+                    .withHeader("Content-Type", "application/json")
+                    .withStatus(200)));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withBody(awsStudyAnalyses)
+                    .withHeader("Content-Type", "application/json")
+                    .withStatus(200)));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")
                     .withStatus(200)));
 
@@ -450,10 +508,10 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldUpdateExistingFileDocRepository() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.response.json");
     @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.json");
-
+    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.study.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     val expectedDoc0 =
         loadJsonFixture(
             this.getClass(),
@@ -480,19 +538,45 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
                 "COLLAB_REPO_URL", applicationProperties.repositories().get(0).getUrl(),
                 "AWS_REPO_URL", applicationProperties.repositories().get(1).getUrl()));
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
+                    .withHeader("Content-Type", "application/json")));
 
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(awsStudyAnalyses)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")));
 
     // test
@@ -534,11 +618,13 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
   void shouldDetectAndNotifyConflictingDocuments() throws InterruptedException, IOException {
     // Given
     @SuppressWarnings("all")
-    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val collabAnalyses = loadJsonString(this.getClass(), "PEME-CA.study.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
 
     // this has a different analysis id than the one in previous files
     @SuppressWarnings("all")
-    val awsStudyAnalyses = loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.study.json");
+    val awsStudyAnalyses =
+        loadJsonString(this.getClass(), "PEME-CA.aws.conflicting.study.response.json");
     val awsStudyAnalysesList =
         loadJsonFixture(
             this.getClass(),
@@ -565,18 +651,44 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
             getConflicts(expectedDoc1, awsStudyAnalysesList.get(0).getAnalysisId()));
 
     stubFor(
-        request("GET", urlEqualTo("/collab/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(collabAnalyses)
                     .withHeader("Content-Type", "application/json")));
     stubFor(
-        request("GET", urlEqualTo("/aws/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/collab/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
                     .withBody(awsStudyAnalyses)
+                    .withHeader("Content-Type", "application/json")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/aws/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withBody(emptyResp)
                     .withHeader("Content-Type", "application/json")));
 
     // test
@@ -694,6 +806,6 @@ class FileCentricIntegrationTest extends MaestroIntegrationTest {
 
   @SneakyThrows
   private String getStudyAnalysesAsString(String studyId) {
-    return loadJsonString(getClass(), studyId + ".analysis.json");
+    return loadJsonString(getClass(), studyId + ".analysis.response.json");
   }
 }

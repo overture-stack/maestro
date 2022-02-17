@@ -135,28 +135,48 @@ class SongStudyDAOTest {
   @Test
   @SneakyThrows
   void shouldRetryFetchingStudyAnalysesOnFailure() {
-    val analyses = loadJsonString(this.getClass(), "PEME-CA.study.json");
+    val analyses = loadJsonString(this.getClass(), "PEME-CA.response.json");
+    val emptyResp = loadJsonString(this.getClass(), "empty-response.json");
     val analysesList =
         loadJsonFixture(
             this.getClass(), "PEME-CA.study.json", new TypeReference<List<Analysis>>() {});
     stubFor(
-        request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlMatching(
+                    "/studies/PEME-CA/analysis/paginated\\?analysisStates=PUBLISHED&limit=100&offset=\\d+"))
             .inScenario("RANDOM_FAILURE")
             .whenScenarioStateIs(Scenario.STARTED)
             .willReturn(
                 aResponse()
                     .withStatus(400)
-                    .withBody("<p> some wierd unexpected text </p>")
+                    .withBody("<p> some weird unexpected text </p>")
                     .withHeader("content-type", "text/html"))
             .willSetStateTo("WORKING"));
 
     stubFor(
-        request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .inScenario("RANDOM_FAILURE")
             .whenScenarioStateIs("WORKING")
             .willReturn(
                 aResponse()
                     .withBody(analyses)
+                    .withStatus(200)
+                    .withHeader("content-type", "application/json")));
+    // Mock the second/last request:
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .inScenario("RANDOM_FAILURE")
+            .whenScenarioStateIs("WORKING")
+            .willReturn(
+                aResponse()
+                    .withBody(emptyResp)
                     .withStatus(200)
                     .withHeader("content-type", "application/json")));
 
@@ -179,11 +199,24 @@ class SongStudyDAOTest {
             .studyId("PEME-CA")
             .build();
     stubFor(
-        request("GET", urlEqualTo("/studies/PEME-CA/analysis?analysisStates=PUBLISHED"))
+        request(
+                "GET",
+                urlEqualTo(
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(400)
-                    .withBody("<p> Some wierd unexpected text </p>")
+                    .withBody("<p> Some weird unexpected text </p>")
+                    .withHeader("content-type", "text/html")));
+    stubFor(
+        request(
+                "GET",
+                urlEqualTo(
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+            .willReturn(
+                aResponse()
+                    .withStatus(400)
+                    .withBody("<p> Some weird unexpected text </p>")
                     .withHeader("content-type", "text/html")));
 
     // when
