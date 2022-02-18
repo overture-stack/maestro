@@ -234,7 +234,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
                   urlEqualTo(
                       "/collab/studies/"
                           + studyId
-                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
               .willReturn(
                   aResponse()
                       .withStatus(200)
@@ -246,7 +246,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
                   urlEqualTo(
                       "/collab/studies/"
                           + studyId
-                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                          + "/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
               .willReturn(
                   aResponse()
                       .withStatus(200)
@@ -312,7 +312,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -322,7 +322,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -385,7 +385,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withBody(resp)
@@ -395,7 +395,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .willReturn(
                 aResponse()
                     .withBody(emptyResp)
@@ -468,7 +468,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -478,7 +478,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -489,7 +489,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -499,7 +499,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -587,7 +587,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -597,7 +597,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/collab/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -608,7 +608,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(200)
@@ -618,7 +618,7 @@ public class AnalysisCentricIntegrationTest extends MaestroIntegrationTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/aws/studies/EUCANCAN-BE/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .willReturn(
                 aResponse()
                     .withStatus(200)

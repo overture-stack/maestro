@@ -275,7 +275,7 @@ final class DefaultApplicationProperties implements ApplicationProperties {
     private int maxRetries = 3;
     // FIXME: This configuration is called three different things in this codebase
     private String indexableStudyStatesCsv = "PUBLISHED";
-    private int pageLimit = 100;
+    private int pageLimit = 25;
   }
 
   @Data

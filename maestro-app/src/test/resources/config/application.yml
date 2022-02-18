@@ -15,7 +15,7 @@ maestro:
   song:
     indexableStudyStatus: PUBLISHED
     maxRetries: 3
-    pageLimit: 100
+    pageLimit: 25
     timeoutSec:
       study: 5
       analysis: 5

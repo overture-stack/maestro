@@ -32,6 +32,7 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalyses
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -52,12 +53,14 @@ class SongStudyDAO implements StudyDAO {
       "{0}/studies/{1}/analysis/paginated?analysisStates={2}&limit={3}&offset={4}";
   private static final String STUDY_ANALYSIS_URL_TEMPLATE = "{0}/studies/{1}/analysis/{2}";
   private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
+  private static final String MSG_STUDY_DOES_NOT_EXIST =
+      "studyId {0} doesn't exist  in the specified repository";
   private static final String MSG_ANALYSIS_DOES_NOT_EXIST =
       "analysis {0} doesn't exist for studyId {1}, repository {2} (or not in a matching state)";
   private static final int FALLBACK_SONG_TIMEOUT = 60;
   private static final int FALLBACK_SONG_ANALYSIS_TIMEOUT = 5;
   private static final int FALLBACK_SONG_MAX_RETRY = 0;
-  private static final int DEFAULT_SONG_PAGE_LIMIT = 100;
+  private static final int DEFAULT_SONG_PAGE_LIMIT = 25;
   private final WebClient webClient;
   private final int songMaxRetries;
   private final int minBackoffSec = 1;
@@ -99,19 +102,8 @@ class SongStudyDAO implements StudyDAO {
     log.trace("in getStudyAnalyses, args: {} ", getStudyAnalysesCommand);
     val repoBaseUrl = getStudyAnalysesCommand.getFilesRepositoryBaseUrl();
     val studyId = getStudyAnalysesCommand.getStudyId();
-    val retryConfig =
-        Retry.allBut(NotFoundException.class)
-            .retryMax(this.songMaxRetries)
-            .doOnRetry(
-                retryCtx ->
-                    log.error(
-                        "exception happened, retrying  {}",
-                        getStudyAnalysesCommand,
-                        retryCtx.exception()))
-            .exponentialBackoff(
-                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
-    var offset = 0;
+    var initialOffset = 0;
     val url =
         format(
             STUDY_ANALYSES_URL_TEMPLATE,
@@ -119,19 +111,20 @@ class SongStudyDAO implements StudyDAO {
             studyId,
             this.indexableStudyStatuses,
             this.pageLimit,
-            offset);
-    var wrapper =
-        new Object() {
-          int offset = 0;
-        };
+            initialOffset);
+    val threadSafeOffset = new AtomicInteger(0);
 
-    return fetchItems(url)
+    return fetchItems(url, studyId)
+        // The expand method recursively calls fetchItems() and emits response of first page to the
+        // last.
+        // the first request being made is offset = 0, and the second request is offset = 25,
+        // and all the way to the last page.
         .expand(
             rep -> {
               if (rep.getAnalyses().size() == 0) {
                 return Mono.empty();
               }
-              wrapper.offset += this.pageLimit;
+              threadSafeOffset.addAndGet(this.pageLimit);
               val currentUrl =
                   format(
                       STUDY_ANALYSES_URL_TEMPLATE,
@@ -139,12 +132,11 @@ class SongStudyDAO implements StudyDAO {
                       studyId,
                       this.indexableStudyStatuses,
                       this.pageLimit,
-                      wrapper.offset);
-              return fetchItems(currentUrl);
+                      threadSafeOffset.get());
+              return fetchItems(currentUrl, studyId);
             })
         .flatMap(rep -> Flux.fromIterable(rep.getAnalyses()))
         .collectList()
-        .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)))
         .doOnSuccess(
             (list) ->
                 log.trace(
@@ -153,9 +145,25 @@ class SongStudyDAO implements StudyDAO {
                     getStudyAnalysesCommand));
   }
 
-  private Mono<GetAnalysisResponse> fetchItems(@NonNull String url) {
+  private Mono<GetAnalysisResponse> fetchItems(@NonNull String url, @NonNull String studyId) {
     log.trace("get paged analyses, url = {}", url);
-    return this.webClient.get().uri(url).retrieve().bodyToMono(GetAnalysisResponse.class);
+    val retryConfig =
+        Retry.allBut(NotFoundException.class)
+            .retryMax(this.songMaxRetries)
+            .doOnRetry(
+                retryCtx ->
+                    log.error("exception happened, retrying  {}", url, retryCtx.exception()))
+            .exponentialBackoff(
+                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
+    return this.webClient
+        .get()
+        .uri(url)
+        .retrieve()
+        .onStatus(
+            HttpStatus.NOT_FOUND::equals,
+            clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
+        .bodyToMono(GetAnalysisResponse.class)
+        .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)));
   }
 
   @Override

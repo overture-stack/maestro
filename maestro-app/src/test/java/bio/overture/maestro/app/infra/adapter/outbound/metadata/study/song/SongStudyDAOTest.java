@@ -144,7 +144,7 @@ class SongStudyDAOTest {
         request(
                 "GET",
                 urlMatching(
-                    "/studies/PEME-CA/analysis/paginated\\?analysisStates=PUBLISHED&limit=100&offset=\\d+"))
+                    "/studies/PEME-CA/analysis/paginated\\?analysisStates=PUBLISHED&limit=25&offset=\\d+"))
             .inScenario("RANDOM_FAILURE")
             .whenScenarioStateIs(Scenario.STARTED)
             .willReturn(
@@ -158,7 +158,7 @@ class SongStudyDAOTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .inScenario("RANDOM_FAILURE")
             .whenScenarioStateIs("WORKING")
             .willReturn(
@@ -171,7 +171,7 @@ class SongStudyDAOTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=25"))
             .inScenario("RANDOM_FAILURE")
             .whenScenarioStateIs("WORKING")
             .willReturn(
@@ -202,7 +202,7 @@ class SongStudyDAOTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=0"))
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=0"))
             .willReturn(
                 aResponse()
                     .withStatus(400)
@@ -212,7 +212,7 @@ class SongStudyDAOTest {
         request(
                 "GET",
                 urlEqualTo(
-                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=100&offset=100"))
+                    "/studies/PEME-CA/analysis/paginated?analysisStates=PUBLISHED&limit=25&offset=100"))
             .willReturn(
                 aResponse()
                     .withStatus(400)
