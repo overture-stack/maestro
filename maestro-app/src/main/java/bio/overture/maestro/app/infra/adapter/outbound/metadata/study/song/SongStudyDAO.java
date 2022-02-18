@@ -24,6 +24,7 @@ import static reactor.core.publisher.Mono.error;
 import bio.overture.maestro.app.infra.config.properties.ApplicationProperties;
 import bio.overture.maestro.domain.api.exception.NotFoundException;
 import bio.overture.maestro.domain.entities.metadata.study.Analysis;
+import bio.overture.maestro.domain.entities.metadata.study.GetAnalysisResponse;
 import bio.overture.maestro.domain.entities.metadata.study.Study;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAllStudiesCommand;
 import bio.overture.maestro.domain.port.outbound.metadata.study.GetAnalysisCommand;
@@ -31,6 +32,7 @@ import bio.overture.maestro.domain.port.outbound.metadata.study.GetStudyAnalyses
 import bio.overture.maestro.domain.port.outbound.metadata.study.StudyDAO;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -48,7 +50,7 @@ import reactor.retry.Retry;
 class SongStudyDAO implements StudyDAO {
 
   private static final String STUDY_ANALYSES_URL_TEMPLATE =
-      "{0}/studies/{1}/analysis?analysisStates={2}";
+      "{0}/studies/{1}/analysis/paginated?analysisStates={2}&limit={3}&offset={4}";
   private static final String STUDY_ANALYSIS_URL_TEMPLATE = "{0}/studies/{1}/analysis/{2}";
   private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
   private static final String MSG_STUDY_DOES_NOT_EXIST =
@@ -58,6 +60,7 @@ class SongStudyDAO implements StudyDAO {
   private static final int FALLBACK_SONG_TIMEOUT = 60;
   private static final int FALLBACK_SONG_ANALYSIS_TIMEOUT = 5;
   private static final int FALLBACK_SONG_MAX_RETRY = 0;
+  private static final int DEFAULT_SONG_PAGE_LIMIT = 25;
   private final WebClient webClient;
   private final int songMaxRetries;
   private final int minBackoffSec = 1;
@@ -68,11 +71,16 @@ class SongStudyDAO implements StudyDAO {
   private final int studyCallTimeoutSeconds;
 
   private final int analysisCallTimeoutSeconds;
+  private final int pageLimit;
 
   @Inject
   public SongStudyDAO(
       @NonNull WebClient webClient, @NonNull ApplicationProperties applicationProperties) {
     this.webClient = webClient;
+    this.pageLimit =
+        applicationProperties.pageLimit() > 0
+            ? applicationProperties.pageLimit()
+            : DEFAULT_SONG_PAGE_LIMIT;
     this.indexableStudyStatuses = applicationProperties.indexableStudyStatuses();
     this.indexableStudyStatusesList = List.of(indexableStudyStatuses.split(","));
     this.songMaxRetries =
@@ -94,34 +102,68 @@ class SongStudyDAO implements StudyDAO {
     log.trace("in getStudyAnalyses, args: {} ", getStudyAnalysesCommand);
     val repoBaseUrl = getStudyAnalysesCommand.getFilesRepositoryBaseUrl();
     val studyId = getStudyAnalysesCommand.getStudyId();
-    val analysisListType = new ParameterizedTypeReference<List<Analysis>>() {};
-    val retryConfig =
-        Retry.allBut(NotFoundException.class)
-            .retryMax(this.songMaxRetries)
-            .doOnRetry(
-                retryCtx ->
-                    log.error(
-                        "exception happened, retrying  {}",
-                        getStudyAnalysesCommand,
-                        retryCtx.exception()))
-            .exponentialBackoff(
-                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
 
-    return this.webClient
-        .get()
-        .uri(format(STUDY_ANALYSES_URL_TEMPLATE, repoBaseUrl, studyId, this.indexableStudyStatuses))
-        .retrieve()
-        .onStatus(
-            HttpStatus.NOT_FOUND::equals,
-            clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
-        .bodyToMono(analysisListType)
-        .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)))
+    var initialOffset = 0;
+    val url =
+        format(
+            STUDY_ANALYSES_URL_TEMPLATE,
+            repoBaseUrl,
+            studyId,
+            this.indexableStudyStatuses,
+            this.pageLimit,
+            initialOffset);
+    val threadSafeOffset = new AtomicInteger(0);
+
+    return fetchItems(url, studyId)
+        // The expand method recursively calls fetchItems() and emits response of first page to the
+        // last.
+        // the first request being made is offset = 0, and the second request is offset = 25,
+        // and all the way to the last page.
+        .expand(
+            rep -> {
+              if (rep.getAnalyses().size() == 0) {
+                return Mono.empty();
+              }
+              threadSafeOffset.addAndGet(this.pageLimit);
+              val currentUrl =
+                  format(
+                      STUDY_ANALYSES_URL_TEMPLATE,
+                      repoBaseUrl,
+                      studyId,
+                      this.indexableStudyStatuses,
+                      this.pageLimit,
+                      threadSafeOffset.get());
+              return fetchItems(currentUrl, studyId);
+            })
+        .flatMap(rep -> Flux.fromIterable(rep.getAnalyses()))
+        .collectList()
         .doOnSuccess(
             (list) ->
                 log.trace(
                     "getStudyAnalyses out, analyses count {} args: {}",
                     list.size(),
                     getStudyAnalysesCommand));
+  }
+
+  private Mono<GetAnalysisResponse> fetchItems(@NonNull String url, @NonNull String studyId) {
+    log.trace("get paged analyses, url = {}", url);
+    val retryConfig =
+        Retry.allBut(NotFoundException.class)
+            .retryMax(this.songMaxRetries)
+            .doOnRetry(
+                retryCtx ->
+                    log.error("exception happened, retrying  {}", url, retryCtx.exception()))
+            .exponentialBackoff(
+                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
+    return this.webClient
+        .get()
+        .uri(url)
+        .retrieve()
+        .onStatus(
+            HttpStatus.NOT_FOUND::equals,
+            clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
+        .bodyToMono(GetAnalysisResponse.class)
+        .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)));
   }
 
   @Override

@@ -80,6 +80,8 @@ public interface ApplicationProperties {
 
   String indexableStudyStatuses();
 
+  int pageLimit();
+
   int songAnalysisCallTimeoutSeconds();
 
   Slack.SlackChannelInfo getSlackChannelInfo();
