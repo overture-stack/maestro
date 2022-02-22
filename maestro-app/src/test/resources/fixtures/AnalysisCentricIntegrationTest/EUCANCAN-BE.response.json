@@ -1,0 +1,176 @@
+{
+  "analyses":
+  [
+    {
+      "analysisId": "cf1432f7-985e-4858-9432-f7985ee858e4",
+      "studyId": "EUCANCAN-BE",
+      "analysisState": "PUBLISHED",
+      "updatedAt": "2020-12-02T17:18:32.353334",
+      "firstPublishedAt": "2020-12-02T17:18:32.353334",
+      "publishedAt": "2020-12-02T17:18:32.353334",
+      "samples": [
+        {
+          "sampleId": "SA610334",
+          "specimenId": "SP210307",
+          "submitterSampleId": "insilico_2_tumor",
+          "matchedNormalSubmitterSampleId": "insilico_2_normal",
+          "sampleType": "Total DNA",
+          "specimen": {
+            "specimenId": "SP210307",
+            "donorId": "DO250284",
+            "submitterSpecimenId": "insilico_2_tumor",
+            "tumourNormalDesignation": "Tumour",
+            "specimenTissueSource": "Blood derived",
+            "specimenType": "Primary tumour"
+          },
+          "donor": {
+            "donorId": "DO250284",
+            "studyId": "EUCANCAN-BE",
+            "gender": "Female",
+            "submitterDonorId": "insilico_2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "objectId": "94ef9598-537f-574b-842d-1486fac84ade",
+          "studyId": "EUCANCAN-BE",
+          "analysisId": "cf1432f7-985e-4858-9432-f7985ee858e4",
+          "fileName": "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.sv.vcf.gz",
+          "fileSize": 695576,
+          "fileType": "VCF",
+          "fileMd5sum": "f8f8dc5a4899b927fe565183a0798a2a",
+          "fileAccess": "controlled",
+          "dataType": "somatic_sv"
+        },
+        {
+          "objectId": "f215e48c-2d76-5c32-b920-20a95305801f",
+          "studyId": "EUCANCAN-BE",
+          "analysisId": "cf1432f7-985e-4858-9432-f7985ee858e4",
+          "fileName": "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.sv.vcf.gz.tbi",
+          "fileSize": 11732,
+          "fileType": "TBI",
+          "fileMd5sum": "a48ef040c536807e6bf7107a216b54f2",
+          "fileAccess": "controlled",
+          "dataType": "vcf_index"
+        }
+      ],
+      "analysisType": {
+        "name": "variant_calling",
+        "version": 2
+      },
+      "workflow": {
+        "name": "sanger-wgs-variant-calling",
+        "inputs": [
+          {
+            "analysis_type": "sequencing_alignment",
+            "tumour_analysis_id": "13b13548-6e32-412d-b135-486e32512dbe"
+          },
+          {
+            "analysis_type": "sequencing_alignment",
+            "normal_analysis_id": "0efe5aeb-3e21-48a5-be5a-eb3e2118a502"
+          }
+        ],
+        "run_id": "wise_brown",
+        "version": "0.1.0-dev",
+        "short_name": "sanger-wgs"
+      },
+      "experiment": {
+        "library_strategy": "WGS"
+      },
+      "variant_type": [
+        "sv"
+      ],
+      "variant_class": [
+        "somatic"
+      ]
+    },
+    {
+      "analysisId": "43f07e4d-e26b-4f4a-b07e-4de26b9f4a50",
+      "studyId": "EUCANCAN-BE",
+      "analysisState": "PUBLISHED",
+      "updatedAt": "2020-12-02T17:18:32.353334",
+      "firstPublishedAt": "2020-12-02T17:18:32.353334",
+      "publishedAt": "2020-12-02T17:18:32.353334",
+      "samples": [
+        {
+          "sampleId": "SA610334",
+          "specimenId": "SP210307",
+          "submitterSampleId": "insilico_2_tumor",
+          "matchedNormalSubmitterSampleId": "insilico_2_normal",
+          "sampleType": "Total DNA",
+          "specimen": {
+            "specimenId": "SP210307",
+            "donorId": "DO250284",
+            "submitterSpecimenId": "insilico_2_tumor",
+            "tumourNormalDesignation": "Tumour",
+            "specimenTissueSource": "Blood derived",
+            "specimenType": "Primary tumour"
+          },
+          "donor": {
+            "donorId": "DO250284",
+            "studyId": "EUCANCAN-BE",
+            "gender": "Female",
+            "submitterDonorId": "insilico_2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "objectId": "882e4591-b004-5564-b2ec-1a210f8cba6b",
+          "studyId": "EUCANCAN-BE",
+          "analysisId": "43f07e4d-e26b-4f4a-b07e-4de26b9f4a50",
+          "fileName": "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.snv.vcf.gz",
+          "fileSize": 927567,
+          "fileType": "VCF",
+          "fileMd5sum": "0d38c7ed8d5ca347deca7b5ef155823b",
+          "fileAccess": "controlled",
+          "dataType": "somatic_snv"
+        },
+        {
+          "objectId": "c6d6eee4-a2cd-513d-a8e5-4d06098d54fe",
+          "studyId": "EUCANCAN-BE",
+          "analysisId": "43f07e4d-e26b-4f4a-b07e-4de26b9f4a50",
+          "fileName": "EUCANCAN-BE.DO250284.SA610334.wgs.20200413.sanger-wgs.somatic.snv.vcf.gz.tbi",
+          "fileSize": 168704,
+          "fileType": "TBI",
+          "fileMd5sum": "acd5e3780a91ed0364af7ce8106edd3d",
+          "fileAccess": "controlled",
+          "dataType": "vcf_index"
+        }
+      ],
+      "analysisType": {
+        "name": "variant_calling",
+        "version": 2
+      },
+      "workflow": {
+        "name": "sanger-wgs-variant-calling",
+        "inputs": [
+          {
+            "analysis_type": "sequencing_alignment",
+            "tumour_analysis_id": "13b13548-6e32-412d-b135-486e32512dbe"
+          },
+          {
+            "analysis_type": "sequencing_alignment",
+            "normal_analysis_id": "0efe5aeb-3e21-48a5-be5a-eb3e2118a502"
+          }
+        ],
+        "run_id": "wise_brown",
+        "version": "0.1.0-dev",
+        "short_name": "sanger-wgs"
+      },
+      "experiment": {
+        "library_strategy": "WGS"
+      },
+      "variant_type": [
+        "snv"
+      ],
+      "variant_class": [
+        "somatic"
+      ]
+    }
+  ],
+  "totalAnalyses": 2,
+  "currentTotalAnalyses": 2
+}
+
