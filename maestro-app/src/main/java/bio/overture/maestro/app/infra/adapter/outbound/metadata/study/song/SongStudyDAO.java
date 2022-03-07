@@ -50,7 +50,7 @@ import reactor.retry.Retry;
 class SongStudyDAO implements StudyDAO {
 
   private static final String STUDY_ANALYSES_URL_TEMPLATE =
-      "{0}/studies/{1}/analysis/paginated?analysisStates={2}&limit={3}&offset={4}";
+      "{0}/studies/{1}/analysis/paginated?analysisStates={2}&limit={3,number,#}&offset={4,number,#}";
   private static final String STUDY_ANALYSIS_URL_TEMPLATE = "{0}/studies/{1}/analysis/{2}";
   private static final String STUDIES_URL_TEMPLATE = "{0}/studies/all";
   private static final String MSG_STUDY_DOES_NOT_EXIST =
