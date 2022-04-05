@@ -138,6 +138,8 @@ management:
       show_details: ALWAYS
 
 spring:
+  config:
+    useLegacyProcessing: true
   application:
     name: maestro
   output.ansi.enabled: ALWAYS

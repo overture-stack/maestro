@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -418,7 +417,6 @@ class DefaultIndexer implements Indexer {
         .map(study -> toStudyAndRepository(studyRepository, study));
   }
 
-  @NotNull
   private Throwable handleGetStudiesError(StudyRepository studyRepository, Throwable e) {
     val errMsg = getErrorMessageOrType(e);
     notifyFailedToFetchStudies(studyRepository.getCode(), errMsg);
@@ -551,7 +549,6 @@ class DefaultIndexer implements Indexer {
     return notifyAndReturnFallback(failedAnalysisId, failureContext, indexName);
   }
 
-  @NotNull
   private Mono<IndexResult> notifyAndReturnFallback(
       Map<String, Set<String>> failingIds,
       Map<String, ? extends Object> contextInfo,

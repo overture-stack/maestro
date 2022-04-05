@@ -43,12 +43,12 @@
     </appender>
 
     <!-- Wrap calls to the console logger with async dispatching to Disruptor. -->
-    <appender name="async" class="reactor.logback.AsyncAppender">
+    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="stdout"/>
     </appender>
 
     <!-- Wrap calls to the console logger with async dispatching to Disruptor. -->
-    <appender name="asyncFailureLog" class="reactor.logback.AsyncAppender">
+    <appender name="asyncFailureLog" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="failureLogAppender"/>
     </appender>
 
