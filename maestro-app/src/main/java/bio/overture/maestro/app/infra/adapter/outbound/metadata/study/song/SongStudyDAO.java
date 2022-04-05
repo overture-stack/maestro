@@ -44,6 +44,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.RetryBackoffSpec;
 
 @Slf4j
 class SongStudyDAO implements StudyDAO {
@@ -212,7 +213,7 @@ class SongStudyDAO implements StudyDAO {
   }
 
   private reactor.util.retry.Retry getRetryConfigs(Object logParam) {
-    return reactor.util.retry.RetryBackoffSpec.backoff(
+    return RetryBackoffSpec.backoff(
             songMaxRetries, Duration.ofSeconds(minBackoffSec))
         .maxBackoff(Duration.ofSeconds(maxBackoffSec))
         .filter((e) -> !(e instanceof NotFoundException))
