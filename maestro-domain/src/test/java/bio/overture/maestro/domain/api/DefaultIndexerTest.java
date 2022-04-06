@@ -17,8 +17,10 @@
 
 package bio.overture.maestro.domain.api;
 
-import static bio.overture.maestro.domain.api.DefaultIndexer.*;
-import static bio.overture.maestro.test.Fixture.*;
+import static bio.overture.maestro.domain.api.DefaultIndexer.ALL;
+import static bio.overture.maestro.domain.api.DefaultIndexer.REPO_CODE;
+import static bio.overture.maestro.test.Fixture.loadJsonFixture;
+import static bio.overture.maestro.test.Fixture.loadJsonFixtureSnakeCase;
 import static bio.overture.maestro.test.TestCategory.UNIT_TEST;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -55,7 +57,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -278,7 +279,6 @@ class DefaultIndexerTest {
         .removeFiles(eq(Set.of(fileCentricDocuments.get(0).getObjectId())));
   }
 
-  @NotNull
   private Map<String, Object> getConflicts(List<FileCentricDocument> fileCentricDocuments) {
     return Map.of(
         "conflicts",

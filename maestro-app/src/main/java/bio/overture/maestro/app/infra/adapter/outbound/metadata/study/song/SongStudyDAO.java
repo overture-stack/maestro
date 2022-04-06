@@ -44,7 +44,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.retry.Retry;
+import reactor.util.retry.RetryBackoffSpec;
 
 @Slf4j
 class SongStudyDAO implements StudyDAO {
@@ -147,14 +147,9 @@ class SongStudyDAO implements StudyDAO {
 
   private Mono<GetAnalysisResponse> fetchItems(@NonNull String url, @NonNull String studyId) {
     log.trace("get paged analyses, url = {}", url);
-    val retryConfig =
-        Retry.allBut(NotFoundException.class)
-            .retryMax(this.songMaxRetries)
-            .doOnRetry(
-                retryCtx ->
-                    log.error("exception happened, retrying  {}", url, retryCtx.exception()))
-            .exponentialBackoff(
-                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
+
+    val retrySpec = getRetryConfigs(url);
+
     return this.webClient
         .get()
         .uri(url)
@@ -163,7 +158,7 @@ class SongStudyDAO implements StudyDAO {
             HttpStatus.NOT_FOUND::equals,
             clientResponse -> error(notFound(MSG_STUDY_DOES_NOT_EXIST, studyId)))
         .bodyToMono(GetAnalysisResponse.class)
-        .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)));
+        .transform(retryAndTimeout(retrySpec, Duration.ofSeconds(this.studyCallTimeoutSeconds)));
   }
 
   @Override
@@ -171,13 +166,8 @@ class SongStudyDAO implements StudyDAO {
     log.trace("in getStudyAnalyses, args: {} ", getAllStudiesCommand);
     val repoBaseUrl = getAllStudiesCommand.getFilesRepositoryBaseUrl();
     val StringListType = new ParameterizedTypeReference<List<String>>() {};
-    val retryConfig =
-        Retry.allBut(NotFoundException.class)
-            .retryMax(this.songMaxRetries)
-            .doOnRetry(
-                retryCtx -> log.error("retrying  {}", getAllStudiesCommand, retryCtx.exception()))
-            .exponentialBackoff(
-                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
+
+    val retrySpec = getRetryConfigs(getAllStudiesCommand);
 
     return this.webClient
         .get()
@@ -187,7 +177,7 @@ class SongStudyDAO implements StudyDAO {
         // we need to first parse as mono then stream it as flux because of this :
         // https://github.com/spring-projects/spring-framework/issues/22662
         .bodyToMono(StringListType)
-        .transform(retryAndTimeout(retryConfig, Duration.ofSeconds(this.studyCallTimeoutSeconds)))
+        .transform(retryAndTimeout(retrySpec, Duration.ofSeconds(this.studyCallTimeoutSeconds)))
         .flatMapMany(Flux::fromIterable)
         .map(id -> Study.builder().studyId(id).build());
   }
@@ -198,14 +188,7 @@ class SongStudyDAO implements StudyDAO {
     val repoBaseUrl = command.getFilesRepositoryBaseUrl();
     val analysisId = command.getAnalysisId();
     val studyId = command.getStudyId();
-    val retryConfig =
-        Retry.allBut(NotFoundException.class)
-            .retryMax(this.songMaxRetries)
-            .doOnRetry(
-                retryCtx ->
-                    log.error("exception happened, retrying  {}", command, retryCtx.exception()))
-            .exponentialBackoff(
-                Duration.ofSeconds(minBackoffSec), Duration.ofSeconds(maxBackoffSec));
+    val retrySpec = getRetryConfigs(command);
 
     return this.webClient
         .get()
@@ -216,8 +199,7 @@ class SongStudyDAO implements StudyDAO {
             clientResponse ->
                 error(notFound(MSG_ANALYSIS_DOES_NOT_EXIST, analysisId, studyId, repoBaseUrl)))
         .bodyToMono(Analysis.class)
-        .transform(
-            retryAndTimeout(retryConfig, Duration.ofSeconds(this.analysisCallTimeoutSeconds)))
+        .transform(retryAndTimeout(retrySpec, Duration.ofSeconds(this.analysisCallTimeoutSeconds)))
         .doOnSuccess(
             (analysis) -> log.trace("getAnalysis out, analysis {} args: {}", analysis, command))
         .flatMap(
@@ -230,7 +212,16 @@ class SongStudyDAO implements StudyDAO {
             });
   }
 
-  private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(Retry<Object> retry, Duration timeout) {
+  private reactor.util.retry.Retry getRetryConfigs(Object logParam) {
+    return RetryBackoffSpec.backoff(
+            songMaxRetries, Duration.ofSeconds(minBackoffSec))
+        .maxBackoff(Duration.ofSeconds(maxBackoffSec))
+        .filter((e) -> !(e instanceof NotFoundException))
+        .doBeforeRetry(retryCtx -> log.error("retrying  {}", logParam, retryCtx.failure()));
+  }
+
+  private <T> Function<Mono<T>, Mono<T>> retryAndTimeout(
+      reactor.util.retry.Retry retry, Duration timeout) {
     // order is important here timeouts should be retried.
     return (in) -> in.timeout(timeout).retryWhen(retry);
   }

@@ -71,7 +71,7 @@ spec:
                     commit = sh(returnStdout: true, script: 'git describe --always').trim()
                 }
                 script {
-                    version = sh(returnStdout: true, script: "cat ./.mvn/maven.config | grep revision | cut -d '=' -f2").trim()
+                    version = sh(returnStdout: true, script: "cat pom.xml | grep \"<version>.*</version>\" | head -1 |awk -F'[><]' '{print \$3}'").trim()
                 }
             }
         }
@@ -80,9 +80,7 @@ spec:
         stage('Test') {
             steps {
                 container('jdk') {
-                    // remove the snapshot and append the commit (the dot before ${commit} is intentional)
-                    // this does NOT publish to a maven artifacts store
-                    sh "./mvnw -Dsha1=.${commit} -Dchangelist=-${BUILD_NUMBER} test package"
+                    sh "./mvnw test package"
                 }
             }
         }
@@ -186,12 +184,5 @@ spec:
 			   ])
 		   }
 	   }
-
-    }
-
-    post {
-        always {
-            junit "**/TEST-*.xml"
-        }
     }
 }

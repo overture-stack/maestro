@@ -27,7 +27,6 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -101,7 +100,6 @@ public class SearchAdapterHelper {
     return buildIndexResult(failures, indexName);
   }
 
-  @NotNull
   private static <T> Set<String> tryBulkUpsertRequestForPart(
       Map.Entry<Integer, List<T>> entry,
       int maxRetriesAttempts,
