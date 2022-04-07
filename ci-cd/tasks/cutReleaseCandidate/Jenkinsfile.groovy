@@ -35,7 +35,7 @@ pipeline {
                     commit = sh(returnStdout: true, script: 'git describe --always').trim()
                 }
                 script {
-                    version = sh(returnStdout: true, script: "cat ./.mvn/maven.config | grep revision | cut -d '=' -f2").trim()
+                    version = sh(returnStdout: true, script: "cat pom.xml | grep \"<version>.*</version>\" | head -1 |awk -F'[><]' '{print \$3}'").trim()
                 }
                 withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh "git checkout -b rc/${version}-${commit}"

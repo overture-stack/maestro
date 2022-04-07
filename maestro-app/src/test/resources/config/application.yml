@@ -1,6 +1,9 @@
 server.port:
   50000
 
+spring:
+  config:
+     useLegacyProcessing: true
 maestro:
   disableIndexing: false
   disableEventIndexing: false

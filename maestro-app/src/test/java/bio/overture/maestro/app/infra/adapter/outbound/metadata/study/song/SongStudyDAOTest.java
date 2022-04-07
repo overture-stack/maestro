@@ -33,6 +33,7 @@ import bio.overture.maestro.test.TestCategory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import java.util.List;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -47,7 +48,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.retry.RetryExhaustedException;
+import reactor.core.Exceptions;
 import reactor.test.StepVerifier;
 
 @Slf4j
@@ -89,7 +90,7 @@ class SongStudyDAOTest {
     StepVerifier.create(analysesMono)
         .expectErrorSatisfies(
             (e) -> {
-              assertTrue(e instanceof RetryExhaustedException);
+              assertTrue(reactor.core.Exceptions.isRetryExhausted(e));
             })
         .verify();
   }
@@ -223,7 +224,7 @@ class SongStudyDAOTest {
     val analysesMono = songStudyDAO.getStudyAnalyses(command);
 
     // then
-    StepVerifier.create(analysesMono).expectError(RetryExhaustedException.class).verify();
+    StepVerifier.create(analysesMono).expectErrorMatches(Exceptions::isRetryExhausted).verify();
   }
 
   @Import({SongConfig.class})
