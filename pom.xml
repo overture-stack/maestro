@@ -29,7 +29,6 @@
     <groupId>bio.overture</groupId>
     <artifactId>maestro</artifactId>
     <version>4.2.0</version>
-
     <dependencies>
     </dependencies>
 
