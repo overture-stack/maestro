@@ -145,39 +145,17 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   @SneakyThrows
   private UpdateRequest mapAnalysisToUpsertRepositoryQuery(
       AnalysisCentricDocument analysisCentricDocument) {
-    val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-
-    val paramsBuilder = new HashMap<String, Object>();
-    paramsBuilder.put(
-        "repository",
-        mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
-    paramsBuilder.put("analysis_state", analysisCentricDocument.getAnalysisState());
-    paramsBuilder.put("updated_at", getDateIso(analysisCentricDocument.getUpdatedAt()));
-
-    if (analysisCentricDocument.getPublishedAt() != null) {
-      // Nullable as may not have been published
-      paramsBuilder.put("published_at", getDateIso(analysisCentricDocument.getPublishedAt()));
-    }
-
-    if (analysisCentricDocument.getFirstPublishedAt() != null) {
-      paramsBuilder.put(
-          "first_published_at", getDateIso(analysisCentricDocument.getFirstPublishedAt()));
-    }
-
-    val parameters = unmodifiableMap(paramsBuilder);
-    val inline = getInline(parameters);
-
     return new UpdateRequest()
         .id(analysisCentricDocument.getAnalysisId())
         .index(this.indexName)
-        .script(inline)
-        .upsert(
+        .doc(
             new IndexRequest()
                 .index(this.indexName)
                 .id(analysisCentricDocument.getAnalysisId())
                 .source(
                     analysisCentricJSONWriter.writeValueAsString(analysisCentricDocument),
-                    XContentType.JSON));
+                    XContentType.JSON))
+        .docAsUpsert(true);
   }
 
   @Retryable(maxAttempts = 5, backoff = @Backoff(value = 1000, multiplier = 1.5))

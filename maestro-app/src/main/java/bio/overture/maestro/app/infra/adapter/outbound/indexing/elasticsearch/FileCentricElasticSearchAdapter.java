@@ -264,45 +264,16 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
 
   @SneakyThrows
   private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
-    val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-
-    // this ISO date format is added because in one instance where maestro was deployed
-    // an error to transform java.util.date was raised:
-    // cannot write time value xcontent for unknown value of type class java.util.Date
-    // there seem to be a class loader issue that cannot load the date transfomers in
-    // org.elasticsearch.common.xcontent.XContentBuilder
-    // root cause not found.
-    val paramsBuilder = new HashMap<String, Object>();
-    paramsBuilder.put(
-        "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
-    paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
-    paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
-
-    if (fileCentricDocument.getAnalysis().getPublishedAt() != null) {
-      // Nullable as may not have been published
-      paramsBuilder.put(
-          "published_at", getDateIso(fileCentricDocument.getAnalysis().getPublishedAt()));
-    }
-
-    if (fileCentricDocument.getAnalysis().getFirstPublishedAt() != null) {
-      paramsBuilder.put(
-          "first_published_at",
-          getDateIso(fileCentricDocument.getAnalysis().getFirstPublishedAt()));
-    }
-
-    val parameters = unmodifiableMap(paramsBuilder);
-    val inline = getInlineForFile(parameters);
-
     return new UpdateRequest()
         .id(fileCentricDocument.getObjectId())
         .index(this.indexName)
-        .script(inline)
-        .upsert(
+        .doc(
             new IndexRequest()
                 .index(this.indexName)
                 .id(fileCentricDocument.getObjectId())
                 .source(
                     fileCentricJSONWriter.writeValueAsString(fileCentricDocument),
-                    XContentType.JSON));
+                    XContentType.JSON))
+        .docAsUpsert(true);
   }
 }
