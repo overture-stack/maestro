@@ -44,6 +44,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.admin.indices.alias.Alias;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -263,7 +264,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   }
 
   @SneakyThrows
-  private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
+  private BulkRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
     // this ISO date format is added because in one instance where maestro was deployed
@@ -275,8 +276,6 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     val paramsBuilder = new HashMap<String, Object>();
     paramsBuilder.put(
         "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
-    paramsBuilder.put(
-        "analysis", mapper.convertValue(fileCentricDocument.getAnalysis(), Map.class));
     paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
 
@@ -295,11 +294,27 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     val parameters = unmodifiableMap(paramsBuilder);
     val inline = getInlineForFile(parameters);
 
-    return new UpdateRequest()
-        .id(fileCentricDocument.getObjectId())
-        .index(this.indexName)
-        .script(inline)
-        .scriptedUpsert(true)
-        .upsert();
+    BulkRequest bulkRequest = new BulkRequest();
+
+    bulkRequest.add(
+        new UpdateRequest()
+            .id(fileCentricDocument.getObjectId())
+            .index(this.indexName)
+            .docAsUpsert(true)
+            .doc(
+                new IndexRequest()
+                    .index(this.indexName)
+                    .id(fileCentricDocument.getObjectId())
+                    .source(
+                        fileCentricJSONWriter.writeValueAsString(fileCentricDocument),
+                        XContentType.JSON)));
+
+    bulkRequest.add(
+        new UpdateRequest()
+            .id(fileCentricDocument.getObjectId())
+            .index(this.indexName)
+            .script(inline));
+
+    return bulkRequest;
   }
 }

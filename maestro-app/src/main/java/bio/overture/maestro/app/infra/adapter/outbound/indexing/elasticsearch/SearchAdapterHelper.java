@@ -53,7 +53,7 @@ public class SearchAdapterHelper {
       String indexName,
       RestHighLevelClient client,
       Function<T, String> documentAnalysisIdExtractor,
-      Function<T, UpdateRequest> mapper) {
+      Function<T, BulkRequest> mapper) {
     log.debug("in batchUpsertAnalysisRepositories, analyses count: {} ", documents.size());
     return Mono.fromSupplier(
             () ->
@@ -78,7 +78,7 @@ public class SearchAdapterHelper {
       String indexName,
       RestHighLevelClient client,
       Function<T, String> documentAnalysisIdExtractor,
-      Function<T, UpdateRequest> mapper) {
+      Function<T, BulkRequest> mapper) {
     log.trace(
         "in SearchAdapterHelper - bulkUpsertAnalysisRepositories, analyses count : {} ",
         analyses.size());
@@ -104,7 +104,7 @@ public class SearchAdapterHelper {
       Map.Entry<Integer, List<T>> entry,
       int maxRetriesAttempts,
       long retriesWaitDuration,
-      Function<T, UpdateRequest> mapper,
+      Function<T, BulkRequest> mapper,
       Function<T, String> documentAnalysisIdExtractor,
       RestHighLevelClient client) {
     val partNum = entry.getKey();
@@ -143,15 +143,16 @@ public class SearchAdapterHelper {
   }
 
   private static <T> void doRequestForPart(
-      List<T> listPart, Function<T, UpdateRequest> mapper, RestHighLevelClient client)
+      List<T> listPart, Function<T, BulkRequest> mapper, RestHighLevelClient client)
       throws IOException {
     bulkUpdateRequest(listPart.stream().map(mapper).collect(Collectors.toList()), client);
   }
 
-  private static void bulkUpdateRequest(List<UpdateRequest> requests, RestHighLevelClient client)
+  private static void bulkUpdateRequest(List<BulkRequest> bulkRequests, RestHighLevelClient client)
       throws IOException {
-    val bulkRequest = buildBulkUpdateRequest(requests);
-    checkForBulkUpdateFailure(client.bulk(bulkRequest, RequestOptions.DEFAULT));
+    for (BulkRequest bulkRequest : bulkRequests) {
+      checkForBulkUpdateFailure(client.bulk(bulkRequest, RequestOptions.DEFAULT));
+    }
   }
 
   public static IndexResult buildIndexResult(
