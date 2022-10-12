@@ -27,7 +27,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.admin.indices.alias.Alias;
-import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -144,7 +143,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
   }
 
   @SneakyThrows
-  private BulkRequest mapAnalysisToUpsertRepositoryQuery(
+  private UpdateRequest mapAnalysisToUpsertRepositoryQuery(
       AnalysisCentricDocument analysisCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
@@ -168,28 +167,18 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
     val parameters = unmodifiableMap(paramsBuilder);
     val inline = getInline(parameters);
 
-    BulkRequest bulkRequest = new BulkRequest();
-
-    bulkRequest.add(
-        new UpdateRequest()
-            .id(analysisCentricDocument.getAnalysisId())
-            .index(this.indexName)
-            .docAsUpsert(true)
-            .doc(
-                new IndexRequest()
-                    .index(this.indexName)
-                    .id(analysisCentricDocument.getAnalysisId())
-                    .source(
-                        analysisCentricJSONWriter.writeValueAsString(analysisCentricDocument),
-                        XContentType.JSON)));
-
-    bulkRequest.add(
-        new UpdateRequest()
-            .id(analysisCentricDocument.getAnalysisId())
-            .index(this.indexName)
-            .script(inline));
-
-    return bulkRequest;
+    return new UpdateRequest()
+        .id(analysisCentricDocument.getAnalysisId())
+        .index(this.indexName)
+        .script(inline)
+        .scriptedUpsert(true)
+        .upsert(
+          new IndexRequest()
+              .index(this.indexName)
+              .id(analysisCentricDocument.getAnalysisId())
+              .source(
+                      analysisCentricJSONWriter.writeValueAsString(analysisCentricDocument),
+                      XContentType.JSON));
   }
 
   @Retryable(maxAttempts = 5, backoff = @Backoff(value = 1000, multiplier = 1.5))

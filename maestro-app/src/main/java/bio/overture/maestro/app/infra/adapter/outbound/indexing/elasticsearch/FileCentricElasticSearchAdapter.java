@@ -264,7 +264,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
   }
 
   @SneakyThrows
-  private BulkRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
+  private UpdateRequest mapFileToUpsertRepositoryQuery(FileCentricDocument fileCentricDocument) {
     val mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
     // this ISO date format is added because in one instance where maestro was deployed
@@ -294,27 +294,17 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     val parameters = unmodifiableMap(paramsBuilder);
     val inline = getInlineForFile(parameters);
 
-    BulkRequest bulkRequest = new BulkRequest();
-
-    bulkRequest.add(
-        new UpdateRequest()
-            .id(fileCentricDocument.getObjectId())
-            .index(this.indexName)
-            .docAsUpsert(true)
-            .doc(
-                new IndexRequest()
-                    .index(this.indexName)
-                    .id(fileCentricDocument.getObjectId())
-                    .source(
-                        fileCentricJSONWriter.writeValueAsString(fileCentricDocument),
-                        XContentType.JSON)));
-
-    bulkRequest.add(
-        new UpdateRequest()
-            .id(fileCentricDocument.getObjectId())
-            .index(this.indexName)
-            .script(inline));
-
-    return bulkRequest;
+    return new UpdateRequest()
+        .id(fileCentricDocument.getObjectId())
+        .index(this.indexName)
+        .script(inline)
+        .scriptedUpsert(true)
+        .upsert(
+            new IndexRequest()
+                .index(this.indexName)
+                .id(fileCentricDocument.getObjectId())
+                .source(
+                    fileCentricJSONWriter.writeValueAsString(fileCentricDocument),
+                    XContentType.JSON));
   }
 }

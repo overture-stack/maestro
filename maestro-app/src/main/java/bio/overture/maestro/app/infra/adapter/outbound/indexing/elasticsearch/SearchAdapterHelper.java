@@ -53,7 +53,7 @@ public class SearchAdapterHelper {
       String indexName,
       RestHighLevelClient client,
       Function<T, String> documentAnalysisIdExtractor,
-      Function<T, BulkRequest> mapper) {
+      Function<T, UpdateRequest> mapper) {
     log.debug("in batchUpsertAnalysisRepositories, analyses count: {} ", documents.size());
     return Mono.fromSupplier(
             () ->
@@ -78,7 +78,7 @@ public class SearchAdapterHelper {
       String indexName,
       RestHighLevelClient client,
       Function<T, String> documentAnalysisIdExtractor,
-      Function<T, BulkRequest> mapper) {
+      Function<T, UpdateRequest> mapper) {
     log.trace(
         "in SearchAdapterHelper - bulkUpsertAnalysisRepositories, analyses count : {} ",
         analyses.size());
@@ -104,7 +104,7 @@ public class SearchAdapterHelper {
       Map.Entry<Integer, List<T>> entry,
       int maxRetriesAttempts,
       long retriesWaitDuration,
-      Function<T, BulkRequest> mapper,
+      Function<T, UpdateRequest> mapper,
       Function<T, String> documentAnalysisIdExtractor,
       RestHighLevelClient client) {
     val partNum = entry.getKey();
@@ -143,16 +143,15 @@ public class SearchAdapterHelper {
   }
 
   private static <T> void doRequestForPart(
-      List<T> listPart, Function<T, BulkRequest> mapper, RestHighLevelClient client)
+      List<T> listPart, Function<T, UpdateRequest> mapper, RestHighLevelClient client)
       throws IOException {
     bulkUpdateRequest(listPart.stream().map(mapper).collect(Collectors.toList()), client);
   }
 
-  private static void bulkUpdateRequest(List<BulkRequest> bulkRequests, RestHighLevelClient client)
+  private static void bulkUpdateRequest(List<UpdateRequest> requests, RestHighLevelClient client)
       throws IOException {
-    for (BulkRequest bulkRequest : bulkRequests) {
-      checkForBulkUpdateFailure(client.bulk(bulkRequest, RequestOptions.DEFAULT));
-    }
+    val bulkRequest = buildBulkUpdateRequest(requests);
+    checkForBulkUpdateFailure(client.bulk(bulkRequest, RequestOptions.DEFAULT));
   }
 
   public static IndexResult buildIndexResult(
@@ -222,7 +221,6 @@ public class SearchAdapterHelper {
             ScriptType.INLINE,
             "painless",
             "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }\n"
-                + "ctx._source.analysis = params.analysis;\n"
                 + "ctx._source.analysis.analysis_state = params.analysis_state;\n"
                 + "ctx._source.analysis.updated_at = ZonedDateTime.parse(params.updated_at).toInstant().toEpochMilli();\n"
                 + "if (params.published_at != null) { ctx._source.analysis.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli(); }\n"
