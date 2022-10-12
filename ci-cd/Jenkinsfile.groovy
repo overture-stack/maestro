@@ -15,14 +15,7 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-def commit = "UNKNOWN"
-def version = "UNKNOWN"
-def dockerRepo = "ghcr.io/overture-stack/maestro"
-pipeline {
-    agent {
-        kubernetes {
-            label 'maestro-executor'
-            yaml """
+String podSpec = '''
 apiVersion: v1
 kind: Pod
 spec:
@@ -59,130 +52,184 @@ spec:
   volumes:
   - name: docker-graph-storage
     emptyDir: {}
-"""
+'''
+
+pipeline {
+    agent {
+        kubernetes {
+            yaml podSpec
         }
     }
+
+    environment {
+        dockerHub = 'overture/maestro'
+        gitHubRegistry = 'ghcr.io'
+        gitHubRepo = 'overture-stack/maestro'
+        githubPackages = "${gitHubRegistry}/${gitHubRepo}"
+
+        commit = sh(
+            returnStdout: true,
+            script: 'git describe --always'
+        ).trim()
+
+        version = readMavenPom().getVersion()
+    }
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        timestamps()
+    }
+
     stages {
-
-        // get the commit and version number for current release
-        stage('Prepare') {
-            steps {
-                script {
-                    commit = sh(returnStdout: true, script: 'git describe --always').trim()
-                }
-                script {
-                    version = sh(returnStdout: true, script: "cat pom.xml | grep \"<version>.*</version>\" | head -1 |awk -F'[><]' '{print \$3}'").trim()
-                }
-            }
-        }
-
         // run tests and package
         stage('Test') {
             steps {
                 container('jdk') {
-                    sh "./mvnw test package"
+                    sh './mvnw test package'
                 }
             }
         }
 
         // run tests and package
-        stage('build') {
+        stage('build image') {
             steps {
                 container('docker') {
-                    // the network=host needed to download dependencies using the host network (since we are inside 'docker'
-                    // container)
-                    sh "docker build --network=host -f ci-cd/Dockerfile . -t overture/maestro:${version}-${commit} -t ${dockerRepo}:${version}-${commit}"
+                    // the network=host needed to download dependencies using the host network
+                    // (since we are inside the 'docker' container)
+                    sh "docker build --network=host -f ci-cd/Dockerfile . -t maestro:${commit}"
                 }
             }
         }
 
-        // publish the edge tag
-        stage('Publish Develop') {
+        stage('Publish images') {
             when {
-                branch "develop"
-            }
-            steps {
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'OvertureBioGithub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login ghcr.io -u $USERNAME -p $PASSWORD'
-                    }
-                    sh "docker tag ${dockerRepo}:${version}-${commit} ${dockerRepo}:edge"
-                    sh "docker push ${dockerRepo}:${version}-${commit}"
-                    sh "docker push ${dockerRepo}:edge"
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                    branch 'master'
+                    branch 'test'
                 }
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh 'docker login -u $USERNAME -p $PASSWORD'
+            }
+            parallel {
+                stage('...to dockerhub') {
+                    steps {
+                        container('docker') {
+                            withCredentials([usernamePassword(
+                                credentialsId:'OvertureDockerHub',
+                                passwordVariable: 'PASSWORD',
+                                usernameVariable: 'USERNAME'
+                            )]) {
+                                sh "docker login -u $USERNAME -p $PASSWORD"
+
+                                script {
+                                    if (env.BRANCH_NAME ==~ /(main|master)/) { // push latest and version tags
+                                        sh "docker tag maestro:${commit} ${dockerHub}:${version}"
+                                        sh "docker push ${dockerHub}:${version}"
+
+                                        sh "docker tag maestro:${commit} ${dockerHub}:latest"
+                                        sh "docker push ${dockerHub}:latest"
+                                    } else { // push commit tags
+                                        sh "docker tag maestro:${commit} ${dockerHub}:${version}-${commit}"
+                                        sh "docker push ${dockerHub}:${version}-${commit}"
+                                    }
+
+                                    if (env.BRANCH_NAME ==~ /(develop)/) { // push edge tags
+                                        sh "docker tag maestro:${commit} ${dockerHub}:edge"
+                                        sh "docker push ${dockerHub}:edge"
+                                    }
+                                }
+                            }
+                        }
                     }
-                    sh "docker tag overture/maestro:${version}-${commit} overture/maestro:edge"
-                    sh "docker push overture/maestro:${version}-${commit}"
-                    sh "docker push overture/maestro:edge"
-               }
+                }
+
+                stage('...to github') {
+                    steps {
+                        container('docker') {
+                            withCredentials([usernamePassword(
+                                credentialsId:'OvertureBioGithub',
+                                passwordVariable: 'PASSWORD',
+                                usernameVariable: 'USERNAME'
+                            )]) {
+                                sh "docker login ${gitHubRegistry} -u $USERNAME -p $PASSWORD"
+
+                                script {
+                                    if (env.BRANCH_NAME ==~ /(main|master)/) { // push latest and version tags
+                                        sh "docker tag maestro:${commit} ${githubPackages}:${version}"
+                                        sh "docker push ${githubPackages}:${version}"
+
+                                        sh "docker tag maestro:${commit} ${githubPackages}:latest"
+                                        sh "docker push ${githubPackages}:latest"
+                                    } else { // push commit tags
+                                        sh "docker tag maestro:${commit} ${githubPackages}:${version}-${commit}"
+                                        sh "docker push ${githubPackages}:${version}-${commit}"
+                                    }
+
+                                    if (env.BRANCH_NAME ==~ /(develop)/) { // push edge tags
+                                        sh "docker tag maestro:${commit} ${githubPackages}:edge"
+                                        sh "docker push ${githubPackages}:edge"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
-       stage('Release') {
-           when {
-               branch "master"
-           }
-           steps {
-               container('docker') {
-                   withCredentials([usernamePassword(credentialsId: 'OvertureBioGithub', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                       sh "git tag ${version}"
-                       sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/overture-stack/maestro --tags"
-                   }
-                   withCredentials([usernamePassword(credentialsId:'OvertureBioGithub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                       sh 'docker login ghcr.io -u $USERNAME -p $PASSWORD'
-                   }
-                   sh "docker tag ${dockerRepo}:${version}-${commit} ${dockerRepo}:${version}"
-                   sh "docker tag ${dockerRepo}:${version}-${commit} ${dockerRepo}:latest"
-                   sh "docker push ${dockerRepo}:${version}"
-                   sh "docker push ${dockerRepo}:latest"
-               }
-               container('docker') {
-                   withCredentials([usernamePassword(credentialsId:'OvertureDockerHub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                       sh 'docker login -u $USERNAME -p $PASSWORD'
-                   }
-                   sh "docker tag overture/maestro:${version}-${commit} overture/maestro:${version}"
-                   sh "docker tag overture/maestro:${version}-${commit} overture/maestro:latest"
-                   sh "docker push overture/maestro:${version}"
-                   sh "docker push overture/maestro:latest"
-              }
-           }
-       }
+        stage('Release & tag') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'master'
+                }
+            }
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'OvertureBioGithub',
+                        passwordVariable: 'GIT_PASSWORD',
+                        usernameVariable: 'GIT_USERNAME'
+                    )]) {
+                        sh "git tag ${version}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${gitHubRepo} --tags"
+                    }
+                }
+            }
+        }
 
-	   stage('Deploy to Overture QA') {
-		   when {
-			   branch "develop"
-		   }
-		   steps {
-			   build(job: "/Overture.bio/provision/helm", parameters: [
-					   [$class: 'StringParameterValue', name: 'OVERTURE_ENV', value: 'qa' ],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_CHART_NAME', value: 'maestro'],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_RELEASE_NAME', value: 'maestro'],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_CHART_VERSION', value: ''], // use latest
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REPO_URL', value: "https://overture-stack.github.io/charts-server/"],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: "false" ],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
-			   ])
-		   }
-	   }
+        stage('Deploy to Overture QA') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                build(job: '/Overture.bio/provision/helm', parameters: [
+                    [$class: 'StringParameterValue', name: 'OVERTURE_ENV', value: 'qa' ],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_CHART_NAME', value: 'maestro'],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_RELEASE_NAME', value: 'maestro'],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_HELM_CHART_VERSION', value: ''], // use latest
+                    [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REPO_URL', value: 'https://overture-stack.github.io/charts-server/'],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: 'false' ],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_ARGS_LINE', value: "--set-string image.tag=${version}-${commit}" ]
+                ])
+            }
+        }
 
-	   stage('Deploy to Overture Staging') {
-		   when {
-			   branch "master"
-		   }
-		   steps {
-			   build(job: "/Overture.bio/provision/helm", parameters: [
-					   [$class: 'StringParameterValue', name: 'OVERTURE_ENV', value: 'staging' ],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_CHART_NAME', value: 'maestro'],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_RELEASE_NAME', value: 'maestro'],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_CHART_VERSION', value: ''], // use latest
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REPO_URL', value: "https://overture-stack.github.io/charts-server/"],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: "false" ],
-					   [$class: 'StringParameterValue', name: 'OVERTURE_ARGS_LINE', value: "--set-string image.tag=${version}" ]
-			   ])
-		   }
-	   }
+        stage('Deploy to Overture Staging') {
+            when {
+                branch 'master'
+            }
+            steps {
+                build(job: '/Overture.bio/provision/helm', parameters: [
+                    [$class: 'StringParameterValue', name: 'OVERTURE_ENV', value: 'staging' ],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_CHART_NAME', value: 'maestro'],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_RELEASE_NAME', value: 'maestro'],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_HELM_CHART_VERSION', value: ''], // use latest
+                    [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REPO_URL', value: 'https://overture-stack.github.io/charts-server/'],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_HELM_REUSE_VALUES', value: 'false' ],
+                    [$class: 'StringParameterValue', name: 'OVERTURE_ARGS_LINE', value: "--set-string image.tag=${version}" ]
+                ])
+            }
+        }
     }
 }
