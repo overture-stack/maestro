@@ -221,6 +221,7 @@ public class SearchAdapterHelper {
             ScriptType.INLINE,
             "painless",
             "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }\n"
+                + "ctx._source.analysis = params.analysis;\n"
                 + "ctx._source.analysis.analysis_state = params.analysis_state;\n"
                 + "ctx._source.analysis.updated_at = ZonedDateTime.parse(params.updated_at).toInstant().toEpochMilli();\n"
                 + "if (params.published_at != null) { ctx._source.analysis.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli(); }\n"
