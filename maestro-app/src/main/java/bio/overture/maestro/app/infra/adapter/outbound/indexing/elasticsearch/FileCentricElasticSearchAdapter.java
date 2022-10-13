@@ -44,7 +44,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.elasticsearch.action.admin.indices.alias.Alias;
-import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
@@ -276,6 +275,8 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     val paramsBuilder = new HashMap<String, Object>();
     paramsBuilder.put(
         "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
+    paramsBuilder.put(
+        "analysis", mapper.convertValue(fileCentricDocument.getAnalysis(), Map.class));
     paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
 

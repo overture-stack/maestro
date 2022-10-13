@@ -151,6 +151,8 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
     paramsBuilder.put(
         "repository",
         mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
+    paramsBuilder.put(
+        "analysis", mapper.convertValue(analysisCentricDocument.getData(), Map.class));
     paramsBuilder.put("analysis_state", analysisCentricDocument.getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(analysisCentricDocument.getUpdatedAt()));
 
@@ -173,12 +175,12 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
         .script(inline)
         .scriptedUpsert(true)
         .upsert(
-          new IndexRequest()
-              .index(this.indexName)
-              .id(analysisCentricDocument.getAnalysisId())
-              .source(
-                      analysisCentricJSONWriter.writeValueAsString(analysisCentricDocument),
-                      XContentType.JSON));
+            new IndexRequest()
+                .index(this.indexName)
+                .id(analysisCentricDocument.getAnalysisId())
+                .source(
+                    analysisCentricJSONWriter.writeValueAsString(analysisCentricDocument),
+                    XContentType.JSON));
   }
 
   @Retryable(maxAttempts = 5, backoff = @Backoff(value = 1000, multiplier = 1.5))
