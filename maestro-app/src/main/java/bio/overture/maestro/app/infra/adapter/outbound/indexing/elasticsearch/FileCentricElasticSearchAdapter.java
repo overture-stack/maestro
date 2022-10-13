@@ -275,8 +275,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     val paramsBuilder = new HashMap<String, Object>();
     paramsBuilder.put(
         "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
-    paramsBuilder.put(
-        "analysis", mapper.convertValue(fileCentricDocument.getAnalysis(), Map.class));
+    paramsBuilder.put("document", scriptedDocument(mapper, fileCentricDocument));
     paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
 
@@ -299,7 +298,6 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
         .id(fileCentricDocument.getObjectId())
         .index(this.indexName)
         .script(inline)
-        .scriptedUpsert(true)
         .upsert(
             new IndexRequest()
                 .index(this.indexName)
@@ -307,5 +305,15 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
                 .source(
                     fileCentricJSONWriter.writeValueAsString(fileCentricDocument),
                     XContentType.JSON));
+  }
+
+  private Map<String, Object> scriptedDocument(
+      ObjectMapper mapper, FileCentricDocument originalDocument) {
+    val newMapDoc = mapper.convertValue(originalDocument, Map.class);
+
+    // remove repositories from Map as we are not updating repositories
+    newMapDoc.remove("repositories");
+
+    return newMapDoc;
   }
 }

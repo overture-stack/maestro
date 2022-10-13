@@ -151,8 +151,7 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
     paramsBuilder.put(
         "repository",
         mapper.convertValue(analysisCentricDocument.getRepositories().get(0), Map.class));
-    paramsBuilder.put(
-        "analysis", mapper.convertValue(analysisCentricDocument.getData(), Map.class));
+    paramsBuilder.put("document", scriptedDocument(mapper, analysisCentricDocument));
     paramsBuilder.put("analysis_state", analysisCentricDocument.getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(analysisCentricDocument.getUpdatedAt()));
 
@@ -173,7 +172,6 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
         .id(analysisCentricDocument.getAnalysisId())
         .index(this.indexName)
         .script(inline)
-        .scriptedUpsert(true)
         .upsert(
             new IndexRequest()
                 .index(this.indexName)
@@ -242,5 +240,14 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
     deleteByQueryRequest.setQuery(
         QueryBuilders.boolQuery().must(QueryBuilders.termQuery("analysis_id", analysisId)));
     this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
+  }
+
+  private Map<String, Object> scriptedDocument(
+      ObjectMapper mapper, AnalysisCentricDocument originalDocument) {
+    val newMapDoc = mapper.convertValue(originalDocument, Map.class);
+
+    // remove repositories from Map as we are not updating repositories
+    newMapDoc.remove("repositories");
+    return newMapDoc;
   }
 }
