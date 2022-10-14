@@ -201,12 +201,22 @@ public class SearchAdapterHelper {
     }
   }
 
+  /**
+   * AnalysisCentric Upsert Script.
+   * Returns a Script for the purpose of updating all the properties of a document with the new document passed as parameter to the script,
+   * such new document does not include the repositories array as we do not want to replace repositories,
+   * instead we want to keep the existing repositories and just incorporate new repositories if needed.
+   * @param parameters a Map of parameters used by the script
+   * */
   public static Script getInline(Map<String, Object> parameters) {
     val inline =
         new Script(
             ScriptType.INLINE,
             "painless",
-            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) } \n"
+            "List tempRepositories = ctx._source.repositories;\n"
+                + "ctx._source = params.document;\n"
+                + "if (!tempRepositories.contains(params.repository)) { tempRepositories.add(params.repository) } \n"
+                + "ctx._source.repositories = tempRepositories;\n"
                 + "ctx._source.analysis_state = params.analysis_state;\n"
                 + "ctx._source.updated_at = ZonedDateTime.parse(params.updated_at).toInstant().toEpochMilli();\n"
                 + "if (params.published_at != null) { ctx._source.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli(); }\n"
@@ -215,12 +225,23 @@ public class SearchAdapterHelper {
     return inline;
   }
 
+  /**
+   * FileCentric Upsert Script.
+   * Returns a Script for the purpose of updating all the properties of a document with the new document passed as parameter to the script,
+   * such new document does not include the repositories array as we do not want to replace repositories,
+   * instead we want to keep the existing repositories and just incorporate new repositories if needed.
+   *
+   * @param parameters a Map of parameters used by the script
+   * */
   public static Script getInlineForFile(Map<String, Object> parameters) {
     val inline =
         new Script(
             ScriptType.INLINE,
             "painless",
-            "if (!ctx._source.repositories.contains(params.repository)) { ctx._source.repositories.add(params.repository) }\n"
+            "List tempRepositories = ctx._source.repositories;\n"
+                + "ctx._source = params.document;\n"
+                + "if (!tempRepositories.contains(params.repository)) { tempRepositories.add(params.repository) }\n"
+                + "ctx._source.repositories = tempRepositories;\n"
                 + "ctx._source.analysis.analysis_state = params.analysis_state;\n"
                 + "ctx._source.analysis.updated_at = ZonedDateTime.parse(params.updated_at).toInstant().toEpochMilli();\n"
                 + "if (params.published_at != null) { ctx._source.analysis.published_at = ZonedDateTime.parse(params.published_at).toInstant().toEpochMilli(); }\n"
