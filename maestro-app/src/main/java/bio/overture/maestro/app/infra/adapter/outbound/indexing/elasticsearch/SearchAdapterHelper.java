@@ -201,6 +201,13 @@ public class SearchAdapterHelper {
     }
   }
 
+  /**
+   * AnalysisCentric Upsert Script.
+   * Returns a Script for the purpose of updating all the properties of a document with the new document passed as parameter to the script,
+   * such new document does not include the repositories array as we do not want to replace repositories,
+   * instead we want to keep the existing repositories and just incorporate new repositories if needed.
+   * @param parameters a Map of parameters used by the script
+   * */
   public static Script getInline(Map<String, Object> parameters) {
     val inline =
         new Script(
@@ -218,6 +225,14 @@ public class SearchAdapterHelper {
     return inline;
   }
 
+  /**
+   * FileCentric Upsert Script.
+   * Returns a Script for the purpose of updating all the properties of a document with the new document passed as parameter to the script,
+   * such new document does not include the repositories array as we do not want to replace repositories,
+   * instead we want to keep the existing repositories and just incorporate new repositories if needed.
+   *
+   * @param parameters a Map of parameters used by the script
+   * */
   public static Script getInlineForFile(Map<String, Object> parameters) {
     val inline =
         new Script(

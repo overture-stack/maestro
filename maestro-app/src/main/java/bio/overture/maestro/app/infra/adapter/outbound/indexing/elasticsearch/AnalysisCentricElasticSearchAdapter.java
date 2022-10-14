@@ -242,11 +242,17 @@ public class AnalysisCentricElasticSearchAdapter implements AnalysisCentricIndex
     this.elasticsearchRestClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
   }
 
+  /**
+   * Returns a Map object used by the Upsert script, it represents an analysis document that contains all the properties
+   * we need to fully replace. Repositories list must not be included as we don't want to replace existing repositories,
+   * instead we want to merge with existing repositories. Merge logic of repositories is handled by the upsert script.
+   *
+   * @param mapper             An Object mapper
+   * @param originalDocument   Analysis Document
+   */
   private Map<String, Object> scriptedDocument(
       ObjectMapper mapper, AnalysisCentricDocument originalDocument) {
     val newMapDoc = mapper.convertValue(originalDocument, Map.class);
-
-    // remove repositories from Map as we are not updating repositories
     newMapDoc.remove("repositories");
     return newMapDoc;
   }
