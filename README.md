@@ -1,4 +1,4 @@
-# Maestro - Song Data Indexing Microservice
+# Maestro - Song Metadata Indexing
 
 [<img hspace="5" src="https://img.shields.io/badge/chat-on--slack-blue?style=for-the-badge">](http://slack.overture.bio)
 [<img hspace="5" src="https://img.shields.io/badge/License-gpl--v3.0-blue?style=for-the-badge">](https://github.com/overture-stack/maestro/blob/develop/LICENSE)
@@ -8,10 +8,10 @@
 <img align="right" width="120vw" src="icon-maestro.png" alt="maestro-logo"/>
 </div>
 
-Maestro sorts genomic files, metadata and biomedical data dispersed across numerous [Song](https://github.com/overture-stack/song) servers into a single, searchable Elasticsearch index enabling upstream services to consume the data and expose it to end users for exploration.
+Maestro organizes genomic metadata dispersed across numerous [Song](https://github.com/overture-stack/song) repositories into a single, searchable Elasticsearch index. This enables upstream search APIs such as [Arranger](https://github.com/overture-stack/arranger) to consume the data and expose it to end users for exploration.
 
 - Built to interact natively with Song and [Arranger](https://github.com/overture-stack/arranger)
-- Receive requests through [Kafka](https://kafka.apache.org/) or JSON Web API 
+- Receives requests through [Kafka](https://kafka.apache.org/) or JSON Web API 
 - Index a single analysis, a study or a full Song repository with one request
 - Create exclusion rules based off Song metadata tags
 - Event-based indexing with apache kafka messaging queue
