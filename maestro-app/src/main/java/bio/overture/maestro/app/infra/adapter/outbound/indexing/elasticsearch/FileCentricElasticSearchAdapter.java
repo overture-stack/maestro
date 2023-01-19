@@ -275,6 +275,7 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
     val paramsBuilder = new HashMap<String, Object>();
     paramsBuilder.put(
         "repository", mapper.convertValue(fileCentricDocument.getRepositories().get(0), Map.class));
+    paramsBuilder.put("document", scriptedDocument(mapper, fileCentricDocument));
     paramsBuilder.put("analysis_state", fileCentricDocument.getAnalysis().getAnalysisState());
     paramsBuilder.put("updated_at", getDateIso(fileCentricDocument.getAnalysis().getUpdatedAt()));
 
@@ -304,5 +305,21 @@ class FileCentricElasticSearchAdapter implements FileCentricIndexAdapter {
                 .source(
                     fileCentricJSONWriter.writeValueAsString(fileCentricDocument),
                     XContentType.JSON));
+  }
+
+  /**
+   * Returns a Map object used by the Upsert script, it represents an analysis document that contains all the properties
+   * we need to fully replace. Repositories list must not be included as we don't want to replace existing repositories,
+   * instead we want to merge with existing repositories. Merge logic of repositories is handled by the upsert script.
+   *
+   * @param mapper             An Object mapper
+   * @param originalDocument   Analysis Document
+   */
+  private Map<String, Object> scriptedDocument(
+      ObjectMapper mapper, FileCentricDocument originalDocument) {
+    val newMapDoc = mapper.convertValue(originalDocument, Map.class);
+    newMapDoc.remove("repositories");
+
+    return newMapDoc;
   }
 }
