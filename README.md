@@ -1,116 +1,75 @@
-<h1 align="center">Maestro</h1>
-<p align="center">Organize geographically distributed data stored in Song and Score, with a single, configurable index.</p>
-<p align="center">
-    <a href="https://github.com/overture-stack/maestro">
-        <img alt="Under Development" 
-            title="Under Development" 
-            src="http://www.overture.bio/img/progress-horizontal-RC.svg" width="320" />
-    </a>
-</p>
+# Maestro - Metadata Indexing
 
-[![Documentation Status](https://readthedocs.org/projects/maestro-overture/badge/?version=latest)](https://maestro-overture.readthedocs.io/en/latest/?badge=latest)
-[![Slack](http://slack.overture.bio/badge.svg)](http://slack.overture.bio)
+[<img hspace="5" src="https://img.shields.io/badge/chat-on--slack-blue?style=for-the-badge">](http://slack.overture.bio)
+[<img hspace="5" src="https://img.shields.io/badge/License-gpl--v3.0-blue?style=for-the-badge">](https://github.com/overture-stack/maestro/blob/develop/LICENSE)
+[<img hspace="5" src="https://img.shields.io/badge/Code%20of%20Conduct-2.1-blue?style=for-the-badge">](code_of_conduct.md)
 
-## Documentation:
-Documentation is hosted on :
-- github pages: https://overture-stack.github.io/maestro/
-- read the docs: https://maestro-overture.readthedocs.io/en/latest/ (using mkdocs https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
+<div>
+<img align="right" width="120vw" src="icon-maestro.png" alt="maestro-logo"/>
+</div>
 
-## Introduction
-Meastro was created to enable genomic researchers to enhance their Overture SONGs by building indexes, elastic search
-by default, that makes searching Analyses and Studies much more powerful and easier.
+Maestro organizes metadata dispersed across numerous [Song](https://github.com/overture-stack/song) repositories into a single, searchable Elasticsearch index. This enables upstream search APIs such as [Arranger](https://github.com/overture-stack/arranger) to consume the data and expose it to end users for exploration.
 
-## TLDR; 
-Skip down to the How to section it has the steps to get started.
+- Built to interact natively with Song and [Arranger](https://github.com/overture-stack/arranger)
+- Receives requests through [Kafka](https://kafka.apache.org/) or JSON Web API 
+- Index a single analysis, a study or a full Song repository with one request
+- Create exclusion rules based off Song metadata tags
+- Event-based indexing with apache kafka messaging queue
+- Slack integration for convenient notifications
 
-### Features:
-- Supports indexing from multiple metadata repositories (SONG).
-- Multiple indexing requests: analysis, study, full repository.
-- Event driven indexing.
-    - Integration with SONG to index published analysis and delete suppressed / unpublished analyses
-- Ability to Exclude analysis based on different Ids: Study, Analysis, Donor, Sample Or file.
-- Slack web hook integration
+<!--Blockqoute-->
 
-### Design Goals:
-- Reactive
-    - Event driven
-    - Elastic
-    - Resiliency & Fault tolerance
-- Failure audit
-    - Dead letters queue for faulty messages to be retried later and reviewed.
-    - Human readable Error log
-- Runtime configurability
-- Extendable: separate domain from infrastructure & configuration
+</br>
 
-## Technologies & libraries:
-- Java 11 - OpenJDK 11
-- Maven 3 (YOU NEED MAVEN 3.5+, if you don't want to use the wrapper or your IDE points to older version)
-- lombok
-- Spring boot 2
-    - Spring webflux & project reactor
-    - Spring retry
-    - Spring Cloud
-        - Streams (for Kafak integration)
-        - config client
-    - Spring boot admin + client
-- Elasticsearch 7+
-- Apache Kafka
-- resilience4j:
-    - retry module
-- vavr 
-- Testing libraries:
-    - Junit 5
-    - Mockito 2
-    - testcontainers
-    - Spring cloud contract wiremock
+> 
+> <div>
+> <img align="left" src="ov-logo.png" height="90"/>
+> </div>
+> 
+> *Maestro is a core component within the [Overture](https://www.overture.bio/) research software ecosystem. Overture is a toolkit of modular software components made to build into scalable data management systems. See our [related products](#related-products) for more information on what Overture can offer.*
+> 
+> 
 
-## Structure
-The project is following the ports/adapters architecture, where the domain is completely isolated from external infrastructure
-and frameworks.
-- Two maven modules:
-    - maestro domain
-      - the core features and framework independent logic that is portable and contains the main indexing, rules, notifications
-      logic as specified by the business features. Has packages like:
-          - entities : contains POJOs and entities
-          - api: the logic that fulfills the business features
-          - ports: contains the interfaces needed by the api to communicate with anything outside the indexing context.
+<!--Blockqoute-->
 
-    - maestro app:
-       - The main runnable (spring boot app)
-       - Contains the infrastructure and adapters (ports implementations) that is needed to connect the domain
-         with the outside world like elastic search, song web clients, configuration files etc.
-         It also has the Spring framework configurations here to keep technologies outside of the domain.
-         
-# Dependencies:
-To Successfully run Maestro (as is) you need the following services to be deployed and configure it to use them:
-- [Elasticsearch](https://www.elastic.co/products/elasticsearch)
-- [Apache Kafka](https://kafka.apache.org/)
-- [SONG](https://github.com/overture-stack/SONG)
+## Technical Specifications
 
-you can check the sample docker compose files under `./run/docker-compose` for containerized versions of elastic & kafka.
-for SONG please check the SONG github repo [here](https://github.com/overture-stack/SONG/tree/develop/dev) 
-on how to run it with docker. Or you can run it as jar.
+- Written in JAVA 
+- Indexing for [Elasticsearch 7](https://www.elastic.co/guide/en/elasticsearch/reference/7.17/elasticsearch-intro.html) or up 
+- [Swagger UI](https://swagger.io/tools/swagger-ui/) REST API 
 
-## How to:
-- Swagger API access: 
-    - localhost:11235/api-docs
+## Documentation
 
-Note: if you don't/can't use the Makefile, look inside it for the shell commands and replicate them.
-- Compile: `make` 
-- Test: `make test`
-- Package: `make package`
-- Run:
-    - Source:
-        - Development:
-            1. `make docker-start-dev` starts the infrastructure containers
-                - kafka
-                - elastic search
-                - other helper tools if you want like kafka rest proxy
-            2. `make run` OR start maestro (Maestro.java) from the IDE/cmd as a java application
-    - Docker:
-        - Repository: https://hub.docker.com/r/overture/maestro
-        - `make docker-start` starts maestro from a docker image along with all needed infrastructure
-    - helm:
-        - Repository: https://overture-stack.github.io/charts-server/
-        - see : https://github.com/overture-stack/helm-charts for instructions and the maestro folder for examples
-      
+- For developer documentation, including instructions for running Ego from source read our [GitHub Wiki](https://github.com/overture-stack/maestro/wiki)
+- For user documentation, including installation, configuration and usage guides, see our websites [Maestro documentation](https://www.overture.bio/documentation/maestro/)
+
+## Support & Contributions
+
+- Filing an [issue](https://github.com/overture-stack/maestro/issues)
+- Making a [contribution](CONTRIBUTING.md)
+- Connect with us on [Slack](https://join.slack.com/t/overture-bio/shared_invite/zt-21tdumtdh-9fP1TFeLepK4~Lc377rOYw)
+- Add or Upvote a [feature request](https://github.com/overture-stack/maestro/issues?q=is%3Aopen+is%3Aissue+label%3Anew-feature+sort%3Areactions-%2B1-desc)
+
+## Related Products 
+
+<div>
+  <img align="right" alt="Overture overview" src="https://www.overture.bio/static/124ca0fede460933c64fe4e50465b235/a6d66/system-diagram.png" width="45%" hspace="5">
+</div>
+
+Overture is an ecosystem of research software tools, each with narrow responsibilities, designed to address the adapting needs of genomics research. 
+
+All our core microservices are included in the Overture **Data Management System** (DMS). Built from our core collection of microservices, the DMS offers turnkey installation, configuration, and deployment of Overture software. For more information on the DMS, read our [DMS documentation](https://www.overture.bio/documentation/dms/).
+
+See the links below for information on our other research software tools:
+
+</br>
+
+|Software|Description|
+|---|---|
+|[Ego](https://www.overture.bio/products/ego/)|An authorization and user management service|
+|[Ego UI](https://www.overture.bio/products/ego-ui/)|A UI for managing Ego authentication and authorization services|
+|[Score](https://www.overture.bio/products/score/)| Transfer data to and from any cloud-based storage system|
+|[Song](https://www.overture.bio/products/song/)|Catalog and manage metadata associated to file data spread across cloud storage systems|
+|[Maestro](https://www.overture.bio/products/maestro/)|Organizing your distributed data into a centralized Elasticsearch index|
+|[Arranger](https://www.overture.bio/products/arranger/)|A search API with reusable UI components that build into configurable and functional data portals|
+|[DMS-UI](https://github.com/overture-stack/dms-ui)|A simple web browser UI that integrates Ego and Arranger|
