@@ -47,7 +47,7 @@ Maestro organizes metadata dispersed across numerous [Song](https://github.com/o
 
 - Filing an [issue](https://github.com/overture-stack/maestro/issues)
 - Making a [contribution](CONTRIBUTING.md)
-- Connect with us on [Slack](https://overture-bio.slack.com/)
+- Connect with us on [Slack](https://join.slack.com/t/overture-bio/shared_invite/zt-21tdumtdh-9fP1TFeLepK4~Lc377rOYw)
 - Add or Upvote a [feature request](https://github.com/overture-stack/maestro/issues?q=is%3Aopen+is%3Aissue+label%3Anew-feature+sort%3Areactions-%2B1-desc)
 
 ## Related Products 
