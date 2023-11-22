@@ -224,7 +224,7 @@
         <slf4j.version>1.7.16</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <spring-data-elasticsearch.version>3.2.0.M2</spring-data-elasticsearch.version>
-        <elasticsearch.version>7.6.0</elasticsearch.version>
+        <elasticsearch.version>7.17.14</elasticsearch.version>
         <mockito-junit-jupiter.version>4.3.1</mockito-junit-jupiter.version>
         <mockito-core.version>4.3.1</mockito-core.version>
         <jackson-databind.version>2.10.5.1</jackson-databind.version>
