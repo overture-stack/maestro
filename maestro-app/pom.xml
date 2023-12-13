@@ -22,7 +22,7 @@
     <parent>
         <artifactId>maestro</artifactId>
         <groupId>bio.overture</groupId>
-        <version>4.3.0</version>
+        <version>4.4.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>bio.overture</groupId>
             <artifactId>maestro-domain</artifactId>
-            <version>4.3.0</version>
+            <version>4.4.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -204,12 +204,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-test-support</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
