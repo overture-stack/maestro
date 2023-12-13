@@ -1,11 +1,11 @@
-FROM openjdk:11-jdk as builder
+FROM adoptopenjdk/openjdk11:jdk-11.0.6_10-slim as builder
 WORKDIR /usr/src/app
 COPY . .
 # tests to be executed outside of dockerfile because we use testcontainers
 # needs access to docker socket
 RUN ./mvnw clean package -DskipTests
 
-FROM openjdk:11-jre-slim
+FROM adoptopenjdk/openjdk11:jre-11.0.6_10 as client
 RUN mkdir /app
 COPY --from=builder /usr/src/app/maestro-app/target/maestro-app-*.jar /app/maestro-app.jar
 
