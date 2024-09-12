@@ -1,15 +1,21 @@
-# Source Code
-Source Code is hosted on [Github](https://github.com/overture-stack/maestro).
+# Setup
 
-# Dependencies
+## Run as a Standalone Server
+
+Provided that you have JDK11+ and all dependencies (see [Dependencies](#dependencies)) running and modified `application.yaml` based on your environment and needs, you can run the following command:  
+
+```bash
+make run
+```
+## Run as a Container 
+
+### Prerequisites
+
 To run Maestro you need the following services running:
 
 - [Elasticsearch](https://www.elastic.co/products/elasticsearch) version 7+ to build index in.
 - [SONG](https://www.overture.bio/products/song) to use as a metadata source.
-- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with song).
-
-
-# Configurations
+- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with song).]
 
 In the code repository, configurations are driven by: `config/application.yml`. Change the relevent sections to connect to Elasticsearch, SONG, Kafka based on your setup.
 
@@ -167,25 +173,8 @@ spring:
           group: songConsumerGrp
           consumer:
             maxAttempts: 1
-
-
 ```
 
-
-
-# Running Locally
-
-Maestro has a `Makefile` for convenience if you can't use make you can check the make file for
-the commands.
-
-## Source Code (No Docker)
-Provided that you have JDK11+ and all dependencies (see [Dependencies](#dependencies)) running and modified `application.yaml` based on your environment and needs, you can run the following command:  
-
-```bash
-make run
-```
-
-## Docker (Recommended for Local installations)
 In this mode a docker-compose.yaml file will be used, it contains a dockerized version of elasticsearch and kafka see `./run/docker-compose/docker-compose.yaml`. 
 For SONG please check the SONG github repo here on how to run it with docker.
 
@@ -197,7 +186,8 @@ starts maestro from a docker image along with all needed infrastructure
 make docker-start
 ```
 
-# Kuberenets (Helm)
+
+## Kuberenets (Helm)
 if you want to run in a Kubernetes cluster you can use the maestro helm chart
 
 - [Chart Repository](https://overture-stack.github.io/charts-server/)
@@ -234,4 +224,3 @@ then add overture chart repository and install the chart:
 helm repo add overture https://overture-stack.github.io/charts-server/
 helm install -f values-override.yaml overture/maestro
 ```
-
