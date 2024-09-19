@@ -15,7 +15,7 @@ To run Maestro you need the following services running:
 
 - [Elasticsearch](https://www.elastic.co/products/elasticsearch) version 7+ to build index in.
 - [SONG](https://www.overture.bio/products/song) to use as a metadata source.
-- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with song).]
+- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with song).
 
 In the code repository, configurations are driven by: `config/application.yml`. Change the relevent sections to connect to Elasticsearch, SONG, Kafka based on your setup.
 
