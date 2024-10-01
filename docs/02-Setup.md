@@ -2,7 +2,7 @@
 
 ## Run as a Standalone Server
 
-Provided that you have JDK11+ and all dependencies (see [Dependencies](#dependencies)) running and modified `application.yaml` based on your environment and needs, you can run the following command:  
+Provided that you have JDK11+ and all dependencies running and modified `application.yaml` based on your environment and needs, you can run the following command:  
 
 ```bash
 make run
