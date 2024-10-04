@@ -1,4 +1,5 @@
-# Maestro
+
+# Overview
 
 Maestro's primary function is to organize data from multiple Song repositories into a single Elasticsearch index. By collecting data into a single index, Maestro allows upstream services, such as <a href="/documentation/arranger" target="_blank" rel="noopener noreferrer">Arranger</a>, to consume the data and expose it to end users for search and exploration.
 
