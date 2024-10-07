@@ -1,0 +1,25 @@
+{
+	"name": "@overture-stack/maestro-common",
+	"version": "5.0.0.alpha.1",
+	"description": "",
+	"main": "dist/index.js",
+	"scripts": {
+		"clean": "rimraf dist",
+		"build": "pnpm run clean && tsc",
+		"test": "mocha",
+		"test:coverage": "c8 pnpm run test"
+	},
+	"keywords": [],
+	"author": "Ontario Institute for Cancer Research",
+	"license": "AGPL-3.0",
+	"dependencies": {
+		"rimraf": "^6.0.1"
+	},
+	"devDependencies": {
+		"@types/chai": "^5.0.0",
+		"@types/mocha": "^10.0.8",
+		"c8": "^10.1.2",
+		"chai": "^5.1.1",
+		"mocha": "^10.7.3"
+	}
+}

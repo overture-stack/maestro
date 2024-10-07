@@ -1,0 +1,31 @@
+{
+	"name": "@overture-stack/maestro",
+	"version": "5.0.0.alpha.1",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"\n=================  Build  ===============": "",
+		"build:all": "pnpm nx run-many --all --target=build",
+		"\n============  Dev environment  ==========": "",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "pnpm nx run-many --all --target=test",
+		"test:coverage": "pnpm nx run-many --all --target=test:coverage"
+	},
+	"type": "module",
+	"keywords": [],
+	"author": "Ontario Institute for Cancer Research",
+	"license": "AGPL-3.0",
+	"devDependencies": {
+		"eslint": "^9.11.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-prettier": "^5.2.1",
+		"eslint-plugin-simple-import-sort": "^12.1.1",
+		"nx": "^19.8.0",
+		"prettier": "^3.3.3",
+		"prettier-plugin-organize-imports": "^4.1.0",
+		"tsx": "^4.19.1",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.6.0"
+	}
+}

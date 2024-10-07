@@ -1,0 +1,15 @@
+{
+  "folders": [
+	{
+		"name": "✨ search-indexer",
+		"path": "."
+	},
+	{
+		"name": "📦 indexer",
+		"path": "packages/indexer"
+	}
+],
+  "settings": {
+    "mochaExplorer.require": "tsx"
+  }
+}
