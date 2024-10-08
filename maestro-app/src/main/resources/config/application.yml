@@ -228,3 +228,4 @@ springdoc:
     value: http://localhost:11235/custom
   swagger-ui:
     path: /api-docs
+    
