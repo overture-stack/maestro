@@ -6,25 +6,15 @@ Maestro's primary function is to organize data from multiple Song repositories i
 
 - **Multi Repo Management:** Maestro offers built-in conflict detection and resolution. For instance, if multiple Song repositories identify the same file, Maestro detects this and aggregates the data from all sources into the Elasticsearch index.
 
-```mermaid
-graph LR
-    SS1[Song Server 1]
-    SS2[Song Server 2]
-    SS3[Song Server 3]
-    SD1[(Song Database 1)]
-    SD2[(Song Database 2)]
-    SD3[(Song Database 3)]
-    M[Maestro]
-    ES[ElasticSeach Index]
+    ```mermaid
+    graph LR
+        SD1[(DB1)]--->SS1[Song 1]
+        SD2[(DB2)]--->SS2[Song 2]
+        SD3[(DB3)]--->SS3[Song 3]
+        SS1 & SS2 & SS3--->M[Maestro]
+        M-->ES[Elasticsearch]
 
-    SD1 ---> SS1
-    SD2 ---> SS2
-    SD3 ---> SS3
-    SS1 ---> M
-    SS2 ---> M
-    SS3 ---> M
-    M ---> ES
-```
+    ```
 
 - **Multiple Indexing Levels:** Song repositories have a standard hierarchy: **Repository > Study > Analysis**. Maestro can index at each level. For example, to index all analyses within a specific study, you can use the following command:
 
