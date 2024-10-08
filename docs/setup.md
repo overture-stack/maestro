@@ -31,9 +31,9 @@ We'll use our Conductor service, a flexible Docker Compose setup, to spin up Mae
     <details>
     <summary>**Click here for a detailed breakdown**</summary>
 
-    This command will set up all complementary services for Score development as follows:
+    This command will set up all complementary services for Maestro development as follows:
 
-    ![aestroDev](./assets/maestroDev.svg 'Maestro Dev Environment')
+    ![maestroDev](./assets/maestroDev.svg 'Maestro Dev Environment')
 
     | Service | Port | Description | Purpose in Score Development |
     |---------|------|-------------|------------------------------|
