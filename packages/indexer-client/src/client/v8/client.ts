@@ -1,6 +1,6 @@
 import { Client } from 'es8';
 
-import type { IElasticsearchService, IndexData, IndexResult } from '@overture-stack/maestro-common';
+import type { DataRecordValue, IElasticsearchService, IndexData, IndexResult } from '@overture-stack/maestro-common';
 
 import { createIndexIfNotExists, deleteData, indexData, ping, updateData } from './operations.js';
 
@@ -31,8 +31,8 @@ export const es8 = (nodeUrl: string): IElasticsearchService => {
 			return ping(client);
 		},
 
-		async updateData(index: string, data: IndexData): Promise<IndexResult> {
-			return updateData(client, index, data);
+		async updateData(index: string, id: string, data: Record<string, DataRecordValue>): Promise<IndexResult> {
+			return updateData(client, index, id, data);
 		},
 
 		async deleteData(index: string, id: string): Promise<IndexResult> {

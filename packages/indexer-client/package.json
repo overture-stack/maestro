@@ -1,12 +1,16 @@
 {
 	"name": "@overture-stack/maestro-indexer-client",
-	"version": "5.0.0.alpha.1",
+	"version": "5.0.0-alpha.1",
 	"description": "",
 	"main": "dist/index.js",
 	"type": "module",
 	"scripts": {
 		"clean": "rimraf dist",
-		"build": "pnpm run clean && tsc"
+		"build": "pnpm run clean && tsc",
+		"test:unit": "mocha",
+		"test:unit:coverage": "c8 pnpm run test:unit",
+		"test:integration": "mocha --config .mocharc.integration.json",
+		"test:integration:coverage": "c8 pnpm run test:integration"
 	},
 	"keywords": [],
 	"author": "Ontario Institute for Cancer Research",
@@ -16,5 +20,8 @@
 		"es7": "npm:@elastic/elasticsearch@7",
 		"es8": "npm:@elastic/elasticsearch@8",
 		"rimraf": "^6.0.1"
+	},
+	"devDependencies": {
+		"@testcontainers/elasticsearch": "^10.13.2"
 	}
 }

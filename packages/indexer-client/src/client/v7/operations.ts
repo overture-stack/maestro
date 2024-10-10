@@ -1,11 +1,11 @@
 import type { Client } from 'es7';
 
 import {
-	DataRecordValue,
+	type DataRecordValue,
+	type FailureData,
 	IndexData,
 	IndexResult,
 	sanitize_index_name,
-	type FailureData,
 } from '@overture-stack/maestro-common';
 
 /**
@@ -21,14 +21,20 @@ import {
  */
 export const createIndexIfNotExists = async (client: Client, index: string): Promise<boolean> => {
 	const sanitizedIndex = sanitize_index_name(index);
-	const exists = await client.indices.exists({ index: sanitizedIndex });
-	if (!exists.body) {
-		await client.indices.create({ index: sanitizedIndex });
-		console.log(`Index ${sanitizedIndex} created.`);
-	} else {
-		console.log(`Index ${sanitizedIndex} already exists.`);
+	let exists = false;
+	try {
+		const result = await client.indices.exists({ index: sanitizedIndex });
+		exists = result.body;
+		if (!result.body) {
+			await client.indices.create({ index: sanitizedIndex });
+			console.log(`Index ${sanitizedIndex} created.`);
+		} else {
+			console.log(`Index ${sanitizedIndex} already exists.`);
+		}
+	} catch (error) {
+		console.error(`Error creating the index: ${JSON.stringify(error)}`);
 	}
-	return exists.body;
+	return exists;
 };
 
 /**
@@ -49,30 +55,45 @@ export const indexData = async (
 	{ id, data, entityName, organization }: IndexData,
 ): Promise<IndexResult> => {
 	const sanitizedIndex = sanitize_index_name(index);
-	const response = await client.index({
-		index: sanitizedIndex,
-		id,
-		body: {
-			data,
-			entityName,
-			organization,
-		},
-	});
-	console.log('Document indexed:', JSON.stringify(response));
+	try {
+		const response = await client.index({
+			index: sanitizedIndex,
+			id,
+			body: {
+				data,
+				entityName,
+				organization,
+			},
+		});
+		console.log('Document indexed:', JSON.stringify(response));
 
-	let successful = false;
-	const failureData: FailureData = {};
-	if (response.body.result === 'created' || response.body.result === 'updated') {
-		successful = true;
-	} else {
-		failureData[id] = [response.body.result];
+		let successful = false;
+		const failureData: FailureData = {};
+		if (response.body.result === 'created' || response.body.result === 'updated') {
+			successful = true;
+		} else {
+			failureData[id] = [response.body.result];
+		}
+
+		return {
+			indexName: index,
+			successful,
+			failureData,
+		};
+	} catch (error) {
+		let errorMessage = JSON.stringify(error);
+
+		console.error(`Error index doc: ${errorMessage}`);
+
+		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
+			errorMessage = error.name;
+		}
+		return {
+			indexName: index,
+			successful: false,
+			failureData: { [id]: [errorMessage] },
+		};
 	}
-
-	return {
-		indexName: index,
-		successful,
-		failureData,
-	};
 };
 
 /**
@@ -87,31 +108,47 @@ export const indexData = async (
 export const updateData = async (
 	client: Client,
 	index: string,
-	{ id, data }: { id: string; data: Record<string, DataRecordValue> },
+	id: string,
+	data: Record<string, DataRecordValue>,
 ): Promise<IndexResult> => {
 	const sanitizedIndex = sanitize_index_name(index);
-	const response = await client.update({
-		index: sanitizedIndex,
-		id,
-		body: {
-			doc: { data },
-		},
-	});
-	console.log('Document updated:', JSON.stringify(response));
+	try {
+		const response = await client.update({
+			index: sanitizedIndex,
+			id,
+			body: {
+				doc: { data },
+			},
+		});
+		console.log('Document updated:', JSON.stringify(response));
 
-	let successful = false;
-	const failureData: FailureData = {};
-	if (response.body.result === 'created' || response.body.result === 'updated') {
-		successful = true;
-	} else {
-		failureData[id] = [response.body.result];
+		let successful = false;
+		const failureData: FailureData = {};
+		if (response.body.result === 'created' || response.body.result === 'updated') {
+			successful = true;
+		} else {
+			failureData[id] = [response.body.result];
+		}
+
+		return {
+			indexName: index,
+			successful,
+			failureData,
+		};
+	} catch (error) {
+		let errorMessage = JSON.stringify(error);
+
+		console.error(`Error update doc: ${errorMessage}`);
+
+		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
+			errorMessage = error.name;
+		}
+		return {
+			indexName: index,
+			successful: false,
+			failureData: { [id]: [errorMessage] },
+		};
 	}
-
-	return {
-		indexName: index,
-		successful,
-		failureData,
-	};
 };
 
 /**
@@ -123,25 +160,40 @@ export const updateData = async (
  */
 export const deleteData = async (client: Client, index: string, id: string): Promise<IndexResult> => {
 	const sanitizedIndex = sanitize_index_name(index);
-	const response = await client.delete({
-		index: sanitizedIndex,
-		id,
-	});
-	console.log('Document deleted:', JSON.stringify(response));
+	try {
+		const response = await client.delete({
+			index: sanitizedIndex,
+			id,
+		});
+		console.log('Document deleted:', JSON.stringify(response));
 
-	let successful = false;
-	const failureData: FailureData = {};
-	if (response.body.result === 'deleted') {
-		successful = true;
-	} else {
-		failureData[id] = [response.body.result];
+		let successful = false;
+		const failureData: FailureData = {};
+		if (response.body.result === 'deleted') {
+			successful = true;
+		} else {
+			failureData[id] = [response.body.result];
+		}
+
+		return {
+			indexName: index,
+			successful,
+			failureData,
+		};
+	} catch (error) {
+		let errorMessage = JSON.stringify(error);
+
+		console.error(`Error delete doc: ${errorMessage}`);
+
+		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
+			errorMessage = error.name;
+		}
+		return {
+			indexName: index,
+			successful: false,
+			failureData: { [id]: [errorMessage] },
+		};
 	}
-
-	return {
-		indexName: index,
-		successful,
-		failureData,
-	};
 };
 
 /**
@@ -156,6 +208,12 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
  * @returns {boolean}
  */
 export const ping = async (client: Client): Promise<boolean> => {
-	const response = await client.ping();
-	return response.body;
+	try {
+		const response = await client.ping();
+		return response.body;
+	} catch (error) {
+		console.error(`Error ping server: ${JSON.stringify(error)}`);
+
+		return false;
+	}
 };

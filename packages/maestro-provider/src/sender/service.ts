@@ -1,4 +1,4 @@
-import { IElasticsearchService, type IndexData } from '@overture-stack/maestro-common';
+import { type DataRecordValue, IElasticsearchService, type IndexData } from '@overture-stack/maestro-common';
 import { es7, es8 } from '@overture-stack/maestro-indexer-client';
 
 export type ESVersion = '7' | '8';
@@ -24,7 +24,8 @@ export const clientProvider = ({
 		createIndex: (index: string) => service.createIndex(index),
 		indexData: (index: string, data: IndexData) => service.indexData(index, data),
 		ping: () => service.ping(),
-		updateData: (index: string, data: IndexData) => service.updateData(index, data),
+		updateData: (index: string, id: string, data: Record<string, DataRecordValue>) =>
+			service.updateData(index, id, data),
 		deleteData: (index: string, id: string) => service.deleteData(index, id),
 	};
 };
