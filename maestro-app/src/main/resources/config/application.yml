@@ -58,16 +58,16 @@ maestro:
     pathPrefix:
     indexes:                      # The index(es) to store documents in (will be created if not existing)
       fileCentric:
+          enabled: true
           name:  overture-quickstart-index
           alias: file_centric
-          enabled: true
-      # analysisCentric:
-      #     name: analysis_centric_1.0
-      #     alias: analysis_centric
-      #     enabled: true
+      analysisCentric:
+          enabled: false
+          name: analysis_centric_1.0
+          alias: analysis_centric
     client: 
       basicAuth:
-        enabled: false
+        enabled: true
         user: elastic
         password: myelasticpassword
       trustSelfSignedCert: true    # Self signed certs should only be used for development environments
@@ -185,7 +185,7 @@ spring:
     stream:
       kafka: # remove this key to disable kafka
         binder:
-          brokers: http://localhost:9092
+          brokers: localhost:9092
         bindings:
           songInput:
             consumer:
@@ -228,4 +228,4 @@ springdoc:
     value: http://localhost:11235/custom
   swagger-ui:
     path: /api-docs
-    
+  
