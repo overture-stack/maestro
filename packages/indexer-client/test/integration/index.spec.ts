@@ -3,15 +3,46 @@ import indexDataTest from './indexData.spec';
 import pingTest from './ping.spec';
 import updateIndexDataTest from './updateIndexedData.spec';
 
-describe('Integration tests - Client V7', function () {
-	before(function () {
-		this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:7.10.1';
-		this.clientVersion = 7;
+describe('Integration tests', function () {
+	describe('Client V7', function () {
+		before(function () {
+			this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:7.10.1';
+			this.clientVersion = 7;
+		});
+
+		// test operations
+		describe('Create index', function () {
+			createdIndexTest.call(this);
+		});
+		describe('Index Data', function () {
+			indexDataTest.call(this);
+		});
+		describe('Ping server', function () {
+			pingTest.call(this);
+		});
+		describe('Update Data', function () {
+			updateIndexDataTest.call(this);
+		});
 	});
 
-	// test operations
-	describe('Create index', createdIndexTest.bind(this));
-	describe('Index Data', indexDataTest.bind(this));
-	describe('Ping server', pingTest.bind(this));
-	describe('Update Data', updateIndexDataTest.bind(this));
+	describe('Client V8', function () {
+		before(function () {
+			this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:8.1.2';
+			this.clientVersion = 8;
+		});
+
+		// test operations
+		describe('Create index', function () {
+			createdIndexTest.call(this);
+		});
+		describe('Index Data', function () {
+			indexDataTest.call(this);
+		});
+		describe('Ping server', function () {
+			pingTest.call(this);
+		});
+		describe('Update Data', function () {
+			updateIndexDataTest.call(this);
+		});
+	});
 });

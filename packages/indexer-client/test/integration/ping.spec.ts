@@ -11,7 +11,11 @@ export default function suite() {
 
 	before(async () => {
 		// Start an Elasticsearch container
-		container = await new ElasticsearchContainer(this.ctx.dockerImage).start();
+		container = await new ElasticsearchContainer(this.ctx.dockerImage)
+			.withEnvironment({
+				'xpack.security.enabled': 'false',
+			})
+			.start();
 
 		// Get the connection details for the running container
 		const esHost = container.getHttpUrl();
@@ -42,7 +46,7 @@ export default function suite() {
 		if (this.ctx.clientVersion === 7) {
 			client = es7('http://unknown');
 		} else if (this.ctx.clientVersion === 8) {
-			client = es7('http://unknown');
+			client = es8('http://unknown');
 		}
 
 		const result = await client.ping();
