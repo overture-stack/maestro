@@ -1,8 +1,6 @@
 .ONESHELL:
 DOCKER_COMPOSE_LOCAL_DIR = ./run/docker-compose
 VERSION=$(shell cat ./.mvn/maven.config | grep revision | cut -d '=' -f2)-SNAPSHOT
-DOCS_SRC_DIR=sphinx-docs
-PUBLISHED_DOCS_DIR=docs
 ###################
 ## MAVEN
 ###################
@@ -133,12 +131,3 @@ kafka-index-repo:
 			{"value" : { "repositoryCode" : "aws" }	}
 		]
 	}'
-
-########################################
-## documentation
-########################################
-build-docs:
-	cd $(DOCS_SRC_DIR)
-	make singlehtml
-	rm -r ../$(PUBLISHED_DOCS_DIR)/*
-	cp -r ./build/singlehtml/* ../$(PUBLISHED_DOCS_DIR)
