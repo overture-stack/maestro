@@ -19,12 +19,13 @@ export default function suite() {
 
 		// Get the connection details for the running container
 		const esHost = container.getHttpUrl();
+		const clientVersion = this.ctx.clientVersion;
 
 		// Initialize our client wrapper
-		if (this.ctx.clientVersion === 7) {
-			client = es7(esHost);
-		} else if (this.ctx.clientVersion === 8) {
-			client = es8(esHost);
+		if (clientVersion === 7) {
+			client = es7({ nodes: esHost, version: 7, basicAuth: { enabled: false } });
+		} else if (clientVersion === 8) {
+			client = es8({ nodes: esHost, version: 8, basicAuth: { enabled: false } });
 		}
 
 		// Wait for Elasticsearch to be ready
@@ -56,9 +57,9 @@ export default function suite() {
 
 		// Setting an invalid node url to throw a Connection Error
 		if (this.ctx.clientVersion === 7) {
-			client = es7('http://unknown');
+			client = es7({ nodes: 'http://unknown', version: 7, basicAuth: { enabled: false } });
 		} else if (this.ctx.clientVersion === 8) {
-			client = es8('http://unknown');
+			client = es8({ nodes: 'http://unknown', version: 8, basicAuth: { enabled: false } });
 		}
 
 		const result = await client.createIndex(indexName);

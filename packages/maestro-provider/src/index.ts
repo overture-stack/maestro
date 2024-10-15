@@ -1,1 +1,1 @@
-export { clientProvider } from './sender/index.js';
+export { clientProvider } from './provider/index.js';

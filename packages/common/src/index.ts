@@ -1,2 +1,11 @@
-export { DataRecordValue, FailureData, IElasticsearchService, IndexData, IndexResult } from './types/index.js';
+export {
+	DataRecordValue,
+	ElasticSearchBasicAuthConfig,
+	ElasticSearchConfig,
+	FailureData,
+	IElasticsearchService,
+	IndexData,
+	IndexResult,
+	LoggerConfig,
+} from './types/index.js';
 export { sanitize_index_name } from './utils/index.js';
