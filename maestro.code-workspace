@@ -5,6 +5,10 @@
 			"path": ".",
 		},
 		{
+			"name": "🚀 server",
+			"path": "apps/server",
+		},
+		{
 			"name": "📦 @overture-stack/maestro-common",
 			"path": "packages/common",
 		},

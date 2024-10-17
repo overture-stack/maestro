@@ -1,1 +1,1 @@
-export { es7, es8 } from './client/index.js';
+export { clientProvider } from './client/index.js';

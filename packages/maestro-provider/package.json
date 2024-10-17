@@ -3,6 +3,7 @@
 	"version": "5.0.0-alpha.1",
 	"description": "",
 	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
 	"type": "module",
 	"scripts": {
 		"clean": "rimraf dist",

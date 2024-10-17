@@ -3,7 +3,8 @@ import { expect } from 'chai';
 
 import { IElasticsearchService, IndexData } from '@overture-stack/maestro-common';
 
-import { es7, es8 } from '../../src/index.js';
+import { es7 } from '../../src/client/v7/client.js';
+import { es8 } from '../../src/client/v8/client.js';
 
 export default function suite() {
 	let container: StartedElasticsearchContainer;

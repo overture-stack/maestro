@@ -5,8 +5,8 @@ export type ElasticSearchBasicAuthConfig = {
 };
 
 type ElasticSearchRetryConfig = {
-	retryMaxAttempts: number;
-	retryWaitDurationMillis: number;
+	retryMaxAttempts?: number;
+	retryWaitDurationMillis?: number;
 };
 
 export type ElasticSearchConfig = {
