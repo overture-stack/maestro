@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"name": "✨ @overture-stack/maestro",
+			"path": ".",
+		},
+		{
+			"name": "🚀 server",
+			"path": "apps/server",
+		},
+		{
+			"name": "📦 @overture-stack/maestro-common",
+			"path": "packages/common",
+		},
+		{
+			"name": "📦 @overture-stack/maestro-indexer-client",
+			"path": "packages/indexer-client",
+		},
+		{
+			"name": "📦 @overture-stack/maestro-provider",
+			"path": "packages/maestro-provider",
+		},
+	],
+	"settings": {
+		"mochaExplorer.require": "tsx",
+	},
+}

@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		/* Language and Environment */
+		"target": "ESNext" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+
+		/* Modules */
+		"module": "NodeNext" /* Specify what module code is generated. */,
+		"resolveJsonModule": true /* Enable importing .json files. */,
+
+		/* Emit */
+		"declaration": true,
+		"noEmit": false /* Disable emitting files from a compilation. */,
+
+		/* Interop Constraints */
+		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+
+		/* Type Checking */
+		"strict": true /* Enable all strict type-checking options. */,
+		"noUncheckedIndexedAccess": true /* Add 'undefined' to a type when accessed using an index. */,
+
+		/* Completeness */
+		"skipLibCheck": true /* Skip type checking all .d.ts files. */
+	},
+	"exclude": ["node_modules"],
+	"include": ["./src/**/*.ts"]
+}
