@@ -12,6 +12,7 @@ dist
 
 # VS code editor
 .vscode
+*.code-workspace
 
 # Test coverage
 coverage

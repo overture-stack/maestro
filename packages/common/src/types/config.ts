@@ -14,7 +14,7 @@ type SchemaBindingConfig = {
 export type KafkaConfig = {
 	lyricSchemaBinding?: SchemaBindingConfig;
 	enabled: boolean;
-	servers: string;
+	servers?: string;
 	songSchemaBinding?: SchemaBindingConfig;
 };
 
@@ -40,7 +40,7 @@ type SongIndicesConfig = {
 export type SongConfig = {
 	indexableStudyStates: string;
 	indices: SongIndicesConfig;
-	repositories: SongRepositoryConfig[];
+	repositories?: SongRepositoryConfig[];
 };
 
 type LyricRepositoryConfig = {
@@ -53,7 +53,7 @@ type LyricRepositoryConfig = {
 export type LyricConfig = {
 	indexValidDataOnly: boolean;
 	index: IndexConfig;
-	repositories: LyricRepositoryConfig[];
+	repositories?: LyricRepositoryConfig[];
 };
 
 export type Config = {

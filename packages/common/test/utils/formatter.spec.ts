@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import { sanitize_index_name } from '../../src/utils/index';
+import { sanitize_index_name } from '../../src/utils/formatter.js';
 
 describe('Formatter functions', () => {
 	describe('Sanitize string', () => {

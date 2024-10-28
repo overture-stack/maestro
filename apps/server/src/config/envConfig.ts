@@ -6,7 +6,7 @@ export const getServerConfig = () => {
 	return {
 		port: process.env.MAESTRO_SERVER_PORT || 11235,
 		nodeEnv: process.env.NODE_ENV || 'development',
-		openApiPath: process.env.MAESTRO_OPENAPI_PATH || '/api-docs',
+		openApiPath: process.env.MAESTRO_OPENAPI_PATH || 'api-docs',
 	};
 };
 
@@ -30,7 +30,7 @@ const kafkaConfigSchema = z.object({
 	MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_DLQ: z.string().optional().default('clinical_data_dlq'),
 	MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_TOPIC: z.string().optional().default('clinical_index_request'),
 	MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_DLQ: z.string().optional().default('clinical_index_request_dlq'),
-	MAESTRO_KAFKA_SERVERS: z.string(),
+	MAESTRO_KAFKA_SERVERS: z.string().optional(),
 	MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_TOPIC: z.string().default('song_analysis'),
 	MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_DLQ: z.string().default('song_analysis_dlq'),
 	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_TOPIC: z.string().default('index_request'),
@@ -62,7 +62,7 @@ const songConfigSchema = z.object({
 	MAESTRO_SONG_INDEX_FILECENTRIC_ALIAS: z.string().default('file_centric'),
 	MAESTRO_SONG_INDEX_FILECENTRIC_ENABLED: z.coerce.boolean().default(false),
 	MAESTRO_SONG_INDEX_FILECENTRIC_NAME: z.string().default('file_centric_1'),
-	MAESTRO_SONG_REPOSITORIES: stringToJSONSchema.pipe(z.array(songRepositorySchema)),
+	MAESTRO_SONG_REPOSITORIES: stringToJSONSchema.pipe(z.array(songRepositorySchema)).optional(),
 });
 
 const LyricRepositoryConfig = z.object({
@@ -72,13 +72,15 @@ const LyricRepositoryConfig = z.object({
 	name: z.string(),
 });
 
-const lyricConfigSchema = z.object({
-	MAESTRO_LYRIC_INDEX_ALIAS: z.string().default('clinical_data_1.0'),
-	MAESTRO_LYRIC_INDEX_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_LYRIC_INDEX_NAME: z.string().default('clinical_data'),
-	MAESTRO_LYRIC_INDEX_VALID_DATA_ONLY: z.coerce.boolean().default(false),
-	MAESTRO_LYRIC_REPOSITORIES: stringToJSONSchema.pipe(z.array(LyricRepositoryConfig)),
-});
+const lyricConfigSchema = z
+	.object({
+		MAESTRO_LYRIC_INDEX_ALIAS: z.string().default('clinical_data_1.0'),
+		MAESTRO_LYRIC_INDEX_ENABLED: z.coerce.boolean().default(false),
+		MAESTRO_LYRIC_INDEX_NAME: z.string().default('clinical_data'),
+		MAESTRO_LYRIC_INDEX_VALID_DATA_ONLY: z.coerce.boolean().default(false),
+		MAESTRO_LYRIC_REPOSITORIES: stringToJSONSchema.pipe(z.array(LyricRepositoryConfig)).optional(),
+	})
+	.optional();
 
 const loggerConfigSchema = z.object({
 	MAESTRO_LOGGING_LEVEL_ROOT: z.string().default('info'),

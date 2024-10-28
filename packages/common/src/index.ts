@@ -12,4 +12,5 @@ export {
 	LyricConfig,
 	SongConfig,
 } from './types/index.js';
-export { sanitize_index_name } from './utils/index.js';
+export { BadRequest, InternalServerError, NotFound, NotImplemented, ServiceUnavailable } from './utils/errors.js';
+export { sanitize_index_name } from './utils/formatter.js';
