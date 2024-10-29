@@ -185,7 +185,7 @@ spring:
     stream:
       kafka: # remove this key to disable kafka
         binder:
-          brokers: localhost:9092
+          brokers: localhost:29092
         bindings:
           songInput:
             consumer:
@@ -200,15 +200,15 @@ spring:
               autoCommitOnError: true
               autoCommitOffset: true
       bindings:
+        songInput:
+          destination: song-analysis
+          group: songConsumerGrp
+          consumer:
+            maxAttempts: 1
         input:
           # We don't specify content type because @StreamListener will handle that
           destination: maestro_index_requests
           group: requestsConsumerGrp
-          consumer:
-            maxAttempts: 1
-        songInput:
-          destination: song-analysis
-          group: songConsumerGrp
           consumer:
             maxAttempts: 1
 
