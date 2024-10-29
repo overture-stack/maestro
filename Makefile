@@ -1,8 +1,7 @@
 .ONESHELL:
-DOCKER_COMPOSE_LOCAL_DIR = ./run/docker-compose
+DOCKER_COMPOSE_DEV_FILE = ./apps/server/docker-compose.dev.yml
+DOCKER_COMPOSE_FILE = ./apps/server/docker-compose.yml
 VERSION=$(shell cat ./.mvn/maven.config | grep revision | cut -d '=' -f2)-SNAPSHOT
-DOCS_SRC_DIR=sphinx-docs
-PUBLISHED_DOCS_DIR=docs
 ###################
 ## MAVEN
 ###################
@@ -29,18 +28,18 @@ docker-build:
 
 # use this when you want to run maestro as container
 docker-start:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR) && docker-compose up -d
+	docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
 
 docker-stop:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR) && docker-compose down
+	docker-compose -f ${DOCKER_COMPOSE_FILE} down
 
 # only starts the infrastructure containers needed by maestro
 # use this when you run maestro from the ide (not as a container)
 docker-start-dev:
-	cd $(DOCKER_COMPOSE_LOCAL_DIR) && docker-compose -f docker-compose.dev.yml up -d
+	docker-compose -f ${DOCKER_COMPOSE_DEV_FILE} up -d
 
-docker-clean:
-	docker system prune
+docker-stop-dev:
+	docker-compose -f ${DOCKER_COMPOSE_DEV_FILE} down
 
 ###################
 ## REST API
@@ -78,10 +77,10 @@ kafka-analysis-publish:
 	-H 'Accept: application/vnd.kafka.v2+json' \
 	-H 'Content-Type: application/vnd.kafka.json.v2+json' \
 	-H 'cache-control: no-cache' \
-	-d '{
-		"records": [
-			{"value" : { "analysisId" : "EGAZ00001254368", "studyId" : "PEME-CA", "songServerId": "collab", "state": "PUBLISHED" }	}
-		]
+	-d '{ \
+		"records": [ \
+			{"value" : { "analysisId" : "EGAZ00001254368", "studyId" : "PEME-CA", "songServerId": "collab", "state": "PUBLISHED" }	} \
+		] \
 	}'
 
 kafka-song-queue:
@@ -104,10 +103,10 @@ kafka-index-study:
 	-H 'Accept: application/vnd.kafka.v2+json' \
 	-H 'Content-Type: application/vnd.kafka.json.v2+json' \
 	-H 'cache-control: no-cache' \
-	-d '{
-	"records": [
-			{"value" : { "repositoryCode" : "collab", "studyId" : "PACA-CA" }	}
-		]
+	-d '{ \
+	"records": [ \
+			{"value" : { "repositoryCode" : "collab", "studyId" : "PACA-CA" }	} \
+		] \
 	}'
 
 kafka-index-analysis:
@@ -116,10 +115,10 @@ kafka-index-analysis:
 	-H 'Accept: application/vnd.kafka.v2+json' \
 	-H 'Content-Type: application/vnd.kafka.json.v2+json' \
 	-H 'cache-control: no-cache' \
-	-d '{
-	"records": [
-			{"value" : { "repositoryCode" : "collab", "studyId" : "PEME-CA", "analysisId" : "EGAZ00001254247", "removeAnalysis": false }	}
-		]
+	-d '{ \
+	"records": [ \
+			{"value" : { "repositoryCode" : "collab", "studyId" : "PEME-CA", "analysisId" : "EGAZ00001254247", "removeAnalysis": false }	} \
+		] \
 	}'
 
 kafka-index-repo:
@@ -128,17 +127,8 @@ kafka-index-repo:
 	-H 'Accept: application/vnd.kafka.v2+json' \
 	-H 'Content-Type: application/vnd.kafka.json.v2+json' \
 	-H 'cache-control: no-cache' \
-	-d '{
-	"records": [
-			{"value" : { "repositoryCode" : "aws" }	}
-		]
+	-d '{ \
+	"records": [ \
+			{"value" : { "repositoryCode" : "aws" }	} \
+		] \
 	}'
-
-########################################
-## documentation
-########################################
-build-docs:
-	cd $(DOCS_SRC_DIR)
-	make singlehtml
-	rm -r ../$(PUBLISHED_DOCS_DIR)/*
-	cp -r ./build/singlehtml/* ../$(PUBLISHED_DOCS_DIR)

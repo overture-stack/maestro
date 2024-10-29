@@ -1,8 +1,21 @@
-.DS_Store
-.idea
-*.iml
-target
-.flattened-pom.xml
-build
+# Dependency directories
+node_modules
+
+# Project cache
+.nx
+
+# Build output
+dist
+
+# Dotenv environment variable files
+.env
+
+# VS code editor
 .vscode
-*.log
+*.code-workspace
+
+# Test coverage
+coverage
+
+# OS generated files
+.DS_Store
