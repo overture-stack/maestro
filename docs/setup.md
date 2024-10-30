@@ -120,7 +120,10 @@ After installing and configuring Score, verify that the system is functioning co
      - Check browser console for error messages
      - Verify you're using the correct URL
 
-For further assistance, [open an issue on GitHub](https://github.com/overture-stack/maestro/issues/new?assignees=&labels=&projects=&template=Feature_Requests.md).
+
+:::info Need Help?
+If you encounter any issues or have questions about our API, please don't hesitate to reach out through our relevant [**community support channels**](/community/support).
+:::
 
 :::warning
 This guide is meant to demonstrate the configuration and usage of Score for development purposes and is not intended for production. If you ignore this warning and use this in any public or production environment, please remember to use Spring profiles accordingly. For production do not use **dev** profile.
