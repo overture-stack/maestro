@@ -6,16 +6,22 @@ Maestro can be configured to listen to Kafka topics for various operations. This
 
 To enable Kafka integration, add the following configuration to your Maestro application properties or YAML file:
 
-```yaml
+```yaml title="./maestro-app/src/main/resources/config/application.yml"
+###############################################################################
+# Spring Configuration (Kafka)
+# Including Kafka integration with song 
+###############################################################################
 spring:
+  config:
+    useLegacyProcessing: true
   application:
     name: maestro
   output.ansi.enabled: ALWAYS
   cloud:
     stream:
-      kafka:
+      kafka: # remove this key to disable kafka
         binder:
-          brokers: localhost:9092
+          brokers: localhost:29092
         bindings:
           songInput:
             consumer:
@@ -30,28 +36,60 @@ spring:
               autoCommitOnError: true
               autoCommitOffset: true
       bindings:
-        input:
-          destination: maestro_index_requests
-          group: requestsConsumerGrp
-          consumer:
-            maxAttempts: 1
         songInput:
           destination: song-analysis
           group: songConsumerGrp
           consumer:
             maxAttempts: 1
+        input:
+          # We don't specify content type because @StreamListener will handle that
+          destination: maestro_index_requests
+          group: requestsConsumerGrp
+          consumer:
+            maxAttempts: 1
 ```
 
-:::info
-To disable Kafka integration, remove the `spring.cloud.stream.kafka` key from your configuration.
-:::
+<details>
+<summary><b>For more details about the configuration, click here</b></summary>
+
+**Spring Configuration**
+- `spring.config.useLegacyProcessing`: Enables legacy configuration processing mode
+- `spring.application.name`: Sets application identifier as "maestro"
+- `spring.output.ansi.enabled`: Controls ANSI color output in logs
+  - Possible values: `ALWAYS`, `NEVER`, `DETECT`
+
+**Kafka Configuration**
+- `spring.cloud.stream.kafka.binder.brokers`: Kafka broker connection URL
+- `spring.cloud.stream.kafka.bindings.songInput.consumer`: Song analysis consumer settings
+  - `enableDlq`: Enables dead letter queue ([see relevant confluent developer documentation here](https://developer.confluent.io/courses/kafka-connect/error-handling-and-dead-letter-queues/#:~:text=Kafka%20Connect's%20dead%20letter%20queue,at%20their%20keys%20and%20values.))
+  - `dlqName`: DLQ name for failed song analysis messages
+  - `autoCommitOnError`: Auto-commits offsets on error
+  - `autoCommitOffset`: Auto-commits processed message offsets
+    - For more information on these configuration see Kafka Consumers docs(https://docs.confluent.io/platform/current/clients/consumer.html)
+   - For more details on offset commit behavior, see:
+      - [Confluents documenation on Kafka Consumers](https://docs.confluent.io/platform/current/clients/consumer.html)
+      - [Spring Cloud Kafka Consumer Properties](https://docs.spring.io/spring-cloud-stream-binder-kafka/docs/current/reference/html/spring-cloud-stream-binder-kafka.html#kafka-consumer-properties)
+
+**Stream Bindings**
+ - `spring.cloud.stream.bindings.songInput`:
+  - `destination`: Target Kafka topic for song analysis
+  - `group`: Consumer group name
+  - `maxAttempts`: Maximum retry attempts for message processing
+    - Possible values: Integer > 0
+
+- `spring.cloud.stream.bindings.input`:
+  - `destination`: Topic for maestro index requests
+  - `group`: Consumer group for index requests
+  - `maxAttempts`: Maximum processing retry attempts
+    - Possible values: Integer > 0
+</details>
 
 ## Kafka Topics
 
 Maestro listens to two main Kafka topics:
 
 1. `maestro_index_requests`: For on-demand indexing requests
-2. `song-analysis`: For SONG analysis updates
+2. `song-analysis`: For Song analysis updates
 
 ### maestro_index_requests Topic
 
@@ -80,7 +118,7 @@ This topic is used for sending on-demand indexing requests to Maestro. Messages 
    }
    ```
 
-3. **Full Repository Indexing (SONG)**
+3. **Full Song Repository Indexing**
    ```json
    {
      "value": {
@@ -91,7 +129,7 @@ This topic is used for sending on-demand indexing requests to Maestro. Messages 
 
 ### song-analysis Topic
 
-This topic receives messages about SONG analysis updates. The message schema is defined by SONG, but typically looks like this:
+This topic receives messages about Song analysis updates. The message schema is defined by Song, but typically looks like this:
 
 ```json
 {
@@ -103,42 +141,6 @@ This topic receives messages about SONG analysis updates. The message schema is 
   }
 }
 ```
-
-## Configuration Details
-
-### Kafka Broker
-- `spring.cloud.stream.kafka.binder.brokers`: Specifies the Kafka broker address(es)
-
-### Dead Letter Queues (DLQ)
-- `enableDlq`: Enables a Dead Letter Queue for failed messages
-- `dlqName`: Specifies the name of the DLQ
-- `autoCommitOnError`: Automatically commits offset on error
-- `autoCommitOffset`: Automatically commits offset after processing
-
-### Consumer Groups
-- `group`: Defines the consumer group for each topic
-- `maxAttempts`: Sets the maximum number of processing attempts for a message
-
-## Best Practices
-
-1. **Error Handling**: Monitor DLQs regularly to handle failed messages
-2. **Message Validation**: Implement proper message validation to ensure correct format and content
-3. **Scalability**: Adjust consumer group settings for load balancing across multiple Maestro instances
-4. **Monitoring**: Set up monitoring for Kafka topics and consumer groups to track performance and issues
-
-## Troubleshooting
-
-If you encounter issues with Kafka integration:
-
-1. Verify Kafka broker connectivity
-2. Check consumer group offsets
-3. Inspect DLQs for failed messages
-4. Ensure message formats match the expected schemas
-5. Review Maestro logs for any Kafka-related errors
-
-:::info
-For production deployments, consider implementing additional security measures such as SSL encryption and SASL authentication for Kafka connections.
-:::
 
 ## Additional Resources
 
