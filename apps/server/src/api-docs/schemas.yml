@@ -1,0 +1,71 @@
+components:
+  responses:
+    BadRequest:
+      description: Error response indicating that the client's request is malformed or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+
+    NotFound:
+      description: Requested resource could not be found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+
+    ServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+
+    ServiceUnavailableError:
+      description: Unable to complete the request due to an issue with an external service.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+
+  schemas:
+    IndexResult:
+      type: object
+      properties:
+        indexName:
+          type: string
+          description: The name of the index where the data is stored.
+        successful:
+          type: boolean
+          description: Indicates whether the indexing operation was successful
+        failureData:
+          $ref: '#/components/schemas/FailureData'
+
+    FailureData:
+      type: object
+      properties:
+        failingIds:
+          type: array
+          description: List of the failing record IDs
+          items:
+            type: string
+
+    ErrorDetails:
+      type: object
+      properties:
+        details:
+          type: string
+          description: A detailed explanation of the error
+        message:
+          type: string
+          description: A brief description of the error encountered
+        timestamp:
+          type: string
+          description: The system timestamp when the error occurred, expressed in ISO 8601 format, which includes the date, time, and time zone (UTC).

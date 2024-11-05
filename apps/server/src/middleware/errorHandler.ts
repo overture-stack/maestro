@@ -9,6 +9,23 @@ import {
 } from '@overture-stack/maestro-common';
 
 /**
+ * Converts an unknown error cause into a string representation.
+ * @param cause The error cause
+ * @returns
+ */
+const convertErrorDetailsToString = (details: unknown): string => {
+	if (typeof details === 'string') {
+		return details;
+	} else if (details instanceof Error) {
+		return details.message;
+	} else if (details) {
+		return String(details);
+	} else {
+		return 'Unknown cause';
+	}
+};
+
+/**
  * A Middleware used to map Error types
  * @param err An Error instance
  * @param req Incoming HTTP Request object
@@ -20,27 +37,38 @@ import {
 export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction) => {
 	console.error('error handler received error: ', err);
 	let status: number;
-	const customizableMsg = err.message;
-	const details = err.cause;
+	let details: string | undefined;
+	let timestamp: string | undefined;
 	switch (true) {
 		case err instanceof BadRequest:
 			status = 400;
+			details = err.details;
+			timestamp = err.timestamp;
 			break;
 		case err instanceof NotFound:
 			status = 404;
+			details = err.details;
+			timestamp = err.timestamp;
 			break;
 		case err instanceof InternalServerError:
 			status = 500;
+			details = err.details;
+			timestamp = err.timestamp;
 			break;
 		case err instanceof NotImplemented:
 			status = 501;
+			details = err.details;
+			timestamp = err.timestamp;
 			break;
 		case err instanceof ServiceUnavailable:
 			status = 503;
+			details = err.details;
+			timestamp = err.timestamp;
 			break;
 		default:
 			status = 500;
+			details = convertErrorDetailsToString(err.cause);
 	}
 
-	res.status(status).send({ error: err.name, message: customizableMsg, details: details });
+	res.status(status).send({ message: err.message, details, timestamp });
 };
