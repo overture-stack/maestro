@@ -26,7 +26,7 @@ We'll use our Conductor service, a flexible Docker Compose setup, to spin up Mae
     | Operating System | Command |
     |------------------|---------|
     | Unix/macOS       | `make maestroDev` |
-    | Windows          | `make.bat maestroDev` |
+    | Windows          | `./make.bat maestroDev` |
 
     <details>
     <summary>**Click here for a detailed breakdown**</summary>
