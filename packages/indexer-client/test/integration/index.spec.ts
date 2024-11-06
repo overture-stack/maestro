@@ -2,6 +2,7 @@ import createdIndexTest from './createdIndex.spec';
 import indexDataTest from './indexData.spec';
 import pingTest from './ping.spec';
 import updateIndexDataTest from './updateIndexedData.spec';
+import bulkUpsertDataTest from './bulkUpsertIndexedData.spec';
 
 describe('Integration tests', function () {
 	describe('Client V7', function () {
@@ -23,6 +24,9 @@ describe('Integration tests', function () {
 		describe('Update Data', function () {
 			updateIndexDataTest.call(this);
 		});
+		describe('Bulk upsert Data', function () {
+			bulkUpsertDataTest.call(this);
+		});
 	});
 
 	describe('Client V8', function () {
@@ -43,6 +47,9 @@ describe('Integration tests', function () {
 		});
 		describe('Update Data', function () {
 			updateIndexDataTest.call(this);
+		});
+		describe('Bulk upsert Data', function () {
+			bulkUpsertDataTest.call(this);
 		});
 	});
 });

@@ -23,6 +23,7 @@ export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): IElast
 
 	return {
 		addData: (index: string, data: IndexData) => service.addData(index, data),
+		bulkUpsert: (index: string, data: Record<string, DataRecordValue>[]) => service.bulkUpsert(index, data),
 		createIndex: (index: string) => service.createIndex(index),
 		deleteData: (index: string, id: string) => service.deleteData(index, id),
 		ping: () => service.ping(),

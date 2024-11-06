@@ -1,4 +1,5 @@
 import type { Client } from 'es7';
+import type { BulkOperationType, BulkResponseItem } from 'es7/api/types';
 
 import {
 	type DataRecordValue,
@@ -7,6 +8,60 @@ import {
 	IndexResult,
 	sanitize_index_name,
 } from '@overture-stack/maestro-common';
+
+/**
+ * Indexes the specified document. If the document exists, replaces the document and increments the version.
+ *
+ * @param client An instance of the Elasticsearch `Client` used to perform the indexing operation
+ * @param index The name of the Elasticsearch index to create
+ * @param dataSet The actual data to be stored in the document
+ * @returns
+ */
+export const bulkUpsert = async (client: Client, index: string, dataSet: Record<string, DataRecordValue>[]) => {
+	const sanitizedIndex = sanitize_index_name(index);
+	try {
+		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex } }, doc]);
+
+		const response = await client.bulk({ refresh: true, body });
+
+		let successful = false;
+		const failureData: FailureData = {};
+		if (response.body.errors) {
+			// The items array has the same order of the dataset we just indexed.
+			// The presence of the `error` key indicates that the operation
+			// that we did for the document has failed.
+			response.body.items.forEach((item: Partial<Record<BulkOperationType, BulkResponseItem>>, indexItem: number) => {
+				const operation = item.index;
+				if (operation && 'error' in operation) {
+					failureData[indexItem] = [operation.error?.reason || 'error'];
+				}
+			});
+		}
+
+		if (Object.keys(failureData).length === 0) {
+			successful = true;
+		}
+
+		return {
+			indexName: index,
+			successful,
+			failureData,
+		};
+	} catch (error) {
+		let errorMessage = JSON.stringify(error);
+
+		console.error(`Error update doc: ${errorMessage}`);
+
+		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
+			errorMessage = error.name;
+		}
+		return {
+			indexName: index,
+			successful: false,
+			failureData: { error: [errorMessage] },
+		};
+	}
+};
 
 /**
  * Creates an index in Elasticsearch if it does not already exist

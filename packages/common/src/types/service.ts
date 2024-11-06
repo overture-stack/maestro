@@ -46,4 +46,11 @@ export interface IElasticsearchService {
 	 * @returns A promise that resolves to the result of the deletion operation.
 	 */
 	deleteData(index: string, id: string): Promise<IndexResult>;
+
+	/**
+	 * Performs a bulk upsert operation to index or update multiple documents in the specified index.
+	 * @param index The name of the index where the documents will be upserted
+	 * @param data An array of data records to be upserted.
+	 */
+	bulkUpsert(index: string, data: Record<string, DataRecordValue>[]): Promise<IndexResult>;
 }

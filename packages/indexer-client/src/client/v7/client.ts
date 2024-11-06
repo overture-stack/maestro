@@ -9,7 +9,7 @@ import type {
 } from '@overture-stack/maestro-common';
 
 import { getAuth } from '../../common/config.js';
-import { createIndexIfNotExists, deleteData, indexData, ping, updateData } from './operations.js';
+import { bulkUpsert, createIndexIfNotExists, deleteData, indexData, ping, updateData } from './operations.js';
 
 /**
  *  Creates an instance of the Elasticsearch service for version 7.
@@ -39,6 +39,10 @@ export const es7 = (config: ElasticSearchConfig): IElasticsearchService => {
 	return {
 		async addData(index: string, data: IndexData): Promise<IndexResult> {
 			return indexData(client, index, data);
+		},
+
+		async bulkUpsert(index: string, data: Record<string, DataRecordValue>[]): Promise<IndexResult> {
+			return bulkUpsert(client, index, data);
 		},
 
 		async createIndex(index: string): Promise<boolean> {
