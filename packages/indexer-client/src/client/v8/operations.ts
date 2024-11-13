@@ -1,7 +1,13 @@
 import type { Client } from 'es8';
 import type { BulkOperationType, BulkResponseItem } from 'es8/lib/api/types.js';
 
-import { type DataRecordValue, FailureData, IndexResult, sanitize_index_name } from '@overture-stack/maestro-common';
+import {
+	type DataRecordValue,
+	FailureData,
+	IndexResult,
+	logger,
+	sanitize_index_name,
+} from '@overture-stack/maestro-common';
 
 export const bulkUpsert = async (client: Client, index: string, dataSet: Record<string, DataRecordValue>[]) => {
 	const sanitizedIndex = sanitize_index_name(index);
@@ -9,6 +15,8 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: Record<
 		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex, _id: doc?.['id'] } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
+
+		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents: ${response.items.length}`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -37,7 +45,7 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: Record<
 	} catch (error) {
 		let errorMessage = JSON.stringify(error);
 
-		console.error(`Error update doc: ${errorMessage}`);
+		logger.error(`Error update doc: ${errorMessage}`);
 
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
 			errorMessage = error.name;
@@ -68,12 +76,12 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
 		exists = await client.indices.exists({ index: sanitizedIndex });
 		if (!exists) {
 			await client.indices.create({ index: sanitizedIndex });
-			console.info(`Index ${sanitizedIndex} created.`);
+			logger.info(`Index ${sanitizedIndex} created.`);
 		} else {
-			console.debug(`Index ${sanitizedIndex} already exists.`);
+			logger.debug(`Index ${sanitizedIndex} already exists.`);
 		}
 	} catch (error) {
-		console.error(`Error creating the index: ${error}`);
+		logger.error(`Error creating the index: ${error}`);
 	}
 	return exists;
 };
@@ -103,7 +111,8 @@ export const indexData = async (
 			id: data?.['id']?.toString(),
 			document: data,
 		});
-		console.debug('Document indexed:', JSON.stringify(response));
+
+		logger.debug(`Indexing document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -119,7 +128,7 @@ export const indexData = async (
 			failureData,
 		};
 	} catch (error) {
-		console.error(`Error document index: ${error}`);
+		logger.error(`Error document index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
@@ -157,7 +166,7 @@ export const updateData = async (
 				doc: { data },
 			},
 		});
-		console.debug('Document updated:', JSON.stringify(response));
+		logger.debug(`Updating indexed document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -173,7 +182,7 @@ export const updateData = async (
 			failureData,
 		};
 	} catch (error) {
-		console.error(`Error updating the index: ${error}`);
+		logger.error(`Error updating the index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
@@ -202,7 +211,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			index: sanitizedIndex,
 			id,
 		});
-		console.debug('Document deleted:', JSON.stringify(response));
+		logger.debug(`Deleting indexed document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -218,7 +227,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			failureData,
 		};
 	} catch (error) {
-		console.error(`Error deleting the index: ${error}`);
+		logger.error(`Error deleting the index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
@@ -247,7 +256,7 @@ export const ping = async (client: Client): Promise<boolean> => {
 	try {
 		return await client.ping();
 	} catch (error) {
-		console.error(`Error ping server: ${error}`);
+		logger.error(`Error ping server: ${error}`);
 
 		return false;
 	}

@@ -1,4 +1,8 @@
-import type { IElasticsearchService, RepositoryIndexingOperations } from '@overture-stack/maestro-common';
+import {
+	type IElasticsearchService,
+	initializeLogger,
+	type RepositoryIndexingOperations,
+} from '@overture-stack/maestro-common';
 import type { MaestroProviderConfig } from '@overture-stack/maestro-common/dist/types/config.js';
 import { clientProvider } from '@overture-stack/maestro-indexer-client';
 
@@ -24,6 +28,7 @@ export interface IMaestroProvider {
  * @returns The Maestro Provider object containing API operations and an Elasticsearch service instance
  */
 export const MaestroProvider = (config: MaestroProviderConfig): IMaestroProvider => {
+	initializeLogger(config.logger);
 	const indexerProvider = clientProvider(config.elasticSearchConfig);
 
 	const apiOperations = api(config, indexerProvider);

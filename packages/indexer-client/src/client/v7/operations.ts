@@ -5,6 +5,7 @@ import {
 	type DataRecordValue,
 	type FailureData,
 	IndexResult,
+	logger,
 	sanitize_index_name,
 } from '@overture-stack/maestro-common';
 
@@ -22,6 +23,8 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: Record<
 		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex, _id: doc?.['id'] } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
+
+		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents:'${dataSet.length}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -49,7 +52,7 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: Record<
 	} catch (error) {
 		let errorMessage = JSON.stringify(error);
 
-		console.error(`Error update doc: ${errorMessage}`);
+		logger.error(`Error update doc: ${errorMessage}`);
 
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
 			errorMessage = error.name;
@@ -81,12 +84,12 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
 		exists = result.body;
 		if (!result.body) {
 			await client.indices.create({ index: sanitizedIndex });
-			console.info(`Index ${sanitizedIndex} created.`);
+			logger.info(`Index ${sanitizedIndex} created.`);
 		} else {
-			console.debug(`Index ${sanitizedIndex} already exists.`);
+			logger.debug(`Index ${sanitizedIndex} already exists.`);
 		}
 	} catch (error) {
-		console.error(`Error creating the index: ${JSON.stringify(error)}`);
+		logger.error(`Error creating the index: ${JSON.stringify(error)}`);
 	}
 	return exists;
 };
@@ -115,7 +118,7 @@ export const indexData = async (
 			id: data?.['id']?.toString(),
 			body: data,
 		});
-		console.debug('Document indexed:', JSON.stringify(response));
+		logger.debug(`Indexing document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -134,7 +137,7 @@ export const indexData = async (
 	} catch (error) {
 		let errorMessage = JSON.stringify(error);
 
-		console.error(`Error index doc: ${errorMessage}`);
+		logger.error(`Error index doc: ${errorMessage}`);
 
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
 			errorMessage = error.name;
@@ -171,7 +174,7 @@ export const updateData = async (
 				doc: { data },
 			},
 		});
-		console.debug('Document updated:', JSON.stringify(response));
+		logger.debug(`Updating indexed document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -189,7 +192,7 @@ export const updateData = async (
 	} catch (error) {
 		let errorMessage = JSON.stringify(error);
 
-		console.error(`Error update doc: ${errorMessage}`);
+		logger.error(`Error update doc: ${errorMessage}`);
 
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
 			errorMessage = error.name;
@@ -216,7 +219,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			index: sanitizedIndex,
 			id,
 		});
-		console.debug('Document deleted:', JSON.stringify(response));
+		logger.debug(`Deleting indexed document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -234,7 +237,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 	} catch (error) {
 		let errorMessage = JSON.stringify(error);
 
-		console.error(`Error delete doc: ${errorMessage}`);
+		logger.error(`Error delete doc: ${errorMessage}`);
 
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
 			errorMessage = error.name;
@@ -263,7 +266,7 @@ export const ping = async (client: Client): Promise<boolean> => {
 		const response = await client.ping();
 		return response.body;
 	} catch (error) {
-		console.error(`Error ping server: ${JSON.stringify(error)}`);
+		logger.error(`Error ping server: ${JSON.stringify(error)}`);
 
 		return false;
 	}

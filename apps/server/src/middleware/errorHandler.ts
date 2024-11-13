@@ -8,6 +8,8 @@ import {
 	ServiceUnavailable,
 } from '@overture-stack/maestro-common';
 
+import { logger } from '../utils/logger.js';
+
 /**
  * Converts an unknown error cause into a string representation.
  * @param cause The error cause
@@ -35,7 +37,7 @@ const convertErrorDetailsToString = (details: unknown): string => {
  */
 
 export const errorHandler = (err: Error, req: Request, res: Response, _next: NextFunction) => {
-	console.error('error handler received error: ', err);
+	logger.error('error handler received error: ', err);
 	let status: number;
 	let details: string | undefined;
 	let timestamp: string | undefined;

@@ -3,6 +3,8 @@ import { ZodError, ZodSchema } from 'zod';
 
 import { BadRequest, InternalServerError } from '@overture-stack/maestro-common';
 
+import { logger } from '../utils/logger.js';
+
 export declare type RequestValidation<TBody, TQuery, TParams> = {
 	body?: ZodSchema<TBody>;
 	query?: ZodSchema<TQuery>;
@@ -37,10 +39,10 @@ export function validateRequest<TBody, TQuery, TParams>(
 		} catch (error) {
 			if (error instanceof ZodError) {
 				const errorMessages = error.errors.map((issue) => `${issue.path.join('.')} is ${issue.message}`).join(' | ');
-				console.error(LOG_MODULE, req.method, req.url, JSON.stringify(errorMessages));
+				logger.error(LOG_MODULE, req.method, req.url, JSON.stringify(errorMessages));
 				next(new BadRequest(errorMessages));
 			} else {
-				console.error(LOG_MODULE, req.method, req.url, 'Internal Server Error');
+				logger.error(LOG_MODULE, req.method, req.url, 'Internal Server Error');
 				next(new InternalServerError());
 			}
 		}

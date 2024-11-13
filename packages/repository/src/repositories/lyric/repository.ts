@@ -1,6 +1,11 @@
 import * as path from 'path';
 
-import type { DataRecordValue, IRepository, LyricRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	type DataRecordValue,
+	type IRepository,
+	logger,
+	type LyricRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
 import httpClient from '../../network/httpClient';
 import { isArrayOfObjects } from '../../utils/utils';
@@ -27,24 +32,28 @@ export const lyricRepository = (config: LyricRepositoryConfig): IRepository => {
 			if (paginationSize) {
 				fullUrl.searchParams.set('page', page.toString());
 			}
-			const result = await httpClient(fullUrl.toString());
+			try {
+				const result = await httpClient(fullUrl.toString());
 
-			if (isArrayOfObjects(result?.records)) {
-				const validArray: Array<Record<string, DataRecordValue>> = result.records.map(
-					(item: Record<string, DataRecordValue>) => {
-						const { systemId, ...rest } = item;
-						return { ...rest, id: systemId };
-					},
-				);
-				yield validArray;
-			} else {
-				return;
+				if (isArrayOfObjects(result?.records)) {
+					const validArray: Array<Record<string, DataRecordValue>> = result.records.map(
+						(item: Record<string, DataRecordValue>) => {
+							const { systemId, ...rest } = item;
+							return { ...rest, id: systemId };
+						},
+					);
+					yield validArray;
+				} else {
+					return;
+				}
+				if (paginationSize) {
+					page++;
+					hasMoreData = page < result?.pagination?.totalPages;
+				}
+				hasMoreData = false;
+			} catch (error) {
+				logger.error(`Error fetching Lyric records on category '${categoryId}'`, error);
 			}
-			if (paginationSize) {
-				page++;
-				hasMoreData = page < result?.pagination?.totalPages;
-			}
-			hasMoreData = false;
 		}
 	};
 	const getOrganizationRecords = async function* ({
@@ -69,24 +78,28 @@ export const lyricRepository = (config: LyricRepositoryConfig): IRepository => {
 			if (paginationSize) {
 				fullUrl.searchParams.set('page', page.toString());
 			}
-			const result = await httpClient(fullUrl.toString());
+			try {
+				const result = await httpClient(fullUrl.toString());
 
-			if (isArrayOfObjects(result?.records)) {
-				const validArray: Array<Record<string, DataRecordValue>> = result.records.map(
-					(item: Record<string, DataRecordValue>) => {
-						const { systemId, ...rest } = item;
-						return { ...rest, id: systemId };
-					},
-				);
-				yield validArray;
-			} else {
-				return;
-			}
-			if (paginationSize) {
-				page++;
-				hasMoreData = page < result?.pagination?.totalPages;
-			} else {
-				hasMoreData = false;
+				if (isArrayOfObjects(result?.records)) {
+					const validArray: Array<Record<string, DataRecordValue>> = result.records.map(
+						(item: Record<string, DataRecordValue>) => {
+							const { systemId, ...rest } = item;
+							return { ...rest, id: systemId };
+						},
+					);
+					yield validArray;
+				} else {
+					return;
+				}
+				if (paginationSize) {
+					page++;
+					hasMoreData = page < result?.pagination?.totalPages;
+				} else {
+					hasMoreData = false;
+				}
+			} catch (error) {
+				logger.error(`Error fetching Lyric records on organization '${organization}'`, error);
 			}
 		}
 	};
@@ -102,10 +115,14 @@ export const lyricRepository = (config: LyricRepositoryConfig): IRepository => {
 		const fullUrl = new URL(path.join('data', 'category', categoryId.toString(), 'id', id), baseUrl);
 		fullUrl.searchParams.append('view', 'compound');
 
-		const result = await httpClient(fullUrl.toString());
-		if (result?.['organization'] === organization) {
-			const { systemId, ...rest } = result;
-			return { ...rest, id: systemId };
+		try {
+			const result = await httpClient(fullUrl.toString());
+			if (result?.['organization'] === organization) {
+				const { systemId, ...rest } = result;
+				return { ...rest, id: systemId };
+			}
+		} catch (error) {
+			logger.error(`Error fetching Lyric records with ID '${id}'`, error);
 		}
 		return {};
 	};

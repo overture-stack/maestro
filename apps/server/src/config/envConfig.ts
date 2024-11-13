@@ -2,6 +2,8 @@ import 'dotenv/config';
 
 import { z, type ZodRawShape } from 'zod';
 
+import { logger } from '../utils/logger.js';
+
 export const getServerConfig = () => {
 	return {
 		port: process.env.MAESTRO_SERVER_PORT || 11235,
@@ -129,7 +131,7 @@ const mainSchema = elasticSearchConfigSchema.and(kafkaConfigSchema).and(loggerCo
 const mainSchemaParsed = mainSchema.safeParse(process.env);
 
 if (!mainSchemaParsed.success) {
-	console.error(mainSchemaParsed.error.issues);
+	logger.error(mainSchemaParsed.error.issues);
 	throw new Error('There is an error with the server environment variables.');
 }
 
@@ -144,7 +146,7 @@ const songOrLyricParsed = songOrLyricSchema.safeParse(process.env);
 if (!songOrLyricParsed.success) {
 	songOrLyricParsed.error.issues.forEach((issue) => {
 		if (issue.code === 'invalid_union') {
-			issue.unionErrors.forEach((ue) => console.error(ue.errors));
+			issue.unionErrors.forEach((ue) => logger.error(ue.errors));
 		}
 	});
 	throw new Error('There is an error with the server environment variables.');

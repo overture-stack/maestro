@@ -1,3 +1,5 @@
+import { logger } from '@overture-stack/maestro-common';
+
 interface FetchOptions extends RequestInit {
 	headers?: Record<string, string>;
 }
@@ -17,14 +19,14 @@ const httpClient = async (url: string, options: FetchOptions = {}) => {
 	};
 
 	try {
-		console.debug(`${config.method ?? 'GET'} ${url}`);
+		logger.debug(`${config.method ?? 'GET'} ${url}`);
 		const response = await fetch(url, config);
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
 		return response.json();
 	} catch (error) {
-		console.error('Fetch error', error);
+		logger.error('Fetch error', error);
 		throw error;
 	}
 };

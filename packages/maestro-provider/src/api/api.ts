@@ -4,6 +4,7 @@ import {
 	type IndexResult,
 	InternalServerError,
 	isEmpty,
+	logger,
 	type MaestroProviderConfig,
 	type RepositoryIndexingOperations,
 } from '@overture-stack/maestro-common';
@@ -44,7 +45,7 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
-			console.error(`Invalid repository information for repository code '${repoCode}'`);
+			logger.error(`Invalid repository information for repository code '${repoCode}'`);
 			throw new BadRequest(`Invalid repository code '${repoCode}'`);
 		}
 
@@ -71,7 +72,7 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
-			console.error(`Invalid repository information for repository code '${repoCode}'`);
+			logger.error(`Invalid repository information for repository code '${repoCode}'`);
 			throw new BadRequest(`Invalid repository code '${repoCode}'`);
 		}
 
@@ -99,7 +100,7 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
-			console.error(`Invalid repository information for repository code '${repoCode}'`);
+			logger.error(`Invalid repository information for repository code '${repoCode}'`);
 			throw new BadRequest(`Invalid repository code '${repoCode}'`);
 		}
 
@@ -110,7 +111,7 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 			// Index records using batchUpsert
 			return indexer.addData(repoInfo.indexName, repoRecord);
 		} else {
-			console.error(`Record '${recordId}' not found in organization '${organization}'`);
+			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
 			throw new BadRequest(`Record '${recordId}' not found in organization '${organization}'`);
 		}
 	};
@@ -126,7 +127,7 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
-			console.error(`Invalid repository information for repository code '${repoCode}'`);
+			logger.error(`Invalid repository information for repository code '${repoCode}'`);
 			throw new BadRequest(`Invalid repository code '${repoCode}'`);
 		}
 
@@ -136,7 +137,7 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 		if (!isEmpty(repoRecord)) {
 			return indexer.deleteData(repoInfo.indexName, recordId);
 		} else {
-			console.error(`Record '${recordId}' not found in organization '${organization}'`);
+			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
 			throw new BadRequest(`Record '${recordId}' not found in organization '${organization}'`);
 		}
 	};
