@@ -1,8 +1,8 @@
+import bulkUpsertDataTest from './bulkUpsertIndexedData.spec';
 import createdIndexTest from './createdIndex.spec';
 import indexDataTest from './indexData.spec';
 import pingTest from './ping.spec';
 import updateIndexDataTest from './updateIndexedData.spec';
-import bulkUpsertDataTest from './bulkUpsertIndexedData.spec';
 
 describe('Integration tests', function () {
 	describe('Client V7', function () {

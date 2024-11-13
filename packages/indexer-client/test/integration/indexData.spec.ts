@@ -1,7 +1,7 @@
 import { ElasticsearchContainer, StartedElasticsearchContainer } from '@testcontainers/elasticsearch';
 import { expect } from 'chai';
 
-import { IElasticsearchService, IndexData } from '@overture-stack/maestro-common';
+import { type DataRecordValue, IElasticsearchService } from '@overture-stack/maestro-common';
 
 import { es7 } from '../../src/client/v7/client.js';
 import { es8 } from '../../src/client/v8/client.js';
@@ -40,7 +40,7 @@ export default function suite() {
 
 	it('should return successful true when indexing data', async () => {
 		const indexName = 'test-index';
-		const mockData: IndexData = {
+		const mockData: Record<string, DataRecordValue> = {
 			id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
@@ -55,7 +55,7 @@ export default function suite() {
 
 	it('should return successful true when indexing data already exists', async () => {
 		const indexName = 'test-index';
-		const mockData: IndexData = {
+		const mockData: Record<string, DataRecordValue> = {
 			id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
@@ -70,7 +70,7 @@ export default function suite() {
 
 	it('should return successful false when a ConnectionError is thrown', async () => {
 		const indexName = 'test-index';
-		const mockData: IndexData = {
+		const mockData: Record<string, DataRecordValue> = {
 			id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',

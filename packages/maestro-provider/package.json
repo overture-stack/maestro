@@ -22,6 +22,6 @@
 	"dependencies": {
 		"@overture-stack/maestro-common": "workspace:^",
 		"@overture-stack/maestro-indexer-client": "workspace:^",
-		"rimraf": "^6.0.1"
+		"@overture-stack/maestro-repository": "workspace:^"
 	}
 }

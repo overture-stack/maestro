@@ -1,8 +1,55 @@
-import type { Config } from '@overture-stack/maestro-common';
+import { z } from 'zod';
 
-import { env } from './envConfig.js';
+import type {
+	LyricRepositoryConfig,
+	MaestroProviderConfig,
+	SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
-export const defaultAppConfig: Config = {
+import { env, type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './envConfig.js';
+
+const getRepositoryConfig = (
+	repos: (z.infer<typeof lyricSchemaDefinition> | z.infer<typeof songSchemaDefinition>)[],
+): (LyricRepositoryConfig | SongRepositoryConfig)[] => {
+	const lyricRepos = repos
+		.filter((value) => value && value.TYPE === repositoryTypes.Values.LYRIC)
+		.map(
+			(value) =>
+				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+				<LyricRepositoryConfig>{
+					baseUrl: value.BASE_URL,
+					code: value.CODE,
+					name: value.NAME,
+					paginationSize: value.PAGINATION_SIZE,
+					type: repositoryTypes.Values.LYRIC,
+					indexName: value.INDEX_NAME,
+					validDataOnly: value.LYRIC_VALIDATE_DATA_ONLY,
+					categoryId: value.LYRIC_CATEGORY_ID,
+				},
+		);
+
+	const songRepos = repos
+		.filter((value) => value && value.TYPE === repositoryTypes.Values.SONG)
+		.map(
+			(value) =>
+				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+				<SongRepositoryConfig>{
+					baseUrl: value.BASE_URL,
+					code: value.CODE,
+					name: value.NAME,
+					paginationSize: value.PAGINATION_SIZE,
+					type: repositoryTypes.Values.SONG,
+					indexName: value.INDEX_NAME,
+					indexableStudyStates: value.SONG_INDEXABLE_STUDY_STATES,
+					analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
+					organization: value.SONG_ORGANIZATION,
+					country: value.SONG_COUNTRY,
+				},
+		);
+	return [...songRepos, ...lyricRepos];
+};
+
+export const defaultAppConfig: MaestroProviderConfig = {
 	elasticSearchConfig: {
 		basicAuth: {
 			enabled: env.MAESTRO_ELASTICSEARCH_CLIENT_BASICAUTH_ENABLED,
@@ -45,29 +92,5 @@ export const defaultAppConfig: Config = {
 	logger: {
 		level: env.MAESTRO_LOGGING_LEVEL_ROOT,
 	},
-	lyricConfig: {
-		index: {
-			alias: env.MAESTRO_LYRIC_INDEX_ALIAS,
-			enabled: env.MAESTRO_LYRIC_INDEX_ENABLED,
-			name: env.MAESTRO_LYRIC_INDEX_NAME,
-		},
-		indexValidDataOnly: env.MAESTRO_LYRIC_INDEX_VALID_DATA_ONLY,
-		repositories: env.MAESTRO_LYRIC_REPOSITORIES,
-	},
-	songConfig: {
-		indexableStudyStates: env.MAESTRO_SONG_INDEXABLE_STUDY_STATES,
-		indices: {
-			analysisCentric: {
-				alias: env.MAESTRO_SONG_INDEX_ANALYSISCENTRIC_ALIAS,
-				enabled: env.MAESTRO_SONG_INDEX_ANALYSISCENTRIC_ENABLED,
-				name: env.MAESTRO_SONG_INDEX_ANALYSISCENTRIC_NAME,
-			},
-			fileCentric: {
-				alias: env.MAESTRO_SONG_INDEX_FILECENTRIC_ALIAS,
-				enabled: env.MAESTRO_SONG_INDEX_FILECENTRIC_ENABLED,
-				name: env.MAESTRO_SONG_INDEX_FILECENTRIC_NAME,
-			},
-		},
-		repositories: env.MAESTRO_SONG_REPOSITORIES,
-	},
+	repositories: getRepositoryConfig(env.repositories),
 };

@@ -1,18 +1,12 @@
 import type { Client } from 'es8';
 import type { BulkOperationType, BulkResponseItem } from 'es8/lib/api/types.js';
 
-import {
-	type DataRecordValue,
-	FailureData,
-	IndexData,
-	IndexResult,
-	sanitize_index_name,
-} from '@overture-stack/maestro-common';
+import { type DataRecordValue, FailureData, IndexResult, sanitize_index_name } from '@overture-stack/maestro-common';
 
 export const bulkUpsert = async (client: Client, index: string, dataSet: Record<string, DataRecordValue>[]) => {
 	const sanitizedIndex = sanitize_index_name(index);
 	try {
-		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex } }, doc]);
+		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex, _id: doc?.['id'] } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
 
@@ -74,9 +68,9 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
 		exists = await client.indices.exists({ index: sanitizedIndex });
 		if (!exists) {
 			await client.indices.create({ index: sanitizedIndex });
-			console.log(`Index ${sanitizedIndex} created.`);
+			console.info(`Index ${sanitizedIndex} created.`);
 		} else {
-			console.log(`Index ${sanitizedIndex} already exists.`);
+			console.debug(`Index ${sanitizedIndex} already exists.`);
 		}
 	} catch (error) {
 		console.error(`Error creating the index: ${error}`);
@@ -99,28 +93,25 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
 export const indexData = async (
 	client: Client,
 	index: string,
-	{ id, data, entityName, organization }: IndexData,
+	data: Record<string, DataRecordValue>,
 ): Promise<IndexResult> => {
 	const sanitizedIndex = sanitize_index_name(index);
 
 	try {
 		const response = await client.index({
 			index: sanitizedIndex,
-			id,
-			document: {
-				data,
-				entityName,
-				organization,
-			},
+			id: data?.['id']?.toString(),
+			document: data,
 		});
-		console.log('Document indexed:', JSON.stringify(response));
+		console.debug('Document indexed:', JSON.stringify(response));
 
 		let successful = false;
 		const failureData: FailureData = {};
 		if (response.result === 'created' || response.result === 'updated') {
 			successful = true;
 		} else {
-			failureData[id] = [response.result];
+			const keyIndex = Object.keys(failureData).length;
+			failureData[keyIndex] = [response.result];
 		}
 		return {
 			indexName: response._index,
@@ -137,7 +128,7 @@ export const indexData = async (
 		return {
 			indexName: index,
 			successful: false,
-			failureData: { [id]: [errorMessage] },
+			failureData: { [data?.['id']?.toString() || 0]: [errorMessage] },
 		};
 	}
 };
@@ -166,7 +157,7 @@ export const updateData = async (
 				doc: { data },
 			},
 		});
-		console.log('Document updated:', JSON.stringify(response));
+		console.debug('Document updated:', JSON.stringify(response));
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -211,7 +202,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			index: sanitizedIndex,
 			id,
 		});
-		console.log('Document deleted:', JSON.stringify(response));
+		console.debug('Document deleted:', JSON.stringify(response));
 
 		let successful = false;
 		const failureData: FailureData = {};

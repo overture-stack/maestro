@@ -1,5 +1,5 @@
 {
-	"name": "@overture-stack/maestro-common",
+	"name": "@overture-stack/maestro-repository",
 	"version": "5.0.0-alpha.1",
 	"description": "",
 	"main": "dist/index.js",
@@ -15,16 +15,12 @@
 		"test:unit:coverage": "c8 pnpm run test:unit"
 	},
 	"keywords": [],
-	"author": "Ontario Institute for Cancer Research",
-	"license": "AGPL-3.0",
+	"author": "",
+	"license": "ISC",
 	"dependencies": {
-		"zod": "^3.23.8"
+		"@overture-stack/maestro-common": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/chai": "^5.0.0",
-		"@types/mocha": "^10.0.8",
-		"c8": "^10.1.2",
-		"chai": "^5.1.1",
-		"mocha": "^10.7.3"
+		"@types/node": "^22.9.0"
 	}
 }

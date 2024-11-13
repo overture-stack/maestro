@@ -4,7 +4,6 @@ import type {
 	DataRecordValue,
 	ElasticSearchConfig,
 	IElasticsearchService,
-	IndexData,
 	IndexResult,
 } from '@overture-stack/maestro-common';
 
@@ -37,7 +36,7 @@ export const es8 = (config: ElasticSearchConfig): IElasticsearchService => {
 	});
 
 	return {
-		async addData(index: string, data: IndexData): Promise<IndexResult> {
+		async addData(index: string, data: Record<string, DataRecordValue>): Promise<IndexResult> {
 			return indexData(client, index, data);
 		},
 		async bulkUpsert(index: string, data: Record<string, DataRecordValue>[]): Promise<IndexResult> {

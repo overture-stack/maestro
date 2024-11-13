@@ -1,17 +1,69 @@
-import { Request, Response } from 'express';
+import { BadRequest } from '@overture-stack/maestro-common';
+import { MaestroProvider } from '@overture-stack/maestro-provider';
 
-import { NotImplemented } from '@overture-stack/maestro-common';
+import { defaultAppConfig } from '../config/provider.js';
+import {
+	indexOrganizationRequestschema,
+	indexRecordRequestschema,
+	indexRepositoryRequestschema,
+} from '../utils/requestSchemas.js';
+import { validateRequest } from '../utils/requestValidation.js';
 
-const indexRepository = (req: Request, res: Response) => {
-	throw new NotImplemented();
+const maestroProvider = MaestroProvider(defaultAppConfig);
+
+const indexRepository = validateRequest(indexRepositoryRequestschema, async (req, res, next) => {
+	try {
+		const repoCode = req.params.repositoryCode;
+
+		if (!repoCode) {
+			throw new BadRequest();
+		}
+
+		const result = await maestroProvider.api.indexRepository(repoCode);
+		// TODO: format result, return corresponding status code
+		res.status(200).send(result);
+	} catch (error) {
+		next(error);
+	}
+});
+
+const indexOrganization = validateRequest(indexOrganizationRequestschema, async (req, res, next) => {
+	try {
+		const repoCode = req.params.repositoryCode;
+		const organization = req.params.organization;
+
+		if (!repoCode) {
+			throw new BadRequest();
+		}
+
+		const result = await maestroProvider.api.indexOrganization(repoCode, organization);
+		// TODO: format result, return corresponding status code
+		res.status(200).send(result);
+	} catch (error) {
+		next(error);
+	}
+});
+
+const indexRecord = validateRequest(indexRecordRequestschema, async (req, res, next) => {
+	try {
+		const repoCode = req.params.repositoryCode;
+		const organization = req.params.organization;
+		const id = req.params.id;
+
+		if (!repoCode) {
+			throw new BadRequest();
+		}
+
+		const result = await maestroProvider.api.indexRecord(repoCode, organization, id);
+		// TODO: format result, return corresponding status code
+		res.status(200).send(result);
+	} catch (error) {
+		next(error);
+	}
+});
+
+export default {
+	indexRepository,
+	indexOrganization,
+	indexRecord,
 };
-
-const indexOrganization = (req: Request, res: Response) => {
-	throw new NotImplemented();
-};
-
-const indexRecord = (req: Request, res: Response) => {
-	throw new NotImplemented();
-};
-
-export default { indexRepository, indexOrganization, indexRecord };

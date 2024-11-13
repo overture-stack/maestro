@@ -20,8 +20,7 @@
 	"dependencies": {
 		"@overture-stack/maestro-common": "workspace:^",
 		"es7": "npm:@elastic/elasticsearch@7",
-		"es8": "npm:@elastic/elasticsearch@8",
-		"rimraf": "^6.0.1"
+		"es8": "npm:@elastic/elasticsearch@8"
 	},
 	"devDependencies": {
 		"@testcontainers/elasticsearch": "^10.13.2"

@@ -1,4 +1,4 @@
-import type { DataRecordValue, IndexData, IndexResult } from './dataRecord.js';
+import type { DataRecordValue, IndexResult } from './dataRecord.js';
 
 /**
  * Interface defining the contract for Elasticsearch service operations.
@@ -19,7 +19,7 @@ export interface IElasticsearchService {
 	 * @param data - The data to be indexed.
 	 * @returns A promise that resolves to the result of the indexing operation.
 	 */
-	addData(index: string, data: IndexData): Promise<IndexResult>;
+	addData(index: string, data: Record<string, DataRecordValue>): Promise<IndexResult>;
 
 	/**
 	 * Checks the availability of the Elasticsearch service.

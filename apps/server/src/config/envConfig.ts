@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import { z } from 'zod';
+import { z, type ZodRawShape } from 'zod';
 
 export const getServerConfig = () => {
 	return {
@@ -37,67 +37,157 @@ const kafkaConfigSchema = z.object({
 	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ: z.string().default('index_request_dlq'),
 });
 
-const stringToJSONSchema = z.string().transform((str, ctx) => {
-	try {
-		return JSON.parse(str);
-	} catch (e) {
-		ctx.addIssue({ code: 'custom', message: `Invalid JSON. ${e}` });
-		return z.NEVER;
-	}
-});
-
-const songRepositorySchema = z.object({
-	baseUrl: z.string(),
-	code: z.string(),
-	country: z.string(),
-	name: z.string(),
-	organization: z.string(),
-});
-
-const songConfigSchema = z.object({
-	MAESTRO_SONG_INDEXABLE_STUDY_STATES: z.string().default('PUBLISHED'),
-	MAESTRO_SONG_INDEX_ANALYSISCENTRIC_ALIAS: z.string().default('analysis_centric'),
-	MAESTRO_SONG_INDEX_ANALYSISCENTRIC_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_SONG_INDEX_ANALYSISCENTRIC_NAME: z.string().default('analysis_centric_1'),
-	MAESTRO_SONG_INDEX_FILECENTRIC_ALIAS: z.string().default('file_centric'),
-	MAESTRO_SONG_INDEX_FILECENTRIC_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_SONG_INDEX_FILECENTRIC_NAME: z.string().default('file_centric_1'),
-	MAESTRO_SONG_REPOSITORIES: stringToJSONSchema.pipe(z.array(songRepositorySchema)).optional(),
-});
-
-const LyricRepositoryConfig = z.object({
-	baseUrl: z.string(),
-	categoryId: z.coerce.number(),
-	code: z.string(),
-	name: z.string(),
-});
-
-const lyricConfigSchema = z
-	.object({
-		MAESTRO_LYRIC_INDEX_ALIAS: z.string().default('clinical_data_1.0'),
-		MAESTRO_LYRIC_INDEX_ENABLED: z.coerce.boolean().default(false),
-		MAESTRO_LYRIC_INDEX_NAME: z.string().default('clinical_data'),
-		MAESTRO_LYRIC_INDEX_VALID_DATA_ONLY: z.coerce.boolean().default(false),
-		MAESTRO_LYRIC_REPOSITORIES: stringToJSONSchema.pipe(z.array(LyricRepositoryConfig)).optional(),
-	})
-	.optional();
-
 const loggerConfigSchema = z.object({
 	MAESTRO_LOGGING_LEVEL_ROOT: z.string().default('info'),
 });
 
-const envConfig = elasticSearchConfigSchema
-	.and(elasticSearchConfigSchema)
-	.and(kafkaConfigSchema)
-	.and(loggerConfigSchema)
-	.and(songConfigSchema)
-	.and(lyricConfigSchema);
+export const repositoryTypes = z.enum(['LYRIC', 'SONG']);
 
-const envParsed = envConfig.safeParse(process.env);
+const definitionBaseRepositorySchema = z.object({
+	BASE_URL: z.string().url(),
+	CODE: z.string(),
+	NAME: z.string(),
+	PAGINATION_SIZE: z.coerce.number().optional(),
+	TYPE: repositoryTypes,
+	INDEX_NAME: z.string(),
+});
 
-if (!envParsed.success) {
-	console.error(envParsed.error.issues);
+const definitionLyricRepositorySchema = z.object({
+	TYPE: z.literal(repositoryTypes.Values.LYRIC),
+	LYRIC_VALIDATE_DATA_ONLY: z.boolean().default(true),
+	LYRIC_CATEGORY_ID: z.coerce.number(),
+});
+
+const definitionSongRepositorySchema = z.object({
+	TYPE: z.literal(repositoryTypes.Values.SONG),
+	SONG_INDEXABLE_STUDY_STATES: z.string().default('PUBLISHED'),
+	SONG_ANALYSIS_CENTRIC_ENABLED: z.boolean().default(true),
+	SONG_ORGANIZATION: z.string().optional(),
+	SONG_COUNTRY: z.string().optional(),
+});
+
+// Function to generate the schema for a dynamic number of repositories
+function createDynamicBaseRepositorySchema(count: number) {
+	const schemas: ZodRawShape = {};
+
+	for (let i = 0; i < count; i++) {
+		schemas[`MAESTRO_REPOSITORIES_${i}_BASE_URL`] = definitionBaseRepositorySchema.shape.BASE_URL;
+		schemas[`MAESTRO_REPOSITORIES_${i}_CODE`] = definitionBaseRepositorySchema.shape.CODE;
+		schemas[`MAESTRO_REPOSITORIES_${i}_NAME`] = definitionBaseRepositorySchema.shape.NAME;
+		schemas[`MAESTRO_REPOSITORIES_${i}_PAGINATION_SIZE`] = definitionBaseRepositorySchema.shape.PAGINATION_SIZE;
+		schemas[`MAESTRO_REPOSITORIES_${i}_TYPE`] = definitionBaseRepositorySchema.shape.TYPE;
+		schemas[`MAESTRO_REPOSITORIES_${i}_INDEX_NAME`] = definitionBaseRepositorySchema.shape.INDEX_NAME;
+	}
+	return z.object(schemas);
+}
+
+// Function to generate the schema for Lyric configuration for a dynamic number of repositories
+function createDynamicCustomLyricRepositorySchema(count: number) {
+	const schemas: ZodRawShape = {};
+
+	for (let i = 0; i < count; i++) {
+		schemas[`MAESTRO_REPOSITORIES_${i}_TYPE`] = definitionLyricRepositorySchema.shape.TYPE;
+		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_VALIDATE_DATA_ONLY`] =
+			definitionLyricRepositorySchema.shape.LYRIC_VALIDATE_DATA_ONLY;
+		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_CATEGORY_ID`] = definitionLyricRepositorySchema.shape.LYRIC_CATEGORY_ID;
+	}
+	return z.object(schemas);
+}
+
+// Function to generate the schema for Lyric configuration for a dynamic number of repositories
+function createDynamicCustomSongRepositorySchema(count: number) {
+	const schemas: ZodRawShape = {};
+
+	for (let i = 0; i < count; i++) {
+		schemas[`MAESTRO_REPOSITORIES_${i}_TYPE`] = definitionSongRepositorySchema.shape.TYPE;
+		schemas[`MAESTRO_REPOSITORIES_${i}_SONG_INDEXABLE_STUDY_STATES`] =
+			definitionSongRepositorySchema.shape.SONG_INDEXABLE_STUDY_STATES;
+		schemas[`MAESTRO_REPOSITORIES_${i}_SONG_ANALYSIS_CENTRIC_ENABLED`] =
+			definitionSongRepositorySchema.shape.SONG_ANALYSIS_CENTRIC_ENABLED;
+		schemas[`MAESTRO_REPOSITORIES_${i}_SONG_ORGANIZATION`] = definitionSongRepositorySchema.shape.SONG_ORGANIZATION;
+		schemas[`MAESTRO_REPOSITORIES_${i}_SONG_COUNTRY`] = definitionSongRepositorySchema.shape.SONG_COUNTRY;
+	}
+	return z.object(schemas);
+}
+
+// Define the number of repositories based on the environment variables present
+const getRepoCount = (): number => {
+	let count = 0;
+	while (process.env[`MAESTRO_REPOSITORIES_${count}_BASE_URL`]) {
+		count++;
+	}
+	return count;
+};
+
+// Create Repository schemas
+const repoCount = getRepoCount();
+const baseRepositorySchema = createDynamicBaseRepositorySchema(repoCount);
+
+// Create the main schema by intersecting the other schemas and the validated union
+const mainSchema = elasticSearchConfigSchema.and(kafkaConfigSchema).and(loggerConfigSchema).and(baseRepositorySchema);
+
+const mainSchemaParsed = mainSchema.safeParse(process.env);
+
+if (!mainSchemaParsed.success) {
+	console.error(mainSchemaParsed.error.issues);
 	throw new Error('There is an error with the server environment variables.');
 }
 
-export const env = envParsed.data;
+// Create the Schemas for Song/Lyric repository properties
+const songDynamicConfigSchema = createDynamicCustomSongRepositorySchema(repoCount);
+const lyricDynamicConfigSchema = createDynamicCustomLyricRepositorySchema(repoCount);
+
+const songOrLyricSchema = songDynamicConfigSchema.or(lyricDynamicConfigSchema);
+
+const songOrLyricParsed = songOrLyricSchema.safeParse(process.env);
+
+if (!songOrLyricParsed.success) {
+	songOrLyricParsed.error.issues.forEach((issue) => {
+		if (issue.code === 'invalid_union') {
+			issue.unionErrors.forEach((ue) => console.error(ue.errors));
+		}
+	});
+	throw new Error('There is an error with the server environment variables.');
+}
+
+const repositoriesParsed = Object.entries({ ...mainSchemaParsed.data, ...songOrLyricParsed.data }).reduce<
+	Record<string, unknown>[]
+>((acc, [key, value]) => {
+	if (key.startsWith('MAESTRO_REPOSITORIES_')) {
+		const parts = key.split('_');
+		if (parts[2]) {
+			const index = parseInt(parts[2], 10);
+			const newKey = parts.slice(3).join('_');
+			if (acc[index]) {
+				acc[index][newKey] = value;
+			} else {
+				acc[index] = { [newKey]: value };
+			}
+		}
+	}
+	return acc;
+}, []);
+
+export const lyricSchemaDefinition = definitionBaseRepositorySchema.and(definitionLyricRepositorySchema);
+export const songSchemaDefinition = definitionBaseRepositorySchema.and(definitionSongRepositorySchema);
+
+const parsedRepositories: (z.infer<typeof lyricSchemaDefinition> | z.infer<typeof songSchemaDefinition>)[] = [];
+
+const isLyricRepository = (data: unknown): data is z.infer<typeof lyricSchemaDefinition> => {
+	return lyricSchemaDefinition.safeParse(data).success;
+};
+
+const isSongRepository = (data: unknown): data is z.infer<typeof songSchemaDefinition> => {
+	return songSchemaDefinition.safeParse(data).success;
+};
+
+repositoriesParsed.forEach((reps) => {
+	const parsed = lyricSchemaDefinition.or(songSchemaDefinition).safeParse(reps);
+	if (isLyricRepository(parsed.data)) {
+		parsedRepositories.push(parsed.data);
+	} else if (isSongRepository(parsed.data)) {
+		parsedRepositories.push(parsed.data);
+	}
+});
+
+export const env = { ...mainSchemaParsed.data, repositories: parsedRepositories };

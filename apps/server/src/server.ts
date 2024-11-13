@@ -10,7 +10,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { healthCheckRouter } from './routes/healthCheck.js';
 import { indexerRouter } from './routes/indexer.js';
 const maestroProvider = MaestroProvider(defaultAppConfig);
-console.log(`ping: ${await maestroProvider.indexerProvider.ping()}`);
 
 // Create Express server
 const app = express();
