@@ -89,14 +89,14 @@ maestro:
       url: http://localhost:8080    # Change this to a valid domain where the song exists in your setup
       name: Overture
       storageType: S3                  # Optional
-      organization: OICR               # Optional
+      organization: Overture           # Optional
       country: CA                      # Optional
     # You can add other Songs as needed
     # - code: song.overture2
     #   url: http://localhost:8080
     #   name: local song 2
     #   storageType: S3                 # Optional
-    #   organization: ICGC              # Optional
+    #   organization: Org123            # Optional
     #   country: CA                     # Optional
 
   ###############################################################################

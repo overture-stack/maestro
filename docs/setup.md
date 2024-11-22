@@ -23,9 +23,9 @@ We'll use our Conductor service, a flexible Docker Compose setup, to spin up Mae
 
 2. Run the appropriate start command for your operating system:
 
-    | Operating System | Command |
-    |------------------|---------|
-    | Unix/macOS       | `make maestroDev` |
+    | Operating System | Command                 |
+    | ---------------- | ----------------------- |
+    | Unix/macOS       | `make maestroDev`       |
     | Windows          | `./make.bat maestroDev` |
 
     <details>
@@ -35,17 +35,17 @@ We'll use our Conductor service, a flexible Docker Compose setup, to spin up Mae
 
     ![maestroDev](./assets/maestroDev.svg 'Maestro Dev Environment')
 
-    | Service | Port | Description | Purpose in Score Development |
-    |---------|------|-------------|------------------------------|
-    | Conductor | `9204` | Orchestrates deployments and environment setups | Manages the overall development environment |
-    | Keycloak-db | - | Database for Keycloak (no exposed port) | Stores Keycloak data for authentication |
-    | Keycloak | `8180` | Authorization and authentication service | Provides OAuth2 authentication for Score |
-    | Song-db | `5433` | Database for Song | Stores metadata managed by Song |
-    | Song | `8080` | Metadata management service | Manages metadata for files stored by Score |
-    | Kafka | `9092` | Distributed event streaming platform | Serves as a messaging queue for publication events used to trigger indexing |
-    | Elasticsearch | `9200` | Distributed search and analytics engine | Provides fast and scalable search capabilities over indexed data |
+    | Service       | Port   | Description                                     | Purpose in Score Development                                                |
+    | ------------- | ------ | ----------------------------------------------- | --------------------------------------------------------------------------- |
+    | Conductor     | `9204` | Orchestrates deployments and environment setups | Manages the overall development environment                                 |
+    | Keycloak-db   | -      | Database for Keycloak (no exposed port)         | Stores Keycloak data for authentication                                     |
+    | Keycloak      | `8180` | Authorization and authentication service        | Provides OAuth2 authentication for Score                                    |
+    | Song-db       | `5433` | Database for Song                               | Stores metadata managed by Song                                             |
+    | Song          | `8080` | Metadata management service                     | Manages metadata for files stored by Score                                  |
+    | Kafka         | `9092` | Distributed event streaming platform            | Serves as a messaging queue for publication events used to trigger indexing |
+    | Elasticsearch | `9200` | Distributed search and analytics engine         | Provides fast and scalable search capabilities over indexed data            |
 
-    - Ensure all ports are free on your system before starting the environment.
+    - Ensure these ports are free on your system before starting the environment.
     - You may need to adjust the ports in the `docker-compose.yml` file if you have conflicts with existing services.
 
     For more information, see our [Conductor documentation linked here](/docs/other-software/Conductor)
