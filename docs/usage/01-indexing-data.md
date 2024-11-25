@@ -8,7 +8,7 @@ Maestro offers flexible indexing at the repository, study, or individual documen
 
 
       :::tip Maestro API Reference Doc
-      Checkout the [Maestro API reference](/docs/core-software/Maestro/usage/api-reference) to view this information alongside a templated Maestro swagger doc.
+      Checkout the [Maestro API reference](https://docs.overture.bio/docs/core-software/Maestro/usage/api-reference) to view this information alongside a templated Maestro swagger doc.
       :::
 
 - **cURL:** Maestro's API can be accessed through the command line using cURL, allowing for more complex programmatic queries if desired. Templated cURL requests can be found from the Maestro Swagger UI 

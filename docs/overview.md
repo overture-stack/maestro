@@ -35,7 +35,7 @@ Maestro's primary function is to organize data from multiple Song repositories i
 
 ## System Architecture
 
-Maestro organizes data from multiple Song repositories into a single Elasticsearch index, enabling upstream services like [Arranger](/docs/core-software/Arranger/overview) to consume and expose the data for user search and exploration.
+Maestro organizes data from multiple Song repositories into a single Elasticsearch index, enabling upstream services like [Arranger](https://docs.overture.bio/docs/core-software/Arranger/overview) to consume and expose the data for user search and exploration.
 
 ![Maestro Arch](./assets/maestroDev.svg 'Maestro Architecture Diagram')
 

@@ -13,12 +13,12 @@ Depending on how Maestro is configured it can index data into documents in one o
     :::
 
 
-The index mapping needs conform with your specific data model and therefore should be configured appropriatly. For more information see our [**platform guide covering index mappings**](/guides/administration-guides/index-mappings). 
+The index mapping needs conform with your specific data model and therefore should be configured appropriatly. For more information see our [**platform guide covering index mappings**](https://docs.overture.bio/guides/administration-guides/index-mappings). 
 
 While index mapping are not configurable at runtime, there may be cases where an administrator needs to change the mapping. For example, when updating Song's dynamic schemas, the administrator must also update the index mapping.
 
 :::tip Feature Request In development
-As part of our [**new data submission system**](/docs/under-development/) we are working towards having Maestro automatically generate these index mappings based on a provided schema
+As part of our [**new data submission system**](https://docs.overture.bio/docs/under-development/) we are working towards having Maestro automatically generate these index mappings based on a provided schema
 :::
 
 <!--- For PR, is the description below accurate, is it detailed enough? --->
