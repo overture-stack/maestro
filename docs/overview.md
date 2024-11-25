@@ -31,11 +31,11 @@ Maestro's primary function is to organize data from multiple Song repositories i
 
 - **Exclusion Rules:** Maestro supports configurable exclusion rules to omit specific analyses from being indexed based on metadata tags assigned by Song. Study, Analysis, File, Sample, Specimen and Donor IDs can be used to exclude specific analyses.
 
-- **HTTP or Kafka Indexing APIs:** Maestro can process indexing requests via <a href="https://kafka.apache.org/" target="_blank" rel="noopener noreferrer">Apache Kafka</a> or through a standard JSON Web API (HTTP).
+- **HTTP or Kafka Indexing APIs:** Maestro can receive indexing requests via <a href="https://kafka.apache.org/" target="_blank" rel="noopener noreferrer">Apache Kafka</a> or through an HTTP Web API.
 
 ## System Architecture
 
-Maestro organizes data from multiple Song repositories into a single Elasticsearch index, enabling upstream services like <a href="/documentation/arranger" target="_blank" rel="noopener noreferrer">Arranger</a> to consume and expose the data for user search and exploration.
+Maestro organizes data from multiple Song repositories into a single Elasticsearch index, enabling upstream services like [Arranger](/docs/core-software/Arranger/overview) to consume and expose the data for user search and exploration.
 
 ![Maestro Arch](./assets/maestroDev.svg 'Maestro Architecture Diagram')
 
@@ -50,9 +50,8 @@ As part of the larger Overture.bio software suite, Maestro integrates with sever
 
 ```
 .
-├── /ci-cd
 ├── /maestro-app
-├── /maestro-domain
+└── /maestro-domain
 ```
 
 #### maestro-domain
@@ -64,4 +63,4 @@ Contains core features and framework-independent logic that is portable and incl
 
 #### maestro-app
 
-This is the main runnable Spring Boot app. It contains the infrastructure and adapters (ports implementations) needed to connect the domain with external services like Elasticsearch, Song web clients, and configuration files. It also includes Spring framework configurations to keep technologies outside of the domain.
+This is the main runnable Spring Boot app. It contains the infrastructure and adapters (ports implementations) needed to connect the domain with external services like Elasticsearch, Song web clients, and configuration files.

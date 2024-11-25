@@ -1,6 +1,6 @@
 # Maestro
 
-Maestro enables researchers to enhance their Overture SONG deployments by building powerful search indexes (Elasticsearch by default) for Analyses and Studies. It organizes geographically distributed data stored in Song and Score with a single, configurable index.
+Maestro enables researchers to enhance their Overture SONG deployments by building powerful search indexes for Analyses and Studies. It organizes geographically distributed data stored in Song and Score into a single, configurable index.
 
 </br>
 
