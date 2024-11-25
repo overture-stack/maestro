@@ -33,7 +33,20 @@ const mergeResult = (accumulator: IndexResult, result: IndexResult): IndexResult
 export const api = (config: MaestroProviderConfig, indexer: IElasticsearchService): RepositoryIndexingOperations => {
 	const repositories = config.repositories;
 	if (!repositories) {
-		throw new InternalServerError(`Invalid repository configuration`);
+		return {
+			indexOrganization: () => {
+				throw new InternalServerError(`Invalid repository configuration`);
+			},
+			indexRecord: () => {
+				throw new InternalServerError(`Invalid repository configuration`);
+			},
+			indexRepository: () => {
+				throw new InternalServerError(`Invalid repository configuration`);
+			},
+			removeIndexRecord: () => {
+				throw new InternalServerError(`Invalid repository configuration`);
+			},
+		};
 	}
 
 	/**
