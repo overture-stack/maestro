@@ -1,68 +1,47 @@
 .ONESHELL:
-DOCKER_COMPOSE_DEV_FILE = ./apps/server/docker-compose.dev.yml
-DOCKER_COMPOSE_FILE = ./apps/server/docker-compose.yml
-VERSION=$(shell cat ./.mvn/maven.config | grep revision | cut -d '=' -f2)-SNAPSHOT
+DOCKER_COMPOSE_DEV_ES7_FILE = ./apps/server/docker-compose-es7.dev.yml
 ###################
-## MAVEN
+## PNPM
 ###################
 compile:
-	./mvnw clean compile
-build:
-	./mvnw clean install -DskipTests
+	pnpm i && pnpm run build:all
 test:
-	./mvnw clean test
-package:
-	./mvnw clean package -Dmaven.test.skip=true
+	pnpm run test:all
 start:
-	cd maestro-app
-	../mvnw spring-boot:run
+	cd apps/server && pwd && pnpm run start:dev
 
 ###################
 ## DOCKER
 ###################
-docker-push:
-	docker push overture/maestro:$(VERSION)
-
-docker-build:
-	docker build -f ci-cd/Dockerfile . -t overture/maestro:$(VERSION)
-
-# use this when you want to run maestro as container
-docker-start:
-	docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
-
-docker-stop:
-	docker-compose -f ${DOCKER_COMPOSE_FILE} down
-
 # only starts the infrastructure containers needed by maestro
-# use this when you run maestro from the ide (not as a container)
 docker-start-dev:
-	docker-compose -f ${DOCKER_COMPOSE_DEV_FILE} up -d
+	docker-compose -f ${DOCKER_COMPOSE_DEV_ES7_FILE} up -d
 
 docker-stop-dev:
-	docker-compose -f ${DOCKER_COMPOSE_DEV_FILE} down
+	docker-compose -f ${DOCKER_COMPOSE_DEV_ES7_FILE} down
 
 ###################
 ## REST API
 ###################
 rest-health:
-	curl -X GET http://localhost:11235/
+	curl -X GET http://localhost:11235/health
 
 rest-index-study:
 	curl -X POST \
-	http://localhost:11235/index/repository/collab/study/PACA-CA \
+	http://localhost:11235/index/repository/lyric1/organization/PACA-CA \
 	-H 'Content-Type: application/json' \
 	-H 'cache-control: no-cache' \
 	-d '{}'
 
 rest-index-analysis:
 	curl -X POST \
-	http://localhost:11235/index/repository/collab/study/PACA-CA/analysis/ad7cabf8-df45-40f8-9fcb-67d8933f46e6 \
+	http://localhost:11235/index/repository/lyric1/organization/PACA-CA/id/ad7cabf8-df45-40f8-9fcb-67d8933f46e6 \
 	-H 'Content-Type: application/json' \
 	-H 'cache-control: no-cache'
 
 rest-index-repo:
 	curl -X POST \
-	http://localhost:11235/index/repository/collab \
+	http://localhost:11235/index/repository/lyric1 \
 	-H 'Content-Type: application/json' \
 	-H 'cache-control: no-cache'
 
