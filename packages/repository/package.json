@@ -1,7 +1,7 @@
 {
 	"name": "@overture-stack/maestro-repository",
 	"version": "5.0.0-alpha.1",
-	"description": "",
+	"description": "A submodule of Maestro that manages interactions with data source repositories, providing a unified interface for efficient data access and management",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"files": [
