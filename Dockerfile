@@ -78,7 +78,7 @@ WORKDIR ${WORKDIR}
 COPY --from=prod-deps ${WORKDIR} .
 COPY --from=build ${WORKDIR}/apps/server/dist apps/server/dist
 
-EXPOSE 3000
+EXPOSE 11235
 
 ENV COMMIT_SHA=${COMMIT}
 ENV NODE_ENV=production
