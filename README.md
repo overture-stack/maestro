@@ -13,20 +13,6 @@ Maestro enables researchers to enhance their Overture SONG deployments by buildi
 > 
 > 
 
-## Repository Structure
-
-The repository is organized with the following directory structure:
-
-```
-.
-├── /ci-cd
-├── /maestro-app
-├── /maestro-domain
-```
-
-- __maestro-domain__ - Core features and framework-independent logic that handles indexing, rules, and notifications
-- __maestro-app__ - The main Spring Boot application containing infrastructure implementations and framework configurations
-
 ## Documentation
 
 Technical resources for those working with or contributing to the project are available from our official documentation site, the following content can also be read and updated within the `/docs` folder of this repository.
