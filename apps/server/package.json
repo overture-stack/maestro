@@ -6,8 +6,10 @@
 	"scripts": {
 		"clean": "rimraf dist",
 		"build": "pnpm run clean && tsc",
-		"start:dev": "tsx watch --clear-screen=false src/index.ts"
+		"start:dev": "tsx watch --clear-screen=false src/index.ts",
+		"start:prod": "node dist/src/index.js"
 	},
+	"private": true,
 	"keywords": [],
 	"author": "Ontario Institute for Cancer Research",
 	"license": "AGPL-3.0",

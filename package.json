@@ -14,7 +14,10 @@
 		"test:unit": "pnpm nx run-many --all --target=test:unit",
 		"test:unit:coverage": "pnpm nx run-many --all --target=test:unit:coverage",
 		"test:integration": "pnpm nx run-many --all --target=test:integration",
-		"test:integration:coverage": "pnpm nx run-many --all --target=test:integration:coverage"
+		"test:integration:coverage": "pnpm nx run-many --all --target=test:integration:coverage",
+		"start:dev": "pnpm --filter @overture-stack/maestro-server start:dev",
+		"\n====  Prod environment (compiled)  ======": "",
+		"start:prod": "pnpm --filter @overture-stack/maestro-server start:prod"
 	},
 	"type": "module",
 	"keywords": [],
@@ -31,7 +34,7 @@
 		"eslint-plugin-prettier": "^5.2.1",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"mocha": "^10.7.3",
-		"nx": "^19.8.0",
+		"nx": "^20.1.3",
 		"prettier": "^3.3.3",
 		"prettier-plugin-organize-imports": "^4.1.0",
 		"rimraf": "^6.0.1",
