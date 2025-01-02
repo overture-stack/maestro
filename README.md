@@ -86,3 +86,21 @@ For SONG please check the SONG github repo [here](https://github.com/overture-st
          - elastic search
          - other helper tools if you want like kafka rest proxy
       2. `make start` to start application
+
+## Running scripts
+
+This project contains the following scripts for managing the build, testing, and development processes. You can run any of these scripts using the following command: `pnpm run <script-name>`
+
+| Script Name                 | Description                                                                                                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `build:all`                 | Builds the entire project for all environments (development, production, etc.)                                                                                                                         |
+| `lint`                      | Runs ESLint to lint all files in the current directory (and subdirectories). It checks for code quality issues, potential errors, and style violations according to the project's ESLint configuration |
+| `lint:fix`                  | Runs ESLint to lint all files in the current directory (and subdirectories), and automatically fixes issues that can be resolved (e.g., formatting, missing semicolons).                               |
+| `test:all`                  | Runs all tests (unit and integration tests).                                                                                                                                                           |
+| `test:all:coverage`         | Runs all tests (unit and integration tests) and generates a coverage report.                                                                                                                           |
+| `test:unit`                 | Runs unit tests only.                                                                                                                                                                                  |
+| `test:unit:coverage`        | Runs unit tests only and generates a coverage report.                                                                                                                                                  |
+| `test:integration`          | Runs integration tests only.                                                                                                                                                                           |
+| `test:integration:coverage` | Runs integration tests only and generates a coverage report.                                                                                                                                           |
+| `start:dev`                 | Starts the development server with live-reloading and debugging enabled.                                                                                                                               |
+| `start:prod`                | Starts the production server optimized for performance and stability (The application must be built beforehand).                                                                                       |

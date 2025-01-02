@@ -4,9 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"\n=================  Build  ===============": "",
 		"build:all": "pnpm nx run-many --all --target=build",
-		"\n============  Dev environment  ==========": "",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
 		"test:all": "pnpm nx run-many --all --target=test:unit,test:integration",
@@ -16,7 +14,6 @@
 		"test:integration": "pnpm nx run-many --all --target=test:integration",
 		"test:integration:coverage": "pnpm nx run-many --all --target=test:integration:coverage",
 		"start:dev": "pnpm --filter @overture-stack/maestro-server start:dev",
-		"\n====  Prod environment (compiled)  ======": "",
 		"start:prod": "pnpm --filter @overture-stack/maestro-server start:prod"
 	},
 	"type": "module",
