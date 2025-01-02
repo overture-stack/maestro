@@ -40,7 +40,7 @@ const kafkaConfigSchema = z.object({
 });
 
 const loggerConfigSchema = z.object({
-	MAESTRO_LOGGING_LEVEL_ROOT: z.string().default('info'),
+	MAESTRO_LOGGING_LEVEL: z.string().default('info'),
 });
 
 export const repositoryTypes = z.enum(['LYRIC', 'SONG']);
@@ -56,7 +56,7 @@ const definitionBaseRepositorySchema = z.object({
 
 const definitionLyricRepositorySchema = z.object({
 	TYPE: z.literal(repositoryTypes.Values.LYRIC),
-	LYRIC_VALIDATE_DATA_ONLY: z.boolean().default(true),
+	LYRIC_VALID_DATA_ONLY: z.boolean().default(true),
 	LYRIC_CATEGORY_ID: z.coerce.number(),
 });
 
@@ -89,8 +89,8 @@ function createDynamicCustomLyricRepositorySchema(count: number) {
 
 	for (let i = 0; i < count; i++) {
 		schemas[`MAESTRO_REPOSITORIES_${i}_TYPE`] = definitionLyricRepositorySchema.shape.TYPE;
-		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_VALIDATE_DATA_ONLY`] =
-			definitionLyricRepositorySchema.shape.LYRIC_VALIDATE_DATA_ONLY;
+		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_VALID_DATA_ONLY`] =
+			definitionLyricRepositorySchema.shape.LYRIC_VALID_DATA_ONLY;
 		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_CATEGORY_ID`] = definitionLyricRepositorySchema.shape.LYRIC_CATEGORY_ID;
 	}
 	return z.object(schemas);

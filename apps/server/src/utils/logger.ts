@@ -4,9 +4,12 @@ import type { ConsoleLike } from '@overture-stack/maestro-common';
 
 const pinoLogger = pino({
 	level: 'info',
-	transport: {
-		target: 'pino-pretty',
+	formatters: {
+		level: (label) => {
+			return { level: label.toUpperCase() };
+		},
 	},
+	timestamp: pino.stdTimeFunctions.isoTime,
 });
 
 export const logger: ConsoleLike = {

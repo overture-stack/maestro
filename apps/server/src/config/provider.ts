@@ -9,7 +9,7 @@ import type {
 import { logger, setLogLevel } from '../utils/logger.js';
 import { env, type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './envConfig.js';
 
-setLogLevel(env.MAESTRO_LOGGING_LEVEL_ROOT);
+setLogLevel(env.MAESTRO_LOGGING_LEVEL);
 
 const getRepositoryConfig = (
 	repos: (z.infer<typeof lyricSchemaDefinition> | z.infer<typeof songSchemaDefinition>)[],
@@ -26,7 +26,7 @@ const getRepositoryConfig = (
 					paginationSize: value.PAGINATION_SIZE,
 					type: repositoryTypes.Values.LYRIC,
 					indexName: value.INDEX_NAME,
-					validDataOnly: value.LYRIC_VALIDATE_DATA_ONLY,
+					validDataOnly: value.LYRIC_VALID_DATA_ONLY,
 					categoryId: value.LYRIC_CATEGORY_ID,
 				},
 		);
