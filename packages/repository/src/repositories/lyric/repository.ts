@@ -8,6 +8,7 @@ import {
 } from '@overture-stack/maestro-common';
 
 import httpClient from '../../network/httpClient';
+import { sanitizeKeyName } from '../../utils/formatter';
 import { isArrayOfObjects } from '../../utils/utils';
 
 /**
@@ -38,8 +39,16 @@ export const lyricRepository = (config: LyricRepositoryConfig): IRepository => {
 				if (isArrayOfObjects(result?.records)) {
 					const validArray: Array<Record<string, DataRecordValue>> = result.records.map(
 						(item: Record<string, DataRecordValue>) => {
-							const { systemId, ...rest } = item;
-							return { ...rest, id: systemId };
+							const formattedData =
+								typeof item.data === 'object'
+									? Object.entries(item.data).reduce((newObj: Record<string, DataRecordValue>, [key, value]) => {
+											const newKey = sanitizeKeyName(key);
+											newObj[newKey] = value;
+											return newObj;
+										}, {})
+									: {};
+
+							return { ...item, data: formattedData };
 						},
 					);
 					yield validArray;
