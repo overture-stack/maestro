@@ -1,3 +1,4 @@
+import { initializeLogger } from '@overture-stack/maestro-common';
 import bulkUpsertDataTest from './bulkUpsertIndexedData.spec';
 import createdIndexTest from './createdIndex.spec';
 import indexDataTest from './indexData.spec';
@@ -9,6 +10,7 @@ describe('Integration tests', function () {
 		before(function () {
 			this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:7.10.1';
 			this.clientVersion = 7;
+			initializeLogger();
 		});
 
 		// test operations
@@ -33,6 +35,7 @@ describe('Integration tests', function () {
 		before(function () {
 			this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:8.1.2';
 			this.clientVersion = 8;
+			initializeLogger();
 		});
 
 		// test operations
