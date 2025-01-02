@@ -1,7 +1,7 @@
 /**
  * Checks if a given value is considered empty.
  * @param value The value to check. This can be of any type.
- * @returns `true` if the value is `null`, `undefined`, an empty object, or an empty string; otherwise, `false`.
+ * @returns `true` if the value is `null`, `undefined`, an empty object, an empty array or an empty string; otherwise, `false`.
  */
 export const isEmpty = (value: unknown) => {
 	if (value == null) {
