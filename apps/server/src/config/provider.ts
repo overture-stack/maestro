@@ -7,7 +7,8 @@ import type {
 } from '@overture-stack/maestro-common';
 
 import { logger, setLogLevel } from '../utils/logger.js';
-import { env, type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './envConfig.js';
+import { env } from './envConfig.js';
+import { type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './repositoryConfig.js';
 
 setLogLevel(env.MAESTRO_LOGGING_LEVEL);
 
