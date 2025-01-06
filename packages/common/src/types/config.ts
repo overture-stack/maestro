@@ -33,7 +33,6 @@ export interface RepositoryConfig {
 
 interface IndexConfig {
 	indexName: string;
-	indexAlias: string;
 }
 
 interface SongIndexConfig extends IndexConfig {
@@ -50,8 +49,8 @@ export interface LyricRepositoryConfig extends RepositoryConfig, LyricIndexConfi
 }
 
 export interface SongRepositoryConfig extends RepositoryConfig, SongIndexConfig {
-	country: string;
-	organization: string;
+	country?: string;
+	organization?: string;
 }
 
 export interface MaestroProviderConfig {

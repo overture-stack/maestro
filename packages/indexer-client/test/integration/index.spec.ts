@@ -1,4 +1,5 @@
 import { initializeLogger } from '@overture-stack/maestro-common';
+
 import bulkUpsertDataTest from './bulkUpsertIndexedData.spec';
 import createdIndexTest from './createdIndex.spec';
 import indexDataTest from './indexData.spec';

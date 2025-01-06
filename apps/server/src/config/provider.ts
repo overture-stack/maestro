@@ -15,41 +15,33 @@ setLogLevel(env.MAESTRO_LOGGING_LEVEL);
 const getRepositoryConfig = (
 	repos: (z.infer<typeof lyricSchemaDefinition> | z.infer<typeof songSchemaDefinition>)[],
 ): (LyricRepositoryConfig | SongRepositoryConfig)[] => {
-	const lyricRepos = repos
+	const lyricRepos: LyricRepositoryConfig[] = repos
 		.filter((value) => value && value.TYPE === repositoryTypes.Values.LYRIC)
-		.map(
-			(value) =>
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-				<LyricRepositoryConfig>{
-					baseUrl: value.BASE_URL,
-					code: value.CODE,
-					name: value.NAME,
-					paginationSize: value.PAGINATION_SIZE,
-					type: repositoryTypes.Values.LYRIC,
-					indexName: value.INDEX_NAME,
-					validDataOnly: value.LYRIC_VALID_DATA_ONLY,
-					categoryId: value.LYRIC_CATEGORY_ID,
-				},
-		);
+		.map((value) => ({
+			baseUrl: value.BASE_URL,
+			code: value.CODE,
+			name: value.NAME,
+			paginationSize: value.PAGINATION_SIZE,
+			type: repositoryTypes.Values.LYRIC,
+			indexName: value.INDEX_NAME,
+			validDataOnly: value.LYRIC_VALID_DATA_ONLY,
+			categoryId: value.LYRIC_CATEGORY_ID,
+		}));
 
-	const songRepos = repos
+	const songRepos: SongRepositoryConfig[] = repos
 		.filter((value) => value && value.TYPE === repositoryTypes.Values.SONG)
-		.map(
-			(value) =>
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-				<SongRepositoryConfig>{
-					baseUrl: value.BASE_URL,
-					code: value.CODE,
-					name: value.NAME,
-					paginationSize: value.PAGINATION_SIZE,
-					type: repositoryTypes.Values.SONG,
-					indexName: value.INDEX_NAME,
-					indexableStudyStates: value.SONG_INDEXABLE_STUDY_STATES,
-					analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
-					organization: value.SONG_ORGANIZATION,
-					country: value.SONG_COUNTRY,
-				},
-		);
+		.map((value) => ({
+			baseUrl: value.BASE_URL,
+			code: value.CODE,
+			name: value.NAME,
+			paginationSize: value.PAGINATION_SIZE,
+			type: repositoryTypes.Values.SONG,
+			indexName: value.INDEX_NAME,
+			indexableStudyStates: value.SONG_INDEXABLE_STUDY_STATES,
+			analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
+			organization: value.SONG_ORGANIZATION,
+			country: value.SONG_COUNTRY,
+		}));
 	return [...songRepos, ...lyricRepos];
 };
 
