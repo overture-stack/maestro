@@ -1,2 +1,2 @@
 export { repository } from './repositories';
-export { getRepoInformation, isLyricConfiguration, isSongConfiguration } from './utils/utils';
+export { getRepoInformation } from './utils/utils';

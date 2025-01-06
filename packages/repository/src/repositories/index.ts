@@ -1,14 +1,22 @@
-import type { IRepository, LyricRepositoryConfig, SongRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	type IRepository,
+	type LyricRepositoryConfig,
+	RepositoryType,
+	type SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
-import { isLyricConfiguration, isSongConfiguration } from '../utils/utils';
 import { lyricRepository } from './lyric/repository';
 import { songRepository } from './song/repository';
 
-export const repository = (config: SongRepositoryConfig | LyricRepositoryConfig): IRepository => {
-	if (isLyricConfiguration(config)) {
-		return lyricRepository(config);
-	} else if (isSongConfiguration(config)) {
-		return songRepository(config);
+export const repository = (config: LyricRepositoryConfig | SongRepositoryConfig): IRepository => {
+	switch (config.type) {
+		case RepositoryType.LYRIC:
+			return lyricRepository(config);
+
+		case RepositoryType.SONG:
+			return songRepository(config);
+
+		default:
+			throw new Error('Invalid repository configuration');
 	}
-	throw Error('Invalid repository configuration');
 };

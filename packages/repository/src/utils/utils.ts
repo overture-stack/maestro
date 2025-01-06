@@ -1,7 +1,8 @@
 import type { DataRecordValue, LyricRepositoryConfig, SongRepositoryConfig } from '@overture-stack/maestro-common';
 
 /**
- * Finds the repository by its repository code
+ * Finds the repository by its repository code.
+ * Returns `undefined` if the repository with the given code is not found.
  * @param repositories
  * @param repoCode
  * @returns
@@ -11,27 +12,6 @@ export const getRepoInformation = (
 	repoCode: string,
 ): SongRepositoryConfig | LyricRepositoryConfig | undefined => {
 	return repositories.find((repo) => repo.code === repoCode);
-};
-/**
- * Determines if passed configuration is appropiate for Lyric
- * @param object
- * @returns
- */
-export const isLyricConfiguration = (
-	object: LyricRepositoryConfig | SongRepositoryConfig,
-): object is LyricRepositoryConfig => {
-	return object.type === 'LYRIC';
-};
-
-/**
- * Determines if passed configuration is appropiate for Song
- * @param object
- * @returns
- */
-export const isSongConfiguration = (
-	object: LyricRepositoryConfig | SongRepositoryConfig,
-): object is SongRepositoryConfig => {
-	return object.type === 'SONG';
 };
 
 /**

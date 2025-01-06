@@ -28,7 +28,6 @@ export interface RepositoryConfig {
 	code: string;
 	name: string;
 	paginationSize?: number;
-	type: RepositoryType;
 }
 
 interface IndexConfig {
@@ -36,8 +35,8 @@ interface IndexConfig {
 }
 
 interface SongIndexConfig extends IndexConfig {
-	indexableStudyStates: string;
 	analysisCentricEnabled: boolean;
+	indexableStudyStates: string;
 }
 
 interface LyricIndexConfig extends IndexConfig {
@@ -46,11 +45,13 @@ interface LyricIndexConfig extends IndexConfig {
 
 export interface LyricRepositoryConfig extends RepositoryConfig, LyricIndexConfig {
 	categoryId: number;
+	type: typeof RepositoryType.LYRIC;
 }
 
 export interface SongRepositoryConfig extends RepositoryConfig, SongIndexConfig {
 	country?: string;
 	organization?: string;
+	type: typeof RepositoryType.SONG;
 }
 
 export interface MaestroProviderConfig {
