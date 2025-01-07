@@ -1,14 +1,14 @@
 import { ElasticsearchContainer, StartedElasticsearchContainer } from '@testcontainers/elasticsearch';
 import { expect } from 'chai';
 
-import { type DataRecordValue, IElasticsearchService } from '@overture-stack/maestro-common';
+import { type DataRecordValue, ElasticsearchService } from '@overture-stack/maestro-common';
 
 import { es7 } from '../../src/client/v7/client.js';
 import { es8 } from '../../src/client/v8/client.js';
 
 export default function suite() {
 	let container: StartedElasticsearchContainer;
-	let client: IElasticsearchService;
+	let client: ElasticsearchService;
 
 	before(async () => {
 		// Start an Elasticsearch container

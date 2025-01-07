@@ -3,7 +3,7 @@ import type { DataRecordValue, IndexResult } from './dataRecord.js';
 /**
  * Interface defining the contract for Elasticsearch service operations.
  */
-export interface IElasticsearchService {
+export interface ElasticsearchService {
 	/**
 	 * Creates an index in Elasticsearch.
 	 *

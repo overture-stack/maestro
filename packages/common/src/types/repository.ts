@@ -3,7 +3,7 @@ import type { DataRecordValue, IndexResult } from './dataRecord';
 /**
  * Interface for all types of repositories (i.e. song or lyric)
  */
-export interface IRepository {
+export interface Repository {
 	getRepositoryRecords(): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown>;
 	getOrganizationRecords({
 		organization,

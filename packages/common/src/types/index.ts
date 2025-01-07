@@ -8,5 +8,5 @@ export {
 } from './config.js';
 export { DataRecordValue, FailureData, IndexData, IndexResult } from './dataRecord.js';
 export { ConsoleLike, LoggerConfig } from './logger.js';
-export { IRepository, RepositoryIndexingOperations } from './repository.js';
-export { IElasticsearchService } from './service.js';
+export { Repository, RepositoryIndexingOperations } from './repository.js';
+export { ElasticsearchService } from './service.js';

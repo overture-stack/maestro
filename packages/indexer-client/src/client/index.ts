@@ -1,4 +1,4 @@
-import { type DataRecordValue, ElasticSearchConfig, IElasticsearchService } from '@overture-stack/maestro-common';
+import { type DataRecordValue, ElasticSearchConfig, ElasticsearchService } from '@overture-stack/maestro-common';
 
 import { es7 } from './v7/client.js';
 import { es8 } from './v8/client.js';
@@ -6,14 +6,14 @@ import { es8 } from './v8/client.js';
 export type ESVersion = '7' | '8';
 
 /**
- * Provides an instance of `IElasticsearchService` based on the specified Elasticsearch version in the configuration
+ * Provides an instance of `ElasticsearchService` based on the specified Elasticsearch version in the configuration
  *
  * @param elasticSearchConfig The configuration object for Elasticsearch, including the version and custom settings
- * @returns An implementation of `IElasticsearchService` that matches the specified version
+ * @returns An implementation of `ElasticsearchService` that matches the specified version
  * @throws Will throw an error if the provided Elasticsearch version is not supported
  */
-export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): IElasticsearchService => {
-	let service: IElasticsearchService;
+export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): ElasticsearchService => {
+	let service: ElasticsearchService;
 
 	if (elasticSearchConfig.version === 7) {
 		service = es7(elasticSearchConfig);

@@ -2,9 +2,9 @@ import * as path from 'path';
 
 import {
 	type DataRecordValue,
-	type IRepository,
 	logger,
 	type LyricRepositoryConfig,
+	type Repository,
 } from '@overture-stack/maestro-common';
 
 import httpClient from '../../network/httpClient';
@@ -16,7 +16,7 @@ import { isArrayOfObjects } from '../../utils/utils';
  * @param config
  * @returns
  */
-export const lyricRepository = (config: LyricRepositoryConfig): IRepository => {
+export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 	const { baseUrl, categoryId, paginationSize } = config;
 	const getRepositoryRecords = async function* (): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
 		let page = 1;

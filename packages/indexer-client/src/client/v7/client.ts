@@ -3,7 +3,7 @@ import { Client } from 'es7';
 import type {
 	DataRecordValue,
 	ElasticSearchConfig,
-	IElasticsearchService,
+	ElasticsearchService,
 	IndexResult,
 } from '@overture-stack/maestro-common';
 
@@ -14,14 +14,14 @@ import { bulkUpsert, createIndexIfNotExists, deleteData, indexData, ping, update
  *  Creates an instance of the Elasticsearch service for version 7.
  *
  * This function initializes an Elasticsearch client using the provided configuration
- * and returns an object that implements the `IElasticsearchService` interface.
+ * and returns an object that implements the `ElasticsearchService` interface.
  * The returned object includes methods for creating an index, indexing data,
  * checking the connection, updating data, and deleting data.
  *
  * @param {ElasticSearchConfig} config The configuration of the Elasticsearch to connect to
- * @returns {IElasticsearchService} An object implementing the `IElasticsearchService` interface, providing methods to interact with Elasticsearch
+ * @returns {ElasticsearchService} An object implementing the `ElasticsearchService` interface, providing methods to interact with Elasticsearch
  */
-export const es7 = (config: ElasticSearchConfig): IElasticsearchService => {
+export const es7 = (config: ElasticSearchConfig): ElasticsearchService => {
 	if (config.version !== 7) {
 		throw Error('Invalid Client Configuration');
 	}

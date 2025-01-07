@@ -1,6 +1,6 @@
 import {
 	BadRequest,
-	type IElasticsearchService,
+	type ElasticsearchService,
 	type IndexResult,
 	InternalServerError,
 	isEmpty,
@@ -27,10 +27,10 @@ const mergeResult = (accumulator: IndexResult, result: IndexResult): IndexResult
 /**
  * Creates an object containing indexing operations to be used in the API
  * @param config The configuration object for the `MaestroProvider`, which includes repository information
- * @param indexer An implementation of `IElasticsearchService` used for performing Elasticsearch operations
+ * @param indexer An implementation of `ElasticsearchService` used for performing Elasticsearch operations
  * @returns
  */
-export const api = (config: MaestroProviderConfig, indexer: IElasticsearchService): RepositoryIndexingOperations => {
+export const api = (config: MaestroProviderConfig, indexer: ElasticsearchService): RepositoryIndexingOperations => {
 	const repositories = config.repositories;
 	if (!repositories) {
 		return {

@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import type { DataRecordValue, IRepository, SongRepositoryConfig } from '@overture-stack/maestro-common';
+import type { DataRecordValue, Repository, SongRepositoryConfig } from '@overture-stack/maestro-common';
 
 import httpClient from '../../network/httpClient';
 import { isArrayOfObjects } from '../../utils/utils';
@@ -10,7 +10,7 @@ import { isArrayOfObjects } from '../../utils/utils';
  * @param config
  * @returns
  */
-export const songRepository = (config: SongRepositoryConfig): IRepository => {
+export const songRepository = (config: SongRepositoryConfig): Repository => {
 	const { baseUrl, paginationSize } = config;
 
 	const getOrganizationRecords = async function* ({

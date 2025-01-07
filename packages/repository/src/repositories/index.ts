@@ -1,6 +1,6 @@
 import {
-	type IRepository,
 	type LyricRepositoryConfig,
+	type Repository,
 	RepositoryType,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
@@ -8,7 +8,7 @@ import {
 import { lyricRepository } from './lyric/repository';
 import { songRepository } from './song/repository';
 
-export const repository = (config: LyricRepositoryConfig | SongRepositoryConfig): IRepository => {
+export const repository = (config: LyricRepositoryConfig | SongRepositoryConfig): Repository => {
 	switch (config.type) {
 		case RepositoryType.LYRIC:
 			return lyricRepository(config);

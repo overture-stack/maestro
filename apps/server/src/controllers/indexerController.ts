@@ -1,5 +1,5 @@
 import { BadRequest } from '@overture-stack/maestro-common';
-import { MaestroProvider } from '@overture-stack/maestro-provider';
+import { initializeMaestroProvider } from '@overture-stack/maestro-provider';
 
 import { defaultAppConfig } from '../config/provider.js';
 import {
@@ -9,7 +9,7 @@ import {
 } from '../utils/requestSchemas.js';
 import { validateRequest } from '../utils/requestValidation.js';
 
-const maestroProvider = MaestroProvider(defaultAppConfig);
+const maestroProvider = initializeMaestroProvider(defaultAppConfig);
 
 const indexRepository = validateRequest(indexRepositoryRequestschema, async (req, res, next) => {
 	try {
