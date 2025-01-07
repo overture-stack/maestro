@@ -1,6 +1,7 @@
 import {
 	BadRequest,
 	type ElasticsearchService,
+	type FailureData,
 	type IndexResult,
 	InternalServerError,
 	isEmpty,
@@ -68,9 +69,22 @@ export const api = (config: MaestroProviderConfig, indexer: ElasticsearchService
 			failureData: {},
 		};
 
-		for await (const items of repository(repoInfo).getRepositoryRecords()) {
-			const result = await indexer.bulkUpsert(repoInfo.indexName, items);
-			mergeResult(resultIndex, result);
+		try {
+			for await (const items of repository(repoInfo).getRepositoryRecords()) {
+				const result = await indexer.bulkUpsert(repoInfo.indexName, items);
+				mergeResult(resultIndex, result);
+			}
+		} catch (error) {
+			resultIndex.successful = false;
+			if (error instanceof Error) {
+				resultIndex.failureData = {
+					error: [String(error.message)],
+				};
+			} else {
+				resultIndex.failureData = {
+					error: [String(error)],
+				};
+			}
 		}
 		return resultIndex;
 	};
@@ -95,9 +109,22 @@ export const api = (config: MaestroProviderConfig, indexer: ElasticsearchService
 			failureData: {},
 		};
 
-		for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
-			const result = await indexer.bulkUpsert(repoInfo.indexName, items);
-			mergeResult(resultIndex, result);
+		try {
+			for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
+				const result = await indexer.bulkUpsert(repoInfo.indexName, items);
+				mergeResult(resultIndex, result);
+			}
+		} catch (error) {
+			resultIndex.successful = false;
+			if (error instanceof Error) {
+				resultIndex.failureData = {
+					error: [String(error.message)],
+				};
+			} else {
+				resultIndex.failureData = {
+					error: [String(error)],
+				};
+			}
 		}
 		return resultIndex;
 	};
@@ -118,14 +145,34 @@ export const api = (config: MaestroProviderConfig, indexer: ElasticsearchService
 		}
 
 		// Fetch the record within a repository
-		const repoRecord = await repository(repoInfo).getRecord({ organization, id: recordId });
+		try {
+			const repoRecord = await repository(repoInfo).getRecord({ organization, id: recordId });
 
-		if (!isEmpty(repoRecord)) {
-			// Index records using batchUpsert
-			return indexer.addData(repoInfo.indexName, repoRecord);
-		} else {
-			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
-			throw new BadRequest(`Record '${recordId}' not found in organization '${organization}'`);
+			if (!isEmpty(repoRecord)) {
+				// Index records using batchUpsert
+				return indexer.addData(repoInfo.indexName, repoRecord);
+			} else {
+				logger.error(`Record '${recordId}' not found in organization '${organization}'`);
+				throw new BadRequest(`Record '${recordId}' not found in organization '${organization}'`);
+			}
+		} catch (error) {
+			let failureData: FailureData = {};
+			if (error instanceof Error) {
+				failureData = {
+					error: [String(error.message)],
+				};
+			} else {
+				failureData = {
+					error: [String(error)],
+				};
+			}
+
+			const resultIndex: IndexResult = {
+				indexName: repoInfo.indexName,
+				successful: false,
+				failureData,
+			};
+			return resultIndex;
 		}
 	};
 

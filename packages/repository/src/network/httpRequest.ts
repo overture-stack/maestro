@@ -9,7 +9,7 @@ const defaultHeaders: Record<string, string> = {
 	Accept: 'application/json',
 };
 
-const httpClient = async (url: string, options: FetchOptions = {}) => {
+export const sendHttpRequest = async (url: string, options: FetchOptions = {}) => {
 	const config: FetchOptions = {
 		...options,
 		headers: {
@@ -20,15 +20,9 @@ const httpClient = async (url: string, options: FetchOptions = {}) => {
 
 	try {
 		logger.debug(`${config.method ?? 'GET'} ${url}`);
-		const response = await fetch(url, config);
-		if (!response.ok) {
-			throw new Error(`HTTP error! Status: ${response.status}`);
-		}
-		return response.json();
+		return await fetch(url, config);
 	} catch (error) {
 		logger.error('Fetch error', error);
 		throw error;
 	}
 };
-
-export default httpClient;
