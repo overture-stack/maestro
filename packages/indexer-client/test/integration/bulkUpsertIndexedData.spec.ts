@@ -1,7 +1,7 @@
 import { ElasticsearchContainer, StartedElasticsearchContainer } from '@testcontainers/elasticsearch';
 import { expect } from 'chai';
 
-import type { DataRecordValue, ElasticsearchService } from '@overture-stack/maestro-common';
+import type { DataRecordNested, ElasticsearchService } from '@overture-stack/maestro-common';
 
 import { es7 } from '../../src/client/v7/client.js';
 import { es8 } from '../../src/client/v8/client.js';
@@ -42,7 +42,7 @@ export default function suite() {
 		const indexName = 'test-index';
 
 		// Upsert Data
-		const data: Record<string, DataRecordValue>[] = [
+		const data: DataRecordNested[] = [
 			{ id: 1, name: 'value1' },
 			{ id: 2, name: 'value2' },
 			{ id: 3, name: 'value3' },
@@ -58,7 +58,7 @@ export default function suite() {
 		const indexName = 'test-index';
 
 		// Upsert Data
-		const data: Record<string, DataRecordValue>[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
+		const data: DataRecordNested[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
 
 		const result = await client.bulkUpsert(indexName, data);
 		expect(result.successful).to.eql(true);
@@ -76,7 +76,7 @@ export default function suite() {
 			client = es8({ nodes: 'http://unknown', version: 8, basicAuth: { enabled: false } });
 		}
 
-		const data: Record<string, DataRecordValue>[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
+		const data: DataRecordNested[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
 
 		const result = await client.bulkUpsert(indexName, data);
 		expect(result.successful).to.eql(false);

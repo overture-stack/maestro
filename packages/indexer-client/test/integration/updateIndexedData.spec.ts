@@ -1,7 +1,7 @@
 import { ElasticsearchContainer, StartedElasticsearchContainer } from '@testcontainers/elasticsearch';
 import { expect } from 'chai';
 
-import type { DataRecordValue, ElasticsearchService, IndexData } from '@overture-stack/maestro-common';
+import type { DataRecordNested, ElasticsearchService } from '@overture-stack/maestro-common';
 
 import { es7 } from '../../src/client/v7/client.js';
 import { es8 } from '../../src/client/v8/client.js';
@@ -42,7 +42,7 @@ export default function suite() {
 		const indexName = 'test-index';
 
 		// Insert Data
-		const insertData: IndexData = {
+		const insertData: DataRecordNested = {
 			id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
@@ -52,7 +52,7 @@ export default function suite() {
 
 		// Edit Data
 		const id = '1234';
-		const editData: Record<string, DataRecordValue> = { key2: 'value2' };
+		const editData: DataRecordNested = { key2: 'value2' };
 
 		const result = await client.updateData(indexName, id, editData);
 		expect(result.successful).to.eql(true);
@@ -65,7 +65,7 @@ export default function suite() {
 
 		// Edit Data
 		const id = '456';
-		const editData: Record<string, DataRecordValue> = { key2: 'value2' };
+		const editData: DataRecordNested = { key2: 'value2' };
 
 		const result = await client.updateData(indexName, id, editData);
 		expect(result.successful).to.eql(false);
@@ -85,7 +85,7 @@ export default function suite() {
 		}
 
 		const id = '1234';
-		const editData: Record<string, DataRecordValue> = { key2: 'value2' };
+		const editData: DataRecordNested = { key2: 'value2' };
 
 		const result = await client.updateData(indexName, id, editData);
 		expect(result.successful).to.eql(false);

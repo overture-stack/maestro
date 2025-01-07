@@ -1,4 +1,4 @@
-import type { DataRecordValue, LyricRepositoryConfig, SongRepositoryConfig } from '@overture-stack/maestro-common';
+import type { DataRecordNested, LyricRepositoryConfig, SongRepositoryConfig } from '@overture-stack/maestro-common';
 
 /**
  * Finds the repository by its repository code.
@@ -20,7 +20,7 @@ export const getRepoInformation = (
  * @param value
  * @returns
  */
-export const isArrayOfObjects = (value: unknown): value is Array<Record<string, DataRecordValue>> => {
+export const isArrayOfObjects = (value: unknown): value is Array<DataRecordNested> => {
 	return (
 		Array.isArray(value) &&
 		value.every(

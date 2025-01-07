@@ -1,7 +1,7 @@
 import { Client } from 'es8';
 
 import type {
-	DataRecordValue,
+	DataRecordNested,
 	ElasticSearchConfig,
 	ElasticsearchService,
 	IndexResult,
@@ -36,10 +36,10 @@ export const es8 = (config: ElasticSearchConfig): ElasticsearchService => {
 	});
 
 	return {
-		async addData(index: string, data: Record<string, DataRecordValue>): Promise<IndexResult> {
+		async addData(index: string, data: DataRecordNested): Promise<IndexResult> {
 			return indexData(client, index, data);
 		},
-		async bulkUpsert(index: string, data: Record<string, DataRecordValue>[]): Promise<IndexResult> {
+		async bulkUpsert(index: string, data: DataRecordNested[]): Promise<IndexResult> {
 			return bulkUpsert(client, index, data);
 		},
 
@@ -55,7 +55,7 @@ export const es8 = (config: ElasticSearchConfig): ElasticsearchService => {
 			return ping(client);
 		},
 
-		async updateData(index: string, id: string, data: Record<string, DataRecordValue>): Promise<IndexResult> {
+		async updateData(index: string, id: string, data: DataRecordNested): Promise<IndexResult> {
 			return updateData(client, index, id, data);
 		},
 	};

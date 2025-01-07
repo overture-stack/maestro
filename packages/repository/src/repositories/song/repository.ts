@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 import {
-	type DataRecordValue,
+	type DataRecordNested,
 	logger,
 	type Repository,
 	type SongRepositoryConfig,
@@ -35,7 +35,7 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 		organization,
 	}: {
 		organization: string;
-	}): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
+	}): AsyncGenerator<DataRecordNested[], void, unknown> {
 		let offset = 0;
 		let hasMoreData = true;
 
@@ -57,9 +57,9 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 				if (response.ok) {
 					const parsedResponse = await response.json();
 					if (isArrayOfObjects(parsedResponse?.records)) {
-						const validArray: Array<Record<string, DataRecordValue>> = parsedResponse.records.map(
-							(item: Record<string, DataRecordValue>) => ({ ...item }),
-						);
+						const validArray: Array<DataRecordNested> = parsedResponse.records.map((item: DataRecordNested) => ({
+							...item,
+						}));
 						yield validArray;
 					} else {
 						return;
@@ -78,13 +78,7 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 		}
 	};
 
-	const getRecord = async ({
-		organization,
-		id,
-	}: {
-		organization: string;
-		id: string;
-	}): Promise<Record<string, DataRecordValue>> => {
+	const getRecord = async ({ organization, id }: { organization: string; id: string }): Promise<DataRecordNested> => {
 		// Get the analysis by ID
 		// http://song/studies/{organization}/analysis/{id}
 		const fullUrl = new URL(path.join(PATH.STUDIES, organization, PATH.ANALYSIS, id), baseUrl);
@@ -96,7 +90,7 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 		return {};
 	};
 
-	const getRepositoryRecords = async function* (): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
+	const getRepositoryRecords = async function* (): AsyncGenerator<DataRecordNested[], void, unknown> {
 		// Get all the studies
 		// http://song/studies/all
 		const fullUrl = new URL(baseUrl);

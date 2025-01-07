@@ -1,4 +1,4 @@
-import { type DataRecordValue, ElasticSearchConfig, ElasticsearchService } from '@overture-stack/maestro-common';
+import { type DataRecordNested, ElasticSearchConfig, ElasticsearchService } from '@overture-stack/maestro-common';
 
 import { es7 } from './v7/client.js';
 import { es8 } from './v8/client.js';
@@ -24,12 +24,11 @@ export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): Elasti
 	}
 
 	return {
-		addData: (index: string, data: Record<string, DataRecordValue>) => service.addData(index, data),
-		bulkUpsert: (index: string, data: Record<string, DataRecordValue>[]) => service.bulkUpsert(index, data),
+		addData: (index: string, data: DataRecordNested) => service.addData(index, data),
+		bulkUpsert: (index: string, data: DataRecordNested[]) => service.bulkUpsert(index, data),
 		createIndex: (index: string) => service.createIndex(index),
 		deleteData: (index: string, id: string) => service.deleteData(index, id),
 		ping: () => service.ping(),
-		updateData: (index: string, id: string, data: Record<string, DataRecordValue>) =>
-			service.updateData(index, id, data),
+		updateData: (index: string, id: string, data: DataRecordNested) => service.updateData(index, id, data),
 	};
 };

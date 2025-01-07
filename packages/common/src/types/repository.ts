@@ -1,16 +1,12 @@
-import type { DataRecordValue, IndexResult } from './dataRecord';
+import type { DataRecordNested, IndexResult } from './dataRecord';
 
 /**
  * Interface for all types of repositories (i.e. song or lyric)
  */
 export interface Repository {
-	getRepositoryRecords(): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown>;
-	getOrganizationRecords({
-		organization,
-	}: {
-		organization: string;
-	}): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown>;
-	getRecord({ organization, id }: { organization: string; id: string }): Promise<Record<string, DataRecordValue>>;
+	getRepositoryRecords(): AsyncGenerator<DataRecordNested[], void, unknown>;
+	getOrganizationRecords({ organization }: { organization: string }): AsyncGenerator<DataRecordNested[], void, unknown>;
+	getRecord({ organization, id }: { organization: string; id: string }): Promise<DataRecordNested>;
 }
 
 /**

@@ -1,7 +1,7 @@
 import * as path from 'path';
 
 import {
-	type DataRecordValue,
+	type DataRecordNested,
 	logger,
 	type LyricRepositoryConfig,
 	type Repository,
@@ -38,7 +38,7 @@ const VIEW = {
  */
 export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 	const { baseUrl, categoryId, paginationSize } = config;
-	const getRepositoryRecords = async function* (): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
+	const getRepositoryRecords = async function* (): AsyncGenerator<DataRecordNested[], void, unknown> {
 		let page = 1;
 		let hasMoreData = true;
 
@@ -59,20 +59,18 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 				if (response.ok) {
 					const parsedResponse = await response.json();
 					if (isArrayOfObjects(parsedResponse?.records)) {
-						const validArray: Array<Record<string, DataRecordValue>> = parsedResponse.records.map(
-							(item: Record<string, DataRecordValue>) => {
-								const formattedData =
-									typeof item.data === 'object'
-										? Object.entries(item.data).reduce((newObj: Record<string, DataRecordValue>, [key, value]) => {
-												const newKey = sanitizeKeyName(key);
-												newObj[newKey] = value;
-												return newObj;
-											}, {})
-										: {};
+						const validArray: Array<DataRecordNested> = parsedResponse.records.map((item: DataRecordNested) => {
+							const formattedData =
+								typeof item.data === 'object'
+									? Object.entries(item.data).reduce((newObj: DataRecordNested, [key, value]) => {
+											const newKey = sanitizeKeyName(key);
+											newObj[newKey] = value;
+											return newObj;
+										}, {})
+									: {};
 
-								return { ...item, data: formattedData };
-							},
-						);
+							return { ...item, data: formattedData };
+						});
 						yield validArray;
 					} else {
 						return;
@@ -94,7 +92,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 		organization,
 	}: {
 		organization: string;
-	}): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
+	}): AsyncGenerator<DataRecordNested[], void, unknown> {
 		let page = 1;
 		let hasMoreData = true;
 
@@ -118,12 +116,10 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 				if (response.ok) {
 					const parsedResponse = await response.json();
 					if (isArrayOfObjects(parsedResponse?.records)) {
-						const validArray: Array<Record<string, DataRecordValue>> = parsedResponse.records.map(
-							(item: Record<string, DataRecordValue>) => {
-								const { systemId, ...rest } = item;
-								return { ...rest, id: systemId };
-							},
-						);
+						const validArray: Array<DataRecordNested> = parsedResponse.records.map((item: DataRecordNested) => {
+							const { systemId, ...rest } = item;
+							return { ...rest, id: systemId };
+						});
 						yield validArray;
 					} else {
 						return;
@@ -140,13 +136,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 			}
 		}
 	};
-	const getRecord = async ({
-		organization,
-		id,
-	}: {
-		organization: string;
-		id: string;
-	}): Promise<Record<string, DataRecordValue>> => {
+	const getRecord = async ({ organization, id }: { organization: string; id: string }): Promise<DataRecordNested> => {
 		// Get a record by ID
 		// http://lyric/data/category/{categoryId}/id/{id}
 		const fullUrl = new URL(path.join(PATH.DATA, PATH.CATEGORY, categoryId.toString(), PATH.ID, id), baseUrl);

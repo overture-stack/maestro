@@ -2,7 +2,7 @@ import type { Client } from 'es7';
 import type { BulkOperationType, BulkResponseItem } from 'es7/api/types';
 
 import {
-	type DataRecordValue,
+	type DataRecordNested,
 	type FailureData,
 	IndexResult,
 	logger,
@@ -17,7 +17,7 @@ import {
  * @param dataSet The actual data to be stored in the document
  * @returns
  */
-export const bulkUpsert = async (client: Client, index: string, dataSet: Record<string, DataRecordValue>[]) => {
+export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
 	const sanitizedIndex = sanitize_index_name(index);
 	try {
 		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex, _id: doc?.['id'] } }, doc]);
@@ -106,11 +106,7 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
  * @param input.organization The organization associated with the document
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
-export const indexData = async (
-	client: Client,
-	index: string,
-	data: Record<string, DataRecordValue>,
-): Promise<IndexResult> => {
+export const indexData = async (client: Client, index: string, data: DataRecordNested): Promise<IndexResult> => {
 	const sanitizedIndex = sanitize_index_name(index);
 	try {
 		const response = await client.index({
@@ -163,7 +159,7 @@ export const updateData = async (
 	client: Client,
 	index: string,
 	id: string,
-	data: Record<string, DataRecordValue>,
+	data: DataRecordNested,
 ): Promise<IndexResult> => {
 	const sanitizedIndex = sanitize_index_name(index);
 	try {
