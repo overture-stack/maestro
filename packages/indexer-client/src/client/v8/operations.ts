@@ -1,18 +1,11 @@
 import type { Client } from 'es8';
 import type { BulkOperationType, BulkResponseItem } from 'es8/lib/api/types.js';
 
-import {
-	type DataRecordNested,
-	FailureData,
-	IndexResult,
-	logger,
-	sanitize_index_name,
-} from '@overture-stack/maestro-common';
+import { type DataRecordNested, FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
 
 export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
-	const sanitizedIndex = sanitize_index_name(index);
 	try {
-		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex, _id: doc?.['id'] } }, doc]);
+		const body = dataSet.flatMap((doc) => [{ index: { _index: index, _id: doc?.['id'] } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
 
@@ -70,15 +63,14 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: DataRec
  * @returns `true` if the index already exists, `false` if doesn't exist
  */
 export const createIndexIfNotExists = async (client: Client, index: string): Promise<boolean> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	let exists = false;
 	try {
-		exists = await client.indices.exists({ index: sanitizedIndex });
+		exists = await client.indices.exists({ index });
 		if (!exists) {
-			await client.indices.create({ index: sanitizedIndex });
-			logger.info(`Index ${sanitizedIndex} created.`);
+			await client.indices.create({ index });
+			logger.info(`Index ${index} created.`);
 		} else {
-			logger.debug(`Index ${sanitizedIndex} already exists.`);
+			logger.debug(`Index ${index} already exists.`);
 		}
 	} catch (error) {
 		logger.error(`Error creating the index: ${error}`);
@@ -99,11 +91,9 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
 export const indexData = async (client: Client, index: string, data: DataRecordNested): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
-
 	try {
 		const response = await client.index({
-			index: sanitizedIndex,
+			index,
 			id: data?.['id']?.toString(),
 			document: data,
 		});
@@ -153,10 +143,9 @@ export const updateData = async (
 	id: string,
 	data: DataRecordNested,
 ): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	try {
 		const response = await client.update({
-			index: sanitizedIndex,
+			index,
 			id,
 			body: {
 				doc: { data },
@@ -200,11 +189,9 @@ export const updateData = async (
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
 export const deleteData = async (client: Client, index: string, id: string): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
-
 	try {
 		const response = await client.delete({
-			index: sanitizedIndex,
+			index,
 			id,
 		});
 		logger.debug(`Deleting indexed document in:'${index}'`);

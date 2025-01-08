@@ -9,7 +9,24 @@ const definitionBaseRepositorySchema = z.object({
 	CODE: z.string(),
 	NAME: z.string(),
 	PAGINATION_SIZE: z.coerce.number().optional(),
-	INDEX_NAME: z.string(),
+	INDEX_NAME: z
+		.string()
+		.refine((value) => !/[<" \\/,|>?*]/.test(value), {
+			// criteria: https://www.elastic.co/guide/en/elasticsearch/reference/7.17/indices-create-index.html
+			message: `INDEX_NAME cannot include characters '<', '"', space character, '\\' , '/', ',', '|', '>', '?', or '*'`,
+		})
+		.refine((value) => !/^[-_+]/.test(value), {
+			message: 'INDEX_NAME cannot start with -, _, or +',
+		})
+		.refine((value) => value !== '.' && value !== '..', {
+			message: 'INDEX_NAME cannot be . or ..',
+		})
+		.refine((value) => /^[^A-Z]*$/.test(value), {
+			message: 'INDEX_NAME must be lowercase and contain only alphanumeric characters',
+		})
+		.refine((value) => Buffer.byteLength(value, 'utf-8') <= 255, {
+			message: 'INDEX_NAME cannot be longer than 255 bytes',
+		}),
 });
 
 const definitionLyricRepositorySchema = z.object({
