@@ -15,6 +15,7 @@ const PATH = {
 	STUDIES: 'studies',
 	ANALYSIS: 'analysis',
 	PAGINATED: 'paginated',
+	ALL: 'all',
 } as const;
 
 // Query parameter constants
@@ -41,7 +42,10 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 
 		// Get all analysis paginated for a study
 		// http://song/studies/{organization}/analysis/paginated?analysisStates={2}&limit={3,number,#}&offset={4,number,#}
-		const fullUrl = new URL(path.join(PATH.STUDIES, organization, PATH.ANALYSIS, PATH.PAGINATED), baseUrl);
+		const fullUrl = new URL(
+			path.join(PATH.STUDIES, organization, PATH.ANALYSIS, paginationSize ? PATH.PAGINATED : ''),
+			baseUrl,
+		);
 		if (paginationSize) {
 			fullUrl.searchParams.append(QUERY.LIMIT, paginationSize.toString());
 		}
@@ -56,21 +60,21 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 
 				if (response.ok) {
 					const parsedResponse = await response.json();
-					if (isArrayOfObjects(parsedResponse?.records)) {
-						const validArray: Array<DataRecordNested> = parsedResponse.records.map((item: DataRecordNested) => ({
-							...item,
-						}));
-						yield validArray;
+					const parsedRecords = paginationSize ? parsedResponse.analyses : parsedResponse;
+					if (isArrayOfObjects(parsedRecords)) {
+						yield parsedRecords;
 					} else {
 						return;
 					}
 					if (paginationSize) {
+						hasMoreData = parseInt(parsedResponse?.currentTotalAnalyses) < parseInt(parsedResponse?.totalAnalyses);
 						offset++;
-						hasMoreData = offset < parsedResponse?.pagination?.totalPages;
+					} else {
+						hasMoreData = false;
 					}
+				} else {
+					hasMoreData = false;
 				}
-
-				hasMoreData = false;
 			} catch (error) {
 				logger.error(`Error fetching Song records on study '${organization}'`, error);
 				throw error;
@@ -90,20 +94,34 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 		return {};
 	};
 
-	const getRepositoryRecords = async function* (): AsyncGenerator<DataRecordNested[], void, unknown> {
+	const getAllStudies = async () => {
 		// Get all the studies
 		// http://song/studies/all
-		const fullUrl = new URL(baseUrl);
-		const response = await sendHttpRequest(fullUrl.toString());
-
-		if (response.ok) {
-			const allStudiesResult = await response.json();
-			for (let index = 1; index <= allStudiesResult.length; index++) {
-				const study = allStudiesResult[index];
-				// Get Records per study
-				for await (const records of getOrganizationRecords({ organization: study })) {
-					yield records;
+		const fullUrl = new URL(path.join(PATH.STUDIES, PATH.ALL), baseUrl);
+		try {
+			const response = await sendHttpRequest(fullUrl.toString());
+			if (response.ok) {
+				const parsedResponse = await response.json();
+				if (Array.isArray(parsedResponse)) {
+					return parsedResponse;
 				}
+			}
+			return [];
+		} catch (error) {
+			logger.error(`Error fetching Song all studies`, error);
+			throw error;
+		}
+	};
+
+	const getRepositoryRecords = async function* (): AsyncGenerator<DataRecordNested[], void, unknown> {
+		// Get all the studies
+		const studies = await getAllStudies();
+
+		for (let index = 0; index < studies.length; index++) {
+			const study = studies[index];
+			// Get Records per study
+			for await (const records of getOrganizationRecords({ organization: study })) {
+				yield records;
 			}
 		}
 		return;

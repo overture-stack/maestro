@@ -76,12 +76,14 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 						return;
 					}
 					if (paginationSize) {
-						page++;
 						hasMoreData = page < parsedResponse?.pagination?.totalPages;
+						page++;
+					} else {
+						hasMoreData = false;
 					}
+				} else {
+					hasMoreData = false;
 				}
-
-				hasMoreData = false;
 			} catch (error) {
 				logger.error(`Error fetching Lyric records on category '${categoryId}'`, error);
 				throw error;
@@ -125,11 +127,14 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 						return;
 					}
 					if (paginationSize) {
-						page++;
 						hasMoreData = page < parsedResponse?.pagination?.totalPages;
+						page++;
+					} else {
+						hasMoreData = false;
 					}
+				} else {
+					hasMoreData = false;
 				}
-				hasMoreData = false;
 			} catch (error) {
 				logger.error(`Error fetching Lyric records on organization '${organization}'`, error);
 				throw error;
