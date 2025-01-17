@@ -10,21 +10,23 @@ describe('Initialize Indexer', () => {
 			const nodeUrl = 'http://myserver:9200';
 			const providerConfig = { nodes: nodeUrl, basicAuth: { enabled: false }, version: 7 };
 			const provider = clientProvider(providerConfig);
-			expect(provider).to.have.property('createIndex');
 			expect(provider).to.have.property('addData');
-			expect(provider).to.have.property('updateData');
+			expect(provider).to.have.property('bulk');
+			expect(provider).to.have.property('createIndex');
 			expect(provider).to.have.property('deleteData');
 			expect(provider).to.have.property('ping');
+			expect(provider).to.have.property('updateData');
 		});
 		it('should create a provider V8 with indexing functions', () => {
 			const nodeUrl = 'http://myserver:9200';
 			const providerConfig = { nodes: nodeUrl, basicAuth: { enabled: false }, version: 8 };
 			const provider = clientProvider(providerConfig);
-			expect(provider).to.have.property('createIndex');
 			expect(provider).to.have.property('addData');
-			expect(provider).to.have.property('updateData');
+			expect(provider).to.have.property('bulk');
+			expect(provider).to.have.property('createIndex');
 			expect(provider).to.have.property('deleteData');
 			expect(provider).to.have.property('ping');
+			expect(provider).to.have.property('updateData');
 		});
 		it('should throw an error if configuration version is incorrect', () => {
 			try {
@@ -41,21 +43,23 @@ describe('Initialize Indexer', () => {
 			const nodeUrl = 'http://myserver:9200';
 			const client = es7({ nodes: nodeUrl, basicAuth: { enabled: false }, version: 7 });
 
-			expect(client).to.have.property('createIndex');
 			expect(client).to.have.property('addData');
-			expect(client).to.have.property('updateData');
+			expect(client).to.have.property('bulk');
+			expect(client).to.have.property('createIndex');
 			expect(client).to.have.property('deleteData');
 			expect(client).to.have.property('ping');
+			expect(client).to.have.property('updateData');
 		});
 		it('should create a client V8 with indexing functions', () => {
 			const nodeUrl = 'http://myserver:9200';
 			const client = es8({ nodes: nodeUrl, basicAuth: { enabled: false }, version: 8 });
 
-			expect(client).to.have.property('createIndex');
 			expect(client).to.have.property('addData');
-			expect(client).to.have.property('updateData');
+			expect(client).to.have.property('bulk');
+			expect(client).to.have.property('createIndex');
 			expect(client).to.have.property('deleteData');
 			expect(client).to.have.property('ping');
+			expect(client).to.have.property('updateData');
 		});
 		it('should throw an error if client V7 configuration version is incorrect', () => {
 			const nodeUrl = 'http://myserver:9200';

@@ -1,10 +1,15 @@
 import { ElasticsearchContainer, StartedElasticsearchContainer } from '@testcontainers/elasticsearch';
 import { expect } from 'chai';
 
-import type { DataRecordNested, ElasticsearchService } from '@overture-stack/maestro-common';
+import {
+	BulkAction,
+	type CreateBulkRequest,
+	type DataRecordNested,
+	type ElasticsearchService,
+} from '@overture-stack/maestro-common';
 
-import { es7 } from '../../src/client/v7/client.js';
-import { es8 } from '../../src/client/v8/client.js';
+import { es7 } from '../../../src/client/v7/client.js';
+import { es8 } from '../../../src/client/v8/client.js';
 
 export default function suite() {
 	let container: StartedElasticsearchContainer;
@@ -38,17 +43,18 @@ export default function suite() {
 		await container.stop();
 	});
 
-	it('should return successful true when bulk upserting indexed data', async () => {
+	it('should return successful true when bulk creating data', async () => {
 		const indexName = 'test-index';
 
-		// Upsert Data
-		const data: DataRecordNested[] = [
+		// Create Data
+		const records: DataRecordNested[] = [
 			{ id: 1, name: 'value1' },
 			{ id: 2, name: 'value2' },
 			{ id: 3, name: 'value3' },
 		];
+		const bulkRequest: CreateBulkRequest[] = records.map((data) => ({ action: BulkAction.CREATE, dataSet: data }));
 
-		const result = await client.bulkUpsert(indexName, data);
+		const result = await client.bulk(indexName, bulkRequest);
 		expect(result.successful).to.eql(true);
 		expect(result.indexName).to.eql(indexName);
 		expect(Object.keys(result.failureData).length).to.eq(0);
@@ -57,10 +63,11 @@ export default function suite() {
 	it('should return successful true when doc id does not exists', async () => {
 		const indexName = 'test-index';
 
-		// Upsert Data
-		const data: DataRecordNested[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
+		// Create Data
+		const records: DataRecordNested[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
+		const bulkRequest: CreateBulkRequest[] = records.map((data) => ({ action: BulkAction.CREATE, dataSet: data }));
 
-		const result = await client.bulkUpsert(indexName, data);
+		const result = await client.bulk(indexName, bulkRequest);
 		expect(result.successful).to.eql(true);
 		expect(result.indexName).to.eql(indexName);
 		expect(Object.keys(result.failureData).length).to.eq(0);
@@ -76,9 +83,10 @@ export default function suite() {
 			client = es8({ nodes: 'http://unknown', version: 8, basicAuth: { enabled: false } });
 		}
 
-		const data: DataRecordNested[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
+		const records: DataRecordNested[] = [{ name: 'value1' }, { name: 'value2' }, { name: 'value3' }];
+		const bulkRequest: CreateBulkRequest[] = records.map((data) => ({ action: BulkAction.CREATE, dataSet: data }));
 
-		const result = await client.bulkUpsert(indexName, data);
+		const result = await client.bulk(indexName, bulkRequest);
 		expect(result.successful).to.eql(false);
 		expect(result.indexName).to.eql(indexName);
 		expect(Object.keys(result.failureData).length).to.eq(1);

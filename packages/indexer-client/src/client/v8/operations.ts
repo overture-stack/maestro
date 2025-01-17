@@ -1,15 +1,60 @@
 import type { Client } from 'es8';
 import type { BulkOperationType, BulkResponseItem } from 'es8/lib/api/types.js';
 
-import { type DataRecordNested, FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
+import {
+	BulkAction,
+	type CreateBulkRequest,
+	type DataRecordNested,
+	type DeleteBulkRequest,
+	FailureData,
+	IndexResult,
+	logger,
+	type UpdateBulkRequest,
+	type UpsertBulkRequest,
+} from '@overture-stack/maestro-common';
 
-export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
+/**
+ * Performs bulk operations (e.g., delete, upsert, create, update) on a specified index in Elasticsearch.
+ *
+ * @param client  The Elasticsearch client used to perform the bulk operations
+ * @param index The name of the index on which to perform the bulk operations
+ * @param bulkRequest An array of bulk request objects representing the actions to be performed.
+ * The array can include upsert, delete, create, and update actions. Each action contains specific data
+ * that will be used for the corresponding operation.
+ *
+ * @returns A Promise that resolves to an `IndexResult` object. The result includes:
+ * - `indexName`: The name of the index on which the operations were performed.
+ * - `successful`: A boolean indicating whether all operations were successful.
+ * - `failureData`: An object that maps the index of failed operations to the error details. If no operations fail, this object is empty.
+ */
+export const bulk = async (
+	client: Client,
+	index: string,
+	bulkRequest: (UpsertBulkRequest | DeleteBulkRequest | CreateBulkRequest | UpdateBulkRequest)[],
+): Promise<IndexResult> => {
 	try {
-		const body = dataSet.flatMap((doc) => [{ index: { _index: index, _id: doc?.['id'] } }, doc]);
+		const body = bulkRequest.flatMap((val) => {
+			switch (val.action) {
+				case BulkAction.DELETE:
+					return [{ delete: { _index: index, _id: val.id } }];
+				case BulkAction.UPSERT: {
+					const doc = val.dataSet;
+					return [{ index: { _index: index, _id: doc?.['id'] } }, doc];
+				}
+				case BulkAction.CREATE: {
+					const doc = val.dataSet;
+					return [{ create: { _index: index, _id: doc?.['id'] } }, doc];
+				}
+				case BulkAction.UPDATE: {
+					const doc = val.dataSet;
+					return [{ update: { _index: index, _id: doc?.['id'] } }, { doc }];
+				}
+			}
+		});
 
 		const response = await client.bulk({ refresh: true, body });
 
-		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents: ${response.items.length}`);
+		logger.debug(`Bulk action in index:'${index}'`, `# of documents: ${response.items.length}`);
 
 		let successful = false;
 		const failureData: FailureData = {};

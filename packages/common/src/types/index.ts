@@ -9,4 +9,11 @@ export {
 export { DataRecordNested, DataRecordValue, FailureData, IndexResult } from './dataRecord.js';
 export { ConsoleLike, LoggerConfig } from './logger.js';
 export { Repository, RepositoryIndexingOperations } from './repository.js';
-export { ElasticsearchService } from './service.js';
+export {
+	BulkAction,
+	CreateBulkRequest,
+	DeleteBulkRequest,
+	ElasticsearchService,
+	UpdateBulkRequest,
+	UpsertBulkRequest,
+} from './service.js';

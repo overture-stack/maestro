@@ -1,5 +1,6 @@
 import {
 	BadRequest,
+	BulkAction,
 	type ElasticsearchService,
 	type FailureData,
 	type IndexResult,
@@ -8,6 +9,7 @@ import {
 	logger,
 	type MaestroProviderConfig,
 	type RepositoryIndexingOperations,
+	type UpsertBulkRequest,
 } from '@overture-stack/maestro-common';
 import { getRepoInformation, repository } from '@overture-stack/maestro-repository';
 
@@ -71,7 +73,8 @@ export const api = (config: MaestroProviderConfig, indexer: ElasticsearchService
 
 		try {
 			for await (const items of repository(repoInfo).getRepositoryRecords()) {
-				const result = await indexer.bulkUpsert(repoInfo.indexName, items);
+				const upsertRequest: UpsertBulkRequest[] = items.map((i) => ({ action: BulkAction.UPSERT, dataSet: i }));
+				const result = await indexer.bulk(repoInfo.indexName, upsertRequest);
 				mergeResult(resultIndex, result);
 			}
 		} catch (error) {
@@ -111,7 +114,8 @@ export const api = (config: MaestroProviderConfig, indexer: ElasticsearchService
 
 		try {
 			for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
-				const result = await indexer.bulkUpsert(repoInfo.indexName, items);
+				const upsertRequest: UpsertBulkRequest[] = items.map((i) => ({ action: BulkAction.UPSERT, dataSet: i }));
+				const result = await indexer.bulk(repoInfo.indexName, upsertRequest);
 				mergeResult(resultIndex, result);
 			}
 		} catch (error) {
