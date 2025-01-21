@@ -15,7 +15,7 @@ export interface MaestroProvider {
 	/**
 	 * The API for repository indexing operations.
 	 */
-	api: RepositoryIndexingOperations;
+	api?: RepositoryIndexingOperations;
 	/**
 	 * The Elasticsearch service implementation payload.
 	 */
@@ -33,10 +33,8 @@ export const initializeMaestroProvider = (config: MaestroProviderConfig): Maestr
 	}
 	const indexerProvider = clientProvider(config.elasticSearchConfig);
 
-	const apiOperations = api(config, indexerProvider);
-
 	return {
-		api: apiOperations,
+		api: config.repositories ? api(config.repositories, indexerProvider) : undefined,
 		payload: indexerProvider,
 	};
 };

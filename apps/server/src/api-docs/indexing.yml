@@ -12,12 +12,12 @@
           type: string
         description: A unique code that identifies the repository where data will be indexed
     responses:
-      200:
-        description: Indexing Response
+      202:
+        description: Accepted response indicating that the indexing operation has been queued for processing
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IndexResult'
+              $ref: '#/components/schemas/AcceptedResponse'
       400:
         $ref: '#/components/responses/BadRequest'
       401:
@@ -49,12 +49,12 @@
           type: string
         description: The name of the organization within the repository for which data will be indexed
     responses:
-      200:
-        description: A summary of the results from the indexing operation
+      202:
+        description: Accepted response indicating that the indexing operation has been queued for processing
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IndexResult'
+              $ref: '#/components/schemas/AcceptedResponse'
       400:
         $ref: '#/components/responses/BadRequest'
       401:
@@ -92,12 +92,12 @@
           type: string
         description: The unique identifier of the record to be indexed within the specified organization.
     responses:
-      200:
-        description: Indexing Response
+      202:
+        description: Accepted response indicating that the indexing operation has been queued for processing
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IndexResult'
+              $ref: '#/components/schemas/AcceptedResponse'
       400:
         $ref: '#/components/responses/BadRequest'
       401:

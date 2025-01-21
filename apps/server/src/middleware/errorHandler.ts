@@ -40,37 +40,31 @@ export const errorHandler = (err: Error, req: Request, res: Response, _next: Nex
 	logger.error('error handler received error: ', err);
 	let status: number;
 	let details: string | undefined;
-	let timestamp: string | undefined;
 	switch (true) {
 		case err instanceof BadRequest:
 			status = 400;
 			details = err.details;
-			timestamp = err.timestamp;
 			break;
 		case err instanceof NotFound:
 			status = 404;
 			details = err.details;
-			timestamp = err.timestamp;
 			break;
 		case err instanceof InternalServerError:
 			status = 500;
 			details = err.details;
-			timestamp = err.timestamp;
 			break;
 		case err instanceof NotImplemented:
 			status = 501;
 			details = err.details;
-			timestamp = err.timestamp;
 			break;
 		case err instanceof ServiceUnavailable:
 			status = 503;
 			details = err.details;
-			timestamp = err.timestamp;
 			break;
 		default:
 			status = 500;
 			details = convertErrorDetailsToString(err.cause);
 	}
 
-	res.status(status).send({ message: err.message, details, timestamp });
+	res.status(status).send({ successful: false, message: err.message, details });
 };

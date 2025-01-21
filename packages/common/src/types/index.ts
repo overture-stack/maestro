@@ -1,3 +1,4 @@
+export { ApiResult } from './api.js';
 export { ElasticSearchBasicAuthConfig, ElasticSearchConfig } from './clientConfig.js';
 export {
 	LyricRepositoryConfig,
