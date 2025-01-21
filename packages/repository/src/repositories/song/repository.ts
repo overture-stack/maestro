@@ -117,8 +117,7 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 		// Get all the studies
 		const studies = await getAllStudies();
 
-		for (let index = 0; index < studies.length; index++) {
-			const study = studies[index];
+		for (const study of studies) {
 			// Get Records per study
 			for await (const records of getOrganizationRecords({ organization: study })) {
 				yield records;

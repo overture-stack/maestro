@@ -1,5 +1,5 @@
 export { ApiResult } from './api.js';
-export { ElasticSearchBasicAuthConfig, ElasticSearchConfig } from './clientConfig.js';
+export { ElasticSearchBasicAuthConfig, ElasticSearchConfig, ElasticSearchSupportedVersions } from './clientConfig.js';
 export {
 	LyricRepositoryConfig,
 	MaestroProviderConfig,

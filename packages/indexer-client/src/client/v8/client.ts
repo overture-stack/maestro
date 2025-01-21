@@ -1,10 +1,11 @@
 import { Client } from 'es8';
 
-import type {
-	DataRecordNested,
-	ElasticSearchConfig,
-	ElasticsearchService,
-	IndexResult,
+import {
+	type DataRecordNested,
+	type ElasticSearchConfig,
+	type ElasticsearchService,
+	ElasticSearchSupportedVersions,
+	type IndexResult,
 } from '@overture-stack/maestro-common';
 
 import { getAuth } from '../../common/config.js';
@@ -22,7 +23,7 @@ import { bulkUpsert, createIndexIfNotExists, deleteData, indexData, ping, update
  * @returns {ElasticsearchService} An object implementing the `ElasticsearchService` interface, providing methods to interact with Elasticsearch
  */
 export const es8 = (config: ElasticSearchConfig): ElasticsearchService => {
-	if (config.version !== 8) {
+	if (config.version !== ElasticSearchSupportedVersions.V8) {
 		throw Error('Invalid Client Configuration');
 	}
 

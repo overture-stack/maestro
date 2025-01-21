@@ -1,9 +1,12 @@
-import { type DataRecordNested, ElasticSearchConfig, ElasticsearchService } from '@overture-stack/maestro-common';
+import {
+	type DataRecordNested,
+	ElasticSearchConfig,
+	ElasticsearchService,
+	ElasticSearchSupportedVersions,
+} from '@overture-stack/maestro-common';
 
 import { es7 } from './v7/client.js';
 import { es8 } from './v8/client.js';
-
-export type ESVersion = '7' | '8';
 
 /**
  * Provides an instance of `ElasticsearchService` based on the specified Elasticsearch version in the configuration
@@ -15,9 +18,9 @@ export type ESVersion = '7' | '8';
 export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): ElasticsearchService => {
 	let service: ElasticsearchService;
 
-	if (elasticSearchConfig.version === 7) {
+	if (elasticSearchConfig.version === ElasticSearchSupportedVersions.V7) {
 		service = es7(elasticSearchConfig);
-	} else if (elasticSearchConfig.version === 8) {
+	} else if (elasticSearchConfig.version === ElasticSearchSupportedVersions.V8) {
 		service = es8(elasticSearchConfig);
 	} else {
 		throw new Error('Unsupported Elasticsearch version');
