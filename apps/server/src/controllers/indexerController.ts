@@ -1,4 +1,3 @@
-import { BadRequest } from '@overture-stack/maestro-common';
 import { initializeMaestroProvider } from '@overture-stack/maestro-provider';
 
 import { defaultAppConfig } from '../config/provider.js';

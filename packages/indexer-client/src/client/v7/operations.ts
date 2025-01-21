@@ -19,7 +19,6 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: DataRec
 
 		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents:'${dataSet.length}'`, response.statusCode);
 
-		let successful = false;
 		const failureData: FailureData = {};
 		if (response.body.errors) {
 			// The items array has the same order of the dataset we just indexed.
@@ -33,13 +32,9 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: DataRec
 			});
 		}
 
-		if (Object.keys(failureData).length === 0) {
-			successful = true;
-		}
-
 		return {
 			indexName: index,
-			successful,
+			successful: !Object.keys(failureData).length,
 			failureData,
 		};
 	} catch (error) {

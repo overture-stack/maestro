@@ -1,5 +1,5 @@
 import type { ElasticSearchConfig } from './clientConfig.js';
-import type { LoggerConfig } from './logger.js';
+import { ConsoleLike } from './logger.js';
 interface BindingConfig {
 	dlq: string;
 	topic: string;
@@ -57,6 +57,6 @@ export interface SongRepositoryConfig extends RepositoryConfig, SongIndexConfig 
 export interface MaestroProviderConfig {
 	elasticSearchConfig: ElasticSearchConfig;
 	kafka?: KafkaConfig;
-	logger?: LoggerConfig;
+	logger?: ConsoleLike;
 	repositories?: (LyricRepositoryConfig | SongRepositoryConfig)[];
 }

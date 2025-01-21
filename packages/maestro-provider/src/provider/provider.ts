@@ -1,7 +1,7 @@
 import {
 	type ElasticsearchService,
 	type RepositoryIndexingOperations,
-	setLoggerConfig,
+	setLogger,
 } from '@overture-stack/maestro-common';
 import type { MaestroProviderConfig } from '@overture-stack/maestro-common/dist/types/config.js';
 import { clientProvider } from '@overture-stack/maestro-indexer-client';
@@ -29,7 +29,7 @@ export interface MaestroProvider {
  */
 export const initializeMaestroProvider = (config: MaestroProviderConfig): MaestroProvider => {
 	if (config.logger) {
-		setLoggerConfig(config.logger);
+		setLogger(config.logger);
 	}
 	const indexerProvider = clientProvider(config.elasticSearchConfig);
 

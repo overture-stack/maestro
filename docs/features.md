@@ -1,6 +1,6 @@
 # Multiple repositories
 
-Maestro is designed to integrate with multiple data source repositories, such as **Song** (for genomic metadata) and **Lyric** (for data submissions). This integration ensures that the data from these repositories is continuously monitored and accurately indexed into Elasticsearch.
+Maestro is designed to integrate with multiple data source repositories, such as **SONG** (for genomic metadata) and **Lyric** (for data submissions). This integration ensures that the data from these repositories is continuously monitored and accurately indexed into Elasticsearch.
 
 # Multiple SONGs, One Index
 

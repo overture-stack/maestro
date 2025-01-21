@@ -15,7 +15,7 @@ their Index to evolve along their model, the process will be something like:
 - Maestro will continue working and indexing those documents but new fields won't be indexed yet.
 - Index mapping needs update due to new analysis types, or change of some structure etc.. :
   - Create new index with the updated mapping
-  - Reindex your data (you can point maestro to your new index and trigger indexing on full repositories to do that,
+  - Reindex your data (you can point Maestro to your new index and trigger indexing on full repositories to do that,
     or you can use `/reindex` API in Elasticsearch).
   - switch your Aliases if it still points to the old index
   - now that your data is migrated Maestro will be indexing based on the new mapping.
@@ -62,7 +62,7 @@ curl -X POST \
 
 ## Kafka topics
 
-Maestro can be configured as mentioned under the running configurations section to listen to kafka topics
+Maestro can be configured as mentioned under the running configurations section to listen to Kafka topics
 
 ```yaml
 MAESTRO_KAFKA_ENABLED=true

@@ -5,7 +5,3 @@ export interface ConsoleLike {
 	error(message: unknown, ...args: unknown[]): void;
 	debug(message: unknown, ...args: unknown[]): void;
 }
-
-export type LoggerConfig = {
-	logger: ConsoleLike;
-};

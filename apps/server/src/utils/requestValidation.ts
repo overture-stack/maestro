@@ -5,6 +5,8 @@ import { BadRequest } from '@overture-stack/maestro-common';
 
 import { logger } from '../utils/logger.js';
 
+const LOG_MODULE = 'REQUEST_VALIDATION';
+
 export declare type RequestValidation<TBody, TQuery, TParams> = {
 	body?: ZodSchema<TBody>;
 	query?: ZodSchema<TQuery>;
@@ -20,7 +22,6 @@ export function validateRequest<TBody, TQuery, TParams>(
 	schema: RequestValidation<TBody, TQuery, TParams>,
 	handler: RequestHandler<TParams, unknown, TBody, TQuery>,
 ): RequestHandler<TParams, unknown, TBody, TQuery> {
-	const LOG_MODULE = 'REQUEST_VALIDATION';
 	return async (req, res, next) => {
 		// Collect all validation errors in an array
 		const validationErrors: string[] = [];

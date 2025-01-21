@@ -85,8 +85,6 @@ export const defaultAppConfig: MaestroProviderConfig = {
 			},
 		},
 	},
-	logger: {
-		logger: logger,
-	},
+	logger: logger,
 	repositories: getRepositoryConfig(env.repositories),
 };

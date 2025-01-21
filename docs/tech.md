@@ -1,6 +1,6 @@
 # Technologies & Libraries
 
-- Node.js v16.14 or greater
+- Node.js v22 or greater
 - PNPM package manager
 - Elasticsearch 7+
 - Apache Kafka
@@ -32,4 +32,4 @@ packages/
 
 - **Maestro Provider:** The core features and provider independent logic that is portable and contains the main indexing, rules, notifications logic as specified by the business features.
 
-- **Maestro Repository:** Designed to manage interactions with data source repositories. It serves as the central interface for retrieving data from various repositories, such as **Song** and **Lyric**, ensuring a streamlined and consistent approach to data access.
+- **Maestro Repository:** Designed to manage interactions with data source repositories. It serves as the central interface for retrieving data from various repositories, such as **SONG** and **Lyric**, ensuring a streamlined and consistent approach to data access.
