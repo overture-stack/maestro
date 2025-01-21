@@ -1,12 +1,12 @@
 # What is Maestro
 
-Maestro is a micro service that listens to changes on any type of data and mantains a ElasticSearch index updated.
+Maestro is a micro-service that listens to changes on any type of data and updates an Elasticsearch index accordingly.
 
-Data changes can be delivered via various sources, including an HTTP API, a JavaScript package, or Kafka, having the possibility to connect to a genomic metadata server [SONG](https://www.overture.bio/products/song) and listens to changes there to build an Elasticsearch index.
+Data changes can be delivered via various sources, including an HTTP API, a JavaScript package, or Kafka, having the possibility to query and retrieve data from a genomic metadata server, such as [SONG](https://www.overture.bio/products/song) or a Data Submission system like [Lyric](https://github.com/overture-stack/lyric) to monitor changes and build an Elasticsearch index.
 
-Maestro was created to enable genomic researchers to enhance their Overture metadata storage system[SONG](https://www.overture.bio/products/song) by building search indexes, Elasticsearch by default, that makes searching Analyses and Studies easy and powerful.
+Maestro was created to enable genomic researchers enhance their Overture metadata storage system [SONG](https://www.overture.bio/products/song) by building search indexes, Elasticsearch by default, that makes searching Analyses and Studies easy and powerful.
 
-On the other end, Indexes created my Maestro can be consumed [Arranger](https://www.overture.bio/products/arranger), a data portal generator.
+On the other end, Indexes created by Maestro can be consumed by [Arranger](https://www.overture.bio/products/arranger), a data portal search API and library of UI components.
 
 # License
 

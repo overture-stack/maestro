@@ -1,65 +1,62 @@
 import type { ElasticSearchConfig } from './clientConfig.js';
-import type { LoggerConfig } from './logger.js';
-
-type BindingConfig = {
-	topic: string;
+import { ConsoleLike } from './logger.js';
+interface BindingConfig {
 	dlq: string;
-};
-
-type SchemaBindingConfig = {
+	topic: string;
+}
+interface SchemaBindingConfig {
 	analysisMessage: BindingConfig;
 	requestMessage: BindingConfig;
-};
-
-export type KafkaConfig = {
-	lyricSchemaBinding?: SchemaBindingConfig;
+}
+export interface KafkaConfig {
 	enabled: boolean;
+	lyricSchemaBinding?: SchemaBindingConfig;
 	servers?: string;
 	songSchemaBinding?: SchemaBindingConfig;
-};
+}
 
-type SongRepositoryConfig = {
+export const RepositoryType = {
+	SONG: 'SONG',
+	LYRIC: 'LYRIC',
+} as const;
+
+type ValueOf<T> = T[keyof T];
+export type RepositoryType = ValueOf<typeof RepositoryType>;
+
+export interface RepositoryConfig {
 	baseUrl: string;
 	code: string;
-	country: string;
 	name: string;
-	organization: string;
-};
+	paginationSize?: number;
+}
 
-type IndexConfig = {
-	alias: string;
-	enabled: boolean;
-	name: string;
-};
+interface IndexConfig {
+	indexName: string;
+}
 
-type SongIndicesConfig = {
-	analysisCentric: IndexConfig;
-	fileCentric: IndexConfig;
-};
-
-export type SongConfig = {
+interface SongIndexConfig extends IndexConfig {
+	analysisCentricEnabled: boolean;
 	indexableStudyStates: string;
-	indices: SongIndicesConfig;
-	repositories?: SongRepositoryConfig[];
-};
+}
 
-type LyricRepositoryConfig = {
-	baseUrl: string;
+interface LyricIndexConfig extends IndexConfig {
+	validDataOnly: boolean;
+}
+
+export interface LyricRepositoryConfig extends RepositoryConfig, LyricIndexConfig {
 	categoryId: number;
-	code: string;
-	name: string;
-};
+	type: typeof RepositoryType.LYRIC;
+}
 
-export type LyricConfig = {
-	indexValidDataOnly: boolean;
-	index: IndexConfig;
-	repositories?: LyricRepositoryConfig[];
-};
+export interface SongRepositoryConfig extends RepositoryConfig, SongIndexConfig {
+	country?: string;
+	organization?: string;
+	type: typeof RepositoryType.SONG;
+}
 
-export type Config = {
+export interface MaestroProviderConfig {
 	elasticSearchConfig: ElasticSearchConfig;
 	kafka?: KafkaConfig;
-	logger?: LoggerConfig;
-	songConfig?: SongConfig;
-	lyricConfig?: LyricConfig;
-};
+	logger?: ConsoleLike;
+	repositories?: (LyricRepositoryConfig | SongRepositoryConfig)[];
+}

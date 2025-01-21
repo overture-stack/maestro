@@ -5,67 +5,58 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorResponse'
 
     NotFound:
       description: Requested resource could not be found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorResponse'
 
     UnauthorizedError:
       description: Access token is missing or invalid
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorResponse'
 
     ServerError:
       description: Internal Server Error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorResponse'
 
     ServiceUnavailableError:
       description: Unable to complete the request due to an issue with an external service.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorResponse'
 
   schemas:
-    IndexResult:
+    AcceptedResponse:
       type: object
       properties:
+        successful:
+          type: boolean
+          default: true
+          description: Indicates whether the indexing operation was successful or not
         indexName:
           type: string
           description: The name of the index where the data is stored.
+
+    ErrorResponse:
+      type: object
+      properties:
         successful:
           type: boolean
-          description: Indicates whether the indexing operation was successful
-        failureData:
-          $ref: '#/components/schemas/FailureData'
-
-    FailureData:
-      type: object
-      properties:
-        failingIds:
-          type: array
-          description: List of the failing record IDs
-          items:
-            type: string
-
-    ErrorDetails:
-      type: object
-      properties:
-        details:
-          type: string
-          description: A detailed explanation of the error
+          default: false
+          description: Indicates whether the indexing operation was successful or not
         message:
           type: string
           description: A brief description of the error encountered
-        timestamp:
+        details:
           type: string
-          description: The system timestamp when the error occurred, expressed in ISO 8601 format, which includes the date, time, and time zone (UTC).
+          description: Additional details about the error

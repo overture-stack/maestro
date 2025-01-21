@@ -2,6 +2,11 @@ import 'dotenv/config';
 
 import { z } from 'zod';
 
+import { ElasticSearchSupportedVersions } from '@overture-stack/maestro-common';
+
+import { logger } from '../utils/logger.js';
+import { validateRepositories } from './repositoryConfig.js';
+
 export const getServerConfig = () => {
 	return {
 		port: process.env.MAESTRO_SERVER_PORT || 11235,
@@ -9,6 +14,8 @@ export const getServerConfig = () => {
 		openApiPath: process.env.MAESTRO_OPENAPI_PATH || 'api-docs',
 	};
 };
+
+const supportedVersionValues = Object.values(ElasticSearchSupportedVersions);
 
 const elasticSearchConfigSchema = z.object({
 	MAESTRO_ELASTICSEARCH_CLIENT_BASICAUTH_ENABLED: z.coerce.boolean(),
@@ -19,9 +26,9 @@ const elasticSearchConfigSchema = z.object({
 	MAESTRO_ELASTICSEARCH_CLIENT_RETRY_MAX_ATTEMPTS: z.coerce.number().optional(),
 	MAESTRO_ELASTICSEARCH_CLIENT_RETRY_WAIT_DURATION_MILLIS: z.coerce.number().optional(),
 	MAESTRO_ELASTICSEARCH_NODES: z.string(),
-	MAESTRO_ELASTICSEARCH_VERSION: z.coerce
-		.number()
-		.refine((val) => val === 7 || val === 8, { message: 'Version must be 7 or 8' }), // Ensure 7 or 8
+	MAESTRO_ELASTICSEARCH_VERSION: z
+		.enum([String(supportedVersionValues[0]), ...supportedVersionValues.slice(1).map(String)])
+		.transform((val) => Number(val)),
 });
 
 const kafkaConfigSchema = z.object({
@@ -37,67 +44,26 @@ const kafkaConfigSchema = z.object({
 	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ: z.string().default('index_request_dlq'),
 });
 
-const stringToJSONSchema = z.string().transform((str, ctx) => {
-	try {
-		return JSON.parse(str);
-	} catch (e) {
-		ctx.addIssue({ code: 'custom', message: `Invalid JSON. ${e}` });
-		return z.NEVER;
-	}
-});
-
-const songRepositorySchema = z.object({
-	baseUrl: z.string(),
-	code: z.string(),
-	country: z.string(),
-	name: z.string(),
-	organization: z.string(),
-});
-
-const songConfigSchema = z.object({
-	MAESTRO_SONG_INDEXABLE_STUDY_STATES: z.string().default('PUBLISHED'),
-	MAESTRO_SONG_INDEX_ANALYSISCENTRIC_ALIAS: z.string().default('analysis_centric'),
-	MAESTRO_SONG_INDEX_ANALYSISCENTRIC_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_SONG_INDEX_ANALYSISCENTRIC_NAME: z.string().default('analysis_centric_1'),
-	MAESTRO_SONG_INDEX_FILECENTRIC_ALIAS: z.string().default('file_centric'),
-	MAESTRO_SONG_INDEX_FILECENTRIC_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_SONG_INDEX_FILECENTRIC_NAME: z.string().default('file_centric_1'),
-	MAESTRO_SONG_REPOSITORIES: stringToJSONSchema.pipe(z.array(songRepositorySchema)).optional(),
-});
-
-const LyricRepositoryConfig = z.object({
-	baseUrl: z.string(),
-	categoryId: z.coerce.number(),
-	code: z.string(),
-	name: z.string(),
-});
-
-const lyricConfigSchema = z
-	.object({
-		MAESTRO_LYRIC_INDEX_ALIAS: z.string().default('clinical_data_1.0'),
-		MAESTRO_LYRIC_INDEX_ENABLED: z.coerce.boolean().default(false),
-		MAESTRO_LYRIC_INDEX_NAME: z.string().default('clinical_data'),
-		MAESTRO_LYRIC_INDEX_VALID_DATA_ONLY: z.coerce.boolean().default(false),
-		MAESTRO_LYRIC_REPOSITORIES: stringToJSONSchema.pipe(z.array(LyricRepositoryConfig)).optional(),
-	})
-	.optional();
+// Pino logger levels (https://github.com/pinojs/pino/blob/main/docs/api.md#level)
+const LogLeveOptions = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
 
 const loggerConfigSchema = z.object({
-	MAESTRO_LOGGING_LEVEL_ROOT: z.string().default('info'),
+	MAESTRO_LOGGING_LEVEL: z.enum(LogLeveOptions).default('info'),
 });
 
-const envConfig = elasticSearchConfigSchema
-	.and(elasticSearchConfigSchema)
-	.and(kafkaConfigSchema)
-	.and(loggerConfigSchema)
-	.and(songConfigSchema)
-	.and(lyricConfigSchema);
+// Create the main schema by intersecting the other schemas and the validated union
+const mainSchema = elasticSearchConfigSchema.and(kafkaConfigSchema).and(loggerConfigSchema);
 
-const envParsed = envConfig.safeParse(process.env);
+const mainSchemaParsed = mainSchema.safeParse(process.env);
 
-if (!envParsed.success) {
-	console.error(envParsed.error.issues);
+if (!mainSchemaParsed.success) {
+	mainSchemaParsed.error.issues.forEach((issue) => {
+		logger.error(issue);
+	});
 	throw new Error('There is an error with the server environment variables.');
 }
 
-export const env = envParsed.data;
+// Create Repository schemas and validate them
+const parsedRepositories = validateRepositories(process.env);
+
+export const env = { ...mainSchemaParsed.data, repositories: parsedRepositories };

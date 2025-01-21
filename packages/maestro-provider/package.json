@@ -1,7 +1,7 @@
 {
 	"name": "@overture-stack/maestro-provider",
 	"version": "5.0.0-alpha.1",
-	"description": "",
+	"description": "The Maestro indexing provider that manages indexing operations to keep data synchronized with search indices",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"type": "module",
@@ -9,9 +9,20 @@
 		"clean": "rimraf dist",
 		"build": "pnpm run clean && tsc"
 	},
-	"keywords": [],
+	"keywords": [
+		"overture",
+		"maestro"
+	],
 	"author": "Ontario Institute for Cancer Research",
 	"license": "AGPL-3.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/overture-stack/maestro.git"
+	},
+	"bugs": {
+		"url": "https://github.com/overture-stack/maestro/issues"
+	},
+	"homepage": "https://github.com/overture-stack/maestro#readme",
 	"devDependencies": {
 		"@types/chai": "^5.0.0",
 		"@types/mocha": "^10.0.8",
@@ -22,6 +33,6 @@
 	"dependencies": {
 		"@overture-stack/maestro-common": "workspace:^",
 		"@overture-stack/maestro-indexer-client": "workspace:^",
-		"rimraf": "^6.0.1"
+		"@overture-stack/maestro-repository": "workspace:^"
 	}
 }

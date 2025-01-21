@@ -1,3 +1,2 @@
-// @Library(value='jenkins-pipeline-library@master', changelog=false) _
-// pipelineOVERTUREMaestro()
-
+@Library(value='jenkins-pipeline-library@maestro-v5', changelog=false) _
+pipelineOVERTUREMaestro()

@@ -1,5 +1,13 @@
-export { ElasticSearchBasicAuthConfig, ElasticSearchConfig } from './clientConfig.js';
-export { Config, KafkaConfig, LyricConfig, SongConfig } from './config.js';
-export { DataRecordValue, FailureData, IndexData, IndexResult } from './dataRecord.js';
-export { LoggerConfig } from './logger.js';
-export { IElasticsearchService } from './service.js';
+export { ApiResult } from './api.js';
+export { ElasticSearchBasicAuthConfig, ElasticSearchConfig, ElasticSearchSupportedVersions } from './clientConfig.js';
+export {
+	LyricRepositoryConfig,
+	MaestroProviderConfig,
+	RepositoryConfig,
+	RepositoryType,
+	SongRepositoryConfig,
+} from './config.js';
+export { DataRecordNested, DataRecordValue, FailureData, IndexResult } from './dataRecord.js';
+export { ConsoleLike } from './logger.js';
+export { Repository, RepositoryIndexingOperations } from './repository.js';
+export { ElasticsearchService } from './service.js';

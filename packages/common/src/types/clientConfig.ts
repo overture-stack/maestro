@@ -17,3 +17,8 @@ export type ElasticSearchConfig = {
 	retry?: ElasticSearchRetryConfig;
 	version: number;
 };
+
+export const ElasticSearchSupportedVersions = {
+	V7: 7,
+	V8: 8,
+} as const;

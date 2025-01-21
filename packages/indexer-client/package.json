@@ -1,11 +1,10 @@
 {
 	"name": "@overture-stack/maestro-indexer-client",
 	"version": "5.0.0-alpha.1",
-	"description": "",
+	"description": "A submodule of Maestro that abstracts communication with Elasticsearch clients",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"type": "module",
-	"private": true,
 	"scripts": {
 		"clean": "rimraf dist",
 		"build": "pnpm run clean && tsc",
@@ -20,8 +19,7 @@
 	"dependencies": {
 		"@overture-stack/maestro-common": "workspace:^",
 		"es7": "npm:@elastic/elasticsearch@7",
-		"es8": "npm:@elastic/elasticsearch@8",
-		"rimraf": "^6.0.1"
+		"es8": "npm:@elastic/elasticsearch@8"
 	},
 	"devDependencies": {
 		"@testcontainers/elasticsearch": "^10.13.2"

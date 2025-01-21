@@ -1,1 +1,1 @@
-export { MaestroProvider } from './service.js';
+export { initializeMaestroProvider, MaestroProvider } from './provider.js';

@@ -1,12 +1,50 @@
 import type { Client } from 'es8';
+import type { BulkOperationType, BulkResponseItem } from 'es8/lib/api/types.js';
 
-import {
-	type DataRecordValue,
-	FailureData,
-	IndexData,
-	IndexResult,
-	sanitize_index_name,
-} from '@overture-stack/maestro-common';
+import { type DataRecordNested, FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
+
+export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
+	try {
+		const body = dataSet.flatMap((doc) => [{ index: { _index: index, _id: doc?.['id'] } }, doc]);
+
+		const response = await client.bulk({ refresh: true, body });
+
+		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents: ${response.items.length}`);
+
+		const failureData: FailureData = {};
+
+		if (response.errors) {
+			// The items array has the same order of the dataset we just indexed.
+			// The presence of the `error` key indicates that the operation
+			// that we did for the document has failed.
+			response.items.forEach((item: Partial<Record<BulkOperationType, BulkResponseItem>>, indexItem: number) => {
+				const operation = item.index;
+				if (operation && 'error' in operation) {
+					failureData[indexItem] = [operation.error?.reason || 'error'];
+				}
+			});
+		}
+
+		return {
+			indexName: index,
+			successful: !Object.keys(failureData).length,
+			failureData,
+		};
+	} catch (error) {
+		let errorMessage = JSON.stringify(error);
+
+		logger.error(`Error update doc: ${errorMessage}`);
+
+		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
+			errorMessage = error.name;
+		}
+		return {
+			indexName: index,
+			successful: false,
+			failureData: { error: [errorMessage] },
+		};
+	}
+};
 
 /**
  * Creates an index in Elasticsearch if it does not already exist
@@ -20,18 +58,17 @@ import {
  * @returns `true` if the index already exists, `false` if doesn't exist
  */
 export const createIndexIfNotExists = async (client: Client, index: string): Promise<boolean> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	let exists = false;
 	try {
-		exists = await client.indices.exists({ index: sanitizedIndex });
+		exists = await client.indices.exists({ index });
 		if (!exists) {
-			await client.indices.create({ index: sanitizedIndex });
-			console.log(`Index ${sanitizedIndex} created.`);
+			await client.indices.create({ index });
+			logger.info(`Index ${index} created.`);
 		} else {
-			console.log(`Index ${sanitizedIndex} already exists.`);
+			logger.debug(`Index ${index} already exists.`);
 		}
 	} catch (error) {
-		console.error(`Error creating the index: ${error}`);
+		logger.error(`Error creating the index: ${error}`);
 	}
 	return exists;
 };
@@ -48,31 +85,23 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
  * @param input.organization The organization associated with the document
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
-export const indexData = async (
-	client: Client,
-	index: string,
-	{ id, data, entityName, organization }: IndexData,
-): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
-
+export const indexData = async (client: Client, index: string, data: DataRecordNested): Promise<IndexResult> => {
 	try {
 		const response = await client.index({
-			index: sanitizedIndex,
-			id,
-			document: {
-				data,
-				entityName,
-				organization,
-			},
+			index,
+			id: data?.['id']?.toString(),
+			document: data,
 		});
-		console.log('Document indexed:', JSON.stringify(response));
+
+		logger.debug(`Indexing document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
 		if (response.result === 'created' || response.result === 'updated') {
 			successful = true;
 		} else {
-			failureData[id] = [response.result];
+			const keyIndex = Object.keys(failureData).length;
+			failureData[keyIndex] = [response.result];
 		}
 		return {
 			indexName: response._index,
@@ -80,7 +109,7 @@ export const indexData = async (
 			failureData,
 		};
 	} catch (error) {
-		console.error(`Error document index: ${error}`);
+		logger.error(`Error document index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
@@ -89,7 +118,7 @@ export const indexData = async (
 		return {
 			indexName: index,
 			successful: false,
-			failureData: { [id]: [errorMessage] },
+			failureData: { [data?.['id']?.toString() || 0]: [errorMessage] },
 		};
 	}
 };
@@ -107,18 +136,17 @@ export const updateData = async (
 	client: Client,
 	index: string,
 	id: string,
-	data: Record<string, DataRecordValue>,
+	data: DataRecordNested,
 ): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	try {
 		const response = await client.update({
-			index: sanitizedIndex,
+			index,
 			id,
 			body: {
 				doc: { data },
 			},
 		});
-		console.log('Document updated:', JSON.stringify(response));
+		logger.debug(`Updating indexed document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -134,7 +162,7 @@ export const updateData = async (
 			failureData,
 		};
 	} catch (error) {
-		console.error(`Error updating the index: ${error}`);
+		logger.error(`Error updating the index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
@@ -156,14 +184,12 @@ export const updateData = async (
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
 export const deleteData = async (client: Client, index: string, id: string): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
-
 	try {
 		const response = await client.delete({
-			index: sanitizedIndex,
+			index,
 			id,
 		});
-		console.log('Document deleted:', JSON.stringify(response));
+		logger.debug(`Deleting indexed document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -179,7 +205,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			failureData,
 		};
 	} catch (error) {
-		console.error(`Error deleting the index: ${error}`);
+		logger.error(`Error deleting the index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
 		if (typeof error === 'object' && error && 'name' in error && typeof error.name === 'string') {
@@ -208,7 +234,7 @@ export const ping = async (client: Client): Promise<boolean> => {
 	try {
 		return await client.ping();
 	} catch (error) {
-		console.error(`Error ping server: ${error}`);
+		logger.error(`Error ping server: ${error}`);
 
 		return false;
 	}

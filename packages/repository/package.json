@@ -1,0 +1,26 @@
+{
+	"name": "@overture-stack/maestro-repository",
+	"version": "5.0.0-alpha.1",
+	"description": "A submodule of Maestro that manages interactions with data source repositories, providing a unified interface for efficient data access and management",
+	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
+	"files": [
+		"dist/"
+	],
+	"scripts": {
+		"clean": "rimraf dist",
+		"build": "pnpm run clean && tsc",
+		"test:unit": "mocha",
+		"test:unit:coverage": "c8 pnpm run test:unit"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@overture-stack/maestro-common": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/node": "^22.9.0",
+		"fetch-mock": "^12.2.0"
+	}
+}

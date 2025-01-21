@@ -1,10 +1,18 @@
 # Maestro Server
 
+> [!NOTE]
+> This package is likely not the one you want to use in your project, it is primarily used as a dependency within the Maestro monorepo. [@overture-stack/maestro-provider](https://www.npmjs.com/package/@overture-stack/maestro-provider) is what you are most likely to want to use.
+
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+[![NPM Version](https://img.shields.io/npm/v/@overture-stack/maestro-server?color=%23cb3837&style=for-the-badge&logo=npm)](https://www.npmjs.com/package/@overture-stack/maestro-server)
+
 ## Requirements
 
 - [Node.js](https://nodejs.org/en/)
-- [Elasticsearch](https://www.elastic.co/elasticsearch)
-- [Apache Kafka](https://kafka.apache.org/)
+- [Elasticsearch Service](https://www.elastic.co/elasticsearch)
+- [Apache Kafka Service](https://kafka.apache.org/) (optional)
+- [Overture Lyric](https://github.com/overture-stack/lyric) (optional)
+- [Overture SONG](https://github.com/overture-stack/SONG) (optional)
 
 ## Getting started
 
