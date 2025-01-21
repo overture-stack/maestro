@@ -6,11 +6,9 @@ import type {
 	SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { logger, setLogLevel } from '../utils/logger.js';
+import { setLogLevel } from '../utils/logger.js';
 import { env } from './envConfig.js';
 import { type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './repositoryConfig.js';
-
-setLogLevel(env.MAESTRO_LOGGING_LEVEL);
 
 const getRepositoryConfig = (
 	repos: (z.infer<typeof lyricSchemaDefinition> | z.infer<typeof songSchemaDefinition>)[],
@@ -85,6 +83,6 @@ export const defaultAppConfig: MaestroProviderConfig = {
 			},
 		},
 	},
-	logger: logger,
+	logger: setLogLevel(env.MAESTRO_LOGGING_LEVEL),
 	repositories: getRepositoryConfig(env.repositories),
 };

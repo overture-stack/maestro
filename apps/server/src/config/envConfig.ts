@@ -44,8 +44,11 @@ const kafkaConfigSchema = z.object({
 	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ: z.string().default('index_request_dlq'),
 });
 
+// Pino logger levels (https://github.com/pinojs/pino/blob/main/docs/api.md#level)
+const LogLeveOptions = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
+
 const loggerConfigSchema = z.object({
-	MAESTRO_LOGGING_LEVEL: z.string().default('info'),
+	MAESTRO_LOGGING_LEVEL: z.enum(LogLeveOptions).default('info'),
 });
 
 // Create the main schema by intersecting the other schemas and the validated union

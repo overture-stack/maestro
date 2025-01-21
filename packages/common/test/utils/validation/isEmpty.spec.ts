@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import { isEmpty } from '../../src/utils/validation.js';
+import isEmpty from '../../../src/utils/validation/isEmpty.js';
 
 describe('Validation functions', () => {
 	describe('isEmpty', () => {
