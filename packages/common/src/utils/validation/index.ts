@@ -1,1 +1,3 @@
-export { default as isEmpty } from './isEmpty.js';
+import isEmpty from './isEmpty';
+
+export { isEmpty };
