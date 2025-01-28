@@ -56,7 +56,6 @@ export const bulk = async (
 
 		logger.debug(`Bulk action in index:'${index}'`, `# of documents: ${response.items.length}`);
 
-		let successful = false;
 		const failureData: FailureData = {};
 
 		if (response.errors) {
@@ -71,13 +70,9 @@ export const bulk = async (
 			});
 		}
 
-		if (Object.keys(failureData).length === 0) {
-			successful = true;
-		}
-
 		return {
 			indexName: index,
-			successful,
+			successful: !Object.keys(failureData).length,
 			failureData,
 		};
 	} catch (error) {

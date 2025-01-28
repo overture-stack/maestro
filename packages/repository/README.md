@@ -6,4 +6,4 @@
 > [!NOTE]
 > This package is likely not the one you want to use in your project, it is primarily used as a dependency within the Maestro monorepo. [@overture-stack/maestro-provider](https://www.npmjs.com/package/@overture-stack/maestro-provider) is what you are most likely to want to use.
 
-This package is an internal component of the Maestro monorepo designed to manage interactions with data source repositories. It serves as the central interface for retrieving data from various repositories, such as **Song** and **Lyric**, ensuring a streamlined and consistent approach to data access.
+This package is an internal component of the Maestro monorepo designed to manage interactions with data source repositories. It serves as the central interface for retrieving data from various repositories, such as **SONG** and **Lyric**, ensuring a streamlined and consistent approach to data access.

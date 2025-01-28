@@ -22,4 +22,5 @@ export const logger: ConsoleLike = {
 
 export const setLogLevel = (level: string) => {
 	pinoLogger.level = level;
+	return logger;
 };

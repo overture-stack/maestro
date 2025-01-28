@@ -26,4 +26,4 @@ This is the table of contents of this documents, you can come back here using th
 - [Code & Archeticture](tech)
   - [Design goals](tech.md#technical-design-goals)
   - [Technology](tech.md#technologies-libraries)
-  - [Code strcuture](tech.md#code-structure)
+  - [Code structure](tech.md#code-structure)

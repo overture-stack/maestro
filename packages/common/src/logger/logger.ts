@@ -1,4 +1,4 @@
-import type { ConsoleLike, LoggerConfig } from '../types';
+import type { ConsoleLike } from '../types';
 
 let loggerInstance: ConsoleLike = console;
 
@@ -7,8 +7,8 @@ let loggerInstance: ConsoleLike = console;
  *
  * @param config
  */
-export const setLoggerConfig = (config: LoggerConfig): void => {
-	loggerInstance = config.logger;
+export const setLogger = (logger: ConsoleLike): void => {
+	loggerInstance = logger;
 };
 
 /**

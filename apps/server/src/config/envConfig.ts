@@ -2,6 +2,8 @@ import 'dotenv/config';
 
 import { z } from 'zod';
 
+import { ElasticSearchSupportedVersions } from '@overture-stack/maestro-common';
+
 import { logger } from '../utils/logger.js';
 import { validateRepositories } from './repositoryConfig.js';
 
@@ -13,6 +15,8 @@ export const getServerConfig = () => {
 	};
 };
 
+const supportedVersionValues = Object.values(ElasticSearchSupportedVersions);
+
 const elasticSearchConfigSchema = z.object({
 	MAESTRO_ELASTICSEARCH_CLIENT_BASICAUTH_ENABLED: z.coerce.boolean(),
 	MAESTRO_ELASTICSEARCH_CLIENT_BASICAUTH_PASSWORD: z.string().optional(),
@@ -22,10 +26,9 @@ const elasticSearchConfigSchema = z.object({
 	MAESTRO_ELASTICSEARCH_CLIENT_RETRY_MAX_ATTEMPTS: z.coerce.number().optional(),
 	MAESTRO_ELASTICSEARCH_CLIENT_RETRY_WAIT_DURATION_MILLIS: z.coerce.number().optional(),
 	MAESTRO_ELASTICSEARCH_NODES: z.string(),
-	MAESTRO_ELASTICSEARCH_VERSION: z.coerce
-		.number()
-		.int()
-		.refine((val) => val === 7 || val === 8, { message: 'Version must be 7 or 8' }), // Ensure 7 or 8
+	MAESTRO_ELASTICSEARCH_VERSION: z
+		.enum([String(supportedVersionValues[0]), ...supportedVersionValues.slice(1).map(String)])
+		.transform((val) => Number(val)),
 });
 
 const kafkaConfigSchema = z.object({
@@ -41,8 +44,11 @@ const kafkaConfigSchema = z.object({
 	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ: z.string().default('index_request_dlq'),
 });
 
+// Pino logger levels (https://github.com/pinojs/pino/blob/main/docs/api.md#level)
+const LogLeveOptions = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
+
 const loggerConfigSchema = z.object({
-	MAESTRO_LOGGING_LEVEL: z.string().default('info'),
+	MAESTRO_LOGGING_LEVEL: z.enum(LogLeveOptions).default('info'),
 });
 
 // Create the main schema by intersecting the other schemas and the validated union

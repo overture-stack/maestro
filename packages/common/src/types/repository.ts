@@ -1,4 +1,5 @@
-import type { DataRecordNested, IndexResult } from './dataRecord';
+import type { ApiResult } from './api';
+import type { DataRecordNested } from './dataRecord';
 
 /**
  * Interface for all types of repositories (i.e. song or lyric)
@@ -19,7 +20,7 @@ export interface RepositoryIndexingOperations {
 	 * @param repoCode - The unique code of the repository to be indexed.
 	 * @returns A promise indicating the completion of the indexing operation.
 	 */
-	indexRepository(repoCode: string): Promise<IndexResult>;
+	indexRepository(repoCode: string): Promise<ApiResult>;
 
 	/**
 	 * Indexes the specified organization within the given repository.
@@ -28,7 +29,7 @@ export interface RepositoryIndexingOperations {
 	 * @param organization - The name of the organization to be indexed.
 	 * @returns A promise indicating the completion of the indexing operation.
 	 */
-	indexOrganization(repoCode: string, organization: string): Promise<IndexResult>;
+	indexOrganization(repoCode: string, organization: string): Promise<ApiResult>;
 
 	/**
 	 * Indexes a specific record identified by its ID within an organization in the given repository.
@@ -38,7 +39,7 @@ export interface RepositoryIndexingOperations {
 	 * @param recordId - The unique identifier of the record to be indexed.
 	 * @returns A promise indicating the completion of the indexing operation.
 	 */
-	indexRecord(repoCode: string, organization: string, recordId: string): Promise<IndexResult>;
+	indexRecord(repoCode: string, organization: string, recordId: string): Promise<ApiResult>;
 
 	/**
 	 * Remove index of a specific record identified by its ID within an organization in the given repository.
@@ -48,5 +49,5 @@ export interface RepositoryIndexingOperations {
 	 * @param recordId - The unique identifier of the record to be removed from the index.
 	 * @returns A promise indicating the completion of the indexing operation.
 	 */
-	removeIndexRecord(repoCode: string, organization: string, recordId: string): Promise<IndexResult>;
+	removeIndexRecord(repoCode: string, organization: string, recordId: string): Promise<ApiResult>;
 }

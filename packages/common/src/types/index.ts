@@ -1,4 +1,5 @@
-export { ElasticSearchBasicAuthConfig, ElasticSearchConfig } from './clientConfig.js';
+export { ApiResult } from './api.js';
+export { ElasticSearchBasicAuthConfig, ElasticSearchConfig, ElasticSearchSupportedVersions } from './clientConfig.js';
 export {
 	LyricRepositoryConfig,
 	MaestroProviderConfig,
@@ -7,7 +8,7 @@ export {
 	SongRepositoryConfig,
 } from './config.js';
 export { DataRecordNested, DataRecordValue, FailureData, IndexResult } from './dataRecord.js';
-export { ConsoleLike, LoggerConfig } from './logger.js';
+export { ConsoleLike } from './logger.js';
 export { Repository, RepositoryIndexingOperations } from './repository.js';
 export {
 	BulkAction,

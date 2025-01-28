@@ -1,3 +1,5 @@
+import { ElasticSearchSupportedVersions } from '@overture-stack/maestro-common';
+
 import bulkCreateDataTest from './bulk/create.spec';
 import bulkDeleteDataTest from './bulk/delete.spec';
 import bulkUpdateDataTest from './bulk/update.spec';
@@ -12,7 +14,7 @@ describe('Integration tests', function () {
 	describe('Client V7', function () {
 		before(function () {
 			this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:7.10.1';
-			this.clientVersion = 7;
+			this.clientVersion = ElasticSearchSupportedVersions.V7;
 		});
 
 		// test operations
@@ -48,7 +50,7 @@ describe('Integration tests', function () {
 	describe('Client V8', function () {
 		before(function () {
 			this.dockerImage = 'docker.elastic.co/elasticsearch/elasticsearch:8.1.2';
-			this.clientVersion = 8;
+			this.clientVersion = ElasticSearchSupportedVersions.V8;
 		});
 
 		// test operations

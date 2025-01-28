@@ -1,5 +1,7 @@
 import { expect } from 'chai';
 
+import { ElasticSearchSupportedVersions } from '@overture-stack/maestro-common';
+
 import { es7 } from '../src/client/v7/client.js';
 import { es8 } from '../src/client/v8/client.js';
 import { clientProvider } from '../src/index.js';
@@ -8,7 +10,11 @@ describe('Initialize Indexer', () => {
 	describe('Provider', () => {
 		it('should create a provider V7 with indexing functions', () => {
 			const nodeUrl = 'http://myserver:9200';
-			const providerConfig = { nodes: nodeUrl, basicAuth: { enabled: false }, version: 7 };
+			const providerConfig = {
+				nodes: nodeUrl,
+				basicAuth: { enabled: false },
+				version: ElasticSearchSupportedVersions.V7,
+			};
 			const provider = clientProvider(providerConfig);
 			expect(provider).to.have.property('addData');
 			expect(provider).to.have.property('bulk');
@@ -19,7 +25,11 @@ describe('Initialize Indexer', () => {
 		});
 		it('should create a provider V8 with indexing functions', () => {
 			const nodeUrl = 'http://myserver:9200';
-			const providerConfig = { nodes: nodeUrl, basicAuth: { enabled: false }, version: 8 };
+			const providerConfig = {
+				nodes: nodeUrl,
+				basicAuth: { enabled: false },
+				version: ElasticSearchSupportedVersions.V8,
+			};
 			const provider = clientProvider(providerConfig);
 			expect(provider).to.have.property('addData');
 			expect(provider).to.have.property('bulk');
@@ -41,7 +51,7 @@ describe('Initialize Indexer', () => {
 	describe('Client', () => {
 		it('should create a client V7 with indexing functions', () => {
 			const nodeUrl = 'http://myserver:9200';
-			const client = es7({ nodes: nodeUrl, basicAuth: { enabled: false }, version: 7 });
+			const client = es7({ nodes: nodeUrl, basicAuth: { enabled: false }, version: ElasticSearchSupportedVersions.V7 });
 
 			expect(client).to.have.property('addData');
 			expect(client).to.have.property('bulk');
@@ -52,7 +62,7 @@ describe('Initialize Indexer', () => {
 		});
 		it('should create a client V8 with indexing functions', () => {
 			const nodeUrl = 'http://myserver:9200';
-			const client = es8({ nodes: nodeUrl, basicAuth: { enabled: false }, version: 8 });
+			const client = es8({ nodes: nodeUrl, basicAuth: { enabled: false }, version: ElasticSearchSupportedVersions.V8 });
 
 			expect(client).to.have.property('addData');
 			expect(client).to.have.property('bulk');

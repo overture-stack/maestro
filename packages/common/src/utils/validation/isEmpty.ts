@@ -3,7 +3,7 @@
  * @param value The value to check. This can be of any type.
  * @returns `true` if the value is `null`, `undefined`, an empty object, an empty array or an empty string; otherwise, `false`.
  */
-export const isEmpty = (value: unknown) => {
+const isEmpty = (value: unknown) => {
 	if (value == null) {
 		// null or undefined
 		return true;
@@ -14,3 +14,5 @@ export const isEmpty = (value: unknown) => {
 	}
 	return false;
 };
+
+export default isEmpty;

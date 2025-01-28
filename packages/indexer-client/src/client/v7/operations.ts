@@ -56,7 +56,6 @@ export const bulk = async (
 
 		logger.debug(`Bulk actions in index:'${index}'`, `# of documents:'${bulkRequest.length}'`, response.statusCode);
 
-		let successful = false;
 		const failureData: FailureData = {};
 		if (response.body.errors) {
 			// The items array has the same order of the dataset we just indexed.
@@ -70,13 +69,9 @@ export const bulk = async (
 			});
 		}
 
-		if (Object.keys(failureData).length === 0) {
-			successful = true;
-		}
-
 		return {
 			indexName: index,
-			successful,
+			successful: !Object.keys(failureData).length,
 			failureData,
 		};
 	} catch (error) {
