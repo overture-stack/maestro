@@ -1,11 +1,13 @@
 import {
 	type ApiResult,
+	BulkAction,
 	type ElasticsearchService,
 	isEmpty,
 	logger,
 	type LyricRepositoryConfig,
 	type RepositoryIndexingOperations,
 	type SongRepositoryConfig,
+	type UpsertBulkRequest,
 } from '@overture-stack/maestro-common';
 import { getRepoInformation, repository } from '@overture-stack/maestro-repository';
 
@@ -40,7 +42,8 @@ export const api = (
 		setImmediate(async () => {
 			try {
 				for await (const items of repository(repoInfo).getRepositoryRecords()) {
-					indexer.bulkUpsert(repoInfo.indexName, items);
+					const upsertRequest: UpsertBulkRequest[] = items.map((i) => ({ action: BulkAction.UPSERT, dataSet: i }));
+					indexer.bulk(repoInfo.indexName, upsertRequest);
 				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
@@ -73,7 +76,8 @@ export const api = (
 		setImmediate(async () => {
 			try {
 				for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
-					indexer.bulkUpsert(repoInfo.indexName, items);
+					const upsertRequest: UpsertBulkRequest[] = items.map((i) => ({ action: BulkAction.UPSERT, dataSet: i }));
+					indexer.bulk(repoInfo.indexName, upsertRequest);
 				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);

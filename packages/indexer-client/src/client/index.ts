@@ -1,8 +1,12 @@
 import {
+	type CreateBulkRequest,
 	type DataRecordNested,
+	type DeleteBulkRequest,
 	ElasticSearchConfig,
 	ElasticsearchService,
 	ElasticSearchSupportedVersions,
+	type UpdateBulkRequest,
+	type UpsertBulkRequest,
 } from '@overture-stack/maestro-common';
 
 import { es7 } from './v7/client.js';
@@ -28,7 +32,8 @@ export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): Elasti
 
 	return {
 		addData: (index: string, data: DataRecordNested) => service.addData(index, data),
-		bulkUpsert: (index: string, data: DataRecordNested[]) => service.bulkUpsert(index, data),
+		bulk: (index: string, request: (CreateBulkRequest | UpdateBulkRequest | DeleteBulkRequest | UpsertBulkRequest)[]) =>
+			service.bulk(index, request),
 		createIndex: (index: string) => service.createIndex(index),
 		deleteData: (index: string, id: string) => service.deleteData(index, id),
 		ping: () => service.ping(),

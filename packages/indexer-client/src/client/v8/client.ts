@@ -1,15 +1,19 @@
 import { Client } from 'es8';
 
 import {
+	type CreateBulkRequest,
 	type DataRecordNested,
+	type DeleteBulkRequest,
 	type ElasticSearchConfig,
 	type ElasticsearchService,
 	ElasticSearchSupportedVersions,
 	type IndexResult,
+	type UpdateBulkRequest,
+	type UpsertBulkRequest,
 } from '@overture-stack/maestro-common';
 
 import { getAuth } from '../../common/config.js';
-import { bulkUpsert, createIndexIfNotExists, deleteData, indexData, ping, updateData } from './operations.js';
+import { bulk, createIndexIfNotExists, deleteData, indexData, ping, updateData } from './operations.js';
 
 /**
  *  Creates an instance of the Elasticsearch service for version 8.
@@ -40,8 +44,11 @@ export const es8 = (config: ElasticSearchConfig): ElasticsearchService => {
 		async addData(index: string, data: DataRecordNested): Promise<IndexResult> {
 			return indexData(client, index, data);
 		},
-		async bulkUpsert(index: string, data: DataRecordNested[]): Promise<IndexResult> {
-			return bulkUpsert(client, index, data);
+		async bulk(
+			index: string,
+			request: (CreateBulkRequest | UpdateBulkRequest | DeleteBulkRequest | UpsertBulkRequest)[],
+		): Promise<IndexResult> {
+			return bulk(client, index, request);
 		},
 
 		async createIndex(index: string): Promise<boolean> {
