@@ -1,109 +1,139 @@
+#
+# Copyright (c) 2024 The Ontario Institute for Cancer Research. All rights reserved.
+#
+# This program and the accompanying materials are made available under the terms of the GNU Public License v3.0.
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+###############################################################################
+# Application Configuration for Maestro
+#
+# This file contains various configuration settings for the Maestro application.
+# Please update the values according to your specific environment.
+###############################################################################
+
+###############################################################################
+# Server Configuration
+###############################################################################
 server:
   port: 11235
 
+###############################################################################
+# Maestro Configuration
+###############################################################################
 maestro:
-  # runs maestro without indexing functionality, i.e. just document conversion APIs
-  # if this is set to true, no need to configure kafka, elasticsearch, song
-  # but you still need to define the repositories
-  disableIndexing: false
-
-  # this can be used to disable kafka integration, this option is preceded by disableIndexing
-  disableEventIndexing: false
-
+  disableIndexing: false          # Runs maestro without indexing, i.e. Only the document conversion API endpoints
+  disableEventIndexing: false     # Disable kafka integration
   webclient:
-    # -1 = unlimited memory size
-    maxInMemorySize: -1
+    maxInMemorySize: -1           # -1 allows for unlimited memory size
+
+  ###############################################################################
+  # SONG Configuration
+  ###############################################################################
   song:
     indexableStudyStatesCsv: PUBLISHED
-    # page limit for getting analysis from song
-    pageLimit: 25
+    pageLimit: 25                 # Page limit for getting analysis from song
     maxRetries: 3
     timeoutSec:
-        study: 100 # some studies take really long, +30 secs, to be downloaded
+        study: 100                # Some studies take really long, +30 secs, to be downloaded
         analysis: 5
 
-  # elastic search server to connect to & client properties
+  ###############################################################################
+  # Elasticsearch Configuration
+  ###############################################################################
   elasticsearch:
-    # elasticsearch server nodes to send requests to
     clusterNodes:
-      - http://localhost:9200
+      - http://localhost:9200     # Elasticsearch server nodes to send requests to
     pathPrefix:
-    # the index name to store documents in (will be created if not existing)
-    indexes:
+    indexes:                      # The index(es) to store documents in (will be created if not existing)
       fileCentric:
-          name: file_centric_1.0
-          alias: file_centric
           enabled: true
+          name:  overture-quickstart-index
+          alias: file_centric
       analysisCentric:
+          enabled: false
           name: analysis_centric_1.0
           alias: analysis_centric
-          enabled: true
-
-    # elasticsearch client properties
-    client:
+    client: 
       basicAuth:
-        enabled: false
+        enabled: true
         user: elastic
-        password:
-      trustSelfSignedCert: false
-      # this is to control the number of documents per bulk request in elasticsearch
-      docsPerBulkReqMax: 5000
-      # max time to wait for a connection to be established
-      connectionTimeout: 5000
-      # max time to wait on idle connection (no data flow)
-      socketTimeout: 10000
-      # in case of failure this controls the retry attempts
-      retry:
-        # maximum number of retry attempts before throwing an error
-        maxAttempts: 3
-        # waiting between retries (ms)
-        waitDurationMillis: 500
+        password: myelasticpassword
+      trustSelfSignedCert: true    # Self signed certs should only be used for development environments
+      docsPerBulkReqMax: 5000      # Controls the number of documents per bulk request in elasticsearch
+      connectionTimeout: 5000      # Max time to wait for a connection to be established
+      socketTimeout: 10000         # Max time to wait on idle connection (no data flow)
+      retry:                       # In case of failure this controls the retry attempts
+        maxAttempts: 3               # Maximum number of retry attempts before throwing an error
+        waitDurationMillis: 500      # Waiting between retries (ms)
 
-  # List of Genomic files repositories (SONGs)
+  ###############################################################################
+  # Repositories Configuration
+  # List of file repositories (Songs)
+  ###############################################################################
+
   repositories:
-    # these properties will be used in the document (see ../file_centric.json)
-    - code: song.overture # must be unique & must match song.serverId if using kafka integration with song
-      url: https://song.domain.com # Change this to a valid domain where the song exists in your setup
-      name: local song
-      # optional
-      storageType: S3
-      organization: ICGC
-      country: CA
-    # you can other SONGs as needed
-    - code: song.overture1
-      url: http://localhost:8080
-      name: local song
-      # optional
-      storageType: S3
-      organization: overture
-      country: LH
+    # The following properties will be used in the document (see ../file_centric.json)
+    - code: song.overture              # Must be unique & must match song.serverId if using kafka integration with song
+      url: http://localhost:8080    # Change this to a valid domain where the song exists in your setup
+      name: Overture
+      storageType: S3                  # Optional
+      organization: Overture           # Optional
+      country: CA                      # Optional
+    # You can add other Songs as needed
+    # - code: song.overture2
+    #   url: http://localhost:8080
+    #   name: local song 2
+    #   storageType: S3                 # Optional
+    #   organization: Org123            # Optional
+    #   country: CA                     # Optional
 
-  # last resort fallback file system log in case of retries exhaustion.
+  ###############################################################################
+  # Failure Log Configuration
+  # Last resort fallback file system log in case of retries exhaustion
+  ###############################################################################
   failureLog:
     enabled: true
     dir: ${user.home}/logs/maestro
 
+  ###############################################################################
+  # Notifications Configuration
+  ###############################################################################
   notifications:
     slack:
       enabled: false
-      # the types to trigger a notification to this channel (see NotificationName.java)
+      # The types to trigger a notification to this channel (see NotificationName.java)
       notifiedOn:
         - ALL
       url: https://hooks.slack.com/services/SECRET_TOKEN
       channel: maestro-alerts
       username: maestro
       maxDataLength: 1000
-      # notifications has two parameters (TYPE [string], DATA[map])
+      # Notifications has two parameters (TYPE [string], DATA[map])
       templates:
         error: ':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
         warning: ':warning: ##TYPE## ```##DATA##```'
         info: ':information_source: ##TYPE## ```##DATA##```'
 
-  # exclusion rules configs
+  ###############################################################################
+  # Exclusion Rules Configuration
+  # Configurable exclusion rules to omit specific analyses from being indexed based on metadata tags assigned by Song
+  ###############################################################################
   exclusionRules:
     byId:
-      studyId:
-        - "test123"
+      # studyId:
+      #   - "test123"
 #      analysis:
 #        - "analysisId"
 #      file:
@@ -115,16 +145,20 @@ maestro:
 #      donor:
 #        - DO232991
 
-# logging & monitoring
+###############################################################################
+# Logging & Monitoring Configuration
+###############################################################################
 logging:
   level:
     root: INFO
     bio.overture: TRACE
-    # very verbose class, only enable lower level when necessary
+    # Very verbose class, only enable lower level when necessary
     bio.overture.maestro.domain.entities.indexing.rules.IDExclusionRule: INFO
     org.apache.kafka.clients: INFO
 
-# spring boot actuator endpoints
+###############################################################################
+# Spring Boot Actuator Endpoints Configuration
+###############################################################################
 management:
   health:
     elasticsearch:
@@ -137,6 +171,10 @@ management:
     health:
       show_details: ALWAYS
 
+###############################################################################
+# Spring Configuration (Kafka)
+# Including Kafka integration with song 
+###############################################################################
 spring:
   config:
     useLegacyProcessing: true
@@ -145,10 +183,9 @@ spring:
   output.ansi.enabled: ALWAYS
   cloud:
     stream:
-      # kafka integration with song (remove this key to disable kafka)
-      kafka:
+      kafka: # remove this key to disable kafka
         binder:
-          brokers: localhost:9092
+          brokers: localhost:29092
         bindings:
           songInput:
             consumer:
@@ -163,26 +200,32 @@ spring:
               autoCommitOnError: true
               autoCommitOffset: true
       bindings:
-        input:
-          # we don't specify content type because @StreamListener will handle that
-          destination: maestro_index_requests
-          group: requestsConsumerGrp
-          consumer:
-            maxAttempts: 1
         songInput:
           destination: song-analysis
           group: songConsumerGrp
           consumer:
             maxAttempts: 1
+        input:
+          # We don't specify content type because @StreamListener will handle that
+          destination: maestro_index_requests
+          group: requestsConsumerGrp
+          consumer:
+            maxAttempts: 1
 
+###############################################################################
+# Springdoc Configuration
+  # This configuration supports reverse proxy URL rewrites (e.g., http://xyz.com/maestro)
+  # It addresses the following issues:
+  # 1. Ensures correct Swagger URL generation when behind a reverse proxy
+  # 2. Avoids conflicts with Kafka configuration when enabling forward headers
+  # 3. Prevents unwanted auto-configuration of the Kafka client
+  # Note: This approach is used instead of enabling forward headers in Spring,
+  # which would have resolved the Swagger UI URL issue but caused other conflicts.
+###############################################################################
 springdoc:
-  ## The reason this was added to support reverse proxy url rewrites like: http://xyz.com/maestro
-  ## otherwise the swagger urls will not be sent to the correct url since swagger ui depends
-  ## on the server definition and springdoc needs forward headers to be enabled by spring
-  ## enabling forward headers in maestro caused it to conflict with disabling kafka
-  ## and forced an autoconfigure for kafka client.
   serverOverride:
     enabled: false
     value: http://localhost:11235/custom
   swagger-ui:
     path: /api-docs
+  
