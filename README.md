@@ -1,106 +1,56 @@
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-[<img hspace="5" src="https://img.shields.io/badge/chat--with--developers-overture--slack-blue?style=for-the-badge">](http://slack.overture.bio)
+# Maestro
 
-## Documentation:
+Maestro enables researchers to enhance their Overture SONG deployments by building powerful search indexes for Analyses and Studies. It organizes geographically distributed data stored in Song and Score into a single, configurable index.
 
-Documentation is hosted on:
+</br>
 
-- github pages: https://overture-stack.github.io/maestro/
-- Overture docs: https://docs.overture.bio/docs/core-software/maestro/overview/
+> 
+> <div>
+> <img align="left" src="ov-logo.png" height="60"/>
+> </div>
+> 
+> *Maestro is part of [Overture](https://www.overture.bio/), a collection of open-source software microservices used to create platforms for researchers to organize and share genomics data.*
+> 
+> 
 
-## Introduction
+## Documentation
 
-Maestro was created to enable genomic researchers to enhance their Overture SONG/Lyric by building indexes using Elasticsearch (by default), which makes searching Analyses and Studies much easier.
+Technical resources for those working with or contributing to the project are available from our official documentation site, the following content can also be read and updated within the `/docs` folder of this repository.
 
-### Features:
+- **[Maestro Overview](https://docs.overture.bio/docs/core-software/Maestro/overview)** 
+- [**Setting up the Development Enviornment**](https://docs.overture.bio/docs/core-software/Maestro/setup)
+- [**Common Usage Docs**](https://docs.overture.bio/docs/core-software/Maestro/setup)
 
-- Supports indexing from multiple metadata repositories (SONG/Lyric).
-- Multiple indexing requests: analysis, study, full repository.
-- Event driven indexing.
-  - Integration with SONG/Lyric to index published analysis and delete suppressed / unpublished analyses
-- Ability to Exclude analysis based on different Ids: Study, Analysis, Donor, Sample Or file.
-- Slack web hook integration
+## Development Environment
 
-## Technologies & libraries:
+- [Java 11 (OpenJDK)](https://openjdk.java.net/projects/jdk/11/)
+- [Maven 3.5+](https://maven.apache.org/) (or use provided wrapper)
+- [VS Code](https://code.visualstudio.com/) or preferred Java IDE
+- [Docker](https://www.docker.com/) Container platform
 
-- Node.js v22 or greater
-- PNPM package manager
-- Elasticsearch 7+
-- Apache Kafka
-- Testing libraries:
-  - Mocha
-  - Chai
-  - Testcontainers
+## Support & Contributions
 
-## Structure
+- For support, feature requests, and bug reports, please see our [Support Guide](https://docs.overture.bio/community/support).
+- For detailed information on how to contribute to this project, please see our [Contributing Guide](https://docs.overture.bio/docs/contribution).
 
-The project is organized as a monorepo workspace, where each application and package is located in its own dedicated folder:
+## Related Software 
 
-```
-apps/
-├─ server/
-packages/
-├─ common/
-├─ indexer-client/
-├─ maestro-provider/
-├─ repository/
+The Overture Platform includes the following Overture Components:
 
-```
+</br>
 
-- **Maestro Server:** The main runnable Express Server. Exposes a set of HTTP API routes that serve as the interface between the Maestro provider and external systems.
+|Software|Description|
+|---|---|
+|[Score](https://github.com/overture-stack/score/)| Transfer data to and from any cloud-based storage system |
+|[Song](https://github.com/overture-stack/song/)| Catalog and manage metadata associated to file data spread across cloud storage systems |
+|[Maestro](https://github.com/overture-stack/maestro/)| Organizing your distributed data into a centralized Elasticsearch index |
+|[Arranger](https://github.com/overture-stack/arranger/)| A search API with reusable search UI components |
+|[Stage](https://github.com/overture-stack/stage)| A React-based web portal scaffolding |
+|[Lyric](https://github.com/overture-stack/lyric)| A model-agnostic, tabular data submission system |
+|[Lectern](https://github.com/overture-stack/lectern)| Schema Manager, designed to validate, store, and manage collections of data dictionaries.  |
 
-- **Maestro Common:** Designed to centralize common utilities, reusable functions, and TypeScript type definitions.
+If you'd like to get started using our platform [check out our quickstart guides](https://docs.overture.bio/guides/getting-started)
 
-- **Maestro Indexer Client:** Abstracts communication with Elasticsearch clients, supporting both version 7 and 8.
+## Funding Acknowledgement
 
-- **Maestro Provider:** The core features and provider independent logic that is portable and contains the main indexing, rules, notifications logic as specified by the business features.
-
-- **Maestro Repository:** Designed to manage interactions with data source repositories. It serves as the central interface for retrieving data from various repositories, such as **SONG** and **Lyric**, ensuring a streamlined and consistent approach to data access.
-
-# Dependencies:
-
-To Successfully run Maestro (as is) you need the following services to be deployed and configure it to use them:
-
-- [Elasticsearch](https://www.elastic.co/products/elasticsearch)
-- [Apache Kafka](https://kafka.apache.org/)
-- [SONG](https://github.com/overture-stack/SONG)
-- [Lyric](https://github.com/overture-stack/lyric)
-
-You can check the sample Docker compose files under `./apps/server/docker-compose-es7.dev.yml` for containerized versions of Elasticsearch 7 & Kafka.
-For SONG please check the SONG github repo [here](https://github.com/overture-stack/SONG/tree/develop/dev) on how to run it with docker. Or you can run it as jar.
-
-## How to:
-
-- Swagger API access:
-  - http://localhost:11235/api-docs
-
-> Note: can't use `Make`? replicate the shell commands found within the Makefile.
-
-- Compile: `make`
-- Test: `make test`
-- Run:
-  - Source:
-    - Development:
-      1. `make docker-start-dev` starts the infrastructure containers
-         - Kafka
-         - Elasticsearch
-         - other helper tools you may want, like a Kafka RESTful proxy
-      2. `make start` to start application
-
-## Running scripts
-
-This project contains the following scripts for managing the build, testing, and development processes. You can run any of these scripts using the following command: `pnpm run <script-name>`
-
-| Script Name                 | Description                                                                                                                                                                                            |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `build:all`                 | Builds the entire project for all environments (development, production, etc.)                                                                                                                         |
-| `lint`                      | Runs ESLint to lint all files in the current directory (and subdirectories). It checks for code quality issues, potential errors, and style violations according to the project's ESLint configuration |
-| `lint:fix`                  | Runs ESLint to lint all files in the current directory (and subdirectories), and automatically fixes issues that can be resolved (e.g., formatting, missing semicolons).                               |
-| `test:all`                  | Runs all tests (unit and integration tests).                                                                                                                                                           |
-| `test:all:coverage`         | Runs all tests (unit and integration tests) and generates a coverage report.                                                                                                                           |
-| `test:unit`                 | Runs unit tests only.                                                                                                                                                                                  |
-| `test:unit:coverage`        | Runs unit tests only and generates a coverage report.                                                                                                                                                  |
-| `test:integration`          | Runs integration tests only.                                                                                                                                                                           |
-| `test:integration:coverage` | Runs integration tests only and generates a coverage report.                                                                                                                                           |
-| `start:dev`                 | Starts the development server with live-reloading and debugging enabled.                                                                                                                               |
-| `start:prod`                | Starts the production server optimized for performance and stability (The application must be built beforehand).                                                                                       |
+Overture is supported by grant #U24CA253529 from the National Cancer Institute at the US National Institutes of Health, and additional funding from Genome Canada, the Canada Foundation for Innovation, the Canadian Institutes of Health Research, Canarie, and the Ontario Institute for Cancer Research.
