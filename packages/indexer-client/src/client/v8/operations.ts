@@ -5,11 +5,11 @@ import { type DataRecordNested, FailureData, IndexResult, logger } from '@overtu
 
 export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
 	try {
-		const body = dataSet.flatMap((doc) => [{ index: { _index: index, _id: doc?.['id'] } }, doc]);
+		const body = dataSet.flatMap(({ _id, ...doc }) => [{ index: { _index: index, _id } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
 
-		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents: ${response.items.length}`);
+		logger.info(`Bulk upsert in index:'${index}'`, `# of documents: ${response.items.length}`);
 
 		const failureData: FailureData = {};
 
@@ -65,7 +65,7 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
 			await client.indices.create({ index });
 			logger.info(`Index ${index} created.`);
 		} else {
-			logger.debug(`Index ${index} already exists.`);
+			logger.info(`Index ${index} already exists.`);
 		}
 	} catch (error) {
 		logger.error(`Error creating the index: ${error}`);
@@ -93,7 +93,7 @@ export const indexData = async (client: Client, index: string, data: DataRecordN
 			document: data,
 		});
 
-		logger.debug(`Indexing document in:'${index}'`);
+		logger.info(`Indexing document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -146,7 +146,7 @@ export const updateData = async (
 				doc: { data },
 			},
 		});
-		logger.debug(`Updating indexed document in:'${index}'`);
+		logger.info(`Updating indexed document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -189,7 +189,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			index,
 			id,
 		});
-		logger.debug(`Deleting indexed document in:'${index}'`);
+		logger.info(`Deleting indexed document in:'${index}'`);
 
 		let successful = false;
 		const failureData: FailureData = {};
