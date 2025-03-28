@@ -8,7 +8,6 @@ import {
 } from '@overture-stack/maestro-common';
 
 import { sendHttpRequest } from '../../network/httpRequest';
-import { sanitizeKeyName } from '../../utils/formatter';
 import { isArrayOfObjects } from '../../utils/utils';
 
 // Path constants
@@ -60,16 +59,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 					const parsedResponse = await response.json();
 					if (isArrayOfObjects(parsedResponse?.records)) {
 						const validArray: Array<DataRecordNested> = parsedResponse.records.map((item: DataRecordNested) => {
-							const formattedData =
-								typeof item.data === 'object'
-									? Object.entries(item.data).reduce((newObj: DataRecordNested, [key, value]) => {
-											const newKey = sanitizeKeyName(key);
-											newObj[newKey] = value;
-											return newObj;
-										}, {})
-									: {};
-
-							return { ...item, data: formattedData };
+							return { ...item, _id: item.systemId };
 						});
 						yield validArray;
 					} else {
@@ -119,8 +109,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 					const parsedResponse = await response.json();
 					if (isArrayOfObjects(parsedResponse?.records)) {
 						const validArray: Array<DataRecordNested> = parsedResponse.records.map((item: DataRecordNested) => {
-							const { systemId, ...rest } = item;
-							return { ...rest, id: systemId };
+							return { ...item, _id: item.systemId };
 						});
 						yield validArray;
 					} else {
@@ -153,8 +142,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 			if (response.ok) {
 				const parsedResponse = await response.json();
 				if (parsedResponse?.['organization'] === organization) {
-					const { systemId, ...rest } = parsedResponse;
-					return { ...rest, id: systemId };
+					return { ...parsedResponse, _id: parsedResponse.systemId };
 				}
 			}
 		} catch (error) {
