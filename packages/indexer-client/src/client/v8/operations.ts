@@ -1,5 +1,4 @@
-import type { Client } from 'es8';
-import type { BulkOperationType, BulkResponseItem } from 'es8/lib/api/types.js';
+import type { Client, estypes } from 'es8';
 
 import { type DataRecordNested, FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
 
@@ -17,12 +16,14 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: DataRec
 			// The items array has the same order of the dataset we just indexed.
 			// The presence of the `error` key indicates that the operation
 			// that we did for the document has failed.
-			response.items.forEach((item: Partial<Record<BulkOperationType, BulkResponseItem>>, indexItem: number) => {
-				const operation = item.index;
-				if (operation && 'error' in operation) {
-					failureData[indexItem] = [operation.error?.reason || 'error'];
-				}
-			});
+			response.items.forEach(
+				(item: Partial<Record<estypes.BulkOperationType, estypes.BulkResponseItem>>, indexItem: number) => {
+					const operation = item.index;
+					if (operation && 'error' in operation) {
+						failureData[indexItem] = [operation.error?.reason || 'error'];
+					}
+				},
+			);
 		}
 
 		return {
