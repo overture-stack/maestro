@@ -13,11 +13,11 @@ import { type DataRecordNested, type FailureData, IndexResult, logger } from '@o
  */
 export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
 	try {
-		const body = dataSet.flatMap((doc) => [{ index: { _index: index, _id: doc?.['id'] } }, doc]);
+		const body = dataSet.flatMap(({ _id, ...doc }) => [{ index: { _index: index, _id } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
 
-		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents:'${dataSet.length}'`, response.statusCode);
+		logger.info(`Bulk upsert in index:'${index}'`, `# of documents:'${dataSet.length}'`, response.statusCode);
 
 		const failureData: FailureData = {};
 		if (response.body.errors) {
@@ -100,7 +100,7 @@ export const indexData = async (client: Client, index: string, data: DataRecordN
 			id: data?.['id']?.toString(),
 			body: data,
 		});
-		logger.debug(`Indexing document in:'${index}'`, response.statusCode);
+		logger.info(`Indexing document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -155,7 +155,7 @@ export const updateData = async (
 				doc: { data },
 			},
 		});
-		logger.debug(`Updating indexed document in:'${index}'`, response.statusCode);
+		logger.info(`Updating indexed document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -199,7 +199,7 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			index,
 			id,
 		});
-		logger.debug(`Deleting indexed document in:'${index}'`, response.statusCode);
+		logger.info(`Deleting indexed document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};

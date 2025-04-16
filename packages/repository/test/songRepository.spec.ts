@@ -76,7 +76,10 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(2);
 			expect(records.length).to.eql(2);
-			expect(records).to.eql([analysisMock1, analysisMock2]);
+			expect(records).to.eql([
+				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
+				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
+			]);
 		});
 
 		it('should successfully fetch repository records with pagination', async () => {
@@ -181,7 +184,12 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(3);
 			expect(records.length).to.eql(4);
-			expect(records).to.eql([analysisMock1, analysisMock2, analysisMock3, analysisMock4]);
+			expect(records).to.eql([
+				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
+				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
+				{ ...analysisMock3, _id: 'GGG-HHHH-IIIII' },
+				{ ...analysisMock4, _id: 'JJJ-KKKK-LLLLL' },
+			]);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -293,7 +301,10 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(2);
-			expect(records).to.eql([analysisMock1, analysisMock2]);
+			expect(records).to.eql([
+				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
+				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
+			]);
 		});
 
 		it('should successfully fetch repository records by organization with pagination', async () => {
@@ -394,7 +405,12 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(2);
 			expect(records.length).to.eql(4);
-			expect(records).to.eql([analysisMock1, analysisMock2, analysisMock3, analysisMock4]);
+			expect(records).to.eql([
+				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
+				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
+				{ ...analysisMock3, _id: 'GGG-HHHH-IIIII' },
+				{ ...analysisMock4, _id: 'JJJ-KKKK-LLLLL' },
+			]);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -487,7 +503,7 @@ describe('Song Repository', () => {
 			const record = await songRepository(config).getRecord({ id, organization: studyId });
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
-			expect(record).to.eql(analysisMock1);
+			expect(record).to.eql({ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' });
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {

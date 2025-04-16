@@ -29,8 +29,8 @@ describe('Lyric Repository', () => {
 			// Mock response
 			fetchMock.any({
 				records: [
-					{ id: 1, data: { name: 'test' } },
-					{ id: 2, data: { name: 'test 2' } },
+					{ systemId: 1, data: { name: 'test' } },
+					{ systemId: 2, data: { name: 'test 2' } },
 				],
 			});
 
@@ -42,6 +42,10 @@ describe('Lyric Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(2);
+			expect(records).to.eql([
+				{ systemId: 1, data: { name: 'test' }, _id: 1 },
+				{ systemId: 2, data: { name: 'test 2' }, _id: 2 },
+			]);
 		});
 
 		it('should successfully fetch repository records with pagination', async () => {
@@ -60,8 +64,8 @@ describe('Lyric Repository', () => {
 			const urlPage1 = 'http://localhost/data/category/123?view=compound&pageSize=2&page=1';
 			fetchMock.get(urlPage1, {
 				records: [
-					{ id: 1, data: { name: 'test' } },
-					{ id: 2, data: { name: 'test 2' } },
+					{ systemId: 1, data: { name: 'test' } },
+					{ systemId: 2, data: { name: 'test 2' } },
 				],
 				pagination: {
 					currentPage: 1,
@@ -73,8 +77,8 @@ describe('Lyric Repository', () => {
 			const urlPage2 = 'http://localhost/data/category/123?view=compound&pageSize=2&page=2';
 			fetchMock.get(urlPage2, {
 				records: [
-					{ id: 3, data: { name: 'test 3' } },
-					{ id: 4, data: { name: 'test 4' } },
+					{ systemId: 3, data: { name: 'test 3' } },
+					{ systemId: 4, data: { name: 'test 4' } },
 				],
 				pagination: {
 					currentPage: 2,
@@ -85,7 +89,7 @@ describe('Lyric Repository', () => {
 			});
 			const urlPage3 = 'http://localhost/data/category/123?view=compound&pageSize=2&page=3';
 			fetchMock.get(urlPage3, {
-				records: [{ id: 5, data: { name: 'test 5' } }],
+				records: [{ systemId: 5, data: { name: 'test 5' } }],
 				pagination: {
 					currentPage: 3,
 					pageSize: 2,
@@ -102,6 +106,13 @@ describe('Lyric Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(3);
 			expect(records.length).to.eql(5);
+			expect(records).eql([
+				{ systemId: 1, data: { name: 'test' }, _id: 1 },
+				{ systemId: 2, data: { name: 'test 2' }, _id: 2 },
+				{ systemId: 3, data: { name: 'test 3' }, _id: 3 },
+				{ systemId: 4, data: { name: 'test 4' }, _id: 4 },
+				{ systemId: 5, data: { name: 'test 5' }, _id: 5 },
+			]);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -174,8 +185,8 @@ describe('Lyric Repository', () => {
 			// Mock response
 			fetchMock.any({
 				records: [
-					{ id: 1, data: { name: 'test' } },
-					{ id: 2, data: { name: 'test 2' } },
+					{ systemId: 1, data: { name: 'test' } },
+					{ systemId: 2, data: { name: 'test 2' } },
 				],
 			});
 
@@ -187,6 +198,10 @@ describe('Lyric Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(2);
+			expect(records).eql([
+				{ systemId: 1, data: { name: 'test' }, _id: 1 },
+				{ systemId: 2, data: { name: 'test 2' }, _id: 2 },
+			]);
 		});
 
 		it('should successfully fetch repository records by organization with pagination', async () => {
@@ -205,8 +220,8 @@ describe('Lyric Repository', () => {
 			const urlPage1 = 'http://localhost/data/category/123/organization/ABC?view=compound&pageSize=2&page=1';
 			fetchMock.get(urlPage1, {
 				records: [
-					{ id: 1, data: { name: 'test' } },
-					{ id: 2, data: { name: 'test 2' } },
+					{ systemId: 1, data: { name: 'test' } },
+					{ systemId: 2, data: { name: 'test 2' } },
 				],
 				pagination: {
 					currentPage: 1,
@@ -218,8 +233,8 @@ describe('Lyric Repository', () => {
 			const urlPage2 = 'http://localhost/data/category/123/organization/ABC?view=compound&pageSize=2&page=2';
 			fetchMock.get(urlPage2, {
 				records: [
-					{ id: 3, data: { name: 'test 3' } },
-					{ id: 4, data: { name: 'test 4' } },
+					{ systemId: 3, data: { name: 'test 3' } },
+					{ systemId: 4, data: { name: 'test 4' } },
 				],
 				pagination: {
 					currentPage: 2,
@@ -230,7 +245,7 @@ describe('Lyric Repository', () => {
 			});
 			const urlPage3 = 'http://localhost/data/category/123/organization/ABC?view=compound&pageSize=2&page=3';
 			fetchMock.get(urlPage3, {
-				records: [{ id: 5, data: { name: 'test 5' } }],
+				records: [{ systemId: 5, data: { name: 'test 5' } }],
 				pagination: {
 					currentPage: 3,
 					pageSize: 2,
@@ -247,6 +262,13 @@ describe('Lyric Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(3);
 			expect(records.length).to.eql(5);
+			expect(records).eql([
+				{ systemId: 1, data: { name: 'test' }, _id: 1 },
+				{ systemId: 2, data: { name: 'test 2' }, _id: 2 },
+				{ systemId: 3, data: { name: 'test 3' }, _id: 3 },
+				{ systemId: 4, data: { name: 'test 4' }, _id: 4 },
+				{ systemId: 5, data: { name: 'test 5' }, _id: 5 },
+			]);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -303,7 +325,7 @@ describe('Lyric Repository', () => {
 		});
 	});
 	describe('getRecord', () => {
-		const id = '999';
+		const systemId = 'AEIOU123';
 		const organization = 'ABC';
 		it('should successfully fetch a record by ID', async () => {
 			const config: LyricRepositoryConfig = {
@@ -318,21 +340,23 @@ describe('Lyric Repository', () => {
 
 			// Mock response
 			fetchMock.any({
-				data: { id, data: { name: 'test 99' } },
+				data: { name: 'test 99' },
 				entityName: 'sample',
 				isValid: true,
 				organization: 'ABC',
-				systemId: 'AEIOU123',
+				systemId,
 			});
 
-			const record = await lyricRepository(config).getRecord({ id, organization });
+			const record = await lyricRepository(config).getRecord({ id: systemId, organization });
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
-			expect(record.data).to.eql({ id, data: { name: 'test 99' } });
+			console.log(`HERE!!!:${JSON.stringify(record)}`);
+			expect(record.data).to.eql({ name: 'test 99' });
 			expect(record.entityName).to.eql('sample');
 			expect(record.isValid).to.eql(true);
 			expect(record.organization).to.eql('ABC');
-			expect(record.id).to.eql('AEIOU123');
+			expect(record.systemId).to.eql('AEIOU123');
+			expect(record._id).to.eql('AEIOU123');
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -350,7 +374,7 @@ describe('Lyric Repository', () => {
 			// Mock response
 			fetchMock.any(401);
 
-			const record = await lyricRepository(config).getRecord({ id, organization });
+			const record = await lyricRepository(config).getRecord({ id: systemId, organization });
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(record).to.eql({});
@@ -374,7 +398,7 @@ describe('Lyric Repository', () => {
 			let record: DataRecordNested = {};
 
 			try {
-				record = await lyricRepository(config).getRecord({ id, organization });
+				record = await lyricRepository(config).getRecord({ id: systemId, organization });
 			} catch (error) {
 				expect(fetchMock.callHistory.calls().length).to.eql(1);
 				expect(error.message).to.eql('Network error');
