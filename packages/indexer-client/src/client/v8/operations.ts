@@ -20,7 +20,7 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: DataRec
 				(item: Partial<Record<estypes.BulkOperationType, estypes.BulkResponseItem>>, indexItem: number) => {
 					const operation = item.index;
 					if (operation && 'error' in operation) {
-						failureData[indexItem] = [operation.error?.reason || 'error'];
+						failureData[indexItem] = [operation.error?.reason || 'unspecified error'];
 					}
 				},
 			);
