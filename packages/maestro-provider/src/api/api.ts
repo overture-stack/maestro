@@ -1,78 +1,57 @@
 import {
-	BadRequest,
-	type IElasticsearchService,
-	type IndexResult,
-	InternalServerError,
+	type ApiResult,
+	type ElasticsearchService,
 	isEmpty,
 	logger,
-	type MaestroProviderConfig,
+	type LyricRepositoryConfig,
 	type RepositoryIndexingOperations,
+	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 import { getRepoInformation, repository } from '@overture-stack/maestro-repository';
 
 /**
- * Accumulates IndexResults objects, combining their failure data and determining overall success
- * @param accumulator The initial `IndexResult` object that serves as the base for merging.
- * @param result The `IndexResult` object to merge with the accumulator
- * @returns
- */
-const mergeResult = (accumulator: IndexResult, result: IndexResult): IndexResult => {
-	return {
-		indexName: result.indexName,
-		failureData: { ...accumulator.failureData, ...result.failureData },
-		successful: Object.keys(accumulator.failureData).length === 0 && Object.keys(result.failureData).length === 0,
-	};
-};
-
-/**
  * Creates an object containing indexing operations to be used in the API
  * @param config The configuration object for the `MaestroProvider`, which includes repository information
- * @param indexer An implementation of `IElasticsearchService` used for performing Elasticsearch operations
+ * @param indexer An implementation of `ElasticsearchService` used for performing Elasticsearch operations
  * @returns
  */
-export const api = (config: MaestroProviderConfig, indexer: IElasticsearchService): RepositoryIndexingOperations => {
-	const repositories = config.repositories;
-	if (!repositories) {
-		return {
-			indexOrganization: () => {
-				throw new InternalServerError(`Invalid repository configuration`);
-			},
-			indexRecord: () => {
-				throw new InternalServerError(`Invalid repository configuration`);
-			},
-			indexRepository: () => {
-				throw new InternalServerError(`Invalid repository configuration`);
-			},
-			removeIndexRecord: () => {
-				throw new InternalServerError(`Invalid repository configuration`);
-			},
-		};
-	}
-
+export const api = (
+	repositories: (LyricRepositoryConfig | SongRepositoryConfig)[],
+	indexer: ElasticsearchService,
+): RepositoryIndexingOperations => {
 	/**
-	 * Performs asynchronous fetch and indexing operations for a specified repository
+	 * Performs asynchronous fetch and indexing operations for a specified repository,
+	 * It returns an immediate response and if the repository code is valid then starts the
+	 * indexing operation in the next event loop cycle without waiting for the response.
+	 *
 	 * @param repoCode
 	 * @returns
 	 */
-	const indexRepository = async (repoCode: string): Promise<IndexResult> => {
+	const indexRepository = async (repoCode: string): Promise<ApiResult> => {
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
+			const message = `Invalid repository code '${repoCode}'`;
 			logger.error(`Invalid repository information for repository code '${repoCode}'`);
-			throw new BadRequest(`Invalid repository code '${repoCode}'`);
+			return { successful: false, message };
 		}
 
-		const resultIndex: IndexResult = {
+		// Fire the async operation using setImmediate to ensure it runs in the next event loop cycle
+		setImmediate(async () => {
+			try {
+				for await (const items of repository(repoInfo).getRepositoryRecords()) {
+					indexer.bulkUpsert(repoInfo.indexName, items);
+				}
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				logger.error(`Error found indexing repository records. ${message}`);
+			}
+		});
+
+		return {
 			indexName: repoInfo.indexName,
 			successful: true,
-			failureData: {},
 		};
-
-		for await (const items of repository(repoInfo).getRepositoryRecords()) {
-			const result = await indexer.bulkUpsert(repoInfo.indexName, items);
-			mergeResult(resultIndex, result);
-		}
-		return resultIndex;
 	};
 
 	/**
@@ -81,25 +60,31 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 	 * @param organization
 	 * @returns
 	 */
-	const indexOrganization = async (repoCode: string, organization: string): Promise<IndexResult> => {
+	const indexOrganization = async (repoCode: string, organization: string): Promise<ApiResult> => {
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
+			const message = `Invalid repository code '${repoCode}'`;
 			logger.error(`Invalid repository information for repository code '${repoCode}'`);
-			throw new BadRequest(`Invalid repository code '${repoCode}'`);
+			return { successful: false, message };
 		}
 
-		const resultIndex: IndexResult = {
+		// Fire the async operation using setImmediate to ensure it runs in the next event loop cycle
+		setImmediate(async () => {
+			try {
+				for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
+					indexer.bulkUpsert(repoInfo.indexName, items);
+				}
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				logger.error(`Error found indexing repository records. ${message}`);
+			}
+		});
+
+		return {
 			indexName: repoInfo.indexName,
 			successful: true,
-			failureData: {},
 		};
-
-		for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
-			const result = await indexer.bulkUpsert(repoInfo.indexName, items);
-			mergeResult(resultIndex, result);
-		}
-		return resultIndex;
 	};
 
 	/**
@@ -109,24 +94,38 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 	 * @param recordId
 	 * @returns
 	 */
-	const indexRecord = async (repoCode: string, organization: string, recordId: string): Promise<IndexResult> => {
+	const indexRecord = async (repoCode: string, organization: string, recordId: string): Promise<ApiResult> => {
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
+			const message = `Invalid repository code '${repoCode}'`;
 			logger.error(`Invalid repository information for repository code '${repoCode}'`);
-			throw new BadRequest(`Invalid repository code '${repoCode}'`);
+			return { successful: false, message };
 		}
 
 		// Fetch the record within a repository
 		const repoRecord = await repository(repoInfo).getRecord({ organization, id: recordId });
 
-		if (!isEmpty(repoRecord)) {
-			// Index records using batchUpsert
-			return indexer.addData(repoInfo.indexName, repoRecord);
-		} else {
+		if (isEmpty(repoRecord)) {
+			const message = `Record '${recordId}' not found in organization '${organization}'`;
 			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
-			throw new BadRequest(`Record '${recordId}' not found in organization '${organization}'`);
+			return { successful: false, message };
 		}
+
+		setImmediate(async () => {
+			try {
+				// Index records
+				indexer.addData(repoInfo.indexName, repoRecord);
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				logger.error(`Error indexing records. ${message}`);
+			}
+		});
+
+		return {
+			indexName: repoInfo.indexName,
+			successful: true,
+		};
 	};
 
 	/**
@@ -136,23 +135,37 @@ export const api = (config: MaestroProviderConfig, indexer: IElasticsearchServic
 	 * @param recordId
 	 * @returns
 	 */
-	const removeIndexRecord = async (repoCode: string, organization: string, recordId: string): Promise<IndexResult> => {
+	const removeIndexRecord = async (repoCode: string, organization: string, recordId: string): Promise<ApiResult> => {
 		const repoInfo = getRepoInformation(repositories, repoCode);
 
 		if (!repoInfo) {
+			const message = `Invalid repository code '${repoCode}'`;
 			logger.error(`Invalid repository information for repository code '${repoCode}'`);
-			throw new BadRequest(`Invalid repository code '${repoCode}'`);
+			return { successful: false, message };
 		}
 
 		// Fetch the record within a repository
 		const repoRecord = await repository(repoInfo).getRecord({ organization, id: recordId });
 
-		if (!isEmpty(repoRecord)) {
-			return indexer.deleteData(repoInfo.indexName, recordId);
-		} else {
+		if (isEmpty(repoRecord)) {
+			const message = `Record '${recordId}' not found in organization '${organization}'`;
 			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
-			throw new BadRequest(`Record '${recordId}' not found in organization '${organization}'`);
+			return { successful: false, message };
 		}
+
+		setImmediate(async () => {
+			try {
+				indexer.deleteData(repoInfo.indexName, recordId);
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				logger.error(`Error found indexing records. ${message}`);
+			}
+		});
+
+		return {
+			indexName: repoInfo.indexName,
+			successful: true,
+		};
 	};
 
 	return {

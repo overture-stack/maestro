@@ -7,10 +7,6 @@ export type IndexResult = {
 	successful: boolean;
 	failureData: FailureData;
 };
-
-export interface IndexData {
-	id: string;
-	data: Record<string, DataRecordValue>;
-	organization: string;
-	entityName: string;
+export interface DataRecordNested {
+	[key: string]: DataRecordValue | DataRecordNested | DataRecordNested[];
 }

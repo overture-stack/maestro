@@ -1,6 +1,6 @@
 import {
 	type DataRecordValue,
-	type IElasticsearchService,
+	type ElasticsearchService,
 	type KafkaConfig,
 	logger,
 	type LyricRepositoryConfig,
@@ -33,7 +33,7 @@ const parseMessage = (messageValue: Buffer | null): Record<string, DataRecordVal
 const handleSongMessage = async (
 	indexName: string,
 	payload: Record<string, DataRecordValue>[],
-	indexer: IElasticsearchService,
+	indexer: ElasticsearchService,
 ) => {
 	const data = Array.isArray(payload) ? payload : [payload];
 	await indexer.bulkUpsert(indexName, data);
@@ -42,7 +42,7 @@ const handleSongMessage = async (
 const handleLyricMessage = async (
 	indexName: string,
 	payload: Record<string, DataRecordValue>[],
-	indexer: IElasticsearchService,
+	indexer: ElasticsearchService,
 ) => {
 	const data = Array.isArray(payload) ? payload : [payload];
 	await indexer.bulkUpsert(indexName, data);
@@ -55,9 +55,9 @@ export async function initializeConsumer({
 }: {
 	kafkaConfig: KafkaConfig;
 	repositories: (SongRepositoryConfig | LyricRepositoryConfig)[];
-	indexerProvider: IElasticsearchService;
+	indexerProvider: ElasticsearchService;
 }) {
-	if (kafkaConfig.servers) {
+	if (kafkaConfig.server) {
 		const kafka = client(kafkaConfig);
 		const consumer = kafka.consumer({ groupId: groupId });
 		await consumer.connect();

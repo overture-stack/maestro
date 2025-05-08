@@ -1,9 +1,9 @@
-import type { DataRecordValue, IndexResult } from './dataRecord.js';
+import type { DataRecordNested, IndexResult } from './dataRecord.js';
 
 /**
  * Interface defining the contract for Elasticsearch service operations.
  */
-export interface IElasticsearchService {
+export interface ElasticsearchService {
 	/**
 	 * Creates an index in Elasticsearch.
 	 *
@@ -19,7 +19,7 @@ export interface IElasticsearchService {
 	 * @param data - The data to be indexed.
 	 * @returns A promise that resolves to the result of the indexing operation.
 	 */
-	addData(index: string, data: Record<string, DataRecordValue>): Promise<IndexResult>;
+	addData(index: string, data: DataRecordNested): Promise<IndexResult>;
 
 	/**
 	 * Checks the availability of the Elasticsearch service.
@@ -36,7 +36,7 @@ export interface IElasticsearchService {
 	 * @param data - The new data to update in the document.
 	 * @returns A promise that resolves to the result of the update operation.
 	 */
-	updateData(index: string, id: string, data: Record<string, DataRecordValue>): Promise<IndexResult>;
+	updateData(index: string, id: string, data: DataRecordNested): Promise<IndexResult>;
 
 	/**
 	 * Deletes a document from a specified Elasticsearch index.
@@ -52,5 +52,5 @@ export interface IElasticsearchService {
 	 * @param index The name of the index where the documents will be upserted
 	 * @param data An array of data records to be upserted.
 	 */
-	bulkUpsert(index: string, data: Record<string, DataRecordValue>[]): Promise<IndexResult>;
+	bulkUpsert(index: string, data: DataRecordNested[]): Promise<IndexResult>;
 }

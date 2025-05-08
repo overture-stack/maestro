@@ -1,14 +1,14 @@
 import { ElasticsearchContainer, StartedElasticsearchContainer } from '@testcontainers/elasticsearch';
 import { expect } from 'chai';
 
-import type { IElasticsearchService } from '@overture-stack/maestro-common';
+import { ElasticsearchService, ElasticSearchSupportedVersions } from '@overture-stack/maestro-common';
 
 import { es7 } from '../../src/client/v7/client.js';
 import { es8 } from '../../src/client/v8/client.js';
 
 export default function suite() {
 	let container: StartedElasticsearchContainer;
-	let client: IElasticsearchService;
+	let client: ElasticsearchService;
 
 	before(async () => {
 		// Start an Elasticsearch container
@@ -23,10 +23,10 @@ export default function suite() {
 		const clientVersion = this.ctx.clientVersion;
 
 		// Initialize our client wrapper
-		if (clientVersion === 7) {
-			client = es7({ nodes: esHost, version: 7, basicAuth: { enabled: false } });
-		} else if (clientVersion === 8) {
-			client = es8({ nodes: esHost, version: 8, basicAuth: { enabled: false } });
+		if (clientVersion === ElasticSearchSupportedVersions.V7) {
+			client = es7({ nodes: esHost, version: ElasticSearchSupportedVersions.V7, basicAuth: { enabled: false } });
+		} else if (clientVersion === ElasticSearchSupportedVersions.V8) {
+			client = es8({ nodes: esHost, version: ElasticSearchSupportedVersions.V8, basicAuth: { enabled: false } });
 		}
 
 		// Wait for Elasticsearch to be ready
@@ -45,10 +45,18 @@ export default function suite() {
 
 	it('should return successful false when indexing server throws an error', async () => {
 		// Setting an invalid node url to throw a Connection Error
-		if (this.ctx.clientVersion === 7) {
-			client = es7({ nodes: 'http://unknown', version: 7, basicAuth: { enabled: false } });
-		} else if (this.ctx.clientVersion === 8) {
-			client = es8({ nodes: 'http://unknown', version: 8, basicAuth: { enabled: false } });
+		if (this.ctx.clientVersion === ElasticSearchSupportedVersions.V7) {
+			client = es7({
+				nodes: 'http://unknown',
+				version: ElasticSearchSupportedVersions.V7,
+				basicAuth: { enabled: false },
+			});
+		} else if (this.ctx.clientVersion === ElasticSearchSupportedVersions.V8) {
+			client = es8({
+				nodes: 'http://unknown',
+				version: ElasticSearchSupportedVersions.V8,
+				basicAuth: { enabled: false },
+			});
 		}
 
 		const result = await client.ping();

@@ -20,6 +20,7 @@
 		"@overture-stack/maestro-common": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^22.9.0"
+		"@types/node": "^22.9.0",
+		"fetch-mock": "^12.2.0"
 	}
 }

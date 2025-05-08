@@ -18,14 +18,18 @@ export interface indexRecordPathParams extends ParamsDictionary {
 	id: string;
 }
 
+const repositoryCodeSchema = z.string().trim().min(1);
+const organizationSchema = z.string().trim().min(1);
+const recordIdSchema = z.string().trim().min(1);
+
 export const indexRepositoryRequestschema: RequestValidation<object, ParsedQs, indexRepositoryPathParams> = {
-	pathParams: z.object({ repositoryCode: z.string() }),
+	pathParams: z.object({ repositoryCode: repositoryCodeSchema }),
 };
 
 export const indexOrganizationRequestschema: RequestValidation<object, ParsedQs, indexOrganizationPathParams> = {
-	pathParams: z.object({ repositoryCode: z.string(), organization: z.string() }),
+	pathParams: z.object({ repositoryCode: repositoryCodeSchema, organization: organizationSchema }),
 };
 
 export const indexRecordRequestschema: RequestValidation<object, ParsedQs, indexRecordPathParams> = {
-	pathParams: z.object({ repositoryCode: z.string(), organization: z.string(), id: z.string() }),
+	pathParams: z.object({ repositoryCode: repositoryCodeSchema, organization: organizationSchema, id: recordIdSchema }),
 };

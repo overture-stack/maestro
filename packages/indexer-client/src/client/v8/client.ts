@@ -1,10 +1,12 @@
 import { Client } from 'es8';
 
-import type {
-	DataRecordValue,
-	ElasticSearchConfig,
-	IElasticsearchService,
-	IndexResult,
+import {
+	type DataRecordNested,
+	type ElasticSearchConfig,
+	type ElasticsearchService,
+	ElasticSearchSupportedVersions,
+	type IndexResult,
+	logger,
 } from '@overture-stack/maestro-common';
 
 import { getAuth } from '../../common/config.js';
@@ -14,20 +16,21 @@ import { bulkUpsert, createIndexIfNotExists, deleteData, indexData, ping, update
  *  Creates an instance of the Elasticsearch service for version 8.
  *
  * This function initializes an Elasticsearch client using the provided configuration
- * and returns an object that implements the `IElasticsearchService` interface.
+ * and returns an object that implements the `ElasticsearchService` interface.
  * The returned object includes methods for creating an index, indexing data,
  * checking the connection, updating data, and deleting data.
  *
  * @param {ElasticSearchConfig} config The configuration of the Elasticsearch to connect to
- * @returns {IElasticsearchService} An object implementing the `IElasticsearchService` interface, providing methods to interact with Elasticsearch
+ * @returns {ElasticsearchService} An object implementing the `ElasticsearchService` interface, providing methods to interact with Elasticsearch
  */
-export const es8 = (config: ElasticSearchConfig): IElasticsearchService => {
-	if (config.version !== 8) {
+export const es8 = (config: ElasticSearchConfig): ElasticsearchService => {
+	if (config.version !== ElasticSearchSupportedVersions.V8) {
 		throw Error('Invalid Client Configuration');
 	}
 
 	const auth = getAuth(config.basicAuth);
 
+	logger.info(`Initializing Elasticsearch client v7 with nodes: ${config.nodes}`);
 	const client = new Client({
 		node: config.nodes,
 		auth,
@@ -36,10 +39,10 @@ export const es8 = (config: ElasticSearchConfig): IElasticsearchService => {
 	});
 
 	return {
-		async addData(index: string, data: Record<string, DataRecordValue>): Promise<IndexResult> {
+		async addData(index: string, data: DataRecordNested): Promise<IndexResult> {
 			return indexData(client, index, data);
 		},
-		async bulkUpsert(index: string, data: Record<string, DataRecordValue>[]): Promise<IndexResult> {
+		async bulkUpsert(index: string, data: DataRecordNested[]): Promise<IndexResult> {
 			return bulkUpsert(client, index, data);
 		},
 
@@ -55,7 +58,7 @@ export const es8 = (config: ElasticSearchConfig): IElasticsearchService => {
 			return ping(client);
 		},
 
-		async updateData(index: string, id: string, data: Record<string, DataRecordValue>): Promise<IndexResult> {
+		async updateData(index: string, id: string, data: DataRecordNested): Promise<IndexResult> {
 			return updateData(client, index, id, data);
 		},
 	};

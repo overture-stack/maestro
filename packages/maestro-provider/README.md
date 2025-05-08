@@ -5,7 +5,7 @@
 
 This package provides indexing functionality for keeping data synchronized from data source repositories like Song and Lyric with search engines like ElasticSearch.
 
-The entry point to this functionality is through the `MaestroProvider`. The MaestroProvider acts as the main interface for configuring, managing, and executing tasks related to indexing data from repositories and payloads into a search engine like Elasticsearch. It simplifies the interaction with complex indexing workflows by providing a unified entry point to both automatic data synchronization and manual document indexing.
+The entry point to this functionality is through the `initializeMaestroProvider`. This function creates a provider that offers methods to configure, manage, and execute tasks related to indexing data from repositories and payloads into a search engine like Elasticsearch. It simplifies the interaction with complex indexing workflows by providing a unified entry point to both automatic data synchronization and manual document indexing.
 
 This package is designed to be imported as an npm dependency.
 
@@ -19,25 +19,25 @@ npm install @overture-provider/maestro-provider
 
 ## Configuration
 
-The **MaestroProvider** requires some initial configuration to work correctly. You can configure it by providing an object of type **MaestroProviderConfig**.
+To create a Maestro provider use the **initializeMaestroProvider** function. This can be done by providing an object of type **MaestroProviderConfig**.
 
 Here is an example of the configuration:
 
 ```bash
-import { MaestroProvider, MaestroProviderConfig } from '@overture-stack/maestro-provider';
+import { initializeMaestroProvider, MaestroProviderConfig } from '@overture-stack/maestro-provider';
 
 const config: MaestroProviderConfig = {
   // Configuration properties
 };
 
-const maestroProvider = MaestroProvider(config);
+const maestroProvider = initializeMaestroProvider(config);
 ```
 
 ## Features
 
 1. **Repository Indexing Operations**
 
-   The `MaestroProvider` provides a set of API functions designed to manage indexing operations for systems that work as data source repositories, such as _Song_ or _Lyric_. These repositories serve as data sources from which _Maestro_ fetches data when the operations are invoked. The `MaestroProvider` acts as the bridge to ensure that this data is correctly indexed into a search engine like Elasticsearch.
+   The `initializeMaestroProvider` function provides a set of API functions designed to manage indexing operations for systems that work as data source repositories, such as _Song_ or _Lyric_. These repositories serve as data sources from which _Maestro_ fetches data when the operations are invoked. The resulting provider acts as the bridge to ensure that this data is correctly indexed into a search engine like Elasticsearch.
 
    It provides bellow operations:
 
@@ -61,7 +61,7 @@ const maestroProvider = MaestroProvider(config);
 
 2. **Indexing Service Implementation for Payloads**
 
-   The `MaestroProvider` also offers a set of indexing operations that do not require fetching data from repositories. Instead, the data is provided directly in the payloads.
+   Maestro provider also offers a set of indexing operations that do not require fetching data from repositories. Instead, the data is provided directly in the payloads.
 
    It provides bellow operations:
 
@@ -94,16 +94,16 @@ const maestroProvider = MaestroProvider(config);
 
 ## Usage Example
 
-After installing and configuring the `MaestroProvider`, you can start using it to perform indexing operations.
+After installing and configuring the Maestro Provider, you can start using it to perform indexing operations.
 
 ```bash
-import { MaestroProvider, MaestroProviderConfig } from 'maestro-provider';
+import { initializeMaestroProvider, MaestroProviderConfig } from 'maestro-provider';
 
 const config: MaestroProviderConfig = {
 // Configure your provider
 };
 
-const maestroProvider = new MaestroProvider(config);
+const maestroProvider = initializeMaestroProvider(config);
 
 // Example API usage:
 maestroProvider.payload.createIndex(payload);

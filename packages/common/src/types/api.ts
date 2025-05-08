@@ -1,9 +1,5 @@
-export type FailureData = {
-	failingIds: string[];
-};
-
-export type IndexResult = {
-	indexName: string;
+export type ApiResult = {
 	successful: boolean;
-	failureData: FailureData;
+	message?: string;
+	indexName?: string;
 };

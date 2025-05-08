@@ -6,53 +6,44 @@ import type {
 	SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { logger, setLogLevel } from '../utils/logger.js';
-import { env, type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './envConfig.js';
-
-setLogLevel(env.MAESTRO_LOGGING_LEVEL_ROOT);
+import { setLogLevel } from '../utils/logger.js';
+import { env } from './envConfig.js';
+import { type lyricSchemaDefinition, repositoryTypes, type songSchemaDefinition } from './repositoryConfig.js';
 
 const getRepositoryConfig = (
 	repos: (z.infer<typeof lyricSchemaDefinition> | z.infer<typeof songSchemaDefinition>)[],
 ): (LyricRepositoryConfig | SongRepositoryConfig)[] => {
-	const lyricRepos = repos
+	const lyricRepos: LyricRepositoryConfig[] = repos
 		.filter((value) => value && value.TYPE === repositoryTypes.Values.LYRIC)
-		.map(
-			(value) =>
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-				<LyricRepositoryConfig>{
-					baseUrl: value.BASE_URL,
-					code: value.CODE,
-					name: value.NAME,
-					paginationSize: value.PAGINATION_SIZE,
-					type: repositoryTypes.Values.LYRIC,
-					indexName: value.INDEX_NAME,
-					validDataOnly: value.LYRIC_VALID_DATA_ONLY,
-					categoryId: value.LYRIC_CATEGORY_ID,
-					kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
-					kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
-				},
-		);
+		.map((value) => ({
+			baseUrl: value.BASE_URL,
+			code: value.CODE,
+			name: value.NAME,
+			paginationSize: value.PAGINATION_SIZE,
+			type: repositoryTypes.Values.LYRIC,
+			indexName: value.INDEX_NAME,
+			validDataOnly: value.LYRIC_VALID_DATA_ONLY,
+			categoryId: value.LYRIC_CATEGORY_ID,
+			kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
+			kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
+		}));
 
-	const songRepos = repos
+	const songRepos: SongRepositoryConfig[] = repos
 		.filter((value) => value && value.TYPE === repositoryTypes.Values.SONG)
-		.map(
-			(value) =>
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-				<SongRepositoryConfig>{
-					baseUrl: value.BASE_URL,
-					code: value.CODE,
-					name: value.NAME,
-					paginationSize: value.PAGINATION_SIZE,
-					type: repositoryTypes.Values.SONG,
-					indexName: value.INDEX_NAME,
-					indexableStudyStates: value.SONG_INDEXABLE_STUDY_STATES,
-					analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
-					organization: value.SONG_ORGANIZATION,
-					country: value.SONG_COUNTRY,
-					kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
-					kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
-				},
-		);
+		.map((value) => ({
+			baseUrl: value.BASE_URL,
+			code: value.CODE,
+			name: value.NAME,
+			paginationSize: value.PAGINATION_SIZE,
+			type: repositoryTypes.Values.SONG,
+			indexName: value.INDEX_NAME,
+			indexableStudyStates: value.SONG_INDEXABLE_STUDY_STATES,
+			analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
+			organization: value.SONG_ORGANIZATION,
+			country: value.SONG_COUNTRY,
+			kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
+			kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
+		}));
 	return [...songRepos, ...lyricRepos];
 };
 
@@ -73,15 +64,13 @@ export const defaultAppConfig: MaestroProviderConfig = {
 		},
 	},
 	kafka: {
-		servers: env.MAESTRO_KAFKA_SERVER,
+		server: env.MAESTRO_KAFKA_SERVER,
 		groupId: env.MAESTRO_KAFKA_GROUP_ID,
 		requestBinding: {
 			topic: env.MAESTRO_KAFKA_INDEX_REQUEST_TOPIC,
 			dlq: env.MAESTRO_KAFKA_INDEX_REQUEST_DLQ,
 		},
 	},
-	logger: {
-		logger: logger,
-	},
+	logger: setLogLevel(env.MAESTRO_LOGGING_LEVEL),
 	repositories: getRepositoryConfig(env.repositories),
 };

@@ -1,13 +1,12 @@
 import type { ElasticSearchConfig } from './clientConfig.js';
-import type { LoggerConfig } from './logger.js';
-
+import { ConsoleLike } from './logger.js';
 interface BindingConfig {
 	dlq?: string;
 	topic?: string;
 }
 export interface KafkaConfig {
 	requestBinding?: BindingConfig;
-	servers?: string;
+	server?: string;
 	groupId?: string;
 }
 
@@ -24,19 +23,17 @@ export interface RepositoryConfig {
 	code: string;
 	name: string;
 	paginationSize?: number;
-	type: RepositoryType;
 	kafkaTopic?: string;
 	kafkaDlq?: string;
 }
 
 interface IndexConfig {
 	indexName: string;
-	indexAlias: string;
 }
 
 interface SongIndexConfig extends IndexConfig {
-	indexableStudyStates: string;
 	analysisCentricEnabled: boolean;
+	indexableStudyStates: string;
 }
 
 interface LyricIndexConfig extends IndexConfig {
@@ -45,16 +42,18 @@ interface LyricIndexConfig extends IndexConfig {
 
 export interface LyricRepositoryConfig extends RepositoryConfig, LyricIndexConfig {
 	categoryId: number;
+	type: typeof RepositoryType.LYRIC;
 }
 
 export interface SongRepositoryConfig extends RepositoryConfig, SongIndexConfig {
-	country: string;
-	organization: string;
+	country?: string;
+	organization?: string;
+	type: typeof RepositoryType.SONG;
 }
 
 export interface MaestroProviderConfig {
 	elasticSearchConfig: ElasticSearchConfig;
 	kafka?: KafkaConfig;
-	logger?: LoggerConfig;
+	logger?: ConsoleLike;
 	repositories?: (LyricRepositoryConfig | SongRepositoryConfig)[];
 }

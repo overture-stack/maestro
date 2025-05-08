@@ -57,7 +57,6 @@ describe('Utils', () => {
 				type: RepositoryType.SONG,
 				baseUrl: 'localhost',
 				indexName: 'index_1_1',
-				indexAlias: 'index_1_1',
 				country: 'CA',
 				organization: 'oicr',
 				analysisCentricEnabled: false,
@@ -71,7 +70,6 @@ describe('Utils', () => {
 				categoryId: 1,
 				validDataOnly: true,
 				indexName: 'index_1_1',
-				indexAlias: 'index_1_1',
 			},
 		];
 
@@ -93,7 +91,6 @@ describe('Utils', () => {
 					type: RepositoryType.SONG,
 					baseUrl: 'localhost',
 					indexName: 'index_1_1',
-					indexAlias: 'index_1_1',
 					country: 'CA',
 					organization: 'oicr',
 					analysisCentricEnabled: false,
@@ -107,7 +104,6 @@ describe('Utils', () => {
 					categoryId: 1,
 					validDataOnly: true,
 					indexName: 'index_1_1',
-					indexAlias: 'index_1_1',
 				},
 			];
 			const result = getRepoInformation(mockCommonRepositories, 'commonRepo');

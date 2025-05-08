@@ -1,13 +1,7 @@
 import type { Client } from 'es7';
 import type { BulkOperationType, BulkResponseItem } from 'es7/api/types';
 
-import {
-	type DataRecordValue,
-	type FailureData,
-	IndexResult,
-	logger,
-	sanitize_index_name,
-} from '@overture-stack/maestro-common';
+import { type DataRecordNested, type FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
 
 /**
  * Indexes the specified document. If the document exists, replaces the document and increments the version.
@@ -17,16 +11,14 @@ import {
  * @param dataSet The actual data to be stored in the document
  * @returns
  */
-export const bulkUpsert = async (client: Client, index: string, dataSet: Record<string, DataRecordValue>[]) => {
-	const sanitizedIndex = sanitize_index_name(index);
+export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
 	try {
-		const body = dataSet.flatMap((doc) => [{ index: { _index: sanitizedIndex, _id: doc?.['id'] } }, doc]);
+		const body = dataSet.flatMap(({ _id, ...doc }) => [{ index: { _index: index, _id } }, doc]);
 
 		const response = await client.bulk({ refresh: true, body });
 
-		logger.debug(`Bulk upsert in index:'${index}'`, `# of documents:'${dataSet.length}'`, response.statusCode);
+		logger.info(`Bulk upsert in index:'${index}'`, `# of documents:'${dataSet.length}'`, response.statusCode);
 
-		let successful = false;
 		const failureData: FailureData = {};
 		if (response.body.errors) {
 			// The items array has the same order of the dataset we just indexed.
@@ -40,13 +32,9 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: Record<
 			});
 		}
 
-		if (Object.keys(failureData).length === 0) {
-			successful = true;
-		}
-
 		return {
 			indexName: index,
-			successful,
+			successful: !Object.keys(failureData).length,
 			failureData,
 		};
 	} catch (error) {
@@ -77,16 +65,15 @@ export const bulkUpsert = async (client: Client, index: string, dataSet: Record<
  * @returns `true` if the index already exists, `false` if doesn't exist
  */
 export const createIndexIfNotExists = async (client: Client, index: string): Promise<boolean> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	let exists = false;
 	try {
-		const result = await client.indices.exists({ index: sanitizedIndex });
+		const result = await client.indices.exists({ index });
 		exists = result.body;
 		if (!result.body) {
-			await client.indices.create({ index: sanitizedIndex });
-			logger.info(`Index ${sanitizedIndex} created.`);
+			await client.indices.create({ index });
+			logger.info(`Index ${index} created.`);
 		} else {
-			logger.debug(`Index ${sanitizedIndex} already exists.`);
+			logger.debug(`Index ${index} already exists.`);
 		}
 	} catch (error) {
 		logger.error(`Error creating the index: ${JSON.stringify(error)}`);
@@ -106,19 +93,14 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
  * @param input.organization The organization associated with the document
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
-export const indexData = async (
-	client: Client,
-	index: string,
-	data: Record<string, DataRecordValue>,
-): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
+export const indexData = async (client: Client, index: string, data: DataRecordNested): Promise<IndexResult> => {
 	try {
 		const response = await client.index({
-			index: sanitizedIndex,
+			index,
 			id: data?.['id']?.toString(),
 			body: data,
 		});
-		logger.debug(`Indexing document in:'${index}'`, response.statusCode);
+		logger.info(`Indexing document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -163,18 +145,17 @@ export const updateData = async (
 	client: Client,
 	index: string,
 	id: string,
-	data: Record<string, DataRecordValue>,
+	data: DataRecordNested,
 ): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	try {
 		const response = await client.update({
-			index: sanitizedIndex,
+			index,
 			id,
 			body: {
 				doc: { data },
 			},
 		});
-		logger.debug(`Updating indexed document in:'${index}'`, response.statusCode);
+		logger.info(`Updating indexed document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};
@@ -213,13 +194,12 @@ export const updateData = async (
  * @returns A promise that resolves to a `IndexResult`, containing metadata about the operation result
  */
 export const deleteData = async (client: Client, index: string, id: string): Promise<IndexResult> => {
-	const sanitizedIndex = sanitize_index_name(index);
 	try {
 		const response = await client.delete({
-			index: sanitizedIndex,
+			index,
 			id,
 		});
-		logger.debug(`Deleting indexed document in:'${index}'`, response.statusCode);
+		logger.info(`Deleting indexed document in:'${index}'`, response.statusCode);
 
 		let successful = false;
 		const failureData: FailureData = {};

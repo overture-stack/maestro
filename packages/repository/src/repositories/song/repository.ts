@@ -1,84 +1,132 @@
 import * as path from 'path';
 
-import type { DataRecordValue, IRepository, SongRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	type DataRecordNested,
+	logger,
+	type Repository,
+	type SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
-import httpClient from '../../network/httpClient';
+import { sendHttpRequest } from '../../network/httpRequest';
 import { isArrayOfObjects } from '../../utils/utils';
+
+// Path constants
+const PATH = {
+	STUDIES: 'studies',
+	ANALYSIS: 'analysis',
+	PAGINATED: 'paginated',
+	ALL: 'all',
+} as const;
+
+// Query parameter constants
+const QUERY = {
+	LIMIT: 'limit',
+	OFFSET: 'offset',
+} as const;
 
 /**
  * Implementation to use Song as a data repository
  * @param config
  * @returns
  */
-export const songRepository = (config: SongRepositoryConfig): IRepository => {
+export const songRepository = (config: SongRepositoryConfig): Repository => {
 	const { baseUrl, paginationSize } = config;
 
 	const getOrganizationRecords = async function* ({
 		organization,
 	}: {
 		organization: string;
-	}): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
+	}): AsyncGenerator<DataRecordNested[], void, unknown> {
 		let offset = 0;
 		let hasMoreData = true;
 
 		// Get all analysis paginated for a study
 		// http://song/studies/{organization}/analysis/paginated?analysisStates={2}&limit={3,number,#}&offset={4,number,#}
-		const fullUrl = new URL(path.join('studies', organization, 'analysis', 'paginated'), baseUrl);
+		const fullUrl = new URL(
+			path.join(PATH.STUDIES, organization, PATH.ANALYSIS, paginationSize ? PATH.PAGINATED : ''),
+			baseUrl,
+		);
 		if (paginationSize) {
-			fullUrl.searchParams.append('limit', paginationSize.toString());
+			fullUrl.searchParams.append(QUERY.LIMIT, paginationSize.toString());
 		}
 
 		while (hasMoreData) {
 			if (paginationSize) {
-				fullUrl.searchParams.set('offset', offset.toString());
+				fullUrl.searchParams.set(QUERY.OFFSET, offset.toString());
 			}
 
-			const result = await httpClient(fullUrl.toString());
+			try {
+				const response = await sendHttpRequest(fullUrl.toString());
 
-			if (isArrayOfObjects(result?.records)) {
-				const validArray: Array<Record<string, DataRecordValue>> = result.records.map(
-					(item: Record<string, DataRecordValue>) => ({ ...item }),
-				);
-				yield validArray;
-			} else {
-				return;
-			}
-			if (paginationSize) {
-				offset++;
-				hasMoreData = offset < result?.pagination?.totalPages;
-			} else {
-				hasMoreData = false;
+				if (response.ok) {
+					const parsedResponse = await response.json();
+					const parsedRecords = paginationSize ? parsedResponse.analyses : parsedResponse;
+					if (isArrayOfObjects(parsedRecords)) {
+						yield parsedRecords.map((record) => {
+							return { _id: record.analysisId, ...record };
+						});
+					} else {
+						return;
+					}
+					if (paginationSize) {
+						hasMoreData = parseInt(parsedResponse?.currentTotalAnalyses) < parseInt(parsedResponse?.totalAnalyses);
+						offset++;
+					} else {
+						hasMoreData = false;
+					}
+				} else {
+					hasMoreData = false;
+				}
+			} catch (error) {
+				logger.error(`Error fetching Song records on study '${organization}'`, error);
+				throw error;
 			}
 		}
 	};
 
-	const getRecord = async ({
-		organization,
-		id,
-	}: {
-		organization: string;
-		id: string;
-	}): Promise<Record<string, DataRecordValue>> => {
+	const getRecord = async ({ organization, id }: { organization: string; id: string }): Promise<DataRecordNested> => {
 		// Get the analysis by ID
 		// http://song/studies/{organization}/analysis/{id}
-		const fullUrl = new URL(path.join('studies', organization, 'analysis', id), baseUrl);
+		const fullUrl = new URL(path.join(PATH.STUDIES, organization, PATH.ANALYSIS, id), baseUrl);
 
-		return httpClient(fullUrl.toString());
+		const response = await sendHttpRequest(fullUrl.toString());
+		if (response.ok) {
+			const parsedResponse = await response.json();
+			return { _id: parsedResponse.analysisId, ...parsedResponse };
+		}
+		return {};
 	};
 
-	const getRepositoryRecords = async function* (): AsyncGenerator<Record<string, DataRecordValue>[], void, unknown> {
+	const getAllStudies = async () => {
 		// Get all the studies
 		// http://song/studies/all
-		const fullUrl = new URL(baseUrl);
-		const allStudiesResult = await httpClient(fullUrl.toString());
+		const fullUrl = new URL(path.join(PATH.STUDIES, PATH.ALL), baseUrl);
+		try {
+			const response = await sendHttpRequest(fullUrl.toString());
+			if (response.ok) {
+				const parsedResponse = await response.json();
+				if (Array.isArray(parsedResponse)) {
+					return parsedResponse;
+				}
+			}
+			return [];
+		} catch (error) {
+			logger.error(`Error fetching Song all studies`, error);
+			throw error;
+		}
+	};
 
-		for (let index = 1; index <= allStudiesResult.length; index++) {
-			const study = allStudiesResult[index];
+	const getRepositoryRecords = async function* (): AsyncGenerator<DataRecordNested[], void, unknown> {
+		// Get all the studies
+		const studies = await getAllStudies();
+
+		for (const study of studies) {
 			// Get Records per study
 			for await (const records of getOrganizationRecords({ organization: study })) {
 				yield records;
 			}
 		}
+		return;
 	};
 
 	return {
