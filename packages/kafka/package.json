@@ -1,0 +1,23 @@
+{
+	"name": "@overture-stack/maestro-kafka",
+	"version": "5.0.0-alpha.1",
+	"description": "A submodule of Maestro that abstracts communication with Kafka client",
+	"main": "dist/index.js",
+	"typings": "dist/index.d.ts",
+	"type": "module",
+	"scripts": {
+		"clean": "rimraf dist",
+		"build": "pnpm run clean && tsc"
+	},
+	"keywords": [],
+	"author": "Ontario Institute for Cancer Research",
+	"license": "AGPL-3.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/overture-stack/maestro.git"
+	},
+	"dependencies": {
+		"kafkajs": "^2.2.4",
+		"@overture-stack/maestro-common": "workspace:^"
+	}
+}

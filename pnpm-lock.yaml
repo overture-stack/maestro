@@ -150,6 +150,15 @@ importers:
         specifier: ^10.13.2
         version: 10.13.2
 
+  packages/kafka:
+    dependencies:
+      '@overture-stack/maestro-common':
+        specifier: workspace:^
+        version: link:../common
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
+
   packages/maestro-provider:
     dependencies:
       '@overture-stack/maestro-common':
@@ -158,6 +167,9 @@ importers:
       '@overture-stack/maestro-indexer-client':
         specifier: workspace:^
         version: link:../indexer-client
+      '@overture-stack/maestro-kafka':
+        specifier: workspace:^
+        version: link:../kafka
       '@overture-stack/maestro-repository':
         specifier: workspace:^
         version: link:../repository
@@ -2629,6 +2641,11 @@ packages:
   /just-extend@6.2.0:
     resolution: {integrity: sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==}
     dev: true
+
+  /kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}

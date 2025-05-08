@@ -26,8 +26,10 @@ const getRepositoryConfig = (
 					paginationSize: value.PAGINATION_SIZE,
 					type: repositoryTypes.Values.LYRIC,
 					indexName: value.INDEX_NAME,
-					validDataOnly: value.LYRIC_VALIDATE_DATA_ONLY,
+					validDataOnly: value.LYRIC_VALID_DATA_ONLY,
 					categoryId: value.LYRIC_CATEGORY_ID,
+					kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
+					kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
 				},
 		);
 
@@ -47,6 +49,8 @@ const getRepositoryConfig = (
 					analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
 					organization: value.SONG_ORGANIZATION,
 					country: value.SONG_COUNTRY,
+					kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
+					kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
 				},
 		);
 	return [...songRepos, ...lyricRepos];
@@ -69,27 +73,11 @@ export const defaultAppConfig: MaestroProviderConfig = {
 		},
 	},
 	kafka: {
-		enabled: env.MAESTRO_KAFKA_ENABLED,
-		servers: env.MAESTRO_KAFKA_SERVERS,
-		lyricSchemaBinding: {
-			analysisMessage: {
-				dlq: env.MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_DLQ,
-				topic: env.MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_TOPIC,
-			},
-			requestMessage: {
-				dlq: env.MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_DLQ,
-				topic: env.MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_TOPIC,
-			},
-		},
-		songSchemaBinding: {
-			analysisMessage: {
-				dlq: env.MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_DLQ,
-				topic: env.MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_TOPIC,
-			},
-			requestMessage: {
-				dlq: env.MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ,
-				topic: env.MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_TOPIC,
-			},
+		servers: env.MAESTRO_KAFKA_SERVER,
+		groupId: env.MAESTRO_KAFKA_GROUP_ID,
+		requestBinding: {
+			topic: env.MAESTRO_KAFKA_INDEX_REQUEST_TOPIC,
+			dlq: env.MAESTRO_KAFKA_INDEX_REQUEST_DLQ,
 		},
 	},
 	logger: {

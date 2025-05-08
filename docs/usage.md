@@ -62,28 +62,28 @@ curl -X POST \
 
 ## Kafka topics
 
-Maestro can be configured as mentioned under the running configurations section to listen to kafka topics
+Maestro can be configured to listen to Kafka topics as described in the Running Configurations section.
 
 ```yaml
-MAESTRO_KAFKA_ENABLED=true
-MAESTRO_KAFKA_SERVERS=http://kafka:9092
-MAESTRO_KAFKA_INDEX_REQUEST_TOPIC=maestro_index_request
-MAESTRO_KAFKA_INDEX_REQUEST_DLQ=maestro_index_request_dlq
-MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_TOPIC=clinical_data
-MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_DLQ=clinical_data_dlq
-MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_TOPIC=song_analysis
-MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_DLQ=song_analysis_dlq
+MAESTRO_KAFKA_SERVER=http://kafka:9092
 ```
 
-`MAESTRO_KAFKA_ENABLED` must be set to true in order to enable Kafka functionality.
+The `MAESTRO_KAFKA_SERVER` configuration specifies the Kafka server(s) to connect to.
 
-The `MAESTRO_KAFKA_SERVERS` configuration specifies the Kafka servers to connect to.
+There are two types of topics that can be configured, depending on your needs:
 
-### Index Request Topic
+### Request topics
 
-The `MAESTRO_KAFKA_INDEX_REQUEST_TOPIC` and `MAESTRO_KAFKA_INDEX_REQUEST_DLQ` defines the topic to be used for on demand index request instead of using the web api above, each request will fetch data from the specified repository provided by `repositoryCode` (Song or Lyric).
+Request topics are used to send on-demand messages instructing Maestro to perform a specific action on a given `repositoryCode`.
 
-The body of the messages should be a JSON, and looks like one of the following:
+Configuration example:
+
+```yaml
+MAESTRO_KAFKA_INDEX_REQUEST_TOPIC=maestro_index_request
+MAESTRO_KAFKA_INDEX_REQUEST_DLQ=maestro_index_request_dlq
+```
+
+The message body for these topics should follow one of the formats below
 
 - Analysis:
 
@@ -97,7 +97,7 @@ The body of the messages should be a JSON, and looks like one of the following:
 { "value": { "repositoryCode": "collab", "studyId": "PEK-AB" } }
 ```
 
-- Full repository (SONG):
+- Full repository:
 
 ```json
 { "value": { "repositoryCode": "aws" } }
@@ -107,7 +107,12 @@ The body of the messages should be a JSON, and looks like one of the following:
 
 You can send an entire document for indexing using a Kafka message.
 
-The `MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_TOPIC` and `MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_DLQ` configuration facilitate this process.
+Use following configuration on a Song repository, example:
+
+```yaml
+MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_TOPIC=song_analysis
+MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_DLQ=song_analysis_dlq
+```
 
 The message schemas are governed by SONG but they currently look like this:
 
@@ -119,9 +124,14 @@ The message schemas are governed by SONG but they currently look like this:
 
 You can send an entire document for indexing using a Kafka message.
 
-The `MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_TOPIC` and `MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_DLQ` configuration facilitate this process.
+Use following configuration on a Song repository, example:
 
-The message schemas are governed by SONG but they currently look like this:
+```yaml
+MAESTRO_REPOSITORIES_1_KAFKA_ANALYSIS_MESSAGE_TOPIC=clinical_data
+MAESTRO_REPOSITORIES_1_KAFKA_ANALYSIS_MESSAGE_DLQ=clinical_data_dlq
+```
+
+The message schemas are governed by LYRIC but they currently look like this:
 
 ```json
 { "value": { "id": "12314124", "organization": "ABC-123", "serverId": "clinical", "data": { "name": "ABCD" } } }

@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@overture-stack/maestro-common": "workspace:^",
 		"@overture-stack/maestro-indexer-client": "workspace:^",
-		"@overture-stack/maestro-repository": "workspace:^"
+		"@overture-stack/maestro-repository": "workspace:^",
+		"@overture-stack/maestro-kafka": "workspace:^"
 	}
 }

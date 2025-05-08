@@ -1,5 +1,6 @@
 export { ElasticSearchBasicAuthConfig, ElasticSearchConfig } from './clientConfig.js';
 export {
+	KafkaConfig,
 	LyricRepositoryConfig,
 	MaestroProviderConfig,
 	RepositoryConfig,

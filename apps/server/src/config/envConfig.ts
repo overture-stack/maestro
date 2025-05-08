@@ -26,18 +26,14 @@ const elasticSearchConfigSchema = z.object({
 		.refine((val) => val === 7 || val === 8, { message: 'Version must be 7 or 8' }), // Ensure 7 or 8
 });
 
-const kafkaConfigSchema = z.object({
-	MAESTRO_KAFKA_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_TOPIC: z.string().optional().default('clinical_data'),
-	MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_DLQ: z.string().optional().default('clinical_data_dlq'),
-	MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_TOPIC: z.string().optional().default('clinical_index_request'),
-	MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_DLQ: z.string().optional().default('clinical_index_request_dlq'),
-	MAESTRO_KAFKA_SERVERS: z.string().optional(),
-	MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_TOPIC: z.string().default('song_analysis'),
-	MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_DLQ: z.string().default('song_analysis_dlq'),
-	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_TOPIC: z.string().default('index_request'),
-	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ: z.string().default('index_request_dlq'),
-});
+const kafkaBaseConfigSchema = z
+	.object({
+		MAESTRO_KAFKA_INDEX_REQUEST_TOPIC: z.string().optional(),
+		MAESTRO_KAFKA_INDEX_REQUEST_DLQ: z.string().optional(),
+		MAESTRO_KAFKA_GROUP_ID: z.string().optional(),
+		MAESTRO_KAFKA_SERVER: z.string(),
+	})
+	.optional();
 
 const loggerConfigSchema = z.object({
 	MAESTRO_LOGGING_LEVEL_ROOT: z.string().default('info'),
@@ -52,18 +48,20 @@ const definitionBaseRepositorySchema = z.object({
 	PAGINATION_SIZE: z.coerce.number().optional(),
 	TYPE: repositoryTypes,
 	INDEX_NAME: z.string(),
+	KAFKA_ANALYSIS_MESSAGE_TOPIC: z.string().optional(),
+	KAFKA_ANALYSIS_MESSAGE_DLQ: z.string().optional(),
 });
 
 const definitionLyricRepositorySchema = z.object({
 	TYPE: z.literal(repositoryTypes.Values.LYRIC),
-	LYRIC_VALIDATE_DATA_ONLY: z.boolean().default(true),
+	LYRIC_VALID_DATA_ONLY: z.coerce.boolean().default(true),
 	LYRIC_CATEGORY_ID: z.coerce.number(),
 });
 
 const definitionSongRepositorySchema = z.object({
 	TYPE: z.literal(repositoryTypes.Values.SONG),
 	SONG_INDEXABLE_STUDY_STATES: z.string().default('PUBLISHED'),
-	SONG_ANALYSIS_CENTRIC_ENABLED: z.boolean().default(true),
+	SONG_ANALYSIS_CENTRIC_ENABLED: z.coerce.boolean().default(true),
 	SONG_ORGANIZATION: z.string().optional(),
 	SONG_COUNTRY: z.string().optional(),
 });
@@ -79,6 +77,10 @@ function createDynamicBaseRepositorySchema(count: number) {
 		schemas[`MAESTRO_REPOSITORIES_${i}_PAGINATION_SIZE`] = definitionBaseRepositorySchema.shape.PAGINATION_SIZE;
 		schemas[`MAESTRO_REPOSITORIES_${i}_TYPE`] = definitionBaseRepositorySchema.shape.TYPE;
 		schemas[`MAESTRO_REPOSITORIES_${i}_INDEX_NAME`] = definitionBaseRepositorySchema.shape.INDEX_NAME;
+		schemas[`MAESTRO_REPOSITORIES_${i}_KAFKA_ANALYSIS_MESSAGE_TOPIC`] =
+			definitionBaseRepositorySchema.shape.KAFKA_ANALYSIS_MESSAGE_TOPIC;
+		schemas[`MAESTRO_REPOSITORIES_${i}_KAFKA_ANALYSIS_MESSAGE_DLQ`] =
+			definitionBaseRepositorySchema.shape.KAFKA_ANALYSIS_MESSAGE_DLQ;
 	}
 	return z.object(schemas);
 }
@@ -89,8 +91,8 @@ function createDynamicCustomLyricRepositorySchema(count: number) {
 
 	for (let i = 0; i < count; i++) {
 		schemas[`MAESTRO_REPOSITORIES_${i}_TYPE`] = definitionLyricRepositorySchema.shape.TYPE;
-		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_VALIDATE_DATA_ONLY`] =
-			definitionLyricRepositorySchema.shape.LYRIC_VALIDATE_DATA_ONLY;
+		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_VALID_DATA_ONLY`] =
+			definitionLyricRepositorySchema.shape.LYRIC_VALID_DATA_ONLY;
 		schemas[`MAESTRO_REPOSITORIES_${i}_LYRIC_CATEGORY_ID`] = definitionLyricRepositorySchema.shape.LYRIC_CATEGORY_ID;
 	}
 	return z.object(schemas);
@@ -126,7 +128,10 @@ const repoCount = getRepoCount();
 const baseRepositorySchema = createDynamicBaseRepositorySchema(repoCount);
 
 // Create the main schema by intersecting the other schemas and the validated union
-const mainSchema = elasticSearchConfigSchema.and(kafkaConfigSchema).and(loggerConfigSchema).and(baseRepositorySchema);
+const mainSchema = elasticSearchConfigSchema
+	.and(kafkaBaseConfigSchema)
+	.and(loggerConfigSchema)
+	.and(baseRepositorySchema);
 
 const mainSchemaParsed = mainSchema.safeParse(process.env);
 

@@ -1,18 +1,14 @@
 import type { ElasticSearchConfig } from './clientConfig.js';
 import type { LoggerConfig } from './logger.js';
+
 interface BindingConfig {
-	dlq: string;
-	topic: string;
-}
-interface SchemaBindingConfig {
-	analysisMessage: BindingConfig;
-	requestMessage: BindingConfig;
+	dlq?: string;
+	topic?: string;
 }
 export interface KafkaConfig {
-	enabled: boolean;
-	lyricSchemaBinding?: SchemaBindingConfig;
+	requestBinding?: BindingConfig;
 	servers?: string;
-	songSchemaBinding?: SchemaBindingConfig;
+	groupId?: string;
 }
 
 export const RepositoryType = {
@@ -29,6 +25,8 @@ export interface RepositoryConfig {
 	name: string;
 	paginationSize?: number;
 	type: RepositoryType;
+	kafkaTopic?: string;
+	kafkaDlq?: string;
 }
 
 interface IndexConfig {
