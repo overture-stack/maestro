@@ -1,87 +1,94 @@
 import {
-	type DataRecordValue,
 	type ElasticsearchService,
 	type KafkaConfig,
 	logger,
 	type LyricRepositoryConfig,
-	RepositoryType,
+	type RepositoryIndexingOperations,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
 import { client } from './client.js';
+import { processDocumentMessage } from './processor/documentMessage.js';
+import { processRequestMessage } from './processor/requestMessage.js';
+import { sendToDLQ } from './producer.js';
+import { getRepoByTopic, getRepoTopics } from './repositoryUtils.js';
 
-const groupId = 'groupy';
-
-const isDefined = (item: string | undefined): item is string => {
-	return !!item;
-};
-
-const getRepoByTopic = (repos: (SongRepositoryConfig | LyricRepositoryConfig)[], topic: string) => {
-	return repos.find((repo) => repo.kafkaTopic === topic);
-};
-
-const parseMessage = (messageValue: Buffer | null): Record<string, DataRecordValue>[] | null => {
-	if (!messageValue) return null;
-	try {
-		return JSON.parse(messageValue.toString());
-	} catch {
-		console.error('Invalid JSON message:', messageValue?.toString());
-		return null;
-	}
-};
-
-const handleSongMessage = async (
-	indexName: string,
-	payload: Record<string, DataRecordValue>[],
-	indexer: ElasticsearchService,
-) => {
-	const data = Array.isArray(payload) ? payload : [payload];
-	await indexer.bulkUpsert(indexName, data);
-};
-
-const handleLyricMessage = async (
-	indexName: string,
-	payload: Record<string, DataRecordValue>[],
-	indexer: ElasticsearchService,
-) => {
-	const data = Array.isArray(payload) ? payload : [payload];
-	await indexer.bulkUpsert(indexName, data);
-};
-
+/**
+ * Initialize a Kafka consumer to listen to each repository and request topics
+ * @param kafkaConfig - Kafka configuration
+ * @param repositories - A list of repository configurations (e.g. Song or Lyric)
+ * @param indexerProvider - An instance of `ElasticsearchService` used for indexing or deleting documents in Elasticsearch.
+ * @param repositoryIndexingApi - API that provides repository-specific fetching and indexing logic.
+ * @returns
+ */
 export async function initializeConsumer({
 	kafkaConfig,
 	repositories,
 	indexerProvider,
+	repositoryIndexingApi,
 }: {
 	kafkaConfig: KafkaConfig;
 	repositories: (SongRepositoryConfig | LyricRepositoryConfig)[];
 	indexerProvider: ElasticsearchService;
+	repositoryIndexingApi: RepositoryIndexingOperations;
 }) {
 	if (kafkaConfig.server) {
-		const kafka = client(kafkaConfig);
-		const consumer = kafka.consumer({ groupId: groupId });
-		await consumer.connect();
+		const groupId = kafkaConfig.groupId;
+		const kafka = await client(kafkaConfig);
+		const consumer = kafka.consumer({ groupId });
+		const producer = kafka.producer({ allowAutoTopicCreation: true });
 
-		const repoTopics = repositories.map((repo) => repo.kafkaTopic).filter(isDefined);
-		const topics = kafkaConfig.requestBinding?.topic ? [...repoTopics, kafkaConfig.requestBinding.topic] : repoTopics;
+		await consumer.connect();
+		await producer.connect();
+
+		const repositoryTopics = getRepoTopics(repositories);
+
+		const requestTopic = kafkaConfig.requestBinding?.topic;
+
+		const topics = [...repositoryTopics];
+		if (requestTopic) {
+			topics.push(requestTopic);
+		}
+
+		if (!topics.length) {
+			logger.error('No topics found in configuration');
+			return;
+		}
 
 		await consumer.subscribe({ topics, fromBeginning: true });
+		logger.info(`Subscribing to Kafka topics: ${JSON.stringify(topics)}`);
 
 		await consumer.run({
 			eachMessage: async ({ topic, message }) => {
-				const repo = getRepoByTopic(repositories, topic);
-				if (!repo || !message) return;
-
-				const parsed = parseMessage(message.value);
-				if (!parsed) return;
-				if (repo.type === RepositoryType.SONG) {
-					await handleSongMessage(repo.indexName, parsed, indexerProvider);
-				} else if (repo.type === RepositoryType.LYRIC) {
-					await handleLyricMessage(repo.indexName, parsed, indexerProvider);
+				if (!message || !message.value) {
+					logger.info(`[${topic}]: Received empty or null message`);
+					return;
 				}
-				logger.info(`${groupId}: [${topic}]:`, message.value?.toString());
+
+				const repo = getRepoByTopic(repositories, topic);
+				if (!repo) {
+					await sendToDLQ(producer, message);
+					return;
+				}
+
+				if (requestTopic && topic === requestTopic) {
+					await processRequestMessage({
+						repository: repo,
+						message: message,
+						indexer: indexerProvider,
+						repositoryIndexingApi: repositoryIndexingApi,
+					});
+					return;
+				}
+
+				try {
+					await processDocumentMessage({ repository: repo, message: message, indexer: indexerProvider });
+					return;
+				} catch (error) {
+					logger.error('Failed to send message to dead letter queue', { error });
+					await sendToDLQ(producer, message, repo.kafkaDlq);
+				}
 			},
 		});
-		return consumer;
 	}
 }

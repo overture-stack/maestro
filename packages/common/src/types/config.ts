@@ -7,7 +7,7 @@ interface BindingConfig {
 export interface KafkaConfig {
 	requestBinding?: BindingConfig;
 	server?: string;
-	groupId?: string;
+	groupId: string;
 }
 
 export const RepositoryType = {

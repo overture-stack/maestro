@@ -7,7 +7,9 @@
 	"type": "module",
 	"scripts": {
 		"clean": "rimraf dist",
-		"build": "pnpm run clean && tsc"
+		"build": "pnpm run clean && tsc",
+		"test:unit": "mocha",
+		"test:unit:coverage": "c8 pnpm run test:unit"
 	},
 	"keywords": [],
 	"author": "Ontario Institute for Cancer Research",
@@ -18,6 +20,7 @@
 	},
 	"dependencies": {
 		"kafkajs": "^2.2.4",
-		"@overture-stack/maestro-common": "workspace:^"
+		"@overture-stack/maestro-common": "workspace:^",
+		"@overture-stack/maestro-repository": "workspace:^"
 	}
 }

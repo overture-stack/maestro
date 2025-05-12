@@ -158,6 +158,9 @@ importers:
       '@overture-stack/maestro-common':
         specifier: workspace:^
         version: link:../common
+      '@overture-stack/maestro-repository':
+        specifier: workspace:^
+        version: link:../repository
       kafkajs:
         specifier: ^2.2.4
         version: 2.2.4

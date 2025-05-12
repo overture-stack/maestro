@@ -35,8 +35,8 @@ const kafkaConfigSchema = z
 	.object({
 		MAESTRO_KAFKA_INDEX_REQUEST_TOPIC: z.string().optional(),
 		MAESTRO_KAFKA_INDEX_REQUEST_DLQ: z.string().optional(),
-		MAESTRO_KAFKA_GROUP_ID: z.string().optional(),
-		MAESTRO_KAFKA_SERVER: z.string(),
+		MAESTRO_KAFKA_GROUP_ID: z.string().optional().default('groupy'),
+		MAESTRO_KAFKA_SERVER: z.string().optional(),
 	})
 	.optional();
 

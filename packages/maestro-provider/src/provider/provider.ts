@@ -34,13 +34,20 @@ export const initializeMaestroProvider = (config: MaestroProviderConfig): Maestr
 	}
 	const indexerProvider = clientProvider(config.elasticSearchConfig);
 
+	const repositoryIndexingApi = config.repositories ? api(config.repositories, indexerProvider) : undefined;
+
 	// Initialize Kafka consumer if configured
-	if (config.kafka?.server && config.repositories) {
-		initializeConsumer({ kafkaConfig: config.kafka, repositories: config.repositories, indexerProvider });
+	if (config.kafka?.server && config.repositories && repositoryIndexingApi) {
+		initializeConsumer({
+			kafkaConfig: config.kafka,
+			repositories: config.repositories,
+			indexerProvider,
+			repositoryIndexingApi: repositoryIndexingApi,
+		});
 	}
 
 	return {
-		api: config.repositories ? api(config.repositories, indexerProvider) : undefined,
+		api: repositoryIndexingApi,
 		payload: indexerProvider,
 	};
 };
