@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { isAnalysisRequest, isRepoRequest, isStudyRequest } from '../src/processor/song/handleRequest';
+import { isAnalysisRequest, isRepoRequest, isStudyRequest } from '../src/processMessage/requestMessage';
 
 describe('Song Request Message Type Guards', () => {
 	describe('isAnalysisRequest', () => {

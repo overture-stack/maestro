@@ -8,8 +8,8 @@ import {
 } from '@overture-stack/maestro-common';
 
 import { client } from './client.js';
-import { processDocumentMessage } from './processor/documentMessage.js';
-import { processRequestMessage } from './processor/requestMessage.js';
+import { processDocumentMessage } from './processMessage/documentMessage.js';
+import { processRequestMessage } from './processMessage/requestMessage.js';
 import { sendToDLQ } from './producer.js';
 import { getRepoByTopic, getRepoTopics } from './repositoryUtils.js';
 

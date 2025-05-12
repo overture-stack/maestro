@@ -11,7 +11,7 @@ To run Maestro you need the following services running:
 - [Elasticsearch](https://www.elastic.co/products/elasticsearch) version 7 and version 8 (Arranger support for the latter is currently a work in progress).
 - [SONG](https://www.overture.bio/products/song) to use as a Genomic metadata source.
 - [Lyric](https://github.com/overture-stack/lyric) to use as a metadata source.
-- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with SONG).
+- Optional: [Apache Kafka](https://kafka.apache.org/) (if you want event driven integration with SONG or Lyric).
 
 # Configurations
 

@@ -1,10 +1,15 @@
+import type { KafkaMessage } from 'kafkajs';
+
 import {
 	type DataRecordValue,
 	type ElasticsearchService,
 	logger,
+	type LyricRepositoryConfig,
 	type RepositoryIndexingOperations,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
+
+import { parseMessage } from './parser.js';
 
 interface AnalysisRequestMessage extends Record<string, DataRecordValue> {
 	analysisId: string;
@@ -52,48 +57,61 @@ export const isRepoRequest = (message: Record<string, DataRecordValue>): message
 };
 
 /**
- * Handles a Song Request Message and processes it based on the type of the request.
- * It checks whether the payload corresponds to an analysis request, a study message, or a repository message,
- * and performs the appropriate action, such as deleting or indexing data.
+ * Process a Request Message based on the type of the request, by checking whether the payload corresponds to
+ * an analysis request, a study message, or a repository message, and performs the appropriate action,
+ * such as deleting or indexing data.
  * If the message format is invalid, it throws an error.
  * @param repository
- * @param payload
+ * @param message
  * @param indexer
  * @param repositoryIndexingApi
+ * @returns
  */
-export const handleSongRequestMessage = async (
-	repository: SongRepositoryConfig,
-	payload: Record<string, DataRecordValue>,
-	indexer: ElasticsearchService,
-	repositoryIndexingApi: RepositoryIndexingOperations,
-) => {
-	if (isAnalysisRequest(payload)) {
-		if (payload.removeAnalysis) {
-			if (payload.analysisId) {
-				// Delete a document only when 'removeAnalysis' is true and  'analysisId' is present
-				indexer.deleteData(repository.indexName, payload.analysisId.toString());
+export const processRequestMessage = async ({
+	repository,
+	message,
+	indexer,
+	repositoryIndexingApi,
+}: {
+	repository: SongRepositoryConfig | LyricRepositoryConfig;
+	message: KafkaMessage;
+	indexer: ElasticsearchService;
+	repositoryIndexingApi: RepositoryIndexingOperations;
+}) => {
+	const parsedPayload = parseMessage(message.value);
+	if (!parsedPayload) {
+		throw new Error('Invalid message format');
+	}
+	const repositoryCode = parsedPayload.repositoryCode;
+	if (repositoryCode !== repository.code) {
+		throw new Error('The repository specified in the message does not match the expected topic');
+	}
+
+	if (isAnalysisRequest(parsedPayload)) {
+		if (parsedPayload.remove) {
+			if (parsedPayload.analysisId) {
+				// Delete a document only when 'remove' is true and  'analysisId' is present
+				indexer.deleteData(repository.indexName, parsedPayload.analysisId.toString());
 			} else {
-				const message = `Invalid message format: ${JSON.stringify(payload)}`;
-				logger.error(message);
+				const message = `Remove document message is missing the required analysis ID`;
 				throw new Error(message);
 			}
 		} else {
 			// Fetch a single Document and Index it using api
 			repositoryIndexingApi.indexRecord(
-				payload.repositoryCode,
-				payload.studyId.toString(),
-				payload.analysisId.toString(),
+				parsedPayload.repositoryCode,
+				parsedPayload.studyId.toString(),
+				parsedPayload.analysisId.toString(),
 			);
 		}
-	} else if (isStudyRequest(payload)) {
+	} else if (isStudyRequest(parsedPayload)) {
 		// Fetch all Documents in a Study and Index them using the api
-		repositoryIndexingApi.indexOrganization(payload.repositoryCode, payload.studyId);
-	} else if (isRepoRequest(payload)) {
+		repositoryIndexingApi.indexOrganization(parsedPayload.repositoryCode, parsedPayload.studyId);
+	} else if (isRepoRequest(parsedPayload)) {
 		// Fetch all Documents in a repository and Index them using the api
-		repositoryIndexingApi.indexRepository(payload.repositoryCode);
+		repositoryIndexingApi.indexRepository(parsedPayload.repositoryCode);
 	} else {
-		const message = `Invalid message format: ${JSON.stringify(payload)}`;
-		logger.error(message);
+		const message = `Invalid message format: does not match any known request type`;
 		throw new Error(message);
 	}
 };

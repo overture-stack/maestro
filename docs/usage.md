@@ -74,7 +74,9 @@ There are two types of topics that can be configured, depending on your needs:
 
 ### Request topics
 
-Request topics are used to send on-demand messages instructing Maestro to perform a specific action on a given `repositoryCode`.
+Request topics are used to send on-demand messages instructing Maestro to fetch the documents from the repository source and perform a specific indexing action.
+
+Following configuration applies for Song or Lyric repositories
 
 Configuration example:
 
@@ -88,8 +90,10 @@ The message body for these topics should follow one of the formats below
 - Analysis:
 
 ```json
-{ "value": { "repositoryCode": "collab", "studyId": "PEK-AB", "analysisId": "EGAZ000", "remove": true } }
+{ "value": { "repositoryCode": "collab", "studyId": "PEK-AB", "analysisId": "EGAZ000", "remove": false } }
 ```
+
+To remove an analysis, set the `remove` field to `true`
 
 - Study:
 
@@ -100,39 +104,53 @@ The message body for these topics should follow one of the formats below
 - Full repository:
 
 ```json
-{ "value": { "repositoryCode": "aws" } }
+{ "value": { "repositoryCode": "collab" } }
 ```
 
-### Song documents specific Topic
+### Documents specific Topic
 
 You can send an entire document for indexing using a Kafka message.
 
-Use following configuration on a Song repository, example:
+Use following configuration on a Song or Lyric repository, example:
 
 ```yaml
-MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_TOPIC=song_analysis
-MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_DLQ=song_analysis_dlq
+MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_TOPIC=topic_analysis
+MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_DLQ=topic_analysis_dlq
 ```
 
-The message schemas are governed by SONG but they currently look like this:
+#### SONG document
+
+To index a document in a SONG repository. While the message schemas are defined by SONG, they currently follow this structure:
 
 ```json
-{ "value": { "analysisId": "12314124", "studyId": "PEK-AB", "songServerId": "collab", "state": "PUBLISHED" } }
+{
+	"value": {
+		"analysisId": "12314124",
+		"studyId": "PEK-AB",
+		"donors": [{ "donor_id": 123 }],
+		"state": "PUBLISHED"
+	}
+}
 ```
 
-### Lyric Specific Topic
+A document will be indexed if its `state` matches one of the values specified in the configuration property `MAESTRO_REPOSITORIES_0_SONG_INDEXABLE_STUDY_STATES` (e.g., `PUBLISHED`). If the `state` does not match and the `analysisId` is provided, the document will be removed.
 
-You can send an entire document for indexing using a Kafka message.
+#### Lyric document
 
-Use following configuration on a Song repository, example:
-
-```yaml
-MAESTRO_REPOSITORIES_1_KAFKA_ANALYSIS_MESSAGE_TOPIC=clinical_data
-MAESTRO_REPOSITORIES_1_KAFKA_ANALYSIS_MESSAGE_DLQ=clinical_data_dlq
-```
-
-The message schemas are governed by LYRIC but they currently look like this:
+To index a document in a Lyric repository, the message structure typically looks like this:
 
 ```json
-{ "value": { "id": "12314124", "organization": "ABC-123", "serverId": "clinical", "data": { "name": "ABCD" } } }
+{
+	"value": {
+		"_id": "12314124",
+		"organization": "ABC-123",
+		"entityName": "sample",
+		"data": { "name": "ABCD" },
+		"isValid": true
+	}
+}
 ```
+
+If the configuration property `MAESTRO_REPOSITORIES_1_LYRIC_VALID_DATA_ONLY` is set to `true` a document will only be indexed if its `isValid` fiels is `true`; otherwise, it will be removed.
+
+If the configuration property is set to `false`, all documents will be indexed regardless of their `isValid` status.
