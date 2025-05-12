@@ -30,7 +30,7 @@ export const es8 = (config: ElasticSearchConfig): ElasticsearchService => {
 
 	const auth = getAuth(config.basicAuth);
 
-	logger.info(`Initializing Elasticsearch client v7 with nodes: ${config.nodes}`);
+	logger.info(`Initializing Elasticsearch client v8 with nodes: ${config.nodes}`);
 	const client = new Client({
 		node: config.nodes,
 		auth,

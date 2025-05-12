@@ -29,10 +29,10 @@ export const processDocumentMessage = async ({
 
 	// Depending on the repository type (SONG or LYRIC), the function delegates to the appropriate handler
 	if (repository.type === RepositoryType.SONG) {
-		logger.info(`Processing SONG kafka message for document in repository ${repository.code}`);
+		logger.info(`Processing SONG kafka message for document in repository '${repository.code}'`);
 		await handleSongDocumentMessage(repository, parsed, indexer);
 	} else if (repository.type === RepositoryType.LYRIC) {
-		logger.info(`Processing Lyric kafka message for document inrepository ${repository.code}`);
+		logger.info(`Processing Lyric kafka message for document inrepository '${repository.code}'`);
 		await handleLyricDocumentMessage(repository, parsed, indexer);
 	}
 };

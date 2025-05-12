@@ -60,9 +60,25 @@ export async function initializeConsumer({
 
 		await consumer.run({
 			eachMessage: async ({ topic, message }) => {
+				logger.info(`Processing a message on topic '${topic}'`);
 				if (!message || !message.value) {
 					logger.info(`[${topic}]: Received empty or null message`);
 					return;
+				}
+
+				if (requestTopic && topic === requestTopic) {
+					try {
+						await processRequestMessage({
+							repositories,
+							message: message,
+							indexer: indexerProvider,
+							repositoryIndexingApi: repositoryIndexingApi,
+						});
+						return;
+					} catch (error) {
+						logger.error('Failed to process request message', { error });
+						await sendToDLQ(producer, message, kafkaConfig.requestBinding?.dlq);
+					}
 				}
 
 				const repo = getRepoByTopic(repositories, topic);
@@ -71,21 +87,11 @@ export async function initializeConsumer({
 					return;
 				}
 
-				if (requestTopic && topic === requestTopic) {
-					await processRequestMessage({
-						repository: repo,
-						message: message,
-						indexer: indexerProvider,
-						repositoryIndexingApi: repositoryIndexingApi,
-					});
-					return;
-				}
-
 				try {
 					await processDocumentMessage({ repository: repo, message: message, indexer: indexerProvider });
 					return;
 				} catch (error) {
-					logger.error('Failed to send message to dead letter queue', { error });
+					logger.error('Failed to process message', { error });
 					await sendToDLQ(producer, message, repo.kafkaDlq);
 				}
 			},

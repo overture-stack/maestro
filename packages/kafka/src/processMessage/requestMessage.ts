@@ -10,6 +10,7 @@ import {
 } from '@overture-stack/maestro-common';
 
 import { parseMessage } from './parser.js';
+import { getRepoInformation } from '@overture-stack/maestro-repository';
 
 interface AnalysisRequestMessage extends Record<string, DataRecordValue> {
 	analysisId: string;
@@ -61,37 +62,43 @@ export const isRepoRequest = (message: Record<string, DataRecordValue>): message
  * an analysis request, a study message, or a repository message, and performs the appropriate action,
  * such as deleting or indexing data.
  * If the message format is invalid, it throws an error.
- * @param repository
+ * @param repositories
  * @param message
  * @param indexer
  * @param repositoryIndexingApi
  * @returns
  */
 export const processRequestMessage = async ({
-	repository,
+	repositories,
 	message,
 	indexer,
 	repositoryIndexingApi,
 }: {
-	repository: SongRepositoryConfig | LyricRepositoryConfig;
+	repositories: (SongRepositoryConfig | LyricRepositoryConfig)[];
 	message: KafkaMessage;
 	indexer: ElasticsearchService;
 	repositoryIndexingApi: RepositoryIndexingOperations;
 }) => {
 	const parsedPayload = parseMessage(message.value);
 	if (!parsedPayload) {
-		throw new Error('Invalid message format');
+		throw new Error('Failed to parse message: Invalid format');
 	}
-	const repositoryCode = parsedPayload.repositoryCode;
-	if (repositoryCode !== repository.code) {
-		throw new Error('The repository specified in the message does not match the expected topic');
+	const repositoryCode = parsedPayload.repositoryCode?.toString();
+	if (!repositoryCode) {
+		throw new Error('Missing repositoryCode in the message payload');
 	}
+	const repoInfo = getRepoInformation(repositories, repositoryCode);
+	if (!repoInfo) {
+		throw new Error(`Unknown repositoryCode: '${repositoryCode}' is not recognized.`);
+	}
+
+	logger.info(`Processing a Kafka message for request indexing in repository '${repoInfo.code}'`);
 
 	if (isAnalysisRequest(parsedPayload)) {
 		if (parsedPayload.remove) {
 			if (parsedPayload.analysisId) {
 				// Delete a document only when 'remove' is true and  'analysisId' is present
-				indexer.deleteData(repository.indexName, parsedPayload.analysisId.toString());
+				indexer.deleteData(repoInfo.indexName, parsedPayload.analysisId.toString());
 			} else {
 				const message = `Remove document message is missing the required analysis ID`;
 				throw new Error(message);

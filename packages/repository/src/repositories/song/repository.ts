@@ -69,7 +69,9 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 						return;
 					}
 					if (paginationSize) {
-						hasMoreData = parseInt(parsedResponse?.currentTotalAnalyses) < parseInt(parsedResponse?.totalAnalyses);
+						const currentTotalAnalyses = parseInt(parsedResponse?.currentTotalAnalyses);
+						const totalAnalyses = parseInt(parsedResponse?.totalAnalyses);
+						hasMoreData = currentTotalAnalyses > 0 && currentTotalAnalyses < totalAnalyses;
 						offset++;
 					} else {
 						hasMoreData = false;

@@ -52,7 +52,7 @@ rest-index-repo:
 ## SONG analysis topic
 kafka-analysis-publish:
 	curl -X POST \
-	http://localhost:8082/topics/song-analysis \
+	http://localhost:8082/topics/song_analysis \
 	-H 'Accept: application/vnd.kafka.v2+json' \
 	-H 'Content-Type: application/vnd.kafka.json.v2+json' \
 	-H 'cache-control: no-cache' \
@@ -64,7 +64,7 @@ kafka-analysis-publish:
 
 kafka-song-queue:
 	docker exec -t kafka.maestro.dev bash -c "/usr/bin/kafka-console-consumer --bootstrap-server localhost:9092 \
-	--topic song-analysis --from-beginning"
+	--topic song_analysis --from-beginning"
 
 kafka-song-dlq:
 	docker exec -t kafka.maestro.dev bash -c "/usr/bin/kafka-console-consumer --bootstrap-server localhost:9092 \

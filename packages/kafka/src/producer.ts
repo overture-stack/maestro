@@ -2,7 +2,7 @@ import type { KafkaMessage, Producer } from 'kafkajs';
 
 import { logger } from '@overture-stack/maestro-common';
 
-const DEFAULT_DLQ_TOPIC = 'dlq-topic';
+const DEFAULT_DLQ_TOPIC = 'default-dlq';
 
 /**
  * Sends a Kafka message to a Dead Letter Queue (DLQ) topic
