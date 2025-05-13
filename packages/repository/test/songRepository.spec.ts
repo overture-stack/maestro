@@ -77,8 +77,20 @@ describe('Song Repository', () => {
 			expect(fetchMock.callHistory.calls().length).to.eql(2);
 			expect(records.length).to.eql(2);
 			expect(records).to.eql([
-				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
-				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
+				{
+					analysis: { ...analysisMock1 },
+					_id: 'AAA-BBBB-CCCCC',
+					analysisId: 'AAA-BBBB-CCCCC',
+					studyId: 'ABC123',
+					state: 'PUBLISHED',
+				},
+				{
+					analysis: { ...analysisMock2 },
+					_id: 'DDD-EEEE-FFFFF',
+					analysisId: 'DDD-EEEE-FFFFF',
+					studyId: 'XYZ987',
+					state: 'PUBLISHED',
+				},
 			]);
 		});
 
@@ -139,7 +151,7 @@ describe('Song Repository', () => {
 				totalAnalyses: 4,
 			});
 
-			const urlPage2 = `http://localhost/studies/${studyId}/analysis/paginated?limit=2&offset=1`;
+			const urlPage2 = `http://localhost/studies/${studyId}/analysis/paginated?limit=2&offset=2`;
 			const analysisMock3 = {
 				analysisId: 'GGG-HHHH-IIIII',
 				analysisState: 'PUBLISHED',
@@ -185,10 +197,34 @@ describe('Song Repository', () => {
 			expect(fetchMock.callHistory.calls().length).to.eql(3);
 			expect(records.length).to.eql(4);
 			expect(records).to.eql([
-				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
-				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
-				{ ...analysisMock3, _id: 'GGG-HHHH-IIIII' },
-				{ ...analysisMock4, _id: 'JJJ-KKKK-LLLLL' },
+				{
+					analysis: { ...analysisMock1 },
+					_id: 'AAA-BBBB-CCCCC',
+					analysisId: 'AAA-BBBB-CCCCC',
+					state: 'PUBLISHED',
+					studyId: 'ABC123',
+				},
+				{
+					analysis: { ...analysisMock2 },
+					_id: 'DDD-EEEE-FFFFF',
+					analysisId: 'DDD-EEEE-FFFFF',
+					state: 'PUBLISHED',
+					studyId: 'XYZ987',
+				},
+				{
+					analysis: { ...analysisMock3 },
+					_id: 'GGG-HHHH-IIIII',
+					analysisId: 'GGG-HHHH-IIIII',
+					state: 'PUBLISHED',
+					studyId: 'DEF456',
+				},
+				{
+					analysis: { ...analysisMock4 },
+					_id: 'JJJ-KKKK-LLLLL',
+					analysisId: 'JJJ-KKKK-LLLLL',
+					state: 'PUBLISHED',
+					studyId: 'XYZ654',
+				},
 			]);
 		});
 
@@ -302,8 +338,20 @@ describe('Song Repository', () => {
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(2);
 			expect(records).to.eql([
-				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
-				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
+				{
+					analysis: { ...analysisMock1 },
+					_id: 'AAA-BBBB-CCCCC',
+					state: 'PUBLISHED',
+					studyId: 'ABC123',
+					analysisId: 'AAA-BBBB-CCCCC',
+				},
+				{
+					analysis: { ...analysisMock2 },
+					_id: 'DDD-EEEE-FFFFF',
+					state: 'PUBLISHED',
+					studyId: 'XYZ987',
+					analysisId: 'DDD-EEEE-FFFFF',
+				},
 			]);
 		});
 
@@ -360,7 +408,7 @@ describe('Song Repository', () => {
 				currentTotalAnalyses: 2,
 				totalAnalyses: 4,
 			});
-			const urlPage2 = `http://localhost/studies/${studyId}/analysis/paginated?limit=2&offset=1`;
+			const urlPage2 = `http://localhost/studies/${studyId}/analysis/paginated?limit=2&offset=2`;
 			const analysisMock3 = {
 				analysisId: 'GGG-HHHH-IIIII',
 				analysisState: 'PUBLISHED',
@@ -406,10 +454,34 @@ describe('Song Repository', () => {
 			expect(fetchMock.callHistory.calls().length).to.eql(2);
 			expect(records.length).to.eql(4);
 			expect(records).to.eql([
-				{ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' },
-				{ ...analysisMock2, _id: 'DDD-EEEE-FFFFF' },
-				{ ...analysisMock3, _id: 'GGG-HHHH-IIIII' },
-				{ ...analysisMock4, _id: 'JJJ-KKKK-LLLLL' },
+				{
+					analysis: { ...analysisMock1 },
+					_id: 'AAA-BBBB-CCCCC',
+					analysisId: 'AAA-BBBB-CCCCC',
+					studyId: 'ABC123',
+					state: 'PUBLISHED',
+				},
+				{
+					analysis: { ...analysisMock2 },
+					_id: 'DDD-EEEE-FFFFF',
+					analysisId: 'DDD-EEEE-FFFFF',
+					studyId: 'XYZ987',
+					state: 'PUBLISHED',
+				},
+				{
+					analysis: { ...analysisMock3 },
+					_id: 'GGG-HHHH-IIIII',
+					analysisId: 'GGG-HHHH-IIIII',
+					studyId: 'DEF456',
+					state: 'PUBLISHED',
+				},
+				{
+					analysis: { ...analysisMock4 },
+					_id: 'JJJ-KKKK-LLLLL',
+					analysisId: 'JJJ-KKKK-LLLLL',
+					studyId: 'XYZ654',
+					state: 'PUBLISHED',
+				},
 			]);
 		});
 
@@ -503,7 +575,13 @@ describe('Song Repository', () => {
 			const record = await songRepository(config).getRecord({ id, organization: studyId });
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
-			expect(record).to.eql({ ...analysisMock1, _id: 'AAA-BBBB-CCCCC' });
+			expect(record).to.eql({
+				analysis: { ...analysisMock1 },
+				_id: 'AAA-BBBB-CCCCC',
+				analysisId: 'AAA-BBBB-CCCCC',
+				studyId: 'ABC123',
+				state: 'PUBLISHED',
+			});
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
