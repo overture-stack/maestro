@@ -8,9 +8,9 @@ import {
 	type RepositoryIndexingOperations,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
+import { getRepoInformation } from '@overture-stack/maestro-repository';
 
 import { parseMessage } from './parser.js';
-import { getRepoInformation } from '@overture-stack/maestro-repository';
 
 interface AnalysisRequestMessage extends Record<string, DataRecordValue> {
 	analysisId: string;

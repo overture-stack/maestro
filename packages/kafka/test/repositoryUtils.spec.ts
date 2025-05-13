@@ -13,7 +13,7 @@ describe('repository utils', () => {
 			code: 'SONG1',
 			indexName: 'analysis_centric',
 			indexableStudyStates: 'PUBLISHED',
-			kafkaTopic: 'song_analysis',
+			kafkaTopic: 'song-analysis',
 			name: 'Song 1',
 			type: 'SONG',
 		},
@@ -55,7 +55,7 @@ describe('repository utils', () => {
 	describe('getRepoTopics', () => {
 		it('should return only defined kafkaTopic values', () => {
 			const result = getRepoTopics(mockRepos);
-			expect(result).to.deep.equal(['song_analysis', 'lyric_document']);
+			expect(result).to.deep.equal(['song-analysis', 'lyric_document']);
 		});
 	});
 

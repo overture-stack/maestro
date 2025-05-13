@@ -76,7 +76,7 @@ There are two types of topics that can be configured, depending on your needs:
 
 Request topics are used to send on-demand messages instructing Maestro to fetch the documents from the repository source and perform a specific indexing action.
 
-Following configuration applies for Song or Lyric repositories
+Following configuration applies for SONG or Lyric repositories
 
 Configuration example:
 
@@ -148,7 +148,7 @@ To index a document in a Lyric repository, the message structure typically looks
 ```json
 {
 	"value": {
-		"_id": "12314124",
+		"systemId": "12314124",
 		"organization": "ABC-123",
 		"entityName": "sample",
 		"data": { "name": "ABCD" },
