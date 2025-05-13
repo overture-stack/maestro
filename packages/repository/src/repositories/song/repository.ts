@@ -63,7 +63,13 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 					const parsedRecords = paginationSize ? parsedResponse.analyses : parsedResponse;
 					if (isArrayOfObjects(parsedRecords)) {
 						yield parsedRecords.map((record) => {
-							return { _id: record.analysisId, ...record };
+							return {
+								_id: record.analysisId,
+								analysisId: record.analysisId,
+								studyId: record.studyId,
+								state: record.analysisState,
+								analysis: { ...record },
+							};
 						});
 					} else {
 						return;
@@ -72,7 +78,9 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 						const currentTotalAnalyses = parseInt(parsedResponse?.currentTotalAnalyses);
 						const totalAnalyses = parseInt(parsedResponse?.totalAnalyses);
 						hasMoreData = currentTotalAnalyses > 0 && currentTotalAnalyses < totalAnalyses;
-						offset++;
+						// How 'offset' works in Song is as follows: the first request starts with an offset of 0,
+						// and in the following request increments the offset by the pagination size (i.e., offset += paginationSize)
+						offset += paginationSize;
 					} else {
 						hasMoreData = false;
 					}
@@ -94,7 +102,13 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 		const response = await sendHttpRequest(fullUrl.toString());
 		if (response.ok) {
 			const parsedResponse = await response.json();
-			return { _id: parsedResponse.analysisId, ...parsedResponse };
+			return {
+				_id: parsedResponse.analysisId,
+				analysisId: parsedResponse.analysisId,
+				studyId: parsedResponse.studyId,
+				state: parsedResponse.analysisState,
+				analysis: { ...parsedResponse },
+			};
 		}
 		return {};
 	};

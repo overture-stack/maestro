@@ -40,7 +40,9 @@ export const api = (
 		setImmediate(async () => {
 			try {
 				for await (const items of repository(repoInfo).getRepositoryRecords()) {
-					indexer.bulkUpsert(repoInfo.indexName, items);
+					if (items.length > 0) {
+						indexer.bulkUpsert(repoInfo.indexName, items);
+					}
 				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
@@ -73,7 +75,9 @@ export const api = (
 		setImmediate(async () => {
 			try {
 				for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
-					indexer.bulkUpsert(repoInfo.indexName, items);
+					if (items.length > 0) {
+						indexer.bulkUpsert(repoInfo.indexName, items);
+					}
 				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);

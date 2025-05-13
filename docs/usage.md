@@ -127,8 +127,14 @@ To index a document in a SONG repository. While the message schemas are defined 
 	"value": {
 		"analysisId": "12314124",
 		"studyId": "PEK-AB",
-		"donors": [{ "donor_id": 123 }],
-		"state": "PUBLISHED"
+		"state": "PUBLISHED",
+		"analysis": {
+			"analysisId": "a54378b7-9f3a-4dcc-8378-b79f3a3dcc2a",
+			"studyId": "ABC123",
+			"analysisState": "PUBLISHED",
+			"files": [],
+			"analysisType": []
+		}
 	}
 }
 ```

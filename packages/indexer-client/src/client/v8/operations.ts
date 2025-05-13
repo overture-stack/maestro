@@ -88,10 +88,11 @@ export const createIndexIfNotExists = async (client: Client, index: string): Pro
  */
 export const indexData = async (client: Client, index: string, data: DataRecordNested): Promise<IndexResult> => {
 	try {
+		const { _id, ...dataWithoutId } = data;
 		const response = await client.index({
 			index,
-			id: data?.['id']?.toString(),
-			document: data,
+			id: _id?.toString(),
+			document: dataWithoutId,
 		});
 
 		logger.info(`Indexing document in:'${index}'`);
@@ -119,7 +120,7 @@ export const indexData = async (client: Client, index: string, data: DataRecordN
 		return {
 			indexName: index,
 			successful: false,
-			failureData: { [data?.['id']?.toString() || 0]: [errorMessage] },
+			failureData: { [data?.['_id']?.toString() || 0]: [errorMessage] },
 		};
 	}
 };

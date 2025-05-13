@@ -55,6 +55,14 @@ export async function initializeConsumer({
 			return;
 		}
 
+		const admin = kafka.admin();
+		admin.createTopics({
+			waitForLeaders: true,
+			topics: topics.map((t) => ({
+				topic: t,
+			})),
+		});
+
 		await consumer.subscribe({ topics, fromBeginning: true });
 		logger.info(`Subscribing to Kafka topics: ${JSON.stringify(topics)}`);
 
@@ -74,11 +82,11 @@ export async function initializeConsumer({
 							indexer: indexerProvider,
 							repositoryIndexingApi: repositoryIndexingApi,
 						});
-						return;
 					} catch (error) {
-						logger.error('Failed to process request message', { error });
+						logger.error(`Failed to process request message. ${error}`);
 						await sendToDLQ(producer, message, kafkaConfig.requestBinding?.dlq);
 					}
+					return;
 				}
 
 				const repo = getRepoByTopic(repositories, topic);
@@ -89,11 +97,11 @@ export async function initializeConsumer({
 
 				try {
 					await processDocumentMessage({ repository: repo, message: message, indexer: indexerProvider });
-					return;
 				} catch (error) {
 					logger.error('Failed to process message', { error });
 					await sendToDLQ(producer, message, repo.kafkaDlq);
 				}
+				return;
 			},
 		});
 	}
