@@ -19,9 +19,20 @@ export const handleLyricDocumentMessage = async (
 	payload: Record<string, DataRecordValue>,
 	indexer: ElasticsearchService,
 ) => {
+	// Index every document if 'validDataOnly' is false, or
+	// if 'validDataOnly' is true and the payload is marked as valid ('isValid' is true)
 	if (!repository.validDataOnly || (repository.validDataOnly && payload.isValid)) {
-		// Index every document if 'validDataOnly' is false, or
-		// if 'validDataOnly' is true and the payload is marked as valid ('isValid' is true)
+		// Example payload — see docs/usage.md for full details:
+		// {
+		//   "systemId": "12314124",
+		//   "organization": "ABC-123",
+		//   "entityName": "sample",
+		//   "data": { "name": "ABCD" },
+		//   "isValid": true
+		// }
+
+		// Map 'systemId' to the Elasticsearch '_id' field to ensure document uniqueness
+		payload._id = payload.systemId;
 		await indexer.bulkUpsert(repository.indexName, [payload]);
 	} else if (payload.systemId) {
 		// Otherwise, the document should be deleted when the systemId is present.

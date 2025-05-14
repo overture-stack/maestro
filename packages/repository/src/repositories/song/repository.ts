@@ -62,15 +62,7 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 					const parsedResponse = await response.json();
 					const parsedRecords = paginationSize ? parsedResponse.analyses : parsedResponse;
 					if (isArrayOfObjects(parsedRecords)) {
-						yield parsedRecords.map((record) => {
-							return {
-								_id: record.analysisId,
-								analysisId: record.analysisId,
-								studyId: record.studyId,
-								state: record.analysisState,
-								analysis: { ...record },
-							};
-						});
+						yield parsedRecords;
 					} else {
 						return;
 					}
@@ -101,14 +93,7 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 
 		const response = await sendHttpRequest(fullUrl.toString());
 		if (response.ok) {
-			const parsedResponse = await response.json();
-			return {
-				_id: parsedResponse.analysisId,
-				analysisId: parsedResponse.analysisId,
-				studyId: parsedResponse.studyId,
-				state: parsedResponse.analysisState,
-				analysis: { ...parsedResponse },
-			};
+			return await response.json();
 		}
 		return {};
 	};

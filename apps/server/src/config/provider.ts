@@ -38,7 +38,7 @@ const getRepositoryConfig = (
 			type: repositoryTypes.Values.SONG,
 			indexName: value.INDEX_NAME,
 			indexableStudyStates: value.SONG_INDEXABLE_STUDY_STATES,
-			analysisCentricEnabled: value.SONG_ANALYSIS_CENTRIC_ENABLED,
+			indexingMode: value.SONG_INDEXING_MODE,
 			organization: value.SONG_ORGANIZATION,
 			country: value.SONG_COUNTRY,
 			kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,

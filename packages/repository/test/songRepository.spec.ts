@@ -2,7 +2,12 @@ import { expect } from 'chai';
 import fetchMock from 'fetch-mock';
 import { describe, it } from 'mocha';
 
-import { type DataRecordNested, RepositoryType, type SongRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	type DataRecordNested,
+	IndexingMode,
+	RepositoryType,
+	type SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
 import { songRepository } from '../src/repositories/song/repository';
 
@@ -23,7 +28,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -76,22 +81,7 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(2);
 			expect(records.length).to.eql(2);
-			expect(records).to.eql([
-				{
-					analysis: { ...analysisMock1 },
-					_id: 'AAA-BBBB-CCCCC',
-					analysisId: 'AAA-BBBB-CCCCC',
-					studyId: 'ABC123',
-					state: 'PUBLISHED',
-				},
-				{
-					analysis: { ...analysisMock2 },
-					_id: 'DDD-EEEE-FFFFF',
-					analysisId: 'DDD-EEEE-FFFFF',
-					studyId: 'XYZ987',
-					state: 'PUBLISHED',
-				},
-			]);
+			expect(records).to.eql([analysisMock1, analysisMock2]);
 		});
 
 		it('should successfully fetch repository records with pagination', async () => {
@@ -102,7 +92,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				paginationSize: 2,
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -196,36 +186,7 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(3);
 			expect(records.length).to.eql(4);
-			expect(records).to.eql([
-				{
-					analysis: { ...analysisMock1 },
-					_id: 'AAA-BBBB-CCCCC',
-					analysisId: 'AAA-BBBB-CCCCC',
-					state: 'PUBLISHED',
-					studyId: 'ABC123',
-				},
-				{
-					analysis: { ...analysisMock2 },
-					_id: 'DDD-EEEE-FFFFF',
-					analysisId: 'DDD-EEEE-FFFFF',
-					state: 'PUBLISHED',
-					studyId: 'XYZ987',
-				},
-				{
-					analysis: { ...analysisMock3 },
-					_id: 'GGG-HHHH-IIIII',
-					analysisId: 'GGG-HHHH-IIIII',
-					state: 'PUBLISHED',
-					studyId: 'DEF456',
-				},
-				{
-					analysis: { ...analysisMock4 },
-					_id: 'JJJ-KKKK-LLLLL',
-					analysisId: 'JJJ-KKKK-LLLLL',
-					state: 'PUBLISHED',
-					studyId: 'XYZ654',
-				},
-			]);
+			expect(records).to.eql([analysisMock1, analysisMock2, analysisMock3, analysisMock4]);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -235,7 +196,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -259,7 +220,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -288,7 +249,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -337,22 +298,7 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(2);
-			expect(records).to.eql([
-				{
-					analysis: { ...analysisMock1 },
-					_id: 'AAA-BBBB-CCCCC',
-					state: 'PUBLISHED',
-					studyId: 'ABC123',
-					analysisId: 'AAA-BBBB-CCCCC',
-				},
-				{
-					analysis: { ...analysisMock2 },
-					_id: 'DDD-EEEE-FFFFF',
-					state: 'PUBLISHED',
-					studyId: 'XYZ987',
-					analysisId: 'DDD-EEEE-FFFFF',
-				},
-			]);
+			expect(records).to.eql([analysisMock1, analysisMock2]);
 		});
 
 		it('should successfully fetch repository records by organization with pagination', async () => {
@@ -363,7 +309,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				paginationSize: 2,
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -453,36 +399,7 @@ describe('Song Repository', () => {
 
 			expect(fetchMock.callHistory.calls().length).to.eql(2);
 			expect(records.length).to.eql(4);
-			expect(records).to.eql([
-				{
-					analysis: { ...analysisMock1 },
-					_id: 'AAA-BBBB-CCCCC',
-					analysisId: 'AAA-BBBB-CCCCC',
-					studyId: 'ABC123',
-					state: 'PUBLISHED',
-				},
-				{
-					analysis: { ...analysisMock2 },
-					_id: 'DDD-EEEE-FFFFF',
-					analysisId: 'DDD-EEEE-FFFFF',
-					studyId: 'XYZ987',
-					state: 'PUBLISHED',
-				},
-				{
-					analysis: { ...analysisMock3 },
-					_id: 'GGG-HHHH-IIIII',
-					analysisId: 'GGG-HHHH-IIIII',
-					studyId: 'DEF456',
-					state: 'PUBLISHED',
-				},
-				{
-					analysis: { ...analysisMock4 },
-					_id: 'JJJ-KKKK-LLLLL',
-					analysisId: 'JJJ-KKKK-LLLLL',
-					studyId: 'XYZ654',
-					state: 'PUBLISHED',
-				},
-			]);
+			expect(records).to.eql([analysisMock1, analysisMock2, analysisMock3, analysisMock4]);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -492,7 +409,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -516,7 +433,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -545,7 +462,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -575,13 +492,7 @@ describe('Song Repository', () => {
 			const record = await songRepository(config).getRecord({ id, organization: studyId });
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
-			expect(record).to.eql({
-				analysis: { ...analysisMock1 },
-				_id: 'AAA-BBBB-CCCCC',
-				analysisId: 'AAA-BBBB-CCCCC',
-				studyId: 'ABC123',
-				state: 'PUBLISHED',
-			});
+			expect(record).to.eql(analysisMock1);
 		});
 
 		it('should return no records when receive different than 200 OK response', async () => {
@@ -591,7 +502,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 
@@ -611,7 +522,7 @@ describe('Song Repository', () => {
 				code: 'songRepo1',
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
-				analysisCentricEnabled: true,
+				indexingMode: IndexingMode.analysisCentric,
 				indexableStudyStates: 'PUBLISHED',
 			};
 

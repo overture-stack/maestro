@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { IndexingMode } from '@overture-stack/maestro-common';
+
 import { logger } from '../utils/logger.js';
 
 export const repositoryTypes = z.enum(['LYRIC', 'SONG']);
@@ -41,10 +43,12 @@ const isLyricRepository = (data: unknown): data is z.infer<typeof lyricSchemaDef
 	return lyricSchemaDefinition.safeParse(data).success;
 };
 
+export const IndexingModeSchema = z.enum([IndexingMode.fileCentric, IndexingMode.analysisCentric]);
+
 const definitionSongRepositorySchema = z.object({
 	TYPE: z.literal(repositoryTypes.Values.SONG),
 	SONG_INDEXABLE_STUDY_STATES: z.string().default('PUBLISHED'),
-	SONG_ANALYSIS_CENTRIC_ENABLED: z.coerce.boolean().default(true),
+	SONG_INDEXING_MODE: IndexingModeSchema,
 	SONG_ORGANIZATION: z.string().optional(),
 	SONG_COUNTRY: z.string().optional(),
 });
@@ -91,7 +95,7 @@ export const validateRepositories = (env: NodeJS.ProcessEnv) => {
 			LYRIC_CATEGORY_ID: env[`${baseKeyPrefix}_LYRIC_CATEGORY_ID`],
 			LYRIC_VALID_DATA_ONLY: env[`${baseKeyPrefix}_LYRIC_VALID_DATA_ONLY`],
 			SONG_INDEXABLE_STUDY_STATES: env[`${baseKeyPrefix}_SONG_INDEXABLE_STUDY_STATES`],
-			SONG_ANALYSIS_CENTRIC_ENABLED: env[`${baseKeyPrefix}_SONG_ANALYSIS_CENTRIC_ENABLED`],
+			SONG_INDEXING_MODE: env[`${baseKeyPrefix}_SONG_INDEXING_MODE`],
 			SONG_ORGANIZATION: env[`${baseKeyPrefix}_SONG_ORGANIZATION`],
 			SONG_COUNTRY: env[`${baseKeyPrefix}_SONG_COUNTRY`],
 			KAFKA_ANALYSIS_MESSAGE_TOPIC: env[`${baseKeyPrefix}_KAFKA_ANALYSIS_MESSAGE_TOPIC`],

@@ -1,10 +1,12 @@
 import {
 	type ApiResult,
+	convertAnalyses,
 	type ElasticsearchService,
 	isEmpty,
 	logger,
 	type LyricRepositoryConfig,
 	type RepositoryIndexingOperations,
+	RepositoryType,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 import { getRepoInformation, repository } from '@overture-stack/maestro-repository';
@@ -41,7 +43,18 @@ export const api = (
 			try {
 				for await (const items of repository(repoInfo).getRepositoryRecords()) {
 					if (items.length > 0) {
-						indexer.bulkUpsert(repoInfo.indexName, items);
+						if (repoInfo.type === RepositoryType.SONG) {
+							// convert Song documents into fileCentric or analysisCentric document
+							const converted = convertAnalyses(repoInfo, items);
+
+							if (converted.length > 0) {
+								indexer.bulkUpsert(repoInfo.indexName, converted);
+							} else {
+								logger.error(`Error converting records into '${repoInfo.indexingMode}Centric document'`);
+							}
+						} else {
+							indexer.bulkUpsert(repoInfo.indexName, items);
+						}
 					}
 				}
 			} catch (error) {
@@ -76,7 +89,18 @@ export const api = (
 			try {
 				for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
 					if (items.length > 0) {
-						indexer.bulkUpsert(repoInfo.indexName, items);
+						if (repoInfo.type === RepositoryType.SONG) {
+							// convert Song documents into fileCentric or analysisCentric document
+							const converted = convertAnalyses(repoInfo, items);
+
+							if (converted.length > 0) {
+								indexer.bulkUpsert(repoInfo.indexName, converted);
+							} else {
+								logger.error(`Error converting records into '${repoInfo.indexingMode}Centric document'`);
+							}
+						} else {
+							indexer.bulkUpsert(repoInfo.indexName, items);
+						}
 					}
 				}
 			} catch (error) {
@@ -119,7 +143,17 @@ export const api = (
 		setImmediate(async () => {
 			try {
 				// Index records
-				indexer.addData(repoInfo.indexName, repoRecord);
+				if (repoInfo.type === RepositoryType.SONG) {
+					// convert Song documents into fileCentric or analysisCentric document
+					const converted = convertAnalyses(repoInfo, [repoRecord]);
+					if (converted[0]) {
+						indexer.addData(repoInfo.indexName, converted[0]);
+					} else {
+						logger.error(`Error converting record '${recordId}' into '${repoInfo.indexingMode}Centric document'`);
+					}
+				} else {
+					indexer.addData(repoInfo.indexName, repoRecord);
+				}
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
 				logger.error(`Error indexing records. ${message}`);

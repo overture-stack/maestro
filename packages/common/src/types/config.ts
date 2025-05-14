@@ -31,8 +31,15 @@ interface IndexConfig {
 	indexName: string;
 }
 
+export const IndexingMode = {
+	fileCentric: 'file',
+	analysisCentric: 'analysis',
+} as const;
+
+export type IndexingMode = ValueOf<typeof IndexingMode>;
+
 interface SongIndexConfig extends IndexConfig {
-	analysisCentricEnabled: boolean;
+	indexingMode: IndexingMode;
 	indexableStudyStates: string;
 }
 

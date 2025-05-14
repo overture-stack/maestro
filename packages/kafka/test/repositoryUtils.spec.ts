@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import type { LyricRepositoryConfig, SongRepositoryConfig } from '@overture-stack/maestro-common';
+import { IndexingMode, type LyricRepositoryConfig, type SongRepositoryConfig } from '@overture-stack/maestro-common';
 
 import { getRepoByTopic, getRepoTopics, isDefined } from '../src/repositoryUtils';
 
 describe('repository utils', () => {
 	const mockRepos: (SongRepositoryConfig | LyricRepositoryConfig)[] = [
 		{
-			analysisCentricEnabled: true,
+			indexingMode: IndexingMode.analysisCentric,
 			baseUrl: 'song-server',
 			code: 'SONG1',
 			indexName: 'analysis_centric',
