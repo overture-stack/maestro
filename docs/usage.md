@@ -64,11 +64,13 @@ curl -X POST \
 
 Maestro can be configured to listen to Kafka topics as described in the Running Configurations section.
 
-```yaml
-MAESTRO_KAFKA_SERVER=http://kafka:9092
-```
+The `MAESTRO_KAFKA_SERVER` configuration specifies the Kafka broker(s) to connect to. It supports one or more Kafka brokers specified in the format `host:port`, separated by commas.
 
-The `MAESTRO_KAFKA_SERVER` configuration specifies the Kafka server(s) to connect to.
+Example with multiple brokers:
+
+```yaml
+MAESTRO_KAFKA_SERVER=kafka1:9092,kafka2:9092
+```
 
 There are two types of topics that can be configured, depending on your needs:
 
@@ -76,7 +78,7 @@ There are two types of topics that can be configured, depending on your needs:
 
 Request topics are used to send on-demand messages instructing Maestro to fetch the documents from the repository source and perform a specific indexing action.
 
-Following configuration applies for SONG or Lyric repositories
+The following applies for both SONG and Lyric instances.
 
 Configuration example:
 

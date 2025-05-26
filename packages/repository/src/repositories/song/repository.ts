@@ -93,6 +93,8 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 
 		const response = await sendHttpRequest(fullUrl.toString());
 		if (response.ok) {
+			// Return the raw response from Song;
+			// Another function can later transform it into either an analysis-centric or file-centric format.
 			return await response.json();
 		}
 		return {};
