@@ -32,77 +32,80 @@ export async function initializeConsumer({
 	indexerProvider: ElasticsearchService;
 	repositoryIndexingApi: RepositoryIndexingOperations;
 }) {
-	if (kafkaConfig.server) {
-		const groupId = kafkaConfig.groupId;
-		const kafka = await client(kafkaConfig);
-		const consumer = kafka.consumer({ groupId });
-		const producer = kafka.producer({ allowAutoTopicCreation: true });
+	if (!kafkaConfig.server || !kafkaConfig.groupId) {
+		logger.info('Kafka server is not configured, skipping consumer initialization');
+		return;
+	}
 
-		await consumer.connect();
-		await producer.connect();
+	const groupId = kafkaConfig.groupId;
+	const kafka = await client(kafkaConfig);
+	const consumer = kafka.consumer({ groupId });
+	const producer = kafka.producer({ allowAutoTopicCreation: true });
 
-		const repositoryTopics = getRepoTopics(repositories);
+	await consumer.connect();
+	await producer.connect();
 
-		const requestTopic = kafkaConfig.requestBinding?.topic;
+	const repositoryTopics = getRepoTopics(repositories);
 
-		const topics = [...repositoryTopics];
-		if (requestTopic) {
-			topics.push(requestTopic);
-		}
+	const requestTopic = kafkaConfig.requestBinding?.topic;
 
-		if (!topics.length) {
-			logger.error('No topics found in configuration');
-			return;
-		}
+	const topics = [...repositoryTopics];
+	if (requestTopic) {
+		topics.push(requestTopic);
+	}
 
-		const admin = kafka.admin();
-		admin.createTopics({
-			waitForLeaders: true,
-			topics: topics.map((t) => ({
-				topic: t,
-			})),
-		});
+	if (!topics.length) {
+		logger.error('No topics found in configuration');
+		return;
+	}
 
-		await consumer.subscribe({ topics, fromBeginning: true });
-		logger.info(`Subscribing to Kafka topics: ${JSON.stringify(topics)}`);
+	const admin = kafka.admin();
+	admin.createTopics({
+		waitForLeaders: true,
+		topics: topics.map((t) => ({
+			topic: t,
+		})),
+	});
 
-		await consumer.run({
-			eachMessage: async ({ topic, message }) => {
-				logger.info(`Processing a message on topic '${topic}'`);
-				if (!message || !message.value) {
-					logger.info(`[${topic}]: Received empty or null message`);
-					return;
-				}
+	await consumer.subscribe({ topics, fromBeginning: true });
+	logger.info(`Subscribing to Kafka topics: ${JSON.stringify(topics)}`);
 
-				if (requestTopic && topic === requestTopic) {
-					try {
-						await processRequestMessage({
-							repositories,
-							message: message,
-							indexer: indexerProvider,
-							repositoryIndexingApi: repositoryIndexingApi,
-						});
-					} catch (error) {
-						logger.error(`Failed to process request message. ${error}`);
-						await sendToDLQ(producer, message, kafkaConfig.requestBinding?.dlq);
-					}
-					return;
-				}
+	await consumer.run({
+		eachMessage: async ({ topic, message }) => {
+			logger.info(`Processing a message on topic '${topic}'`);
+			if (!message || !message.value) {
+				logger.info(`[${topic}]: Received empty or null message`);
+				return;
+			}
 
-				const repo = getRepoByTopic(repositories, topic);
-				if (!repo) {
-					await sendToDLQ(producer, message);
-					return;
-				}
-
+			if (requestTopic && topic === requestTopic) {
 				try {
-					await processDocumentMessage({ repository: repo, message: message, indexer: indexerProvider });
+					await processRequestMessage({
+						repositories,
+						message: message,
+						indexer: indexerProvider,
+						repositoryIndexingApi: repositoryIndexingApi,
+					});
 				} catch (error) {
-					logger.error('Failed to process message', { error });
-					await sendToDLQ(producer, message, repo.kafkaDlq);
+					logger.error(`Failed to process request message. ${error}`);
+					await sendToDLQ(producer, message, kafkaConfig.requestBinding?.dlq);
 				}
 				return;
-			},
-		});
-	}
+			}
+
+			const repo = getRepoByTopic(repositories, topic);
+			if (!repo) {
+				await sendToDLQ(producer, message);
+				return;
+			}
+
+			try {
+				await processDocumentMessage({ repository: repo, message: message, indexer: indexerProvider });
+			} catch (error) {
+				logger.error('Failed to process message', { error });
+				await sendToDLQ(producer, message, repo.kafkaDlq);
+			}
+			return;
+		},
+	});
 }

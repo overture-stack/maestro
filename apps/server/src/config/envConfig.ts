@@ -35,11 +35,26 @@ const kafkaConfigSchema = z
 	.object({
 		MAESTRO_KAFKA_INDEX_REQUEST_TOPIC: z.string().optional(),
 		MAESTRO_KAFKA_INDEX_REQUEST_DLQ: z.string().optional(),
-		MAESTRO_KAFKA_GROUP_ID: z.string().optional().default('groupy'),
+		MAESTRO_KAFKA_GROUP_ID: z.string().optional(),
 		MAESTRO_KAFKA_SERVER: z.string().optional(),
 	})
-	.optional();
-
+	.superRefine((data, ctx) => {
+		// If Kafka config is provided, ensure that the group ID and server are present
+		if (data.MAESTRO_KAFKA_SERVER || data.MAESTRO_KAFKA_GROUP_ID) {
+			if (!data.MAESTRO_KAFKA_SERVER) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'MAESTRO_KAFKA_SERVER is required when Kafka configuration is provided.',
+				});
+			}
+			if (!data.MAESTRO_KAFKA_GROUP_ID) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'MAESTRO_KAFKA_GROUP_ID is required when Kafka configuration is provided.',
+				});
+			}
+		}
+	});
 // Pino logger levels (https://github.com/pinojs/pino/blob/main/docs/api.md#level)
 const LogLeveOptions = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
 
