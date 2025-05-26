@@ -64,12 +64,12 @@ curl -X POST \
 
 Maestro can be configured to listen to Kafka topics as described in the Running Configurations section.
 
-The `MAESTRO_KAFKA_SERVER` configuration specifies the Kafka broker(s) to connect to. It supports one or more Kafka brokers specified in the format `host:port`, separated by commas.
+The `MAESTRO_KAFKA_BROKERS` configuration specifies the Kafka broker(s) to connect to. It supports one or more Kafka brokers specified in the format `host:port`, separated by commas.
 
 Example with multiple brokers:
 
 ```yaml
-MAESTRO_KAFKA_SERVER=kafka1:9092,kafka2:9092
+MAESTRO_KAFKA_BROKERS=kafka1:9092,kafka2:9092
 ```
 
 There are two types of topics that can be configured, depending on your needs:
@@ -116,8 +116,8 @@ You can send an entire document for indexing using a Kafka message.
 Use following configuration on a Song or Lyric repository, example:
 
 ```yaml
-MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_TOPIC=topic_analysis
-MAESTRO_REPOSITORIES_0_KAFKA_ANALYSIS_MESSAGE_DLQ=topic_analysis_dlq
+MAESTRO_REPOSITORIES_0_KAFKA_DOCUMENT_UPDATE_TOPIC=topic_analysis
+MAESTRO_REPOSITORIES_0_KAFKA_DOCUMENT_UPDATE_DLQ=topic_analysis_dlq
 ```
 
 #### SONG document
@@ -162,3 +162,19 @@ To index a document in a Lyric repository, the message structure typically looks
 If the configuration property `MAESTRO_REPOSITORIES_1_LYRIC_VALID_DATA_ONLY` is set to `true` a document will only be indexed if its `isValid` fiels is `true`; otherwise, it will be removed.
 
 If the configuration property is set to `false`, all documents will be indexed regardless of their `isValid` status.
+
+## SONG Repository Indexing Modes
+
+The structure of SONG documents indexed in the system is controlled by the `MAESTRO_REPOSITORIES_0_SONG_INDEXING_MODE` environment variable, which accepts values `file` or `analysis`. This setting controls how incoming analysis data is transformed before being stored in your index. :
+
+- Analysis-centric indexing (default):
+
+```json
+MAESTRO_REPOSITORIES_0_SONG_INDEXING_MODE=analysis
+```
+
+- File-centric indexing:
+
+```json
+MAESTRO_REPOSITORIES_0_SONG_INDEXING_MODE=file
+```

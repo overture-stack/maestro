@@ -36,15 +36,15 @@ const kafkaConfigSchema = z
 		MAESTRO_KAFKA_INDEX_REQUEST_TOPIC: z.string().optional(),
 		MAESTRO_KAFKA_INDEX_REQUEST_DLQ: z.string().optional(),
 		MAESTRO_KAFKA_GROUP_ID: z.string().optional(),
-		MAESTRO_KAFKA_SERVER: z.string().optional(),
+		MAESTRO_KAFKA_BROKERS: z.string().optional(),
 	})
 	.superRefine((data, ctx) => {
-		// If Kafka config is provided, ensure that the group ID and server are present
-		if (data.MAESTRO_KAFKA_SERVER || data.MAESTRO_KAFKA_GROUP_ID) {
-			if (!data.MAESTRO_KAFKA_SERVER) {
+		// If Kafka config is provided, ensure that the group ID and brokers are present
+		if (data.MAESTRO_KAFKA_BROKERS || data.MAESTRO_KAFKA_GROUP_ID) {
+			if (!data.MAESTRO_KAFKA_BROKERS) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
-					message: 'MAESTRO_KAFKA_SERVER is required when Kafka configuration is provided.',
+					message: 'MAESTRO_KAFKA_BROKERS is required when Kafka configuration is provided.',
 				});
 			}
 			if (!data.MAESTRO_KAFKA_GROUP_ID) {

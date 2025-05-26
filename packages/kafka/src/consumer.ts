@@ -32,8 +32,8 @@ export async function initializeConsumer({
 	indexerProvider: ElasticsearchService;
 	repositoryIndexingApi: RepositoryIndexingOperations;
 }) {
-	if (!kafkaConfig.server || !kafkaConfig.groupId) {
-		logger.info('Kafka server is not configured, skipping consumer initialization');
+	if (!kafkaConfig.brokers || !kafkaConfig.groupId) {
+		logger.info('Kafka brokers is not configured, skipping consumer initialization');
 		return;
 	}
 

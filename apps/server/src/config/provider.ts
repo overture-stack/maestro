@@ -24,8 +24,8 @@ const getRepositoryConfig = (
 			indexName: value.INDEX_NAME,
 			validDataOnly: value.LYRIC_VALID_DATA_ONLY,
 			categoryId: value.LYRIC_CATEGORY_ID,
-			kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
-			kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
+			kafkaTopic: value.KAFKA_DOCUMENT_UPDATE_TOPIC,
+			kafkaDlq: value.KAFKA_DOCUMENT_UPDATE_DLQ,
 		}));
 
 	const songRepos: SongRepositoryConfig[] = repos
@@ -41,8 +41,8 @@ const getRepositoryConfig = (
 			indexingMode: value.SONG_INDEXING_MODE,
 			organization: value.SONG_ORGANIZATION,
 			country: value.SONG_COUNTRY,
-			kafkaTopic: value.KAFKA_ANALYSIS_MESSAGE_TOPIC,
-			kafkaDlq: value.KAFKA_ANALYSIS_MESSAGE_DLQ,
+			kafkaTopic: value.KAFKA_DOCUMENT_UPDATE_TOPIC,
+			kafkaDlq: value.KAFKA_DOCUMENT_UPDATE_DLQ,
 		}));
 	return [...songRepos, ...lyricRepos];
 };
@@ -64,7 +64,7 @@ export const defaultAppConfig: MaestroProviderConfig = {
 		},
 	},
 	kafka: {
-		server: env.MAESTRO_KAFKA_SERVER,
+		brokers: env.MAESTRO_KAFKA_BROKERS,
 		groupId: env.MAESTRO_KAFKA_GROUP_ID,
 		requestBinding: {
 			topic: env.MAESTRO_KAFKA_INDEX_REQUEST_TOPIC,

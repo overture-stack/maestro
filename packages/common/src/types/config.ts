@@ -6,7 +6,7 @@ interface BindingConfig {
 }
 export interface KafkaConfig {
 	requestBinding?: BindingConfig;
-	server?: string;
+	brokers?: string;
 	groupId?: string;
 }
 

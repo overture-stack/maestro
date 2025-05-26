@@ -37,7 +37,7 @@ export const initializeMaestroProvider = (config: MaestroProviderConfig): Maestr
 	const repositoryIndexingApi = config.repositories ? api(config.repositories, indexerProvider) : undefined;
 
 	// Initialize Kafka consumer if configured
-	if (config.kafka?.server && config.repositories && repositoryIndexingApi) {
+	if (config.kafka?.brokers && config.repositories && repositoryIndexingApi) {
 		initializeConsumer({
 			kafkaConfig: config.kafka,
 			repositories: config.repositories,

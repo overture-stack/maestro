@@ -29,8 +29,8 @@ const definitionBaseRepositorySchema = z.object({
 		.refine((value) => Buffer.byteLength(value, 'utf-8') <= 255, {
 			message: 'INDEX_NAME cannot be longer than 255 bytes',
 		}),
-	KAFKA_ANALYSIS_MESSAGE_TOPIC: z.string().optional(),
-	KAFKA_ANALYSIS_MESSAGE_DLQ: z.string().optional(),
+	KAFKA_DOCUMENT_UPDATE_TOPIC: z.string().optional(),
+	KAFKA_DOCUMENT_UPDATE_DLQ: z.string().optional(),
 });
 
 const definitionLyricRepositorySchema = z.object({
@@ -98,8 +98,8 @@ export const validateRepositories = (env: NodeJS.ProcessEnv) => {
 			SONG_INDEXING_MODE: env[`${baseKeyPrefix}_SONG_INDEXING_MODE`],
 			SONG_ORGANIZATION: env[`${baseKeyPrefix}_SONG_ORGANIZATION`],
 			SONG_COUNTRY: env[`${baseKeyPrefix}_SONG_COUNTRY`],
-			KAFKA_ANALYSIS_MESSAGE_TOPIC: env[`${baseKeyPrefix}_KAFKA_ANALYSIS_MESSAGE_TOPIC`],
-			KAFKA_ANALYSIS_MESSAGE_DLQ: env[`${baseKeyPrefix}_KAFKA_ANALYSIS_MESSAGE_DLQ`],
+			KAFKA_DOCUMENT_UPDATE_TOPIC: env[`${baseKeyPrefix}_KAFKA_DOCUMENT_UPDATE_TOPIC`],
+			KAFKA_DOCUMENT_UPDATE_DLQ: env[`${baseKeyPrefix}_KAFKA_DOCUMENT_UPDATE_DLQ`],
 		};
 
 		try {
