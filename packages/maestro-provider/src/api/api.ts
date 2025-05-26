@@ -1,6 +1,7 @@
 import {
 	type ApiResult,
 	convertAnalyses,
+	type DataRecordNested,
 	type ElasticsearchService,
 	isEmpty,
 	logger,
@@ -10,6 +11,44 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 import { getRepoInformation, repository } from '@overture-stack/maestro-repository';
+
+/**
+ * Processes and indexes data records based on the repository type.
+ *
+ * If the repository type is `SONG`, the function converts the provided items into either
+ * file-centric or analysis-centric documents (based on the repository's indexing mode),
+ * and then bulk upserts them into the configured Elasticsearch index.
+ *
+ * For `Lyric` repository types, it upserts the provided items without conversion as they
+ * are already formatted.
+ *
+ * @param items - An array of data records to be indexed.
+ * @param repoInfo - The configuration object for the repository, which includes the index name and type.
+ * @param indexer - An instance of `ElasticsearchService` used for performing indexing operations.
+ */
+const indexRepositoryData = ({
+	items,
+	repoInfo,
+	indexer,
+}: {
+	items: DataRecordNested[];
+	repoInfo: SongRepositoryConfig | LyricRepositoryConfig;
+	indexer: ElasticsearchService;
+}) => {
+	if (repoInfo.type === RepositoryType.SONG) {
+		// convert Song documents into fileCentric or analysisCentric document
+		const converted = convertAnalyses(repoInfo, items);
+
+		if (converted.length > 0) {
+			indexer.bulkUpsert(repoInfo.indexName, converted);
+		} else {
+			logger.error(`Error converting records into '${repoInfo.indexingMode}Centric document'`);
+		}
+	} else {
+		// Lyric repository type, upsert items directly
+		indexer.bulkUpsert(repoInfo.indexName, items);
+	}
+};
 
 /**
  * Creates an object containing indexing operations to be used in the API
@@ -43,18 +82,7 @@ export const api = (
 			try {
 				for await (const items of repository(repoInfo).getRepositoryRecords()) {
 					if (items.length > 0) {
-						if (repoInfo.type === RepositoryType.SONG) {
-							// convert Song documents into fileCentric or analysisCentric document
-							const converted = convertAnalyses(repoInfo, items);
-
-							if (converted.length > 0) {
-								indexer.bulkUpsert(repoInfo.indexName, converted);
-							} else {
-								logger.error(`Error converting records into '${repoInfo.indexingMode}Centric document'`);
-							}
-						} else {
-							indexer.bulkUpsert(repoInfo.indexName, items);
-						}
+						indexRepositoryData({ repoInfo, items, indexer });
 					}
 				}
 			} catch (error) {
@@ -89,18 +117,7 @@ export const api = (
 			try {
 				for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
 					if (items.length > 0) {
-						if (repoInfo.type === RepositoryType.SONG) {
-							// convert Song documents into fileCentric or analysisCentric document
-							const converted = convertAnalyses(repoInfo, items);
-
-							if (converted.length > 0) {
-								indexer.bulkUpsert(repoInfo.indexName, converted);
-							} else {
-								logger.error(`Error converting records into '${repoInfo.indexingMode}Centric document'`);
-							}
-						} else {
-							indexer.bulkUpsert(repoInfo.indexName, items);
-						}
+						indexRepositoryData({ repoInfo, items, indexer });
 					}
 				}
 			} catch (error) {
@@ -142,18 +159,7 @@ export const api = (
 
 		setImmediate(async () => {
 			try {
-				// Index records
-				if (repoInfo.type === RepositoryType.SONG) {
-					// convert Song documents into fileCentric or analysisCentric document
-					const converted = convertAnalyses(repoInfo, [repoRecord]);
-					if (converted[0]) {
-						indexer.addData(repoInfo.indexName, converted[0]);
-					} else {
-						logger.error(`Error converting record '${recordId}' into '${repoInfo.indexingMode}Centric document'`);
-					}
-				} else {
-					indexer.addData(repoInfo.indexName, repoRecord);
-				}
+				indexRepositoryData({ repoInfo, items: [repoRecord], indexer });
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
 				logger.error(`Error indexing records. ${message}`);
