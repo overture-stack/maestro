@@ -108,8 +108,8 @@ export const indexData = async (client: Client, index: string, data: DataRecordN
 		if (response.body.result === 'created' || response.body.result === 'updated') {
 			successful = true;
 		} else {
-			const keyIndex = Object.keys(failureData).length;
-			failureData[keyIndex] = [response.body.result];
+			const keyIndex = _id?.toString() || '0';
+			failureData[keyIndex] = [...(failureData[keyIndex] ?? []), response.body.result];
 		}
 
 		return {
