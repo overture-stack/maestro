@@ -4,6 +4,7 @@ import { describe, it } from 'mocha';
 
 import {
 	type DataRecordNested,
+	IndexableState,
 	IndexingMode,
 	RepositoryType,
 	type SongRepositoryConfig,
@@ -29,7 +30,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -93,7 +94,7 @@ describe('Song Repository', () => {
 				indexName: 'index_1_1',
 				paginationSize: 2,
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -197,7 +198,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -221,7 +222,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -250,7 +251,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -310,7 +311,7 @@ describe('Song Repository', () => {
 				indexName: 'index_1_1',
 				paginationSize: 2,
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -410,7 +411,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -434,7 +435,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -463,7 +464,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -503,7 +504,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response
@@ -523,7 +524,7 @@ describe('Song Repository', () => {
 				baseUrl: 'http://localhost',
 				indexName: 'index_1_1',
 				indexingMode: IndexingMode.analysisCentric,
-				indexableStudyStates: 'PUBLISHED',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			};
 
 			// Mock response

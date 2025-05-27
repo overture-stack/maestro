@@ -1,7 +1,12 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import { type LyricRepositoryConfig, RepositoryType, type SongRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	IndexableState,
+	type LyricRepositoryConfig,
+	RepositoryType,
+	type SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
 import { getRepoInformation, isArrayOfObjects } from '../src/utils/utils.js';
 
@@ -59,8 +64,8 @@ describe('Utils', () => {
 				indexName: 'index_1_1',
 				country: 'CA',
 				organization: 'oicr',
-				analysisCentricEnabled: false,
-				indexableStudyStates: 'PUBLISHED',
+				indexingMode: 'analysis',
+				indexableStudyStates: [IndexableState.PUBLISHED],
 			},
 			{
 				code: 'lyricRepo1',
@@ -93,8 +98,8 @@ describe('Utils', () => {
 					indexName: 'index_1_1',
 					country: 'CA',
 					organization: 'oicr',
-					analysisCentricEnabled: false,
-					indexableStudyStates: 'PUBLISHED',
+					indexingMode: 'analysis',
+					indexableStudyStates: [IndexableState.PUBLISHED],
 				},
 				{
 					code: 'commonRepo',

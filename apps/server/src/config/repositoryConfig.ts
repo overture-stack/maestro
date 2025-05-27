@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IndexingMode } from '@overture-stack/maestro-common';
+import { IndexableState, IndexingMode } from '@overture-stack/maestro-common';
 
 import { logger } from '../utils/logger.js';
 
@@ -45,9 +45,19 @@ const isLyricRepository = (data: unknown): data is z.infer<typeof lyricSchemaDef
 
 export const IndexingModeSchema = z.enum([IndexingMode.fileCentric, IndexingMode.analysisCentric]);
 
+export const IndexableStateEnum = z.enum([
+	IndexableState.PUBLISHED,
+	IndexableState.UNPUBLISHED,
+	IndexableState.SUPPRESSED,
+]);
+
 const definitionSongRepositorySchema = z.object({
 	TYPE: z.literal(repositoryTypes.Values.SONG),
-	SONG_INDEXABLE_STUDY_STATES: z.string().default('PUBLISHED'),
+	SONG_INDEXABLE_STUDY_STATES: z
+		.string()
+		.default(IndexableState.PUBLISHED)
+		.transform((val) => val.split(',').map((s) => s.trim()))
+		.pipe(z.array(IndexableStateEnum)),
 	SONG_INDEXING_MODE: IndexingModeSchema,
 	SONG_ORGANIZATION: z.string().optional(),
 	SONG_COUNTRY: z.string().optional(),

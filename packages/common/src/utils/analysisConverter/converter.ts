@@ -1,7 +1,9 @@
+import { z } from 'zod';
+
 import { logger } from '../../logger/logger.js';
 import { IndexingMode, type SongRepositoryConfig } from '../../types/config.js';
 import { DataRecordNested } from '../../types/dataRecord.js';
-import type { AnalysisCentricDocument, FileCentricDocument, FileEntry } from './types.js';
+import { type AnalysisCentricDocument, type FileCentricDocument, fileEntrySchema } from './types.js';
 
 /**
  * Type guard to validate if a given object conforms to the `FileEntry` structure
@@ -9,23 +11,13 @@ import type { AnalysisCentricDocument, FileCentricDocument, FileEntry } from './
  * @param obj A file object
  * @returns true if object contains all the required properties, otherwise returns false
  */
-export const isFileEntry = (obj: unknown): obj is FileEntry => {
-	return (
-		typeof obj === 'object' &&
-		obj !== null &&
-		'objectId' in obj &&
-		'studyId' in obj &&
-		'fileName' in obj &&
-		'fileSize' in obj &&
-		'fileType' in obj &&
-		'fileMd5sum' in obj &&
-		'fileAccess' in obj &&
-		'dataType' in obj
-	);
+export const isFileEntry = (obj: unknown): obj is z.infer<typeof fileEntrySchema> => {
+	const result = fileEntrySchema.safeParse(obj);
+	return result.success;
 };
 
-export const isFileEntryArray = (value: unknown): value is FileEntry[] => {
-	return Array.isArray(value) && value.length > 0 && value.every(isFileEntry);
+export const isFileEntryArray = (value: unknown) => {
+	return Array.isArray(value) && value.every(isFileEntry);
 };
 
 export const convertToAnalysisCentricDocuments = (records: DataRecordNested[]) => {

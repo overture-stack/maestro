@@ -1,7 +1,12 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import { type LyricRepositoryConfig, RepositoryType, type SongRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	IndexableState,
+	type LyricRepositoryConfig,
+	RepositoryType,
+	type SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
 import { repository } from '../src/repositories';
 
@@ -30,8 +35,8 @@ describe('repositories', () => {
 			code: 'songRepo2',
 			baseUrl: 'http://localhost',
 			indexName: 'index_1_2',
-			analysisCentricEnabled: true,
-			indexableStudyStates: 'PUBLISHED',
+			indexingMode: 'analysis',
+			indexableStudyStates: [IndexableState.PUBLISHED],
 		};
 		const result = repository(config);
 

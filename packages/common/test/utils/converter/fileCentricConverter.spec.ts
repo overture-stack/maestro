@@ -1,6 +1,12 @@
 import { expect } from 'chai';
 
-import { type DataRecordNested, IndexingMode, RepositoryType, type SongRepositoryConfig } from '../../../src/types';
+import {
+	type DataRecordNested,
+	IndexableState,
+	IndexingMode,
+	RepositoryType,
+	type SongRepositoryConfig,
+} from '../../../src/types';
 import { convertToFileCentricDocuments } from '../../../src/utils/analysisConverter/converter';
 import type { FileEntry } from '../../../src/utils/analysisConverter/types';
 
@@ -12,7 +18,7 @@ describe('convertToFileCentricDocuments', () => {
 		type: RepositoryType.SONG,
 		country: 'CAN',
 		baseUrl: 'http://localhost',
-		indexableStudyStates: 'PUBLISHED',
+		indexableStudyStates: [IndexableState.PUBLISHED],
 		indexName: 'my-index',
 		indexingMode: IndexingMode.fileCentric,
 	};
@@ -20,7 +26,6 @@ describe('convertToFileCentricDocuments', () => {
 	const validFile: FileEntry = {
 		objectId: 'f123',
 		studyId: 'S1',
-		analysisId: 'A1',
 		fileName: 'data.txt',
 		fileSize: '1234',
 		fileType: 'txt',

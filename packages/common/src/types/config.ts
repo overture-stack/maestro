@@ -38,9 +38,17 @@ export const IndexingMode = {
 
 export type IndexingMode = ValueOf<typeof IndexingMode>;
 
+export const IndexableState = {
+	PUBLISHED: 'PUBLISHED',
+	UNPUBLISHED: 'UNPUBLISHED',
+	SUPPRESSED: 'SUPPRESSED',
+} as const;
+
+export type IndexableState = (typeof IndexableState)[keyof typeof IndexableState];
+
 interface SongIndexConfig extends IndexConfig {
 	indexingMode: IndexingMode;
-	indexableStudyStates: string;
+	indexableStudyStates: IndexableState[];
 }
 
 interface LyricIndexConfig extends IndexConfig {

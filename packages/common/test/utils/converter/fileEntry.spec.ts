@@ -55,8 +55,8 @@ describe('File object functions', () => {
 			expect(isFileEntryArray(null)).to.eql(false);
 		});
 
-		it('should return false for an empty array', () => {
-			expect(isFileEntryArray([])).to.eql(false);
+		it('should return true for an empty array,  since this function does not perform length validation', () => {
+			expect(isFileEntryArray([])).to.eql(true);
 		});
 	});
 });

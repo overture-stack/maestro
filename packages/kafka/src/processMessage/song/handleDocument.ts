@@ -20,10 +20,13 @@ export const handleSongDocumentMessage = async (
 	indexer: ElasticsearchService,
 ) => {
 	const indexName = repository.indexName;
-	const indexableStates = repository.indexableStudyStates.split(',').map((state) => state.trim());
+	const indexableStates = repository.indexableStudyStates;
 
 	// Only index the analysis when it has an indexable state (e.g. PUBLISHED)
-	if (indexableStates.length === 0 || (payload.state && indexableStates.includes(payload.state.toString()))) {
+	if (
+		indexableStates.length === 0 ||
+		(payload.state && indexableStates.some((value) => String(value) === String(payload.state)))
+	) {
 		// Song already preparte the document ready for index whether this is fileCentric or analysisCentric
 		// Example analysisCentric payload — see docs/usage.md for full details:
 		// {

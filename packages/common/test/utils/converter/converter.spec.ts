@@ -1,6 +1,12 @@
 import { expect } from 'chai';
 
-import { type DataRecordNested, IndexingMode, RepositoryType, type SongRepositoryConfig } from '../../../src/types';
+import {
+	type DataRecordNested,
+	IndexableState,
+	IndexingMode,
+	RepositoryType,
+	type SongRepositoryConfig,
+} from '../../../src/types';
 import { convertAnalyses } from '../../../src/utils/analysisConverter/converter';
 import type { FileEntry } from '../../../src/utils/analysisConverter/types';
 
@@ -12,7 +18,7 @@ describe('convertAnalyses', () => {
 		type: RepositoryType.SONG,
 		country: 'US',
 		baseUrl: 'http://localhost',
-		indexableStudyStates: 'PUBLISHED',
+		indexableStudyStates: [IndexableState.PUBLISHED],
 		indexName: 'my-index',
 		indexingMode: IndexingMode.fileCentric,
 	};
@@ -25,7 +31,6 @@ describe('convertAnalyses', () => {
 	const file: FileEntry = {
 		objectId: 'f001',
 		studyId: 'S1',
-		analysisId: 'A1',
 		fileName: 'file.bam',
 		fileSize: '123456',
 		fileType: 'bam',

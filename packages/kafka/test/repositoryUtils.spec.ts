@@ -1,7 +1,12 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import { IndexingMode, type LyricRepositoryConfig, type SongRepositoryConfig } from '@overture-stack/maestro-common';
+import {
+	IndexableState,
+	IndexingMode,
+	type LyricRepositoryConfig,
+	type SongRepositoryConfig,
+} from '@overture-stack/maestro-common';
 
 import { getRepoByTopic, getRepoTopics, isDefined } from '../src/repositoryUtils';
 
@@ -12,7 +17,7 @@ describe('repository utils', () => {
 			baseUrl: 'song-server',
 			code: 'SONG1',
 			indexName: 'analysis_centric',
-			indexableStudyStates: 'PUBLISHED',
+			indexableStudyStates: [IndexableState.PUBLISHED],
 			kafkaTopic: 'song-analysis',
 			name: 'Song 1',
 			type: 'SONG',

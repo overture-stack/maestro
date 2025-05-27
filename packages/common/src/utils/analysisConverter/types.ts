@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import type { DataRecordNested } from '../../types/dataRecord';
 
 /**
@@ -42,14 +44,16 @@ export type FileCentricDocument = {
  * Type representing the structure of a file object returned by Song as part of an analysis.
  * This type is used to transform analysis data into fileCentric documents
  */
-export type FileEntry = {
-	objectId: string;
-	studyId: string;
-	analysisId: string;
-	fileName: string;
-	fileSize: string;
-	fileType: string;
-	fileMd5sum: string;
-	fileAccess: string;
-	dataType: string;
-};
+export const fileEntrySchema = z.object({
+	objectId: z.string(),
+	studyId: z.string(),
+	fileName: z.string(),
+	fileSize: z.string(),
+	fileType: z.string(),
+	fileMd5sum: z.string(),
+	fileAccess: z.string(),
+	dataType: z.string(),
+});
+
+// If you want to infer the TypeScript type:
+export type FileEntry = z.infer<typeof fileEntrySchema>;
