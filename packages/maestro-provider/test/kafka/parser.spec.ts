@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { parseMessage } from '../src/processMessage/parser';
+import { parseMessage } from '../../src/kafka/processMessage/parser';
 
 describe('parse kafka message', () => {
 	it('should return null for null input', () => {

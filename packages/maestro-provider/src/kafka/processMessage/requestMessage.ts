@@ -8,8 +8,8 @@ import {
 	type RepositoryIndexingOperations,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
-import { getRepoInformation } from '@overture-stack/maestro-repository';
 
+import { getRepoInformation } from '../../repository/index.js';
 import { parseMessage } from './parser.js';
 
 interface AnalysisRequestMessage extends Record<string, DataRecordValue> {

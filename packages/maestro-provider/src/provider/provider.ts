@@ -5,9 +5,9 @@ import {
 	setLogger,
 } from '@overture-stack/maestro-common';
 import { clientProvider } from '@overture-stack/maestro-indexer-client';
-import { initializeConsumer } from '@overture-stack/maestro-kafka';
 
 import { api } from '../api/api.js';
+import { initializeConsumer } from '../kafka/index.js';
 
 /**
  * Interface representing a provider for indexing operations

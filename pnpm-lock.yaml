@@ -153,17 +153,7 @@ importers:
         specifier: ^10.13.2
         version: 10.13.2
 
-  packages/kafka:
-    dependencies:
-      '@overture-stack/maestro-common':
-        specifier: workspace:^
-        version: link:../common
-      '@overture-stack/maestro-repository':
-        specifier: workspace:^
-        version: link:../repository
-      kafkajs:
-        specifier: ^2.2.4
-        version: 2.2.4
+  packages/kafka: {}
 
   packages/maestro-provider:
     dependencies:
@@ -173,12 +163,9 @@ importers:
       '@overture-stack/maestro-indexer-client':
         specifier: workspace:^
         version: link:../indexer-client
-      '@overture-stack/maestro-kafka':
-        specifier: workspace:^
-        version: link:../kafka
-      '@overture-stack/maestro-repository':
-        specifier: workspace:^
-        version: link:../repository
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
     devDependencies:
       '@types/chai':
         specifier: ^5.0.0
@@ -192,22 +179,14 @@ importers:
       chai:
         specifier: ^5.1.1
         version: 5.1.1
+      fetch-mock:
+        specifier: ^12.2.0
+        version: 12.2.0
       mocha:
         specifier: ^10.7.3
         version: 10.7.3
 
-  packages/repository:
-    dependencies:
-      '@overture-stack/maestro-common':
-        specifier: workspace:^
-        version: link:../common
-    devDependencies:
-      '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
-      fetch-mock:
-        specifier: ^12.2.0
-        version: 12.2.0
+  packages/repository: {}
 
 packages:
 

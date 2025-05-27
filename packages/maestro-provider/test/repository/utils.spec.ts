@@ -8,7 +8,7 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { getRepoInformation, isArrayOfObjects } from '../src/utils/utils.js';
+import { getRepoInformation, isArrayOfObjects } from '../../src/repository/utils/utils.js';
 
 describe('Utils', () => {
 	describe('Checks if value is an array of objects', () => {

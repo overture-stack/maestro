@@ -7,8 +7,8 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { sendHttpRequest } from '../../network/httpRequest';
-import { isArrayOfObjects } from '../../utils/utils';
+import { sendHttpRequest } from '../../network/httpRequest.js';
+import { isArrayOfObjects } from '../../utils/utils.js';
 
 // Path constants
 const PATH = {

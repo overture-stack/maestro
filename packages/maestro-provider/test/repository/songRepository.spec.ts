@@ -10,7 +10,7 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { songRepository } from '../src/repositories/song/repository';
+import { songRepository } from '../../src/repository/repositories/song/repository';
 
 describe('Song Repository', () => {
 	const studyId = 'ABC123';

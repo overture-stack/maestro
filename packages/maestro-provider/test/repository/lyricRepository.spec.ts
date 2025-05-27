@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 
 import { type DataRecordNested, type LyricRepositoryConfig, RepositoryType } from '@overture-stack/maestro-common';
 
-import { lyricRepository } from '../src/repositories/lyric/repository';
+import { lyricRepository } from '../../src/repository/repositories/lyric/repository';
 
 describe('Lyric Repository', () => {
 	beforeEach(() => {

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { isAnalysisRequest, isRepoRequest, isStudyRequest } from '../src/processMessage/requestMessage';
+import { isAnalysisRequest, isRepoRequest, isStudyRequest } from '../../src/kafka/processMessage/requestMessage';
 
 describe('Song Request Message Type Guards', () => {
 	describe('isAnalysisRequest', () => {

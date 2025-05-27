@@ -10,7 +10,8 @@ import {
 	RepositoryType,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
-import { getRepoInformation, repository } from '@overture-stack/maestro-repository';
+
+import { getRepoInformation, repository } from '../repository/index.js';
 
 /**
  * Processes and indexes data records based on the repository type.

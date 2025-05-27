@@ -8,7 +8,7 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { repository } from '../src/repositories';
+import { repository } from '../../src/repository/repositories';
 
 describe('repositories', () => {
 	it('should call lyricRepository when type is LYRIC', () => {

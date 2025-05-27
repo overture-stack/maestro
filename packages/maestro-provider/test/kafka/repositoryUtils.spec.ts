@@ -8,7 +8,7 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { getRepoByTopic, getRepoTopics, isDefined } from '../src/repositoryUtils';
+import { getRepoByTopic, getRepoTopics, isDefined } from '../../src/kafka/repositoryUtils';
 
 describe('repository utils', () => {
 	const mockRepos: (SongRepositoryConfig | LyricRepositoryConfig)[] = [
