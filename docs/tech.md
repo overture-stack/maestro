@@ -19,6 +19,7 @@ apps/
 packages/
 ├─ common/
 ├─ indexer-client/
+├─ kafka/
 ├─ maestro-provider/
 ├─ repository/
 
@@ -29,6 +30,8 @@ packages/
 - **Maestro Common:** Designed to centralize common utilities, reusable functions, and TypeScript type definitions.
 
 - **Maestro Indexer Client:** Abstracts communication with Elasticsearch clients, supporting both version 7 and version 8.
+
+- **Maestro Kafka:** Connects a Kafka consumer to topics for message listening and processing
 
 - **Maestro Provider:** The core features and provider independent logic that is portable and contains the main indexing, rules, notifications logic as specified by the business features.
 

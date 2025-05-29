@@ -43,9 +43,9 @@ export default function suite() {
 
 		// Upsert Data
 		const data: DataRecordNested[] = [
-			{ id: 1, name: 'value1' },
-			{ id: 2, name: 'value2' },
-			{ id: 3, name: 'value3' },
+			{ _id: 1, name: 'value1' },
+			{ _id: 2, name: 'value2' },
+			{ _id: 3, name: 'value3' },
 		];
 
 		const result = await client.bulkUpsert(indexName, data);

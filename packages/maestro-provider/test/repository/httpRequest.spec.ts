@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import fetchMock from 'fetch-mock';
 import { describe, it } from 'mocha';
 
-import { sendHttpRequest } from '../src/network/httpRequest';
+import { sendHttpRequest } from '../../src/repository/network/httpRequest';
 
 describe('sendHttpRequest', () => {
 	beforeEach(() => {

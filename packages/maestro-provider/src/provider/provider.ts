@@ -1,12 +1,13 @@
 import {
 	type ElasticsearchService,
+	type MaestroProviderConfig,
 	type RepositoryIndexingOperations,
 	setLogger,
 } from '@overture-stack/maestro-common';
-import type { MaestroProviderConfig } from '@overture-stack/maestro-common/dist/types/config.js';
 import { clientProvider } from '@overture-stack/maestro-indexer-client';
 
 import { api } from '../api/api.js';
+import { initializeConsumer } from '../kafka/index.js';
 
 /**
  * Interface representing a provider for indexing operations
@@ -33,8 +34,20 @@ export const initializeMaestroProvider = (config: MaestroProviderConfig): Maestr
 	}
 	const indexerProvider = clientProvider(config.elasticSearchConfig);
 
+	const repositoryIndexingApi = config.repositories ? api(config.repositories, indexerProvider) : undefined;
+
+	// Initialize Kafka consumer if configured
+	if (config.kafka?.brokers && config.repositories && repositoryIndexingApi) {
+		initializeConsumer({
+			kafkaConfig: config.kafka,
+			repositories: config.repositories,
+			indexerProvider,
+			repositoryIndexingApi: repositoryIndexingApi,
+		});
+	}
+
 	return {
-		api: config.repositories ? api(config.repositories, indexerProvider) : undefined,
+		api: repositoryIndexingApi,
 		payload: indexerProvider,
 	};
 };

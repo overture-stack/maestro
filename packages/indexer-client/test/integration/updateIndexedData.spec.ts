@@ -43,18 +43,19 @@ export default function suite() {
 
 		// Insert Data
 		const insertData: DataRecordNested = {
-			id: '1234',
+			_id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
 			organization: 'test-org',
 		};
-		await client.addData(indexName, insertData);
+		const resultAddData = await client.addData(indexName, insertData);
 
 		// Edit Data
 		const id = '1234';
 		const editData: DataRecordNested = { key2: 'value2' };
 
 		const result = await client.updateData(indexName, id, editData);
+		expect(resultAddData.successful).to.eql(true);
 		expect(result.successful).to.eql(true);
 		expect(result.indexName).to.eql(indexName);
 		expect(Object.keys(result.failureData).length).to.eq(0);

@@ -3,22 +3,43 @@
 		"default": {
 			"runner": "nx/tasks-runners/default",
 			"options": {
-				"cacheableOperations": ["build", "generate", "lint", "test"]
+				"cacheableOperations": [
+					"build",
+					"generate",
+					"lint",
+					"test"
+				]
 			}
 		}
 	},
+	"targetDependencies": {
+		"build": [
+			{
+				"target": "build",
+				"projects": "dependencies"
+			}
+		]
+	},
 	"targetDefaults": {
 		"build": {
-			"dependsOn": ["^build"]
+			"dependsOn": [
+				"^build"
+			]
 		},
 		"dev": {
-			"dependsOn": ["^build"]
+			"dependsOn": [
+				"^build"
+			]
 		},
 		"publish": {
-			"dependsOn": ["^build"]
+			"dependsOn": [
+				"^build"
+			]
 		},
 		"test": {
-			"dependsOn": ["^build"]
+			"dependsOn": [
+				"^build"
+			]
 		}
 	}
 }

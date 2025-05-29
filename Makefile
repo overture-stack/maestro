@@ -68,7 +68,7 @@ kafka-song-queue:
 
 kafka-song-dlq:
 	docker exec -t kafka.maestro.dev bash -c "/usr/bin/kafka-console-consumer --bootstrap-server localhost:9092 \
-	--topic maestro_song_analysis_dlq --from-beginning"
+	--topic maestro-song-analysis_dlq --from-beginning"
 
 ## Maestro requests topic
 kafka-maestro-topic:

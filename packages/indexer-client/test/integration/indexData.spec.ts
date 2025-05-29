@@ -45,7 +45,7 @@ export default function suite() {
 	it('should return successful true when indexing data', async () => {
 		const indexName = 'test-index';
 		const mockData: DataRecordNested = {
-			id: '1234',
+			_id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
 			organization: 'test-org',
@@ -60,7 +60,7 @@ export default function suite() {
 	it('should return successful true when indexing data already exists', async () => {
 		const indexName = 'test-index';
 		const mockData: DataRecordNested = {
-			id: '1234',
+			_id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
 			organization: 'test-org',
@@ -75,7 +75,7 @@ export default function suite() {
 	it('should return successful false when a ConnectionError is thrown', async () => {
 		const indexName = 'test-index';
 		const mockData: DataRecordNested = {
-			id: '1234',
+			_id: '1234',
 			data: { key: 'value' },
 			entityName: 'test-entity',
 			organization: 'test-org',

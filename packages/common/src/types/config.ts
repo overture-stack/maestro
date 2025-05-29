@@ -1,18 +1,13 @@
 import type { ElasticSearchConfig } from './clientConfig.js';
 import { ConsoleLike } from './logger.js';
 interface BindingConfig {
-	dlq: string;
-	topic: string;
-}
-interface SchemaBindingConfig {
-	analysisMessage: BindingConfig;
-	requestMessage: BindingConfig;
+	dlq?: string;
+	topic?: string;
 }
 export interface KafkaConfig {
-	enabled: boolean;
-	lyricSchemaBinding?: SchemaBindingConfig;
-	servers?: string;
-	songSchemaBinding?: SchemaBindingConfig;
+	requestBinding?: BindingConfig;
+	brokers?: string;
+	groupId?: string;
 }
 
 export const RepositoryType = {
@@ -28,15 +23,32 @@ export interface RepositoryConfig {
 	code: string;
 	name: string;
 	paginationSize?: number;
+	kafkaTopic?: string;
+	kafkaDlq?: string;
 }
 
 interface IndexConfig {
 	indexName: string;
 }
 
+export const IndexingMode = {
+	fileCentric: 'file',
+	analysisCentric: 'analysis',
+} as const;
+
+export type IndexingMode = ValueOf<typeof IndexingMode>;
+
+export const IndexableState = {
+	PUBLISHED: 'PUBLISHED',
+	UNPUBLISHED: 'UNPUBLISHED',
+	SUPPRESSED: 'SUPPRESSED',
+} as const;
+
+export type IndexableState = (typeof IndexableState)[keyof typeof IndexableState];
+
 interface SongIndexConfig extends IndexConfig {
-	analysisCentricEnabled: boolean;
-	indexableStudyStates: string;
+	indexingMode: IndexingMode;
+	indexableStudyStates: IndexableState[];
 }
 
 interface LyricIndexConfig extends IndexConfig {

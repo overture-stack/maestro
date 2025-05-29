@@ -5,8 +5,8 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { lyricRepository } from './lyric/repository';
-import { songRepository } from './song/repository';
+import { lyricRepository } from './lyric/repository.js';
+import { songRepository } from './song/repository.js';
 
 export const repository = (config: LyricRepositoryConfig | SongRepositoryConfig): Repository => {
 	switch (config.type) {

@@ -31,19 +31,30 @@ const elasticSearchConfigSchema = z.object({
 		.transform((val) => Number(val)),
 });
 
-const kafkaConfigSchema = z.object({
-	MAESTRO_KAFKA_ENABLED: z.coerce.boolean().default(false),
-	MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_TOPIC: z.string().optional().default('clinical_data'),
-	MAESTRO_KAFKA_LYRIC_ANALYSIS_MESSAGE_DLQ: z.string().optional().default('clinical_data_dlq'),
-	MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_TOPIC: z.string().optional().default('clinical_index_request'),
-	MAESTRO_KAFKA_LYRIC_REQUEST_MESSAGE_DLQ: z.string().optional().default('clinical_index_request_dlq'),
-	MAESTRO_KAFKA_SERVERS: z.string().optional(),
-	MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_TOPIC: z.string().default('song_analysis'),
-	MAESTRO_KAFKA_SONG_ANALYSIS_MESSAGE_DLQ: z.string().default('song_analysis_dlq'),
-	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_TOPIC: z.string().default('index_request'),
-	MAESTRO_KAFKA_SONG_REQUEST_MESSAGE_DLQ: z.string().default('index_request_dlq'),
-});
-
+const kafkaConfigSchema = z
+	.object({
+		MAESTRO_KAFKA_INDEX_REQUEST_TOPIC: z.string().optional(),
+		MAESTRO_KAFKA_INDEX_REQUEST_DLQ: z.string().optional(),
+		MAESTRO_KAFKA_GROUP_ID: z.string().optional(),
+		MAESTRO_KAFKA_BROKERS: z.string().optional(),
+	})
+	.superRefine((data, ctx) => {
+		// If Kafka config is provided, ensure that the group ID and brokers are present
+		if (data.MAESTRO_KAFKA_BROKERS || data.MAESTRO_KAFKA_GROUP_ID) {
+			if (!data.MAESTRO_KAFKA_BROKERS) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'MAESTRO_KAFKA_BROKERS is required when Kafka configuration is provided.',
+				});
+			}
+			if (!data.MAESTRO_KAFKA_GROUP_ID) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: 'MAESTRO_KAFKA_GROUP_ID is required when Kafka configuration is provided.',
+				});
+			}
+		}
+	});
 // Pino logger levels (https://github.com/pinojs/pino/blob/main/docs/api.md#level)
 const LogLeveOptions = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const;
 

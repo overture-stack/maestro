@@ -1,6 +1,9 @@
 export { ApiResult } from './api.js';
 export { ElasticSearchBasicAuthConfig, ElasticSearchConfig, ElasticSearchSupportedVersions } from './clientConfig.js';
 export {
+	IndexableState,
+	IndexingMode,
+	KafkaConfig,
 	LyricRepositoryConfig,
 	MaestroProviderConfig,
 	RepositoryConfig,

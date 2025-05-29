@@ -153,6 +153,8 @@ importers:
         specifier: ^10.13.2
         version: 10.13.2
 
+  packages/kafka: {}
+
   packages/maestro-provider:
     dependencies:
       '@overture-stack/maestro-common':
@@ -161,9 +163,9 @@ importers:
       '@overture-stack/maestro-indexer-client':
         specifier: workspace:^
         version: link:../indexer-client
-      '@overture-stack/maestro-repository':
-        specifier: workspace:^
-        version: link:../repository
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
     devDependencies:
       '@types/chai':
         specifier: ^5.0.0
@@ -177,22 +179,14 @@ importers:
       chai:
         specifier: ^5.1.1
         version: 5.1.1
+      fetch-mock:
+        specifier: ^12.2.0
+        version: 12.2.0
       mocha:
         specifier: ^10.7.3
         version: 10.7.3
 
-  packages/repository:
-    dependencies:
-      '@overture-stack/maestro-common':
-        specifier: workspace:^
-        version: link:../common
-    devDependencies:
-      '@types/node':
-        specifier: ^22.9.0
-        version: 22.9.0
-      fetch-mock:
-        specifier: ^12.2.0
-        version: 12.2.0
+  packages/repository: {}
 
 packages:
 
@@ -2666,6 +2660,11 @@ packages:
   /just-extend@6.2.0:
     resolution: {integrity: sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==}
     dev: true
+
+  /kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}

@@ -6,6 +6,7 @@ import {
 	type ElasticsearchService,
 	ElasticSearchSupportedVersions,
 	type IndexResult,
+	logger,
 } from '@overture-stack/maestro-common';
 
 import { getAuth } from '../../common/config.js';
@@ -29,6 +30,7 @@ export const es7 = (config: ElasticSearchConfig): ElasticsearchService => {
 
 	const auth = getAuth(config.basicAuth);
 
+	logger.info(`Initializing Elasticsearch client v7 with nodes: ${config.nodes}`);
 	const client = new Client({
 		node: config.nodes,
 		auth,

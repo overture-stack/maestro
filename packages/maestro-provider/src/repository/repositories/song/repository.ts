@@ -7,8 +7,8 @@ import {
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
 
-import { sendHttpRequest } from '../../network/httpRequest';
-import { isArrayOfObjects } from '../../utils/utils';
+import { sendHttpRequest } from '../../network/httpRequest.js';
+import { isArrayOfObjects } from '../../utils/utils.js';
 
 // Path constants
 const PATH = {
@@ -62,15 +62,17 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 					const parsedResponse = await response.json();
 					const parsedRecords = paginationSize ? parsedResponse.analyses : parsedResponse;
 					if (isArrayOfObjects(parsedRecords)) {
-						yield parsedRecords.map((record) => {
-							return { _id: record.analysisId, ...record };
-						});
+						yield parsedRecords;
 					} else {
 						return;
 					}
 					if (paginationSize) {
-						hasMoreData = parseInt(parsedResponse?.currentTotalAnalyses) < parseInt(parsedResponse?.totalAnalyses);
-						offset++;
+						const currentTotalAnalyses = parseInt(parsedResponse?.currentTotalAnalyses);
+						const totalAnalyses = parseInt(parsedResponse?.totalAnalyses);
+						hasMoreData = currentTotalAnalyses > 0 && currentTotalAnalyses < totalAnalyses;
+						// How 'offset' works in Song is as follows: the first request starts with an offset of 0,
+						// and in the following request increments the offset by the pagination size (i.e., offset += paginationSize)
+						offset += paginationSize;
 					} else {
 						hasMoreData = false;
 					}
@@ -91,8 +93,9 @@ export const songRepository = (config: SongRepositoryConfig): Repository => {
 
 		const response = await sendHttpRequest(fullUrl.toString());
 		if (response.ok) {
-			const parsedResponse = await response.json();
-			return { _id: parsedResponse.analysisId, ...parsedResponse };
+			// Return the raw response from Song;
+			// Another function can later transform it into either an analysis-centric or file-centric format.
+			return await response.json();
 		}
 		return {};
 	};

@@ -7,7 +7,9 @@
 	"type": "module",
 	"scripts": {
 		"clean": "rimraf dist",
-		"build": "pnpm run clean && tsc"
+		"build": "pnpm run clean && tsc",
+		"test:unit": "mocha",
+		"test:unit:coverage": "c8 pnpm run test:unit"
 	},
 	"keywords": [
 		"overture",
@@ -28,11 +30,12 @@
 		"@types/mocha": "^10.0.8",
 		"c8": "^10.1.2",
 		"chai": "^5.1.1",
+		"fetch-mock": "^12.2.0",
 		"mocha": "^10.7.3"
 	},
 	"dependencies": {
 		"@overture-stack/maestro-common": "workspace:^",
 		"@overture-stack/maestro-indexer-client": "workspace:^",
-		"@overture-stack/maestro-repository": "workspace:^"
+		"kafkajs": "^2.2.4"
 	}
 }
