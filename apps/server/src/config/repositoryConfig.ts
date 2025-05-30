@@ -39,9 +39,6 @@ const definitionLyricRepositorySchema = z.object({
 	LYRIC_CATEGORY_ID: z.coerce.number(),
 });
 export const lyricSchemaDefinition = definitionBaseRepositorySchema.and(definitionLyricRepositorySchema);
-const isLyricRepository = (data: unknown): data is z.infer<typeof lyricSchemaDefinition> => {
-	return lyricSchemaDefinition.safeParse(data).success;
-};
 
 export const IndexingModeSchema = z.enum([IndexingMode.fileCentric, IndexingMode.analysisCentric]);
 
@@ -63,9 +60,6 @@ const definitionSongRepositorySchema = z.object({
 	SONG_COUNTRY: z.string().optional(),
 });
 export const songSchemaDefinition = definitionBaseRepositorySchema.and(definitionSongRepositorySchema);
-const isSongRepository = (data: unknown): data is z.infer<typeof songSchemaDefinition> => {
-	return songSchemaDefinition.safeParse(data).success;
-};
 
 // Define the number of repositories based on the environment variables present
 const getRepoCount = (): number => {
@@ -114,10 +108,8 @@ export const validateRepositories = (env: NodeJS.ProcessEnv) => {
 
 		try {
 			const parsed = repositorySchema.parse(repoData);
-
-			if (isLyricRepository(parsed) || isSongRepository(parsed)) {
-				resultParsedRepositories.push(parsed);
-			}
+			logger.info(`Configuring repository: ${parsed.CODE} (${parsed.TYPE}) at ${parsed.BASE_URL}`);
+			resultParsedRepositories.push(parsed);
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				error.issues.forEach((issue) => {

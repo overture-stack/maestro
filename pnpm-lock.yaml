@@ -153,8 +153,6 @@ importers:
         specifier: ^10.13.2
         version: 10.13.2
 
-  packages/kafka: {}
-
   packages/maestro-provider:
     dependencies:
       '@overture-stack/maestro-common':
@@ -185,8 +183,6 @@ importers:
       mocha:
         specifier: ^10.7.3
         version: 10.7.3
-
-  packages/repository: {}
 
 packages:
 
