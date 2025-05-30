@@ -23,7 +23,7 @@ export type FileCentricDocument = {
 	file: {
 		name: string;
 		data_type: string;
-		size: string;
+		size: number;
 		md5sum: string;
 	};
 	file_access: string;
@@ -48,7 +48,7 @@ export const fileEntrySchema = z.object({
 	objectId: z.string(),
 	studyId: z.string(),
 	fileName: z.string(),
-	fileSize: z.string(),
+	fileSize: z.number(),
 	fileType: z.string(),
 	fileMd5sum: z.string(),
 	fileAccess: z.string(),
