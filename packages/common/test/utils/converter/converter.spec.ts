@@ -32,7 +32,7 @@ describe('convertAnalyses', () => {
 		objectId: 'f001',
 		studyId: 'S1',
 		fileName: 'file.bam',
-		fileSize: '123456',
+		fileSize: 123456,
 		fileType: 'bam',
 		fileMd5sum: 'abc123',
 		fileAccess: 'controlled',

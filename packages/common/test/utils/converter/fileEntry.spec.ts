@@ -8,7 +8,7 @@ describe('File object functions', () => {
 		studyId: 'STUDY-1',
 		analysisId: 'ANALYSIS-1',
 		fileName: 'file.txt',
-		fileSize: '1024',
+		fileSize: 1024,
 		fileType: 'txt',
 		fileMd5sum: 'abcd1234',
 		fileAccess: 'controlled',

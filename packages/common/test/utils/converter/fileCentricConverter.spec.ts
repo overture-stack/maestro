@@ -27,7 +27,7 @@ describe('convertToFileCentricDocuments', () => {
 		objectId: 'f123',
 		studyId: 'S1',
 		fileName: 'data.txt',
-		fileSize: '1234',
+		fileSize: 1234,
 		fileType: 'txt',
 		fileMd5sum: 'abcd1234',
 		fileAccess: 'open',
@@ -68,7 +68,7 @@ describe('convertToFileCentricDocuments', () => {
 		expect(doc.file.data_type).to.eql('txt');
 		expect(doc.file.md5sum).to.eql('abcd1234');
 		expect(doc.file.name).to.eql('data.txt');
-		expect(doc.file.size).to.eql('1234');
+		expect(doc.file.size).to.eql(1234);
 		expect(doc.object_id).to.eql('f123');
 		expect(doc.repositories[0].code).to.eql('REPO1');
 		expect(doc.repositories[0].country).to.eql('CAN');
