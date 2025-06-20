@@ -143,6 +143,8 @@ To index a document in a SONG repository. While the message schemas are defined 
 
 A document will be indexed if its `state` matches one of the values specified in the configuration property `MAESTRO_REPOSITORIES_0_SONG_INDEXABLE_STUDY_STATES` (e.g., `PUBLISHED`). If the `state` does not match and the `analysisId` is provided, the document will be removed.
 
+Documents can be converted to either `fileCentric` or `analysisCentric` modes, depending on the repository configuration. For more information, see the section titled "SONG Repository Indexing Modes."
+
 #### Lyric document
 
 To index a document in a Lyric repository, the message structure typically looks like this:

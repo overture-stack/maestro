@@ -1,4 +1,5 @@
 import {
+	convertAnalyses,
 	type DataRecordValue,
 	type ElasticsearchService,
 	logger,
@@ -27,24 +28,10 @@ export const handleSongDocumentMessage = async (
 		indexableStates.length === 0 ||
 		(payload.state && indexableStates.some((value) => String(value) === String(payload.state)))
 	) {
-		// Song already preparte the document ready for index whether this is fileCentric or analysisCentric
-		// Example analysisCentric payload — see docs/usage.md for full details:
-		// {
-		//   "analysisId": "12314124",
-		//	 "studyId": "PEK-AB",
-		//	 "state": "PUBLISHED",
-		//	 "analysis": {
-		//	   "analysisId": "a54378b7-9f3a-4dcc-8378-b79f3a3dcc2a",
-		//     "studyId": "ABC123",
-		//	   "analysisState": "PUBLISHED",
-		//	   "files": [],
-		//	   "analysisType": []
-		//   }
-		// }
+		// convert the payload to a fileCentric or analysisCentric document
+		const converted = convertAnalyses(repository, [payload]);
 
-		// Map 'analysisId' or 'objectId' to the Elasticsearch '_id' field to ensure document uniqueness
-		payload._id = payload.analysisId || payload.objectId;
-		await indexer.bulkUpsert(indexName, [payload]);
+		await indexer.bulkUpsert(indexName, converted);
 	} else if (payload?.analysisId) {
 		// if the state is not an indexable state (e.g. UNPUBLISHED), remove the document from the index
 		await indexer.deleteData(indexName, payload.analysisId.toString());
