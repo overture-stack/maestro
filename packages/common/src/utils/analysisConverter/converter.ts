@@ -12,8 +12,17 @@ import { type AnalysisCentricDocument, type FileCentricDocument, fileEntrySchema
  * @returns true if object contains all the required properties, otherwise returns false
  */
 export const isFileEntry = (obj: unknown): obj is z.infer<typeof fileEntrySchema> => {
-	const result = fileEntrySchema.safeParse(obj);
-	return result.success;
+	try {
+		fileEntrySchema.parse(obj);
+		return true;
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			error.issues.forEach((issue) => {
+				logger.error(`Invalid file object`, issue);
+			});
+		}
+		return false;
+	}
 };
 
 export const isFileEntryArray = (value: unknown) => {
@@ -34,6 +43,7 @@ export const convertToFileCentricDocuments = (repoInfo: SongRepositoryConfig, re
 	return records.flatMap((record) => {
 		const { files, studyId, ...analysisWithoutFiles } = record;
 
+		// A repository defined as fileCentric must have files!
 		if (!isFileEntryArray(files) || files.length === 0) {
 			logger.error(`Analysis '${record.analysisId}' does not include any file`);
 			return [];

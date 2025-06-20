@@ -1,10 +1,12 @@
 import {
 	convertAnalyses,
-	type DataRecordValue,
+	type DataRecordNested,
 	type ElasticsearchService,
 	logger,
 	type SongRepositoryConfig,
 } from '@overture-stack/maestro-common';
+
+import { isArrayOfObjects } from '../../../repository/utils/utils.js';
 
 /**
  * Handles a Song Document Message and processes it based on the state of the document.
@@ -17,7 +19,7 @@ import {
  */
 export const handleSongDocumentMessage = async (
 	repository: SongRepositoryConfig,
-	payload: Record<string, DataRecordValue>,
+	payload: DataRecordNested,
 	indexer: ElasticsearchService,
 ) => {
 	const indexName = repository.indexName;
@@ -28,10 +30,38 @@ export const handleSongDocumentMessage = async (
 		indexableStates.length === 0 ||
 		(payload.state && indexableStates.some((value) => String(value) === String(payload.state)))
 	) {
-		// convert the payload to a fileCentric or analysisCentric document
-		const converted = convertAnalyses(repository, [payload]);
+		// Example payload — see docs/usage.md for full details:
+		// {
+		// 	"analysisId": "3bb8a1ff-ca21-4132-96b4-60cad182db06",
+		// 	"studyId": "TEST-CA",
+		// 	"songServerId": "collab",
+		// 	"state": "PUBLISHED",
+		// 	"analysis": {
+		// 		"analysisId": "3bb8a1ff-ca21-4132-96b4-60cad182db06",
+		// 		"analysisState": "PUBLISHED",
+		// 		"files": [
+		// 			{
+		// 				"objectId": "a74f4e10-f648-4c6d-ac14-0dc7dfdcd6a0",
+		// 				"fileName": "TEST-CA.fasta",
+		// 				"fileSize": 29937,
+		// 				"fileType": "FASTA",
+		// 				"fileMd5sum": "0000000000",
+		// 				"fileAccess": "open",
+		// 				"dataType": "FASTA"
+		// 			}
+		// 		]
+		// 	}
+		// }
+		const { analysis } = payload;
+		const arrayAnalysis = Array.isArray(analysis) ? analysis : [analysis];
 
-		await indexer.bulkUpsert(indexName, converted);
+		if (!isArrayOfObjects(arrayAnalysis)) {
+			const message = `Invalid message format: ${JSON.stringify(payload)}`;
+			logger.error(message);
+			throw new Error(message);
+		}
+		const converted = convertAnalyses(repository, arrayAnalysis);
+		return indexer.bulkUpsert(indexName, converted);
 	} else if (payload?.analysisId) {
 		// if the state is not an indexable state (e.g. UNPUBLISHED), remove the document from the index
 		await indexer.deleteData(indexName, payload.analysisId.toString());

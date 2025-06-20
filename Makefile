@@ -50,6 +50,7 @@ rest-index-repo:
 ###################
 ## the curl requests here run against the kafka rest proxy
 ## SONG analysis topic
+## publish an analysis with files
 kafka-analysis-publish:
 	curl -X POST \
 	http://localhost:8082/topics/song-analysis \
@@ -58,7 +59,18 @@ kafka-analysis-publish:
 	-H 'cache-control: no-cache' \
 	-d '{ \
 		"records": [ \
-			{"value" : { "analysisId" : "EGAZ00001254368", "studyId" : "PEME-CA", "songServerId": "collab", "state": "PUBLISHED" }	} \
+			{"value" : { "analysisId" : "3bb8a1ff-ca21-4132-96b4-60cad182db06", "studyId" : "TEST-CA", "songServerId": "collab", "state": "PUBLISHED", \
+			"analysis": { "analysisId": "3bb8a1ff-ca21-4132-96b4-60cad182db06", "analysisState": "PUBLISHED", \
+				"files": [{ \
+					"objectId": "a74f4e10-f648-4c6d-ac14-0dc7dfdcd6a0", \
+					"fileName": "TEST-CA.fasta", \
+					"fileSize": 29937, \
+					"fileType": "FASTA", \
+					"fileMd5sum": "0000000000", \
+					"fileAccess": "open", \
+					"dataType": "FASTA" \
+				} ] \
+			} }	} \
 		] \
 	}'
 

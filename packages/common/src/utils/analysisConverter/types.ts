@@ -46,7 +46,7 @@ export type FileCentricDocument = {
  */
 export const fileEntrySchema = z.object({
 	objectId: z.string(),
-	studyId: z.string(),
+	studyId: z.string().optional(),
 	fileName: z.string(),
 	fileSize: z.number(),
 	fileType: z.string(),

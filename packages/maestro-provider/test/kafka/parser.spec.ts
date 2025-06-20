@@ -16,6 +16,14 @@ describe('parse kafka message', () => {
 		expect(result).to.eql(json);
 	});
 
+	it('should parse a nested JSON buffer correctly', () => {
+		const json = { foo: 'bar', count: 42, nested: { key: 'value', array: [1, 2, 3] } };
+		const buffer = Buffer.from(JSON.stringify(json));
+
+		const result = parseMessage(buffer);
+		expect(result).to.eql(json);
+	});
+
 	it('should return null for invalid JSON and log an error', () => {
 		const invalidJson = Buffer.from('{ invalid: json }');
 

@@ -1,7 +1,7 @@
 import type { KafkaMessage } from 'kafkajs';
 
 import {
-	type DataRecordValue,
+	type DataRecordNested,
 	type ElasticsearchService,
 	logger,
 	type LyricRepositoryConfig,
@@ -12,18 +12,18 @@ import {
 import { getRepoInformation } from '../../repository/index.js';
 import { parseMessage } from './parser.js';
 
-interface AnalysisRequestMessage extends Record<string, DataRecordValue> {
+interface AnalysisRequestMessage extends DataRecordNested {
 	analysisId: string;
 	studyId: string;
 	repositoryCode: string;
 }
 
-interface StudyRequestMessage extends Record<string, DataRecordValue> {
+interface StudyRequestMessage extends DataRecordNested {
 	studyId: string;
 	repositoryCode: string;
 }
 
-interface RepositoryRequestMessage extends Record<string, DataRecordValue> {
+interface RepositoryRequestMessage extends DataRecordNested {
 	repositoryCode: string;
 }
 
@@ -33,7 +33,7 @@ interface RepositoryRequestMessage extends Record<string, DataRecordValue> {
  * @param message
  * @returns
  */
-export const isAnalysisRequest = (message: Record<string, DataRecordValue>): message is AnalysisRequestMessage => {
+export const isAnalysisRequest = (message: DataRecordNested): message is AnalysisRequestMessage => {
 	return !!message.analysisId && !!message.studyId && !!message.repositoryCode;
 };
 
@@ -43,7 +43,7 @@ export const isAnalysisRequest = (message: Record<string, DataRecordValue>): mes
  * @param message
  * @returns
  */
-export const isStudyRequest = (message: Record<string, DataRecordValue>): message is StudyRequestMessage => {
+export const isStudyRequest = (message: DataRecordNested): message is StudyRequestMessage => {
 	return !message.analysisId && !!message.studyId && !!message.repositoryCode;
 };
 
@@ -53,7 +53,7 @@ export const isStudyRequest = (message: Record<string, DataRecordValue>): messag
  * @param message
  * @returns
  */
-export const isRepoRequest = (message: Record<string, DataRecordValue>): message is RepositoryRequestMessage => {
+export const isRepoRequest = (message: DataRecordNested): message is RepositoryRequestMessage => {
 	return !message.analysisId && !message.studyId && !!message.repositoryCode;
 };
 

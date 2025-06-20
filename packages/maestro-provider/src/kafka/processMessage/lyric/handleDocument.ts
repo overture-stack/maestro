@@ -1,5 +1,5 @@
 import {
-	type DataRecordValue,
+	type DataRecordNested,
 	type ElasticsearchService,
 	logger,
 	type LyricRepositoryConfig,
@@ -16,7 +16,7 @@ import {
  */
 export const handleLyricDocumentMessage = async (
 	repository: LyricRepositoryConfig,
-	payload: Record<string, DataRecordValue>,
+	payload: DataRecordNested,
 	indexer: ElasticsearchService,
 ) => {
 	// Index every document if 'validDataOnly' is false, or

@@ -1,4 +1,4 @@
-import type { DataRecordValue } from '@overture-stack/maestro-common';
+import type { DataRecordNested } from '@overture-stack/maestro-common';
 
 /**
  * Parses the Kafka message into a JSON format and returns it.
@@ -6,7 +6,7 @@ import type { DataRecordValue } from '@overture-stack/maestro-common';
  * @param messageValue
  * @returns
  */
-export const parseMessage = (messageValue: Buffer | null): Record<string, DataRecordValue> | null => {
+export const parseMessage = (messageValue: Buffer | null): DataRecordNested | null => {
 	if (!messageValue) return null;
 	try {
 		return JSON.parse(messageValue.toString());
