@@ -18,7 +18,7 @@ Maestro enables researchers to enhance their Overture SONG deployments by buildi
 Technical resources for those working with or contributing to the project are available from our official documentation site, the following content can also be read and updated within the `/docs` folder of this repository.
 
 - **[Maestro Overview](https://docs.overture.bio/docs/core-software/Maestro/overview)** 
-- [**Setting up the Development Enviornment**](https://docs.overture.bio/docs/core-software/Maestro/setup)
+- [**Setting up the Development Environment**](https://docs.overture.bio/docs/core-software/Maestro/setup)
 - [**Common Usage Docs**](https://docs.overture.bio/docs/core-software/Maestro/setup)
 
 ## Development Environment
