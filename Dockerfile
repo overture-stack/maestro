@@ -15,7 +15,9 @@ ARG WORKDIR
 RUN apk add --no-cache libc6-compat
 
 # install pnpm as root user, before updating node ownership
-RUN npm i -g pnpm
+ENV COREPACK_HOME=/usr/local/share/corepack
+RUN corepack enable
+RUN corepack prepare pnpm@11.9.0 --activate
 
 # create our own user to run node, don't run node in production as root
 ENV APP_UID=9999
@@ -41,7 +43,7 @@ ARG WORKDIR
 
 COPY --chown=maestro:maestro . ./
 
-RUN pnpm install --ignore-scripts
+RUN pnpm install --ignore-scripts --frozen-lockfile
 
 RUN pnpm build:all
 
@@ -59,8 +61,10 @@ WORKDIR ${WORKDIR}
 
 USER ${APP_USER}:${APP_USER}
 
+ENV CI=true
+
 # pnpm will not install any package listed in devDependencies
-RUN pnpm install --prod
+RUN pnpm install --prod --frozen-lockfile
 
 
 ######################
@@ -83,4 +87,4 @@ EXPOSE 11235
 ENV COMMIT_SHA=${COMMIT}
 ENV NODE_ENV=production
 
-CMD [ "pnpm", "start:prod" ]
+CMD [ "node", "apps/server/dist/src/index.js" ]
