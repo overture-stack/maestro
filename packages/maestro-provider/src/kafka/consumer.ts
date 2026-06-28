@@ -60,12 +60,19 @@ export async function initializeConsumer({
 	}
 
 	const admin = kafka.admin();
-	admin.createTopics({
-		waitForLeaders: true,
-		topics: topics.map((t) => ({
-			topic: t,
-		})),
-	});
+	try {
+		await admin.connect();
+		await admin.createTopics({
+			waitForLeaders: true,
+			topics: topics.map((t) => ({
+				topic: t,
+			})),
+		});
+	} catch (error) {
+		logger.warn('Topic pre-creation failed; topics may already exist or require manual creation', { error });
+	} finally {
+		await admin.disconnect();
+	}
 
 	await consumer.subscribe({ topics, fromBeginning: true });
 	logger.info(`Subscribing to Kafka topics: ${JSON.stringify(topics)}`);
