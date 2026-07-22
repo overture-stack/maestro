@@ -152,6 +152,8 @@ To index a document in a Lyric repository, the message structure typically looks
 ```json
 {
 	"value": {
+		"categoryAlias": "donor",
+		"categoryId": 3,
 		"systemId": "12314124",
 		"organization": "ABC-123",
 		"entityName": "sample",
@@ -161,9 +163,22 @@ To index a document in a Lyric repository, the message structure typically looks
 }
 ```
 
+`categoryId` is always present; `categoryAlias` is present only if the Lyric category has an alias assigned.
+
 If the configuration property `MAESTRO_REPOSITORIES_1_LYRIC_VALID_DATA_ONLY` is set to `true` a document will only be indexed if its `isValid` fiels is `true`; otherwise, it will be removed.
 
 If the configuration property is set to `false`, all documents will be indexed regardless of their `isValid` status.
+
+#### Routing a document to a repository
+
+`MAESTRO_REPOSITORIES_N_LYRIC_CATEGORY_ID` accepts either the category's numeric id or its alias, matched against the incoming message by equality, not shape, so a numeric-looking alias is never confused with a plain id.
+
+A Kafka topic can be shared by more than one Lyric repository:
+
+- One repository per topic: the message routes directly, no category identifier required.
+- Multiple repositories per topic: `categoryAlias` is tried first, falling back to `categoryId`. A repository matches if its `LYRIC_CATEGORY_ID` equals either field.
+- More than one repository configured with the same value: the message is indexed into all of them, a deliberate fan-out, not a misconfiguration.
+- No match, or no identifier on a shared topic: sent to the dead-letter queue with a warning logged.
 
 ## SONG Repository Indexing Modes
 

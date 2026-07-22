@@ -36,7 +36,8 @@ const definitionBaseRepositorySchema = z.object({
 const definitionLyricRepositorySchema = z.object({
 	TYPE: z.literal(repositoryTypes.Values.LYRIC),
 	LYRIC_VALID_DATA_ONLY: z.coerce.boolean().default(true),
-	LYRIC_CATEGORY_ID: z.coerce.number(),
+	// A numeric id or an alias; matched by equality, not shape, so not coerced to a number.
+	LYRIC_CATEGORY_ID: z.string().min(1),
 });
 export const lyricSchemaDefinition = definitionBaseRepositorySchema.and(definitionLyricRepositorySchema);
 
