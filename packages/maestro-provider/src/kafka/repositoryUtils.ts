@@ -33,11 +33,13 @@ export const getMatchingRepos = (
 	const messageCategoryId = message.categoryId === undefined ? undefined : String(message.categoryId);
 
 	return candidates.filter((repo) => {
-		if (repo.type !== RepositoryType.LYRIC) {
-			return true;
+		// scoping directly, as Song doesn't have categories, and future compatible data sources may not either
+		if (repo.type === RepositoryType.LYRIC) {
+			const configuredValue = String(repo.categoryId);
+			return configuredValue === message.categoryAlias || configuredValue === messageCategoryId;
 		}
-		const configuredValue = String(repo.categoryId);
-		return configuredValue === message.categoryAlias || configuredValue === messageCategoryId;
+
+		return true;
 	});
 };
 
