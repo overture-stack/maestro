@@ -56,7 +56,12 @@ interface LyricIndexConfig extends IndexConfig {
 }
 
 export interface LyricRepositoryConfig extends RepositoryConfig, LyricIndexConfig {
-	categoryId: number;
+	/**
+	 * The Lyric category this repository indexes, or an alias for it. Matched against an incoming
+	 * message's `categoryId`/`categoryAlias` by equality, not shape, so a numeric-looking alias
+	 * is never confused with a plain id.
+	 */
+	categoryId: number | string;
 	type: typeof RepositoryType.LYRIC;
 }
 

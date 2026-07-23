@@ -94,7 +94,7 @@ In the data model, data is grouped by different entities. Maestro can index disc
 
 # Different indexing APIs
 
-- Event driven indexing: Kafka integration with SONG to index published analysis and delete suppressed / unpublished analyses, (see the [Usage](usage.md#kafka-topics) Kafka settings)
+- Event driven indexing: Kafka integration with SONG (index published analyses, delete suppressed/unpublished ones) and Lyric (index committed documents, routed by category), see the [Usage](usage.md#kafka-topics) Kafka settings
 - HTTP json API see [Usage](usage.md#http-api)
 
 # Ability to Exclude

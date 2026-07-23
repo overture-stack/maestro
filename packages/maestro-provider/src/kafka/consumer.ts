@@ -8,10 +8,10 @@ import {
 } from '@overture-stack/maestro-common';
 
 import { client } from './client.js';
-import { processDocumentMessage } from './processMessage/documentMessage.js';
 import { processRequestMessage } from './processMessage/requestMessage.js';
+import { routeDocumentMessage } from './processMessage/routeDocumentMessage.js';
 import { sendToDLQ } from './producer.js';
-import { getRepoByTopic, getRepoTopics } from './repositoryUtils.js';
+import { getRepoTopics } from './repositoryUtils.js';
 
 /**
  * Initialize a Kafka consumer to listen to each repository and request topics
@@ -100,17 +100,17 @@ export async function initializeConsumer({
 				return;
 			}
 
-			const repo = getRepoByTopic(repositories, topic);
-			if (!repo) {
-				await sendToDLQ(producer, message);
-				return;
-			}
-
 			try {
-				await processDocumentMessage({ repository: repo, message: message, indexer: indexerProvider });
+				await routeDocumentMessage({
+					indexer: indexerProvider,
+					message,
+					producer,
+					repositories,
+					topic,
+				});
 			} catch (error) {
-				logger.error('Failed to process message', { error });
-				await sendToDLQ(producer, message, repo.kafkaDlq);
+				logger.error(`Failed to route document message on topic '${topic}'. ${error}`);
+				await sendToDLQ(producer, message);
 			}
 			return;
 		},

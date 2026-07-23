@@ -152,6 +152,8 @@ To index a document in a Lyric repository, the message structure typically looks
 ```json
 {
 	"value": {
+		"categoryAlias": "donor",
+		"categoryId": 3,
 		"systemId": "12314124",
 		"organization": "ABC-123",
 		"entityName": "sample",
@@ -161,9 +163,22 @@ To index a document in a Lyric repository, the message structure typically looks
 }
 ```
 
+`categoryId` is always present; `categoryAlias` is present only if the Lyric category has an alias assigned.
+
 If the configuration property `MAESTRO_REPOSITORIES_1_LYRIC_VALID_DATA_ONLY` is set to `true` a document will only be indexed if its `isValid` fiels is `true`; otherwise, it will be removed.
 
 If the configuration property is set to `false`, all documents will be indexed regardless of their `isValid` status.
+
+#### Routing a document to a repository
+
+`MAESTRO_REPOSITORIES_N_LYRIC_CATEGORY_ID` accepts either the category's numeric id or its alias, matched against the incoming message by equality, not shape, so a numeric-looking alias is never confused with a plain id.
+
+A Kafka topic can be shared by more than one Lyric repository, or by only one:
+
+- Every Lyric repository always requires a match: `categoryAlias` is tried first, falling back to `categoryId`. A repository matches if its `LYRIC_CATEGORY_ID` equals either field. This applies even when only one Lyric repository is configured for the topic, since Lyric's own publishing isn't under Maestro's control, it may fan out several categories onto one topic while Maestro only indexes a subset.
+- More than one repository configured with the same value: the message is indexed into all of them, a deliberate fan-out, not a misconfiguration.
+- No match: logged and skipped, not sent to the dead-letter queue. A well-formed message that simply isn't for any configured repository has nothing to reprocess, this is expected whenever a topic carries categories this deployment isn't configured to index.
+- SONG repositories have no category concept: topic alone routes to them, same as before.
 
 ## SONG Repository Indexing Modes
 
