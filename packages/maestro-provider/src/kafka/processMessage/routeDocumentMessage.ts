@@ -9,6 +9,8 @@ import { parseMessage } from './parser.js';
 import { processDocumentMessage } from './documentMessage.js';
 
 /**
+ * Routes a message received from Kafka to the correct processor.
+ * 
  * Parses a Lyric/SONG document message once, resolves which repo(s) it belongs to, and indexes
  * it into every match. Split out from `initializeConsumer`'s `eachMessage` so it's testable
  * without a live Kafka client, and so a fan-out doesn't re-parse the same message per repo.
