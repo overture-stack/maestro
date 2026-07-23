@@ -45,13 +45,17 @@ export const routeDocumentMessage = async ({
 	});
 
 	if (matches.length === 0) {
-		logger.warn(`No repository matched message on topic '${topic}'`, {
+		// Not DLQ'd: a well-formed message with no matching repo isn't an error to reprocess, it's
+		// expected whenever a topic carries categories this Maestro deployment isn't configured to
+		// index (Lyric's publishing isn't under Maestro's control). configuredForTopic is logged
+		// alongside it so a genuine misconfiguration (e.g. a typo'd categoryId) is still visible to
+		// anyone looking, without treating every non-match as an operational alarm.
+		logger.info(`No repository matched message on topic '${topic}', skipping`, {
 			categoryAlias: parsed.categoryAlias,
 			categoryId: parsed.categoryId,
 			configuredForTopic: getConfiguredCategoryIds(repositories, topic),
 			topic,
 		});
-		await sendToDLQ(producer, message);
 		return;
 	}
 

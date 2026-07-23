@@ -16,11 +16,13 @@ type DocumentMessageIdentity = {
 
 /**
  * Returns every repo configured for `topic` whose `categoryId` matches the message's own
- * `categoryId` or `categoryAlias`, by equality not shape.
+ * `categoryId` or `categoryAlias`, by equality not shape. Always enforced for Lyric repos, even
+ * when a topic maps to only one: Lyric's publishing isn't under Maestro's control, it may fan out
+ * several categories onto one topic while Maestro is only configured to index a subset of them.
+ * SONG repos have no category concept, so topic alone is sufficient to route to them.
  *
- * A topic mapping to exactly one repo returns it unconditionally; category identifiers only
- * disambiguate a shared topic. More than one match is a deliberate fan-out, not an error; a
- * caller treating zero matches as unroutable is responsible for that.
+ * More than one match is a deliberate fan-out, not an error; a caller treating zero matches as
+ * unroutable is responsible for that.
  */
 export const getMatchingRepos = (
 	repos: (SongRepositoryConfig | LyricRepositoryConfig)[],
@@ -28,15 +30,11 @@ export const getMatchingRepos = (
 	message: DocumentMessageIdentity,
 ): (SongRepositoryConfig | LyricRepositoryConfig)[] => {
 	const candidates = repos.filter((repo) => repo.kafkaTopic === topic);
-	if (candidates.length <= 1) {
-		return candidates;
-	}
-
 	const messageCategoryId = message.categoryId === undefined ? undefined : String(message.categoryId);
 
 	return candidates.filter((repo) => {
 		if (repo.type !== RepositoryType.LYRIC) {
-			return false;
+			return true;
 		}
 		const configuredValue = String(repo.categoryId);
 		return configuredValue === message.categoryAlias || configuredValue === messageCategoryId;

@@ -100,13 +100,18 @@ export async function initializeConsumer({
 				return;
 			}
 
-			await routeDocumentMessage({
-				indexer: indexerProvider,
-				message,
-				producer,
-				repositories,
-				topic,
-			});
+			try {
+				await routeDocumentMessage({
+					indexer: indexerProvider,
+					message,
+					producer,
+					repositories,
+					topic,
+				});
+			} catch (error) {
+				logger.error(`Failed to route document message on topic '${topic}'. ${error}`);
+				await sendToDLQ(producer, message);
+			}
 			return;
 		},
 	});

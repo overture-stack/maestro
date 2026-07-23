@@ -53,8 +53,8 @@ describe('routeDocumentMessage', () => {
 		sinon.restore();
 	});
 
-	describe('when the topic maps to a single repo', () => {
-		it('should index the document even without a categoryId on the message', async () => {
+	describe('when the topic maps to a single Lyric repo', () => {
+		it('should skip (not DLQ) a message with no categoryId, since a lone repo still requires a match', async () => {
 			const repo = lyricRepo('3');
 			const indexer = createFakeIndexer();
 			const producer = createFakeProducer();
@@ -62,6 +62,24 @@ describe('routeDocumentMessage', () => {
 			await routeDocumentMessage({
 				indexer: indexer as unknown as ElasticsearchService,
 				message: kafkaMessage({ data: { a: 1 }, isValid: true, systemId: 'SYS-1' }) as never,
+				producer: producer as never,
+				repositories: [repo],
+				topic: sharedTopic,
+			});
+
+			expect(indexer.bulkUpsert.called).to.be.false;
+			expect(producer.send.called).to.be.false;
+			expect(loggerInfoStub.called).to.be.true;
+		});
+
+		it('should index the document when the message categoryId matches the configured value', async () => {
+			const repo = lyricRepo('3');
+			const indexer = createFakeIndexer();
+			const producer = createFakeProducer();
+
+			await routeDocumentMessage({
+				indexer: indexer as unknown as ElasticsearchService,
+				message: kafkaMessage({ categoryId: '3', data: { a: 1 }, isValid: true, systemId: 'SYS-1' }) as never,
 				producer: producer as never,
 				repositories: [repo],
 				topic: sharedTopic,
@@ -81,7 +99,7 @@ describe('routeDocumentMessage', () => {
 
 			await routeDocumentMessage({
 				indexer: indexer as unknown as ElasticsearchService,
-				message: kafkaMessage({ data: { a: 1 }, isValid: true, systemId: 'SYS-1' }) as never,
+				message: kafkaMessage({ categoryId: '3', data: { a: 1 }, isValid: true, systemId: 'SYS-1' }) as never,
 				producer: producer as never,
 				repositories: [repo],
 				topic: sharedTopic,
@@ -147,7 +165,10 @@ describe('routeDocumentMessage', () => {
 			expect(indexer.bulkUpsert.calledWith(repoB.indexName)).to.be.true;
 		});
 
-		it('should send to the DLQ and log a warning when no repo matches the message categoryId/categoryAlias', async () => {
+		it('should skip (not DLQ) and log info when no repo matches the message categoryId/categoryAlias', async () => {
+			// Not an error: a well-formed message that simply isn't for any configured repo has
+			// nothing to reprocess, expected once a topic carries categories this Maestro isn't
+			// configured to index.
 			const repoA = lyricRepo('3');
 			const repoB = lyricRepo('7');
 			const indexer = createFakeIndexer();
@@ -162,11 +183,11 @@ describe('routeDocumentMessage', () => {
 			});
 
 			expect(indexer.bulkUpsert.called).to.be.false;
-			expect(producer.send.called).to.be.true;
-			expect(loggerWarnStub.called).to.be.true;
+			expect(producer.send.called).to.be.false;
+			expect(loggerInfoStub.called).to.be.true;
 		});
 
-		it('should include every repo configured for the topic in the no-match warning, so a misconfigured categoryId is visible without cross-referencing deployed config', async () => {
+		it('should include every repo configured for the topic in the no-match log, so a misconfigured categoryId is visible without cross-referencing deployed config', async () => {
 			const repoA = lyricRepo('3');
 			const repoB = lyricRepo('7');
 			const indexer = createFakeIndexer();
@@ -180,15 +201,13 @@ describe('routeDocumentMessage', () => {
 				topic: sharedTopic,
 			});
 
-			const loggedContext = loggerWarnStub.getCalls().flatMap((call) => call.args);
+			const loggedContext = loggerInfoStub.getCalls().flatMap((call) => call.args);
 			const serialized = JSON.stringify(loggedContext);
 			expect(serialized).to.include('blah');
 			expect(serialized).to.include('"configuredForTopic":["3","7"]');
 		});
 
-		it('should send to the DLQ and log a warning when the message carries no category identifier at all', async () => {
-			// A hard stop, not a fallback: Kafka publishing in Lyric is new enough that no
-			// producer should omit categoryId.
+		it('should skip (not DLQ) and log info when the message carries no category identifier at all', async () => {
 			const repoA = lyricRepo('3');
 			const repoB = lyricRepo('7');
 			const indexer = createFakeIndexer();
@@ -203,8 +222,8 @@ describe('routeDocumentMessage', () => {
 			});
 
 			expect(indexer.bulkUpsert.called).to.be.false;
-			expect(producer.send.called).to.be.true;
-			expect(loggerWarnStub.called).to.be.true;
+			expect(producer.send.called).to.be.false;
+			expect(loggerInfoStub.called).to.be.true;
 		});
 	});
 

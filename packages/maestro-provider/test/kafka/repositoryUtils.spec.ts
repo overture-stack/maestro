@@ -78,22 +78,48 @@ describe('repository utils', () => {
 			validDataOnly: true,
 		});
 
-		describe('when the topic maps to a single repo', () => {
-			it('should return that repo without needing a category identifier on the message', () => {
+		describe('when the topic maps to a single Lyric repo', () => {
+			it('should still require a matching category identifier, since Lyric may publish other categories to the same topic', () => {
 				const repos = [lyricRepo('3')];
 
 				const result = getMatchingRepos(repos, sharedTopic, {});
 
-				expect(result).to.deep.equal(repos);
+				expect(result).to.have.length(0);
 			});
 
-			it('should return that repo even when the message carries a categoryId that does not match its configured value', () => {
-				// Topic alone is unambiguous here, so category identifiers are informational, not required for a match.
+			it('should reject a message whose categoryId does not match the configured value', () => {
 				const repos = [lyricRepo('3')];
 
 				const result = getMatchingRepos(repos, sharedTopic, { categoryId: 999 });
 
+				expect(result).to.have.length(0);
+			});
+
+			it('should match when the message categoryId equals the configured value', () => {
+				const repos = [lyricRepo('3')];
+
+				const result = getMatchingRepos(repos, sharedTopic, { categoryId: 3 });
+
 				expect(result).to.deep.equal(repos);
+			});
+		});
+
+		describe('when the topic maps to a single SONG repo', () => {
+			it('should return that repo without any category identifier, since SONG has no category concept', () => {
+				const songRepo: SongRepositoryConfig = {
+					baseUrl: 'song-server',
+					code: 'SONG-SOLO',
+					indexableStudyStates: [IndexableState.PUBLISHED],
+					indexingMode: IndexingMode.analysisCentric,
+					indexName: 'analysis_centric',
+					kafkaTopic: 'song-solo-topic',
+					name: 'Song Solo',
+					type: 'SONG',
+				};
+
+				const result = getMatchingRepos([songRepo], 'song-solo-topic', {});
+
+				expect(result).to.deep.equal([songRepo]);
 			});
 		});
 
@@ -149,7 +175,7 @@ describe('repository utils', () => {
 
 			it('should return no matches when the message carries no category identifier at all', () => {
 				// Documented, not a graceful fallback: a shared topic with no category identifier
-				// can't be routed safely, goes to the DLQ with a warning at the consumer level.
+				// can't be routed safely, and is skipped (logged, not DLQ'd) at the consumer level.
 				const repos = [lyricRepo('3'), lyricRepo('7')];
 
 				const result = getMatchingRepos(repos, sharedTopic, {});
@@ -159,8 +185,6 @@ describe('repository utils', () => {
 		});
 
 		it('should not match repos configured for a different topic', () => {
-			// A second same-topic repo avoids the single-candidate bypass, so this genuinely
-			// tests topic filtering.
 			const repos = [lyricRepo('3'), lyricRepo('7'), { ...lyricRepo('7', 'decoy'), kafkaTopic: 'other-topic' }];
 
 			const result = getMatchingRepos(repos, sharedTopic, { categoryId: 7 });
