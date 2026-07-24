@@ -18,7 +18,7 @@ The index mapping needs conform with your specific data model and therefore shou
 While index mapping are not configurable at runtime, there may be cases where an administrator needs to change the mapping. For example, when updating Song's dynamic schemas, the administrator must also update the index mapping.
 
 :::tip Feature Request In development
-As part of our [**new data submission system**](https://docs.overture.bio/docs/under-development/) we are working towards having Maestro automatically generate these index mappings based on a provided schema
+As part of our [**new data submission system**](https://docs.overture.bio/build/core-software/Lyric/overview) we are working towards having Maestro automatically generate these index mappings based on a provided schema
 :::
 
 <!--- For PR, is the description below accurate, is it detailed enough? --->
