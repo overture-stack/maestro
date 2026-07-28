@@ -36,20 +36,20 @@ We'll use our Quickstart service, a flexible Docker Compose setup, to spin up Ma
 
    ![maestroDev](./assets/maestroDev.svg "Maestro Dev Environment")
 
-   | Service       | Port   | Description                                     | Purpose in Score Development                                                |
+   | Service       | Port   | Description                                     | Purpose in Maestro Development                                              |
    | ------------- | ------ | ----------------------------------------------- | --------------------------------------------------------------------------- |
    | Conductor     | `9204` | Orchestrates deployments and environment setups | Manages the overall development environment                                 |
    | Keycloak-db   | -      | Database for Keycloak (no exposed port)         | Stores Keycloak data for authentication                                     |
-   | Keycloak      | `8180` | Authorization and authentication service        | Provides OAuth2 authentication for Score                                    |
+   | Keycloak      | `8180` | Authorization and authentication service        | Provides OAuth2 authentication for Maestro                                  |
    | Song-db       | `5433` | Database for Song                               | Stores metadata managed by Song                                             |
-   | Song          | `8080` | Metadata management service                     | Manages metadata for files stored by Score                                  |
+   | Song          | `8080` | Metadata management service                     | Manages the file metadata that Maestro indexes                             |
    | Kafka         | `9092` | Distributed event streaming platform            | Serves as a messaging queue for publication events used to trigger indexing |
    | Elasticsearch | `9200` | Distributed search and analytics engine         | Provides fast and scalable search capabilities over indexed data            |
 
    - Ensure these ports are free on your system before starting the environment.
    - You may need to adjust the ports in the `docker-compose.yml` file if you have conflicts with existing services.
 
-   For more information, see our [Quickstart documentation linked here](https://docs.overture.bio/docs/platform-tools/Quickstart)
+   For more information, see our [Quickstart documentation linked here](/deploy/quickstart)
 
    </details>
 
@@ -103,22 +103,22 @@ We'll use our Quickstart service, a flexible Docker Compose setup, to spin up Ma
 
 ### Verification
 
-After installing and configuring Score, verify that the system is functioning correctly:
+After installing and configuring Maestro, verify that the system is functioning correctly:
 
 1. **Check Server Health**
 
    ```bash
-   curl -s -o /dev/null -w "%{http_code}" "http://localhost:8087/download/ping"
+   curl -s -o /dev/null -w "%{http_code}" "http://localhost:11235/"
    ```
 
-   - Expected result: Status code `200`
+   - Expected result: Status code `200` (the endpoint returns `{"status":"up"}`)
    - Troubleshooting:
-     - Ensure Score server is running
-     - Check you're using the correct port (default is 8087)
+     - Ensure the Maestro server is running
+     - Check you're using the correct port (default is 11235)
      - Verify no firewall issues are blocking the connection
 
 2. **Check the Swagger UI**
-   - Navigate to `http://localhost:8087/swagger-ui.html` in a web browser
+   - Navigate to `http://localhost:11235/api-docs` in a web browser
    - Expected result: Swagger UI page with a list of available API endpoints
    - Troubleshooting:
      - Check browser console for error messages
@@ -129,5 +129,5 @@ If you encounter any issues or have questions about our API, please don't hesita
 :::
 
 :::warning
-This guide is meant to demonstrate the configuration and usage of Score for development purposes and is not intended for production. If you ignore this warning and use this in any public or production environment, please remember to use Spring profiles accordingly. For production do not use **dev** profile.
+This guide is meant to demonstrate the configuration and usage of Maestro for development purposes and is not intended for production. If you ignore this warning and use this in any public or production environment, please remember to use Spring profiles accordingly. For production do not use **dev** profile.
 :::

@@ -3,12 +3,12 @@
 Maestro offers flexible indexing at the repository, study, or individual document (analysis file) levels alongside a RESTful API for interacting with its core functionalities. There are two methods to interact with the Maestro API:
 
 - **The Swagger UI:** The Swagger UI is useful for exploration and simple use cases. It provides detailed descriptions of all available endpoints, expected inputs, and error responses. Depending on your deployment the swagger UI can be accessed from the following URLs.
-    - Local: `http://localhost:11235/maestro/api-docs`
+    - Local: `http://localhost:11235/api-docs`
     - Server: `https://<YOUR-URL>/maestro/api-docs`
 
 
       :::tip Maestro API Reference Doc
-      Checkout the [Maestro API reference](https://docs.overture.bio/docs/core-software/Maestro/usage/api-reference) to view this information alongside a templated Maestro swagger doc.
+      Checkout the [Maestro API reference](/develop/Maestro/reference/api-reference) to view this information alongside a templated Maestro swagger doc.
       :::
 
 - **cURL:** Maestro's API can be accessed through the command line using cURL, allowing for more complex programmatic queries if desired. Templated cURL requests can be found from the Maestro Swagger UI 
@@ -30,7 +30,7 @@ Replace `<repositoryCode>`, `<studyId>`, and `<analysisId>` with appropriate val
 
 #### Using Swagger UI
 
-  1. Go to `http://localhost:11235/maestro/api-docs`
+  1. Go to `http://localhost:11235/api-docs`
   2. Under **management-controller**, select: 
       - `POST /index/repository/{repositoryCode}/study/{studyId}/analysis/{analysisId}`
   3. Click **Try it out** & enter your `analysisId`, `studyId`, and `repositoryCode`
@@ -61,7 +61,7 @@ Replace `<repositoryCode>` and `<studyId>` with appropriate values.
 
 The following is an example of a Swagger request for indexing a specfic studyId
 
-1. Go to `http://localhost:11235/maestro/api-docs`
+1. Go to `http://localhost:11235/api-docs`
 2. Under **management-controller**, select `POST /index/repository/{repositoryCode}/study/{studyId}`
 3. Click **Try it out** & enter your `studyId` and `repositoryCode`
 5. Click **Execute**
@@ -85,7 +85,7 @@ Replace `<repositoryCode>` with the appropriate value.
 
 #### Using Swagger UI
 
-1. Go to `http://localhost:11235/maestro/api-docs`
+1. Go to `http://localhost:11235/api-docs`
 2. Under **management-controller**, select `POST /index/repository/{repositoryCode}`
 3. Click **Try it out**
 4. Enter the `repositoryCode` of the Song repository you want to index

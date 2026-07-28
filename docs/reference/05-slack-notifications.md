@@ -1,3 +1,11 @@
+---
+draft: true
+---
+
+<!-- Drafted 2026-07-28: the canonical TypeScript maestro-server does not provide Slack
+notifications; this page documents the Java implementation's feature. Remove `draft: true`
+once the TypeScript server reaches Slack parity. -->
+
 # Slack Notifications
 
 Maestro can be integrated with Slack to send real-time notifications about errors, warnings, and progress updates throughout the indexing process. 
@@ -16,35 +24,35 @@ Before configuring Slack notifications, you'll need:
 
     ```bash
     # Enable/Disable Slack Integration
-    NOTIFICATIONS_SLACK_ENABLED=true
+    MAESTRO_NOTIFICATIONS_SLACK_ENABLED=true
 
     # Notification Types
     # Options: ALL, ERROR, WARNING, INFO
-    NOTIFICATIONS_SLACK_NOTIFIEDON=ALL
+    MAESTRO_NOTIFICATIONS_SLACK_NOTIFIEDON=ALL
 
     # Slack Webhook Configuration
-    NOTIFICATIONS_SLACK_URL=https://hooks.slack.com/services/YOUR_SECRET_TOKEN
-    NOTIFICATIONS_SLACK_CHANNEL=maestro-alerts
-    NOTIFICATIONS_SLACK_USERNAME=maestro
+    MAESTRO_NOTIFICATIONS_SLACK_URL=https://hooks.slack.com/services/YOUR_SECRET_TOKEN
+    MAESTRO_NOTIFICATIONS_SLACK_CHANNEL=maestro-alerts
+    MAESTRO_NOTIFICATIONS_SLACK_USERNAME=maestro
 
     # Message Configuration
-    NOTIFICATIONS_SLACK_MAXDATALENGTH=1000
+    MAESTRO_NOTIFICATIONS_SLACK_MAXDATALENGTH=1000
 
     # Notification Templates
-    NOTIFICATIONS_SLACK_TEMPLATE_ERROR=':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
-    NOTIFICATIONS_SLACK_TEMPLATE_WARNING=':warning: ##TYPE## ```##DATA##```'
-    NOTIFICATIONS_SLACK_TEMPLATE_INFO=':information_source: ##TYPE## ```##DATA##```'
+    MAESTRO_NOTIFICATIONS_SLACK_TEMPLATE_ERROR=':bangbang: Error : ##TYPE##, Error Info: ```##DATA##```'
+    MAESTRO_NOTIFICATIONS_SLACK_TEMPLATE_WARNING=':warning: ##TYPE## ```##DATA##```'
+    MAESTRO_NOTIFICATIONS_SLACK_TEMPLATE_INFO=':information_source: ##TYPE## ```##DATA##```'
     ```
 
     <details>
     <summary><b>For more details about the configuration, click here</b></summary>
 
     - **Basic Settings:**
-      - `NOTIFICATIONS_SLACK_ENABLED`: Activates the Slack integration
-      - `NOTIFICATIONS_SLACK_NOTIFIEDON`: Controls which notification types are sent
-      - `NOTIFICATIONS_SLACK_URL`: Your webhook URL for message delivery
-      - `NOTIFICATIONS_SLACK_CHANNEL`: Target channel (without # symbol)
-      - `NOTIFICATIONS_SLACK_USERNAME`: Bot display name in Slack
+      - `MAESTRO_NOTIFICATIONS_SLACK_ENABLED`: Activates the Slack integration
+      - `MAESTRO_NOTIFICATIONS_SLACK_NOTIFIEDON`: Controls which notification types are sent
+      - `MAESTRO_NOTIFICATIONS_SLACK_URL`: Your webhook URL for message delivery
+      - `MAESTRO_NOTIFICATIONS_SLACK_CHANNEL`: Target channel (without # symbol)
+      - `MAESTRO_NOTIFICATIONS_SLACK_USERNAME`: Bot display name in Slack
 
     - **Message Templates:**
       - Templates use two variables:
@@ -59,7 +67,7 @@ Before configuring Slack notifications, you'll need:
       - Supports Slack's markdown-style formatting
       - Code blocks use triple backticks
       - Includes emoji shortcuts
-      - Message length controlled by `NOTIFICATIONS_SLACK_MAXDATALENGTH`
+      - Message length controlled by `MAESTRO_NOTIFICATIONS_SLACK_MAXDATALENGTH`
     </details>
 
     :::info Message Templates
@@ -79,9 +87,9 @@ If notifications aren't working, follow these steps:
 1. **Verify Configuration:**
     ```bash
     # Check these settings first
-    NOTIFICATIONS_SLACK_ENABLED=true
-    NOTIFICATIONS_SLACK_URL=<valid-webhook-url>
-    NOTIFICATIONS_SLACK_CHANNEL=<channel-without-#>
+    MAESTRO_NOTIFICATIONS_SLACK_ENABLED=true
+    MAESTRO_NOTIFICATIONS_SLACK_URL=<valid-webhook-url>
+    MAESTRO_NOTIFICATIONS_SLACK_CHANNEL=<channel-without-#>
     ```
 
 2. **Common Issues:**

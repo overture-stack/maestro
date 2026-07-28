@@ -13,22 +13,22 @@ To configure exclusion rules, update your `.env.maestro` file with the following
 # Exclusion rules configurations for Maestro
 
 # Exclude by study ID
-EXCLUSIONRULES_BYID_STUDYID=TEST-STUDY
+MAESTRO_EXCLUSIONRULES_BYID_STUDYID=TEST-STUDY
 
 # Exclude specific analyses
-# EXCLUSIONRULES_BYID_ANALYSIS=531had59-235f-315j-3918-gjaea93ga90j
+# MAESTRO_EXCLUSIONRULES_BYID_ANALYSIS=531had59-235f-315j-3918-gjaea93ga90j
 
 # Exclude specific files
-# EXCLUSIONRULES_BYID_FILE=41ba4fb3-9428-50b5-af6c-d779cd59b04d
+# MAESTRO_EXCLUSIONRULES_BYID_FILE=41ba4fb3-9428-50b5-af6c-d779cd59b04d
 
 # Exclude specific samples
-# EXCLUSIONRULES_BYID_SAMPLE=a6381313-gaj3-eaif-95jd-nahnba9gn112
+# MAESTRO_EXCLUSIONRULES_BYID_SAMPLE=a6381313-gaj3-eaif-95jd-nahnba9gn112
 
 # Exclude specific specimens
-# EXCLUSIONRULES_BYID_SPECIMEN=j928shgh-bme9-gka7-vac8-ga239sdaig98
+# MAESTRO_EXCLUSIONRULES_BYID_SPECIMEN=j928shgh-bme9-gka7-vac8-ga239sdaig98
 
 # Exclude specific donors
-# EXCLUSIONRULES_BYID_DONOR=DO232991
+# MAESTRO_EXCLUSIONRULES_BYID_DONOR=DO232991
 ```
 
 :::info
@@ -39,7 +39,7 @@ For any configurations to take effect, make sure to uncomment the exclusion rule
 
 1. **Multiple Exclusions**: To exclude multiple IDs of the same type, separate them with commas. For example:
    ```bash
-   EXCLUSIONRULES_BYID_STUDYID=TEST-STUDY-1,TEST-STUDY-2,TEST-STUDY-3
+   MAESTRO_EXCLUSIONRULES_BYID_STUDYID=TEST-STUDY-1,TEST-STUDY-2,TEST-STUDY-3
    ```
 
 2. **Combining Rules**: You can use multiple exclusion rules simultaneously. For instance, you can exclude specific studies and specific files within other studies.
