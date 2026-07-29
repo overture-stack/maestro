@@ -1,9 +1,9 @@
+# Setup
+
 <!-- Maintainer note (2026-07-28): these instructions target Maestro V5, the TypeScript
 `@overture-stack/maestro-server`. At time of writing V5 lives on a development branch and is
 not yet the repository default; until it is merged, clone the V5 branch rather than the default
 branch. Remove this note once V5 is the default branch on GitHub. -->
-
-# Setup
 
 ## Prerequisites
 
