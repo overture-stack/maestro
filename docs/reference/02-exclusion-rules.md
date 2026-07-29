@@ -1,3 +1,14 @@
+---
+draft: true
+---
+
+<!-- Drafted 2026-07-28: the canonical TypeScript maestro-server (V5) does not implement
+exclusion rules; the server's configuration schema and provider have no exclusion support, and
+the feature appears only in the repository's README and internal docs prose carried over from
+the Java implementation. This page documents the Java feature. Remove `draft: true` once the
+TypeScript server reaches exclusion-rule parity, and update the configuration to the V5
+`MAESTRO_`-prefixed form at that time. -->
+
 # Exclusion Rules
 
 Maestro supports data publication controls by providing configurable exclusion rules. These rules allow you to omit specific analyses from being indexed based on metadata tags assigned by Song. You can use Study, Analysis, File, Sample, Specimen, and Donor IDs to exclude data from indexing.

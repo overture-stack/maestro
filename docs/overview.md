@@ -1,66 +1,80 @@
 # Overview
 
-Maestro's primary function is to organize data from multiple Song repositories into a single Elasticsearch index. By collecting data into a single index, Maestro allows upstream services, such as Arranger, to consume the data and expose it to end users for search and exploration.
+Maestro's primary function is to organize data from multiple data repositories into a single Elasticsearch index. By collecting data into a single index, Maestro allows upstream services, such as Arranger, to consume the data and expose it to end users for search and exploration.
+
+Maestro listens for changes in its configured repositories and keeps the index in step with them. It can source data from [Song](/develop/Song/overview) (genomic metadata) and [Lyric](/develop/Lyric/overview) (tabular data submission), fetching records over HTTP or reacting to events on Kafka.
 
 ## Key Features
 
-- **Multi Repo Management:** Maestro offers built-in conflict detection and resolution. For instance, if multiple Song repositories identify the same file, Maestro detects this and aggregates the data from all sources into the Elasticsearch index.
+- **Multiple Repositories:** Maestro can connect to several repositories at once and index them all into one Elasticsearch index. If more than one repository identifies the same file, Maestro aggregates the data from every source into a single index document rather than duplicating it.
 
     ```mermaid
     graph LR
         SD1[(DB1)]--->SS1[Song 1]
         SD2[(DB2)]--->SS2[Song 2]
-        SD3[(DB3)]--->SS3[Song 3]
-        SS1 & SS2 & SS3--->M[Maestro]
+        LD[(DB3)]--->LY[Lyric]
+        SS1 & SS2 & LY--->M[Maestro]
         M-->ES[Elasticsearch]
 
     ```
 
-- **Multiple Indexing Levels:** Song repositories have a standard hierarchy: **Repository > Study > Analysis**. Maestro can index at each level. For example, to index all analyses within a specific study, you can use the following command:
+- **Song and Lyric Sources:** Each repository is configured as either a Song or a Lyric source. Song supplies analysis and study metadata; Lyric supplies tabular submission data, routed by category. Maestro indexes both into the same Elasticsearch index.
+
+- **Multiple Indexing Levels:** Maestro can index at three levels: an entire repository, a single organization or study within it, or a single record. For example, to index all records for one organization you can use the following command:
 
     ```bash
     curl -X POST \
-        http://localhost:11235/index/repository/<repositoryCode>/study/<studyId> \
+        http://localhost:11235/index/repository/<repositoryCode>/organization/<organization> \
         -H 'Content-Type: application/json' \
         -H 'cache-control: no-cache' \
+        -d '{}'
     ```
 
-- **Song Schema Support:** Song utilizes a core data model along with a flexible, user-defined dynamic schema. Maestro requires the base schema fields to index data but also supports indexing of additional fields found within the dynamic schema.
- 
-- **Index Mapping Migrations:** When changes are introduced to the dynamic schema, administrator(s) must update and migrate the new index mapping.
+- **Dynamic Schema Support:** Maestro requires only the base fields of a record to index it, but it also carries along any additional fields defined by a Song analysis schema. When those schemas change, an administrator is responsible for updating and migrating the index mapping.
 
-- **Exclusion Rules:** Maestro supports configurable exclusion rules to omit specific analyses from being indexed based on metadata tags assigned by Song. Study, Analysis, File, Sample, Specimen and Donor IDs can be used to exclude specific analyses.
+- **File or Analysis Centric Indexing:** For Song repositories, Maestro can build either file centric or analysis centric documents, selected per repository through configuration.
 
-- **HTTP or Kafka Indexing APIs:** Maestro can receive indexing requests via <a href="https://kafka.apache.org/" target="_blank" rel="noopener noreferrer">Apache Kafka</a> or through an HTTP Web API.
+- **HTTP or Kafka Indexing APIs:** Maestro can receive indexing requests through an HTTP web API or from <a href="https://kafka.apache.org/" target="_blank" rel="noopener noreferrer">Apache Kafka</a> topics for event-driven indexing.
 
 ## System Architecture
 
-Maestro organizes data from multiple Song repositories into a single Elasticsearch index, enabling upstream services like [Arranger](/develop/Arranger/overview) to consume and expose the data for user search and exploration.
+Maestro organizes data from multiple repositories into a single Elasticsearch index, enabling upstream services like [Arranger](/develop/Arranger/overview) to consume and expose the data for user search and exploration.
 
 ![Maestro Arch](./assets/maestroDev.svg 'Maestro Architecture Diagram')
 
 As part of the larger Overture.bio software suite, Maestro integrates with several services:
 
-* **Song:** Maestro natively integrates with Song to index Song metadata into a single index.
-* **Elasticsearch:** Maestro is designed to integrate with and build Elasticsearch indices by default.
-* **Apache Kafka:** Optional integration for event-based indexing using Kafka messaging queues. Maestro can listen for and trigger indexing operations from specific Kafka topics.
-* **Slack:** Integrated for index monitoring notifications.
+* **Song:** Maestro reads analysis and study metadata from one or more Song servers and indexes it into a single index.
+* **Lyric:** Maestro reads tabular submission data from Lyric and indexes it alongside Song data in the same index.
+* **Elasticsearch:** Maestro builds and maintains Elasticsearch indices; both Elasticsearch 7 and 8 are supported.
+* **Apache Kafka:** Optional integration for event-based indexing. Maestro can listen on Kafka topics and trigger indexing operations from the messages it receives.
 
 ## Repository Structure
 
+Maestro V5 is a TypeScript project managed as a [pnpm](https://pnpm.io/) monorepo. Each application and package lives in its own folder:
+
 ```
 .
-├── /maestro-app
-└── /maestro-domain
+├── /apps
+│   └── /server
+└── /packages
+    ├── /common
+    ├── /indexer-client
+    └── /maestro-provider
 ```
 
-#### maestro-domain
+#### apps/server
 
-Contains core features and framework-independent logic that is portable and includes the main indexing, rules, and notifications logic. It has packages such as:
-- entities: contains POJOs and entities
-- api: the logic that fulfills the business features
-- ports: contains the interfaces needed by the api to communicate with anything outside the indexing context
+The main runnable [Express](https://expressjs.com/) server. It exposes the HTTP API routes that connect the Maestro provider to external systems, reads configuration from environment variables, and, when Kafka is configured, runs the consumer that listens for indexing events.
 
-#### maestro-app
+#### packages/common
 
-This is the main runnable Spring Boot app. It contains the infrastructure and adapters (ports implementations) needed to connect the domain with external services like Elasticsearch, Song web clients, and configuration files.
+Shared utilities, reusable functions, and TypeScript type definitions used across the other packages.
+
+#### packages/indexer-client
+
+Abstracts communication with Elasticsearch, supporting both version 7 and version 8 clients.
+
+#### packages/maestro-provider
+
+The core, framework-independent indexing logic: the main indexing operations, repository handling, and rules that fulfil Maestro's business features. It also contains the Kafka consumer used for event-driven indexing.

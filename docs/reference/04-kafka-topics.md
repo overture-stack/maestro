@@ -1,148 +1,130 @@
 # Kafka Topics
 
-Maestro can be configured to listen to Kafka topics for various operations. This page explains how to set up Kafka integration and use different message types.
+Maestro can listen to Kafka topics to index data as events happen, instead of only on demand through the HTTP API. This page explains how to enable Kafka and how the different topics are used.
 
-## Configuring the Kafka Integration
+Kafka is optional. If you do not configure it, Maestro still works through the HTTP API.
 
-To enable Kafka integration, add the following configuration to your Maestro application properties or YAML file:
+## Enabling Kafka
 
-```yaml title="./maestro-app/src/main/resources/config/application.yml"
-###############################################################################
-# Spring Configuration (Kafka)
-# Including Kafka integration with song 
-###############################################################################
-spring:
-  config:
-    useLegacyProcessing: true
-  application:
-    name: maestro
-  output.ansi.enabled: ALWAYS
-  cloud:
-    stream:
-      kafka: # remove this key to disable kafka
-        binder:
-          brokers: localhost:29092
-        bindings:
-          songInput:
-            consumer:
-              enableDlq: true
-              dlqName: maestro_song_analysis_dlq
-              autoCommitOnError: true
-              autoCommitOffset: true
-          input:
-            consumer:
-              enableDlq: true
-              dlqName: maestro_index_requests_dlq
-              autoCommitOnError: true
-              autoCommitOffset: true
-      bindings:
-        songInput:
-          destination: song-analysis
-          group: songConsumerGrp
-          consumer:
-            maxAttempts: 1
-        input:
-          # We don't specify content type because @StreamListener will handle that
-          destination: maestro_index_requests
-          group: requestsConsumerGrp
-          consumer:
-            maxAttempts: 1
+Kafka is configured through environment variables in your `.env` file. To connect Maestro to a broker, set both of the following:
+
+```bash
+# Comma-separated list of brokers in host:port form
+MAESTRO_KAFKA_BROKERS=kafka1:9092,kafka2:9092
+
+# Consumer group the Maestro consumer joins
+MAESTRO_KAFKA_GROUP_ID=maestro
 ```
 
-<details>
-<summary><b>For more details about the configuration, click here</b></summary>
+:::info
+`MAESTRO_KAFKA_BROKERS` and `MAESTRO_KAFKA_GROUP_ID` are required together. If you set one, you must set the other, or Maestro will fail to start.
+:::
 
-**Spring Configuration**
-- `spring.config.useLegacyProcessing`: Enables legacy configuration processing mode
-- `spring.application.name`: Sets application identifier as "maestro"
-- `spring.output.ansi.enabled`: Controls ANSI color output in logs
-  - Possible values: `ALWAYS`, `NEVER`, `DETECT`
+Maestro listens on two kinds of topics: one **request topic**, and one **document topic per repository**. Each is described below.
 
-**Kafka Configuration**
-- `spring.cloud.stream.kafka.binder.brokers`: Kafka broker connection URL
-- `spring.cloud.stream.kafka.bindings.songInput.consumer`: Song analysis consumer settings
-  - `enableDlq`: Enables dead letter queue ([see relevant confluent developer documentation here](https://developer.confluent.io/courses/kafka-connect/error-handling-and-dead-letter-queues/#:~:text=Kafka%20Connect's%20dead%20letter%20queue,at%20their%20keys%20and%20values.))
-  - `dlqName`: DLQ name for failed song analysis messages
-  - `autoCommitOnError`: Auto-commits offsets on error
-  - `autoCommitOffset`: Auto-commits processed message offsets
-    - For more information on these configuration see Kafka Consumers docs(https://docs.confluent.io/platform/current/clients/consumer.html)
-   - For more details on offset commit behavior, see:
-      - [Confluents documenation on Kafka Consumers](https://docs.confluent.io/platform/current/clients/consumer.html)
-      - [Spring Cloud Kafka Consumer Properties](https://docs.spring.io/spring-cloud-stream-binder-kafka/docs/current/reference/html/spring-cloud-stream-binder-kafka.html#kafka-consumer-properties)
+## Request Topic
 
-**Stream Bindings**
- - `spring.cloud.stream.bindings.songInput`:
-  - `destination`: Target Kafka topic for song analysis
-  - `group`: Consumer group name
-  - `maxAttempts`: Maximum retry attempts for message processing
-    - Possible values: Integer > 0
+The request topic carries on-demand indexing instructions. When Maestro receives a request message, it fetches the referenced data from the repository and indexes it, exactly as the HTTP indexing endpoints do.
 
-- `spring.cloud.stream.bindings.input`:
-  - `destination`: Topic for maestro index requests
-  - `group`: Consumer group for index requests
-  - `maxAttempts`: Maximum processing retry attempts
-    - Possible values: Integer > 0
-</details>
+Configure a single request topic and its dead-letter queue:
 
-## Kafka Topics
+```bash
+MAESTRO_KAFKA_INDEX_REQUEST_TOPIC=maestro-index-request
+MAESTRO_KAFKA_INDEX_REQUEST_DLQ=maestro-index-request-dlq
+```
 
-Maestro listens to two main Kafka topics:
+The message payload identifies what to index. Maestro decides the operation from which fields are present:
 
-1. `maestro_index_requests`: For on-demand indexing requests
-2. `song-analysis`: For Song analysis updates
+- **Index a repository** (all organizations within it):
 
-### maestro_index_requests Topic
+  ```json
+  { "repositoryCode": "collab" }
+  ```
 
-This topic is used for sending on-demand indexing requests to Maestro. Messages should be in JSON format and can be of three types:
+- **Index an organization or study** (all records within it):
 
-1. **Analysis Indexing**
-   ```json
-   {
-     "value": {
-       "repositoryCode": "collab",
-       "studyId": "PEK-AB",
-       "analysisId": "EGAZ000",
-       "remove": true
-     }
-   }
-   ```
-   - `remove`: Set to `true` for deletion, `false` or omit for indexing/updating
+  ```json
+  { "repositoryCode": "collab", "studyId": "PACA-CA" }
+  ```
 
-2. **Study Indexing**
-   ```json
-   {
-     "value": {
-       "repositoryCode": "collab",
-       "studyId": "PEK-AB"
-     }
-   }
-   ```
+- **Index a single record**:
 
-3. **Full Song Repository Indexing**
-   ```json
-   {
-     "value": {
-       "repositoryCode": "aws"
-     }
-   }
-   ```
+  ```json
+  { "repositoryCode": "collab", "studyId": "PACA-CA", "analysisId": "EGAZ000" }
+  ```
 
-### song-analysis Topic
+  To remove a single record from the index instead of indexing it, set `remove` to `true`:
 
-This topic receives messages about Song analysis updates. The message schema is defined by Song, but typically looks like this:
+  ```json
+  { "repositoryCode": "collab", "studyId": "PACA-CA", "analysisId": "EGAZ000", "remove": true }
+  ```
+
+:::info Publishing through the Kafka REST proxy
+When you publish a message through the Kafka REST proxy, the payload goes in a record's `value` field, for example `{ "records": [ { "value": { "repositoryCode": "collab", "studyId": "PACA-CA" } } ] }`. The examples above show the payload itself.
+:::
+
+If a request message cannot be processed, it is sent to the configured dead-letter queue.
+
+## Document Topics
+
+A document topic carries a full document to index directly. Unlike the request topic, Maestro does not fetch anything; it indexes the document contained in the message. Each repository has its own document topic, and the topic a message arrives on determines which repository it is indexed into.
+
+Configure a document topic and dead-letter queue per repository, using the repository's index (`0`, `1`, and so on):
+
+```bash
+MAESTRO_REPOSITORIES_0_KAFKA_DOCUMENT_UPDATE_TOPIC=clinical-data
+MAESTRO_REPOSITORIES_0_KAFKA_DOCUMENT_UPDATE_DLQ=clinical-data-dlq
+```
+
+### Song document
+
+A message on a Song repository's document topic carries an analysis. Its schema is defined by Song and currently looks like this:
 
 ```json
 {
-  "value": {
-    "analysisId": "12314124",
-    "studyId": "PEK-AB",
-    "songServerId": "collab",
-    "state": "PUBLISHED"
+  "analysisId": "12314124",
+  "studyId": "PEK-AB",
+  "state": "PUBLISHED",
+  "analysis": {
+    "analysisId": "a54378b7-9f3a-4dcc-8378-b79f3a3dcc2a",
+    "studyId": "ABC123",
+    "analysisState": "PUBLISHED",
+    "files": [],
+    "analysisType": []
   }
 }
 ```
 
+A document is indexed if its `state` matches one of the values in that repository's `MAESTRO_REPOSITORIES_<n>_SONG_INDEXABLE_STUDY_STATES` (for example `PUBLISHED`). If the `state` does not match and an `analysisId` is present, the document is removed from the index instead. Documents are stored as `file` or `analysis` centric depending on the repository's `SONG_INDEXING_MODE` (see [Index Mappings](/develop/Maestro/reference/index-mappings)).
+
+### Lyric document
+
+A message on a Lyric repository's document topic carries a record and typically looks like this:
+
+```json
+{
+  "categoryAlias": "donor",
+  "categoryId": 3,
+  "systemId": "12314124",
+  "organization": "ABC-123",
+  "entityName": "sample",
+  "data": { "name": "ABCD" },
+  "isValid": true
+}
+```
+
+`categoryId` is always present; `categoryAlias` is present only when the Lyric category has an alias. If the repository sets `MAESTRO_REPOSITORIES_<n>_LYRIC_VALID_DATA_ONLY=true`, a document is indexed only when its `isValid` field is `true`, and removed otherwise. When the value is `false`, all documents are indexed regardless of `isValid`.
+
+#### Routing a Lyric document to a repository
+
+`MAESTRO_REPOSITORIES_<n>_LYRIC_CATEGORY_ID` accepts either the category's numeric id or its alias. It is matched against the incoming message by equality: `categoryAlias` is tried first, then `categoryId`.
+
+- One topic can be shared by more than one Lyric repository. Lyric may publish several categories onto one topic, and each repository indexes only the messages whose category it is configured for.
+- If more than one repository is configured with the same category value, the message is indexed into all of them. This is a deliberate fan-out, not a misconfiguration.
+- If no repository matches, the message is logged and skipped. It is not sent to the dead-letter queue, because a well-formed message that simply is not for any configured repository has nothing to reprocess.
+- Song repositories have no category concept; the topic alone routes messages to them.
+
 ## Additional Resources
 
-- [Spring Cloud Stream Documentation](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/)
 - [Apache Kafka Documentation](https://kafka.apache.org/documentation/)
+- [KafkaJS Documentation](https://kafka.js.org/)
