@@ -23,10 +23,15 @@ Technical resources for those working with or contributing to the project are av
 
 ## Development Environment
 
-- [Java 11 (OpenJDK)](https://openjdk.java.net/projects/jdk/11/)
-- [Maven 3.5+](https://maven.apache.org/) (or use provided wrapper)
-- [VS Code](https://code.visualstudio.com/) or preferred Java IDE
+- [Node.js](https://nodejs.org/) v22 or higher
+- [pnpm](https://pnpm.io/installation) package manager
 - [Docker](https://www.docker.com/) Container platform
+- [Elasticsearch](https://www.elastic.co/products/elasticsearch) 7 or higher
+
+Maestro is a TypeScript project managed as a pnpm monorepo. A `Makefile` wraps the common
+tasks: `make compile` installs dependencies and builds every package, `make docker-start-dev`
+starts the supporting Elasticsearch and Kafka containers, and `make start` runs the server.
+Once running, the Swagger UI is available at `http://localhost:11235/api-docs`.
 
 ## Support & Contributions
 
