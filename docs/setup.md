@@ -85,7 +85,7 @@ For a full description of the configuration variables, see the reference pages f
    - `pnpm install`: installs the dependencies for every package in the monorepo.
    - `pnpm run build:all`: compiles all of the TypeScript packages and the server application.
 
-   The repository also provides a `Makefile` that wraps these commands. Running `make compile` is equivalent to `pnpm install && pnpm run build:all`, and `make help` lists the available shortcuts.
+   The repository also provides a `Makefile` that wraps these commands. Running `make compile` is equivalent to `pnpm install && pnpm run build:all`, and `make start` runs the server. Open the `Makefile` to see the full set of targets, which also includes REST and Kafka helper commands.
 
     </details>
 
