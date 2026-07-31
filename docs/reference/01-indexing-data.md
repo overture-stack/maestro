@@ -8,7 +8,7 @@ Maestro offers flexible indexing at the repository, organization, or individual 
 
 
       :::tip Maestro API Reference Doc
-      Checkout the [Maestro API reference](/develop/Maestro/reference/api-reference) to view this information alongside a templated Maestro Swagger doc.
+      Checkout the [Maestro API reference](./06-api-reference.mdx) to view this information alongside a templated Maestro Swagger doc.
       :::
 
 - **cURL:** Maestro's API can be accessed through the command line using cURL, allowing for more complex programmatic queries if desired. Templated cURL requests can be found in the Maestro Swagger UI.

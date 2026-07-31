@@ -67,7 +67,7 @@ Maestro is configured entirely through environment variables, all prefixed with 
 2. Update the Elasticsearch, Song, Lyric, and Kafka sections in `apps/server/.env` to match your environment. At minimum, Maestro needs an Elasticsearch node and at least one repository configured.
 
 :::info
-For a full description of the configuration variables, see the reference pages for [indexing](/develop/Maestro/reference/indexing-data), [index mappings](/develop/Maestro/reference/index-mappings), and [Kafka topics](/develop/Maestro/reference/kafka-topics).
+For a full description of the configuration variables, see the reference pages for [indexing](./reference/01-indexing-data.md), [index mappings](./reference/03-index-mappings.md), and [Kafka topics](./reference/04-kafka-topics.md).
 :::
 
 ### Running the Development Server

@@ -95,7 +95,7 @@ A message on a Song repository's document topic carries an analysis. Its schema 
 }
 ```
 
-A document is indexed if its `state` matches one of the values in that repository's `MAESTRO_REPOSITORIES_<n>_SONG_INDEXABLE_STUDY_STATES` (for example `PUBLISHED`). If the `state` does not match and an `analysisId` is present, the document is removed from the index instead. Documents are stored as `file` or `analysis` centric depending on the repository's `SONG_INDEXING_MODE` (see [Index Mappings](/develop/Maestro/reference/index-mappings)).
+A document is indexed if its `state` matches one of the values in that repository's `MAESTRO_REPOSITORIES_<n>_SONG_INDEXABLE_STUDY_STATES` (for example `PUBLISHED`). If the `state` does not match and an `analysisId` is present, the document is removed from the index instead. Documents are stored as `file` or `analysis` centric depending on the repository's `SONG_INDEXING_MODE` (see [Index Mappings](./03-index-mappings.md)).
 
 ### Lyric document
 
