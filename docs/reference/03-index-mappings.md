@@ -19,7 +19,7 @@ You select the mode per Song repository through configuration, using the `MAESTR
 MAESTRO_REPOSITORIES_1_SONG_INDEXING_MODE=file
 ```
 
-The index mapping needs to conform with your specific data model, so it should be configured appropriately. For more information, see our [**platform guide covering index mappings**](/use/administration/index-mappings).
+The index mapping needs to conform with your specific data model, so it should be configured appropriately. For more information, see our [**platform guide covering index mappings**](https://docs.overture.bio/use/administration/index-mappings).
 
 Maestro works with a dynamic schema. It only requires the base fields of a record, and it passes along any additional fields the record carries, relying on Elasticsearch dynamic mapping for those. Evolving the mapping when your data model changes is the administrator's responsibility. For example, when updating Song's dynamic schemas, the administrator may also need to update the index mapping and migrate the data.
 
@@ -34,7 +34,7 @@ Follow these steps to migrate your index when changes to the mapping are require
 3. **Update Elasticsearch aliases:** Point your Elasticsearch aliases to the new or updated index instead of the old one.
 
 :::tip Index Mapping Guide
-For more detailed information see our [**platform guide on index mappings**](/use/administration/index-mappings)
+For more detailed information see our [**platform guide on index mappings**](https://docs.overture.bio/use/administration/index-mappings)
 :::
 
 ## Best Practices

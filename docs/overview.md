@@ -2,7 +2,7 @@
 
 Maestro's primary function is to organize data from multiple data repositories into a single Elasticsearch index. By collecting data into a single index, Maestro allows upstream services, such as Arranger, to consume the data and expose it to end users for search and exploration.
 
-Maestro listens for changes in its configured repositories and keeps the index in step with them. It can source data from [Song](/develop/Song/overview) (genomic metadata) and [Lyric](/develop/Lyric/overview) (tabular data submission), fetching records over HTTP or reacting to events on Kafka.
+Maestro listens for changes in its configured repositories and keeps the index in step with them. It can source data from [Song](https://docs.overture.bio/develop/Song/overview) (genomic metadata) and [Lyric](https://docs.overture.bio/develop/Lyric/overview) (tabular data submission), fetching records over HTTP or reacting to events on Kafka.
 
 ## Key Features
 
@@ -38,7 +38,7 @@ Maestro listens for changes in its configured repositories and keeps the index i
 
 ## System Architecture
 
-Maestro organizes data from multiple repositories into a single Elasticsearch index, enabling upstream services like [Arranger](/develop/Arranger/overview) to consume and expose the data for user search and exploration.
+Maestro organizes data from multiple repositories into a single Elasticsearch index, enabling upstream services like [Arranger](https://docs.overture.bio/develop/Arranger/overview) to consume and expose the data for user search and exploration.
 
 ![Maestro Arch](./assets/maestroDev.svg 'Maestro Architecture Diagram')
 

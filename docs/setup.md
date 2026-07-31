@@ -48,7 +48,7 @@ Maestro indexes data into Elasticsearch and can react to events on Kafka. The Ma
 
    - Ensure these ports are free on your system before starting the environment.
    - You may need to adjust the ports in the Docker Compose file if you have conflicts with existing services.
-   - Song and Lyric are not started by this file. To index real data, run [Song](/develop/Song/overview) or [Lyric](/develop/Lyric/overview) separately and point Maestro at them through configuration.
+   - Song and Lyric are not started by this file. To index real data, run [Song](https://docs.overture.bio/develop/Song/overview) or [Lyric](https://docs.overture.bio/develop/Lyric/overview) separately and point Maestro at them through configuration.
 
    To stop the infrastructure containers again, run `make docker-stop-dev`.
 
@@ -128,7 +128,7 @@ After installing and configuring Maestro, verify that the system is functioning 
      - Verify you're using the correct URL
 
 :::info Need Help?
-If you encounter any issues or have questions about our API, please don't hesitate to reach out through our [**support page**](/community/support) or our [**discussion forum**](https://github.com/overture-stack/docs/discussions?discussions_q=).
+If you encounter any issues or have questions about our API, please don't hesitate to reach out through our [**support page**](https://docs.overture.bio/community/support) or our [**discussion forum**](https://github.com/overture-stack/docs/discussions?discussions_q=).
 :::
 
 :::warning
