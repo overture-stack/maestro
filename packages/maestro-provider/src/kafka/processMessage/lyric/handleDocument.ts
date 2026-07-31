@@ -22,7 +22,7 @@ export const handleLyricDocumentMessage = async (
 	// Index every document if 'validDataOnly' is false, or
 	// if 'validDataOnly' is true and the payload is marked as valid ('isValid' is true)
 	if (!repository.validDataOnly || (repository.validDataOnly && payload.isValid)) {
-		// Example payload — see docs/usage.md for full details:
+		// Example payload, see docs/reference/04-kafka-topics.md for full details:
 		// {
 		//   "systemId": "12314124",
 		//   "organization": "ABC-123",
