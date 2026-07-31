@@ -1,6 +1,6 @@
 # Maestro
 
-Maestro enables researchers to enhance their Overture SONG deployments by building powerful search indexes for Analyses and Studies. It organizes geographically distributed data stored in Song and Score into a single, configurable index.
+Maestro enables researchers to enhance their Overture Song and Lyric deployments by building powerful search indexes over their metadata. It organizes geographically distributed data from multiple repositories into a single, configurable Elasticsearch index.
 
 </br>
 
@@ -18,8 +18,8 @@ Maestro enables researchers to enhance their Overture SONG deployments by buildi
 Technical resources for those working with or contributing to the project are available from our official documentation site, the following content can also be read and updated within the `/docs` folder of this repository.
 
 - **[Maestro Overview](https://docs.overture.bio/develop/Maestro/overview)** 
-- [**Setting up the Development Enviornment**](https://docs.overture.bio/develop/Maestro/setup)
-- [**Common Usage Docs**](https://docs.overture.bio/develop/Maestro/setup)
+- [**Setting up the Development Environment**](https://docs.overture.bio/develop/Maestro/setup)
+- [**Reference Docs**](https://docs.overture.bio/develop/Maestro/reference)
 
 ## Development Environment
 
