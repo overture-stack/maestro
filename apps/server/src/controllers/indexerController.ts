@@ -65,8 +65,28 @@ const indexRecord = validateRequest(indexRecordRequestschema, async (req, res, n
 	}
 });
 
+const removeIndexRecord = validateRequest(indexRecordRequestschema, async (req, res, next) => {
+	try {
+		const repoCode = req.params.repositoryCode;
+		const organization = req.params.organization;
+		const id = req.params.id;
+
+		const result = await maestroProvider.api?.removeIndexRecord(repoCode, organization, id);
+		if (result?.successful) {
+			// Accepted
+			res.status(202).send(result);
+		} else {
+			// Bad Request
+			res.status(400).send(result);
+		}
+	} catch (error) {
+		next(error);
+	}
+});
+
 export default {
 	indexRepository,
 	indexOrganization,
 	indexRecord,
+	removeIndexRecord,
 };

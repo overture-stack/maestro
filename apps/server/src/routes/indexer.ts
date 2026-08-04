@@ -8,6 +8,7 @@ export const indexerRouter: Router = (() => {
 	router.post('/repository/:repositoryCode', indexerController.indexRepository);
 	router.post('/repository/:repositoryCode/organization/:organization', indexerController.indexOrganization);
 	router.post('/repository/:repositoryCode/organization/:organization/id/:id', indexerController.indexRecord);
+	router.delete('/repository/:repositoryCode/organization/:organization/id/:id', indexerController.removeIndexRecord);
 
 	return router;
 })();
