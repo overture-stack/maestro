@@ -108,3 +108,44 @@
         $ref: '#/components/responses/ServerError'
       503:
         $ref: '#/components/responses/ServiceUnavailableError'
+  delete:
+    summary: Removes the index entry for a specific record identified by its ID within an organization in the given repository.
+    description: This operation allows fine-grained removal at the record level. The `repositoryCode` identifies the repository, `organization` specifies the organization, and `id` refers to the unique identifier of the record to be removed from the index.
+    tags:
+      - Indexing
+    parameters:
+      - name: repositoryCode
+        in: path
+        required: true
+        schema:
+          type: string
+        description: A unique code that identifies the repository where data will be removed from the index
+      - name: organization
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the organization within the repository for which data will be removed from the index
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the record to be removed from the index within the specified organization.
+    responses:
+      202:
+        description: Accepted response indicating that the removal operation has been queued for processing
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptedResponse'
+      400:
+        $ref: '#/components/responses/BadRequest'
+      401:
+        $ref: '#/components/responses/UnauthorizedError'
+      404:
+        $ref: '#/components/responses/NotFound'
+      500:
+        $ref: '#/components/responses/ServerError'
+      503:
+        $ref: '#/components/responses/ServiceUnavailableError'

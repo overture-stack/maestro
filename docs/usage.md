@@ -49,6 +49,17 @@ curl -X POST \
 	-H 'cache-control: no-cache'
 ```
 
+- Remove a record from the index by Analysis:
+
+`DELETE http://maestro.host:11235/index/repository/<repo>/organization/<organization or studyId>/id/<analysisId>`
+
+```bash
+	curl -X DELETE \
+	http://localhost:11235/index/repository/collab/organization/BASH-AR/id/ad7cabf8-df45-40fe6 \
+	-H 'Content-Type: application/json' \
+	-H 'cache-control: no-cache'
+```
+
 - Index an entire repository:
 
 `POST http://maestro.host:11235/index/repository/<repo-code>`
