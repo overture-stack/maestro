@@ -33,7 +33,7 @@ Once running, the Swagger UI is available at `http://localhost:11235/api-docs`.
 ## Support & Contributions
 
 - For support, feature requests, and bug reports, please see our [Support Guide](https://docs.overture.bio/community/support).
-- For detailed information on how to contribute to this project, please see our [Contributing Guide](https://docs.overture.bio/develop/contributing).
+- For detailed information on how to contribute to this project, please see our [Contributing Guide](./CONTRIBUTING.md).
 
 ## Related Software
 
