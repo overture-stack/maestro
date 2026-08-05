@@ -1,6 +1,6 @@
 # Indexing Data
 
-Maestro offers flexible indexing at the repository, organization, or individual record level, alongside a RESTful API for interacting with its core functionality. There are two ways to interact with the Maestro API:
+Maestro offers flexible indexing at the repository, organization, or individual record level, and removal at the record level, alongside a RESTful API for interacting with its core functionality. There are two ways to interact with the Maestro API:
 
 - **The Swagger UI:** The Swagger UI is useful for exploration and simple use cases. It provides detailed descriptions of all available endpoints, expected inputs, and error responses. Depending on your deployment, the Swagger UI can be accessed from the following URLs.
     - Local: `http://localhost:11235/api-docs`
@@ -88,9 +88,31 @@ Replace `<repositoryCode>` with the appropriate value.
 4. Enter the `repositoryCode` of the repository you want to index
 5. Click **Execute**
 
+## Removing a Record from the Index
+
+A single record can be removed from the index using the same path as record-level indexing, with the `DELETE` method. This removes the indexed document only; nothing is deleted from the source Song or Lyric repository.
+
+#### Using cURL
+
+```shell
+curl -X DELETE \
+  http://localhost:11235/index/repository/<repositoryCode>/organization/<organization>/id/<id> \
+  -H 'Content-Type: application/json' \
+  -H 'cache-control: no-cache'
+```
+
+Replace `<repositoryCode>`, `<organization>`, and `<id>` with appropriate values.
+
+#### Using Swagger UI
+
+1. Go to `http://localhost:11235/api-docs`
+2. Under **Indexing**, select `DELETE /index/repository/{repositoryCode}/organization/{organization}/id/{id}`
+3. Click **Try it out** and enter your `repositoryCode`, `organization`, and `id`
+4. Click **Execute**
+
 ## Successful Indexing Response
 
-For all indexing operations, Maestro accepts the request and returns HTTP `202 Accepted` with a body like this:
+For all indexing and removal operations, Maestro accepts the request and returns HTTP `202 Accepted` with a body like this:
 
 ```json
 {
