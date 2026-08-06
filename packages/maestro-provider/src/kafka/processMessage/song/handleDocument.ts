@@ -30,7 +30,7 @@ export const handleSongDocumentMessage = async (
 		indexableStates.length === 0 ||
 		(payload.state && indexableStates.some((value) => String(value) === String(payload.state)))
 	) {
-		// Example payload — see docs/usage.md for full details:
+		// Example payload, see docs/reference/04-kafka-topics.md for full details:
 		// {
 		// 	"analysisId": "3bb8a1ff-ca21-4132-96b4-60cad182db06",
 		// 	"studyId": "TEST-CA",

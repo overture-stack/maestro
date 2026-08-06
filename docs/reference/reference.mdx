@@ -1,0 +1,37 @@
+# Reference
+
+The following reference docs provide instructions for common tasks and workflows in Maestro:
+
+<br></br>
+
+<DocCardList />
+
+### Maestro Terminology
+
+Whether you're new to these tools or looking to refresh your understanding, this glossary is here as a reference of key terms and concepts.
+
+- **Repository:** A configured data source that Maestro indexes. Each repository is either a Song source or a Lyric source.
+
+- **Song:** A genomic metadata source. Song supplies analyses and studies that Maestro indexes.
+
+- **Lyric:** A tabular data submission source. Lyric supplies records, grouped by category and organization, that Maestro indexes.
+
+- **Analysis:** A structured JSON metadata document submitted to Song and indexed by Maestro.
+
+- **Study:** In Song, an organized collection of analyses tagged with a common study ID.
+
+- **Organization:** The second indexing level, below a repository. For a Song repository it corresponds to a study; for a Lyric repository it corresponds to an organization.
+
+- **Record:** A single indexed document: one Song analysis or one Lyric record.
+
+- **Category:** In Lyric, a grouping of records. Maestro routes Lyric documents to a repository by matching the message's category.
+
+- **Schema:** A description of the structure and constraints of data.
+
+- **Index Mapping:** A definition of how documents and their fields are stored and indexed in Elasticsearch.
+
+- **File Centric Index Mapping:** A type of index mapping that organizes data by file Id.
+
+- **Analysis Centric Index Mapping:** A type of index mapping that organizes data by analysis Id.
+
+- **Alias:** In the context of Elasticsearch, an alias is a secondary name for a group of indices.
