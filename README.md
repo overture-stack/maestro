@@ -1,5 +1,9 @@
 # Maestro
 
+> [!IMPORTANT]
+> This branch contains the **legacy Java implementation**.
+> The most up-to-date Maestro codebase is the **JavaScript implementation on the `main` branch**.
+
 Maestro enables researchers to enhance their Overture SONG deployments by building powerful search indexes for Analyses and Studies. It organizes geographically distributed data stored in Song and Score into a single, configurable index.
 
 </br>
