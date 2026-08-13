@@ -1,6 +1,6 @@
 {
 	"name": "@overture-stack/maestro-common",
-	"version": "5.0.0-alpha.1",
+	"version": "5.0.0",
 	"description": "A submodule of Maestro designed to centralize common utilities, reusable functions, and TypeScript types.",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",

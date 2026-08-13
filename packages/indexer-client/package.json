@@ -1,6 +1,6 @@
 {
 	"name": "@overture-stack/maestro-indexer-client",
-	"version": "5.0.0-alpha.1",
+	"version": "5.0.0",
 	"description": "A submodule of Maestro that abstracts communication with Elasticsearch clients",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
