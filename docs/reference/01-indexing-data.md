@@ -110,6 +110,24 @@ Replace `<repositoryCode>`, `<organization>`, and `<id>` with appropriate values
 3. Click **Try it out** and enter your `repositoryCode`, `organization`, and `id`
 4. Click **Execute**
 
+## Removing the Documents of Deleted Records
+
+A document stays in the index until Maestro learns that its record was deleted. Maestro treats a record as deleted only once its repository confirms the deletion, so an unreachable or misconfigured repository never empties the index.
+
+| Repository type | Confirms a deletion when | Needs |
+|---|---|---|
+| Lyric | Two of Lyric's answers agree: Lyric answers `404` for the record, and Lyric's audit lists the record's deletion in its organization | Lyric's audit, below |
+
+- **Indexing a record** removes the record's document instead of indexing it, once its repository confirms the record deleted.
+- **Removing a record from the index** removes the record's document while the repository still holds the record, and once the repository confirms its deletion.
+- **Indexing an organization or a repository** reads every page of records, then removes each document of that organization, or of the whole repository, missing from those pages, once the repository confirms its record deleted. If any page of records cannot be read, nothing is removed.
+
+Indexing an organization finds its documents through the index's `organization` field, which must be mapped as `keyword`. A `text` field with a `keyword` sub-field, as Elasticsearch's dynamic mapping creates, does not meet this. Indexing an organization removes the documents of deleted records only from an index meeting this.
+
+:::info Lyric's audit
+Confirming a deletion needs Lyric's audit: `features.audit.enabled` in Lyric's configuration, or `AUDIT_ENABLED` for Lyric's reference server, where it is on unless set otherwise. Maestro removes the documents of deleted records only while Lyric's audit is on.
+:::
+
 ## Successful Indexing Response
 
 For all indexing and removal operations, Maestro accepts the request and returns HTTP `202 Accepted` with a body like this:
@@ -121,4 +139,4 @@ For all indexing and removal operations, Maestro accepts the request and returns
 }
 ```
 
-`successful` reports whether the operation was accepted, and `indexName` is the Elasticsearch index the data was written to.
+`successful` reports whether the operation was accepted, and `indexName` is the Elasticsearch index the data was written to. For a record confirmed deleted by its repository, a `message` also says whether its document was removed or the index held none. If the index fails to remove that document, Maestro answers `500`.

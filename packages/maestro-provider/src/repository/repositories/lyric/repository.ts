@@ -12,17 +12,20 @@ import { isArrayOfObjects } from '../../utils/utils.js';
 
 // Path constants
 const PATH = {
-	DATA: 'data',
+	AUDIT: 'audit',
 	CATEGORY: 'category',
-	ORGANIZATION: 'organization',
+	DATA: 'data',
 	ID: 'id',
+	ORGANIZATION: 'organization',
 } as const;
 
 // Query parameter constants
 const QUERY = {
-	VIEW: 'view',
-	PAGESIZE: 'pageSize',
+	EVENT_TYPE: 'eventType',
 	PAGE: 'page',
+	PAGESIZE: 'pageSize',
+	SYSTEM_ID: 'systemId',
+	VIEW: 'view',
 } as const;
 
 // View constant
@@ -30,12 +33,37 @@ const VIEW = {
 	COMPOUND: 'compound',
 } as const;
 
+const AUDIT_EVENT_DELETE = 'DELETE';
+
+/**
+ * Whether a record exists in Lyric, was deleted from it, or neither can be established.
+ */
+export const RECORD_STATUS = {
+	DELETED: 'deleted',
+	PRESENT: 'present',
+	UNKNOWN: 'unknown',
+} as const;
+
+/**
+ * One of the values of `RECORD_STATUS`.
+ */
+export type RecordStatus = (typeof RECORD_STATUS)[keyof typeof RECORD_STATUS];
+
+/**
+ * A `Repository` reading from Lyric. Its `getRecordStatus` answers `present` when Lyric returns the record, whichever
+ * organization holds it, and `deleted` when Lyric answers 404 for the record and Lyric's audit lists its deletion in
+ * `organization`. Any other answer, or a failed request, gives `unknown`.
+ */
+export type LyricRepository = Repository & {
+	getRecordStatus({ id, organization }: { id: string; organization: string }): Promise<RecordStatus>;
+};
+
 /**
  * Implementation to use Lyric as a data repository
  * @param config
  * @returns
  */
-export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
+export const lyricRepository = (config: LyricRepositoryConfig): LyricRepository => {
 	const { baseUrl, categoryId, paginationSize } = config;
 	const getRepositoryRecords = async function* (): AsyncGenerator<DataRecordNested[], void, unknown> {
 		let page = 1;
@@ -146,9 +174,57 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 		return {};
 	};
 
+	const isDeletionAudited = async ({ id, organization }: { id: string; organization: string }): Promise<boolean> => {
+		// http://lyric/audit/category/{categoryId}/organization/{organization}?systemId={id}&eventType=DELETE
+		const fullUrl = new URL(
+			path.join(PATH.AUDIT, PATH.CATEGORY, categoryId.toString(), PATH.ORGANIZATION, encodeURIComponent(organization)),
+			baseUrl,
+		);
+		fullUrl.searchParams.append(QUERY.SYSTEM_ID, id);
+		fullUrl.searchParams.append(QUERY.EVENT_TYPE, AUDIT_EVENT_DELETE);
+
+		const response = await sendHttpRequest(fullUrl.toString());
+		if (response.ok) {
+			const parsedResponse = await response.json();
+			return (
+				isArrayOfObjects(parsedResponse?.records) &&
+				parsedResponse.records.some(
+					(auditRecord: Record<string, unknown>) =>
+						auditRecord.event === AUDIT_EVENT_DELETE && auditRecord.systemId === id,
+				)
+			);
+		}
+		return false;
+	};
+
+	const getRecordStatus = async ({ id, organization }: { id: string; organization: string }): Promise<RecordStatus> => {
+		// http://lyric/data/category/{categoryId}/id/{id}
+		const fullUrl = new URL(
+			path.join(PATH.DATA, PATH.CATEGORY, categoryId.toString(), PATH.ID, encodeURIComponent(id)),
+			baseUrl,
+		);
+		fullUrl.searchParams.append(QUERY.VIEW, VIEW.COMPOUND);
+
+		try {
+			const response = await sendHttpRequest(fullUrl.toString());
+			if (response.ok) {
+				return RECORD_STATUS.PRESENT;
+			}
+			// A misrouted request also answers 404, so only Lyric's audit of the deletion confirms one
+			if (response.status === 404 && (await isDeletionAudited({ id, organization }))) {
+				return RECORD_STATUS.DELETED;
+			}
+			return RECORD_STATUS.UNKNOWN;
+		} catch (error) {
+			logger.warn(`Could not establish whether Lyric record '${id}' was deleted`, error);
+			return RECORD_STATUS.UNKNOWN;
+		}
+	};
+
 	return {
-		getRepositoryRecords,
 		getOrganizationRecords,
 		getRecord,
+		getRecordStatus,
+		getRepositoryRecords,
 	};
 };

@@ -32,7 +32,7 @@ describe('routeDocumentMessage', () => {
 
 	const createFakeIndexer = () => ({
 		bulkUpsert: sinon.stub().resolves({ status: 'success' }),
-		deleteData: sinon.stub().resolves({ status: 'success' }),
+		deleteData: sinon.stub().resolves({ failureData: {}, indexName: 'index', successful: true }),
 	});
 
 	const createFakeProducer = () => ({
@@ -94,7 +94,7 @@ describe('routeDocumentMessage', () => {
 			const producer = createFakeProducer();
 			const indexer = {
 				bulkUpsert: sinon.stub().rejects(new Error('elasticsearch unavailable')),
-				deleteData: sinon.stub().resolves({ status: 'success' }),
+				deleteData: sinon.stub().resolves({ failureData: {}, indexName: 'index', successful: true }),
 			};
 
 			await routeDocumentMessage({
@@ -240,7 +240,7 @@ describe('routeDocumentMessage', () => {
 					}
 					return { status: 'success' };
 				}),
-				deleteData: sinon.stub().resolves({ status: 'success' }),
+				deleteData: sinon.stub().resolves({ failureData: {}, indexName: 'index', successful: true }),
 			};
 
 			await routeDocumentMessage({

@@ -4,7 +4,8 @@ import { afterEach, beforeEach, describe, it } from 'mocha';
 
 import { type DataRecordNested, type LyricRepositoryConfig, RepositoryType } from '@overture-stack/maestro-common';
 
-import { lyricRepository } from './repository.js';
+import { lyricAuditResponse, lyricAuditRow } from '../../../../testing/fixtures/lyricAudit.js';
+import { lyricRepository, RECORD_STATUS } from './repository.js';
 
 const config: LyricRepositoryConfig = {
 	baseUrl: 'http://lyric.test',
@@ -16,6 +17,11 @@ const config: LyricRepositoryConfig = {
 	type: RepositoryType.LYRIC,
 	validDataOnly: true,
 };
+
+const recordUrl = (id: string): string => `http://lyric.test/data/category/7/id/${id}?view=compound`;
+
+const auditUrl = (organization: string, id: string): string =>
+	`http://lyric.test/audit/category/7/organization/${encodeURIComponent(organization)}?systemId=${id}&eventType=DELETE`;
 
 const configWithoutPageSize: LyricRepositoryConfig = { ...config, paginationSize: undefined };
 
@@ -57,6 +63,93 @@ describe('lyricRepository', () => {
 
 	afterEach(() => {
 		fetchMock.hardReset();
+	});
+
+	describe('getRecordStatus', () => {
+		it('is present when Lyric returns the record, whichever organization holds it', async () => {
+			fetchMock.get(recordUrl('rec-1'), { organization: 'org-b', systemId: 'rec-1' });
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.PRESENT);
+		});
+
+		it('is deleted when Lyric has no record and its audit lists the deletion in that organization', async () => {
+			fetchMock.get(recordUrl('rec-1'), 404);
+			fetchMock.get(
+				auditUrl('org-a', 'rec-1'),
+				lyricAuditResponse([lyricAuditRow({ organization: 'org-a', systemId: 'rec-1' })]),
+			);
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.DELETED);
+		});
+
+		it('is unknown when Lyric has no record and its audit lists no deletion', async () => {
+			fetchMock.get(recordUrl('rec-1'), 404);
+			fetchMock.get(auditUrl('org-a', 'rec-1'), 404);
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.UNKNOWN);
+		});
+
+		it('is unknown when the audit lists only other changes to the record and deletions of other records', async () => {
+			fetchMock.get(recordUrl('rec-1'), 404);
+			fetchMock.get(
+				auditUrl('org-a', 'rec-1'),
+				lyricAuditResponse([
+					lyricAuditRow({ event: 'UPDATE', organization: 'org-a', systemId: 'rec-1' }),
+					lyricAuditRow({ organization: 'org-a', systemId: 'rec-2' }),
+				]),
+			);
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.UNKNOWN);
+		});
+
+		it('is unknown when an audit row names its change in a field other than `event`', async () => {
+			fetchMock.get(recordUrl('rec-1'), 404);
+			fetchMock.get(
+				auditUrl('org-a', 'rec-1'),
+				lyricAuditResponse([{ action: 'DELETE', organization: 'org-a', systemId: 'rec-1' }]),
+			);
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.UNKNOWN);
+		});
+
+		it('is unknown, without asking the audit, when Lyric fails to answer for the record', async () => {
+			fetchMock.get(recordUrl('rec-1'), 500);
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.UNKNOWN);
+			expect(fetchMock.callHistory.calls().length).to.equal(1);
+		});
+
+		it('is unknown when the request for the record fails', async () => {
+			fetchMock.get(recordUrl('rec-1'), { throws: new TypeError('fetch failed') });
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'org-a' });
+
+			expect(status).to.equal(RECORD_STATUS.UNKNOWN);
+		});
+
+		it('asks the audit about an organization holding a space and a slash as a single path segment', async () => {
+			fetchMock.get(recordUrl('rec-1'), 404);
+			fetchMock.get(
+				auditUrl('Lab A/B', 'rec-1'),
+				lyricAuditResponse([lyricAuditRow({ organization: 'Lab A/B', systemId: 'rec-1' })]),
+			);
+
+			const status = await lyricRepository(config).getRecordStatus({ id: 'rec-1', organization: 'Lab A/B' });
+
+			expect(status).to.equal(RECORD_STATUS.DELETED);
+		});
 	});
 
 	describe('getOrganizationRecords', () => {

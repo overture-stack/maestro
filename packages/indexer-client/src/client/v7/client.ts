@@ -2,15 +2,25 @@ import { Client } from 'es7';
 
 import {
 	type DataRecordNested,
+	type DocumentFieldValue,
 	type ElasticSearchConfig,
 	type ElasticsearchService,
 	ElasticSearchSupportedVersions,
 	type IndexResult,
 	logger,
+	type ScanDocumentsOptions,
 } from '@overture-stack/maestro-common';
 
 import { getAuth } from '../../common/config.js';
-import { bulkUpsert, createIndexIfNotExists, deleteData, indexData, ping, updateData } from './operations.js';
+import {
+	bulkUpsert,
+	createIndexIfNotExists,
+	deleteData,
+	indexData,
+	ping,
+	scanDocuments,
+	updateData,
+} from './operations.js';
 
 /**
  *  Creates an instance of the Elasticsearch service for version 7.
@@ -57,6 +67,10 @@ export const es7 = (config: ElasticSearchConfig): ElasticsearchService => {
 
 		async ping(): Promise<boolean> {
 			return ping(client);
+		},
+
+		scanDocuments(index: string, options: ScanDocumentsOptions): AsyncGenerator<DocumentFieldValue[], void, unknown> {
+			return scanDocuments(client, index, options);
 		},
 
 		async updateData(index: string, id: string, data: DataRecordNested): Promise<IndexResult> {
