@@ -1,7 +1,23 @@
 import type { Client } from 'es7';
 import type { BulkOperationType, BulkResponseItem } from 'es7/api/types';
 
-import { type DataRecordNested, type FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
+import {
+	type DataRecordNested,
+	DOCUMENT_NOT_FOUND,
+	type DocumentFieldValue,
+	type FailureData,
+	IndexResult,
+	logger,
+	type ScanDocumentsOptions,
+} from '@overture-stack/maestro-common';
+
+import {
+	buildScanQuery,
+	DEFAULT_SCAN_PAGE_SIZE,
+	isDocumentNotFound,
+	SCROLL_KEEP_ALIVE,
+	toDocumentFieldValues,
+} from '../../common/documents.js';
 
 /**
  * Indexes the specified document. If the document exists, replaces the document and increments the version.
@@ -216,6 +232,15 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			failureData,
 		};
 	} catch (error) {
+		if (isDocumentNotFound(error)) {
+			logger.error(`Found no document '${id}' to delete in index '${index}'`, {
+				documentId: id,
+				event: 'maestro.indexer.deleteNotFound',
+				indexName: index,
+				status: 404,
+			});
+			return { failureData: { [id]: [DOCUMENT_NOT_FOUND] }, indexName: index, successful: false };
+		}
 		let errorMessage = JSON.stringify(error);
 
 		logger.error(`Error delete doc: ${errorMessage}`);
@@ -250,5 +275,50 @@ export const ping = async (client: Client): Promise<boolean> => {
 		logger.error(`Error ping server: ${JSON.stringify(error)}`);
 
 		return false;
+	}
+};
+
+type ScrollPage = { _scroll_id?: string; hits: { hits: Array<{ _id?: unknown; _source?: unknown }> } };
+
+const clearScroll = async (client: Client, scrollId: string | undefined): Promise<void> => {
+	if (scrollId) {
+		try {
+			await client.clearScroll({ body: { scroll_id: scrollId } });
+		} catch (error) {
+			logger.warn(`Error clearing a scroll: ${JSON.stringify(error)}`);
+		}
+	}
+};
+
+/**
+ * Lists the documents of `index`, one page per request, each with the value of `options.fieldName`, as
+ * `ElasticsearchService.scanDocuments` describes.
+ *
+ * @param client An instance of the Elasticsearch `Client` used to list the documents.
+ * @param index The name of the index to list.
+ * @param options The field to return, and the value a listed document must hold in it.
+ */
+export const scanDocuments = async function* (
+	client: Client,
+	index: string,
+	{ fieldName, fieldValue, pageSize = DEFAULT_SCAN_PAGE_SIZE }: ScanDocumentsOptions,
+): AsyncGenerator<DocumentFieldValue[], void, unknown> {
+	// The scroll position moves with each page, and is cleared however the listing ends
+	let page = (
+		await client.search<ScrollPage>({
+			body: { _source: [fieldName], query: buildScanQuery(fieldName, fieldValue) },
+			index,
+			scroll: SCROLL_KEEP_ALIVE,
+			size: pageSize,
+		})
+	).body;
+	try {
+		while (page.hits.hits.length > 0 && page._scroll_id) {
+			yield toDocumentFieldValues(page.hits.hits, fieldName, fieldValue);
+			page = (await client.scroll<ScrollPage>({ body: { scroll: SCROLL_KEEP_ALIVE, scroll_id: page._scroll_id } }))
+				.body;
+		}
+	} finally {
+		await clearScroll(client, page._scroll_id);
 	}
 };

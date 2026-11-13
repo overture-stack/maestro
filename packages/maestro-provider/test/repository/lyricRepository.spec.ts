@@ -115,7 +115,7 @@ describe('Lyric Repository', () => {
 			]);
 		});
 
-		it('should return no records when receive different than 200 OK response', async () => {
+		it('stops with an error, having yielded no records, when Lyric refuses the request', async () => {
 			const config: LyricRepositoryConfig = {
 				type: RepositoryType.LYRIC,
 				name: 'Lyric Repository',
@@ -131,13 +131,20 @@ describe('Lyric Repository', () => {
 			fetchMock.any(401);
 
 			const records: DataRecordNested[] = [];
+			const readAll = async () => {
+				for await (const items of lyricRepository(config).getRepositoryRecords()) {
+					records.push(...items);
+				}
+			};
 
-			for await (const items of lyricRepository(config).getRepositoryRecords()) {
-				records.push(...items);
-			}
+			const error = await readAll().then(
+				() => undefined,
+				(caught: unknown) => caught,
+			);
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(0);
+			expect(error).to.be.instanceOf(Error);
 		});
 
 		it('should throw an error if an error occcured', async () => {
@@ -271,7 +278,7 @@ describe('Lyric Repository', () => {
 			]);
 		});
 
-		it('should return no records when receive different than 200 OK response', async () => {
+		it('stops with an error, having yielded no records, when Lyric refuses the request', async () => {
 			const config: LyricRepositoryConfig = {
 				type: RepositoryType.LYRIC,
 				name: 'Lyric Repository',
@@ -287,13 +294,20 @@ describe('Lyric Repository', () => {
 			fetchMock.any(401);
 
 			const records: DataRecordNested[] = [];
+			const readAll = async () => {
+				for await (const items of lyricRepository(config).getOrganizationRecords({ organization })) {
+					records.push(...items);
+				}
+			};
 
-			for await (const items of lyricRepository(config).getOrganizationRecords({ organization })) {
-				records.push(...items);
-			}
+			const error = await readAll().then(
+				() => undefined,
+				(caught: unknown) => caught,
+			);
 
 			expect(fetchMock.callHistory.calls().length).to.eql(1);
 			expect(records.length).to.eql(0);
+			expect(error).to.be.instanceOf(Error);
 		});
 
 		it('should throw an error if an error occcured', async () => {

@@ -1,7 +1,5 @@
 import {
 	type ApiResult,
-	convertAnalyses,
-	type DataRecordNested,
 	type ElasticsearchService,
 	isEmpty,
 	logger,
@@ -12,44 +10,8 @@ import {
 } from '@overture-stack/maestro-common';
 
 import { getRepoInformation, repository } from '../repository/index.js';
-
-/**
- * Processes and indexes data records based on the repository type.
- *
- * If the repository type is `SONG`, the function converts the provided items into either
- * file-centric or analysis-centric documents (based on the repository's indexing mode),
- * and then bulk upserts them into the configured Elasticsearch index.
- *
- * For `Lyric` repository types, it upserts the provided items without conversion as they
- * are already formatted.
- *
- * @param items - An array of data records to be indexed.
- * @param repoInfo - The configuration object for the repository, which includes the index name and type.
- * @param indexer - An instance of `ElasticsearchService` used for performing indexing operations.
- */
-const indexRepositoryData = ({
-	items,
-	repoInfo,
-	indexer,
-}: {
-	items: DataRecordNested[];
-	repoInfo: SongRepositoryConfig | LyricRepositoryConfig;
-	indexer: ElasticsearchService;
-}) => {
-	if (repoInfo.type === RepositoryType.SONG) {
-		// convert Song documents into fileCentric or analysisCentric document
-		const converted = convertAnalyses(repoInfo, items);
-
-		if (converted.length > 0) {
-			indexer.bulkUpsert(repoInfo.indexName, converted);
-		} else {
-			logger.error(`Error converting records into '${repoInfo.indexingMode}Centric document'`);
-		}
-	} else {
-		// Lyric repository type, upsert items directly
-		indexer.bulkUpsert(repoInfo.indexName, items);
-	}
-};
+import { lyricRepository } from '../repository/repositories/lyric/repository.js';
+import { indexRepositoryData, reindex, REMOVAL_OUTCOME, removeDocumentIfRecordDeleted } from './reindex.js';
 
 /**
  * Creates an object containing indexing operations to be used in the API
@@ -61,6 +23,60 @@ export const api = (
 	repositories: (LyricRepositoryConfig | SongRepositoryConfig)[],
 	indexer: ElasticsearchService,
 ): RepositoryIndexingOperations => {
+	const notFound = ({ organization, recordId }: { organization: string; recordId: string }): ApiResult => {
+		const message = `Record '${recordId}' not found in organization '${organization}'`;
+		logger.error(message);
+		return { message, successful: false };
+	};
+
+	/**
+	 * Removes the document of a record confirmed deleted by Lyric, and answers `undefined` for any other record.
+	 */
+	const removeIfRecordDeleted = async ({
+		organization,
+		recordId,
+		repoInfo,
+	}: {
+		organization: string;
+		recordId: string;
+		repoInfo: LyricRepositoryConfig | SongRepositoryConfig;
+	}): Promise<ApiResult | undefined> => {
+		if (repoInfo.type === RepositoryType.LYRIC) {
+			const outcome = await removeDocumentIfRecordDeleted({
+				documentId: recordId,
+				indexer,
+				indexName: repoInfo.indexName,
+				lyric: lyricRepository(repoInfo),
+				organization,
+			});
+			const deletedRecord = `Record '${recordId}' was deleted from organization '${organization}'`;
+			switch (outcome) {
+				case REMOVAL_OUTCOME.REMOVED:
+					return {
+						indexName: repoInfo.indexName,
+						message: `${deletedRecord}, so its document is removed from the index`,
+						successful: true,
+					};
+				case REMOVAL_OUTCOME.ALREADY_ABSENT:
+					return {
+						indexName: repoInfo.indexName,
+						message: `${deletedRecord}, and the index holds no document for it`,
+						successful: true,
+					};
+				case REMOVAL_OUTCOME.FAILED:
+					return {
+						indexName: repoInfo.indexName,
+						message: `${deletedRecord}, but the index could not remove its document`,
+						serverFault: true,
+						successful: false,
+					};
+				case REMOVAL_OUTCOME.KEPT:
+					return undefined;
+			}
+		}
+		return undefined;
+	};
+
 	/**
 	 * Performs asynchronous fetch and indexing operations for a specified repository,
 	 * It returns an immediate response and if the repository code is valid then starts the
@@ -81,11 +97,7 @@ export const api = (
 		// Fire the async operation using setImmediate to ensure it runs in the next event loop cycle
 		setImmediate(async () => {
 			try {
-				for await (const items of repository(repoInfo).getRepositoryRecords()) {
-					if (items.length > 0) {
-						indexRepositoryData({ repoInfo, items, indexer });
-					}
-				}
+				await reindex({ indexer, pages: repository(repoInfo).getRepositoryRecords(), repoInfo });
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
 				logger.error(`Error found indexing repository records. ${message}`);
@@ -116,11 +128,12 @@ export const api = (
 		// Fire the async operation using setImmediate to ensure it runs in the next event loop cycle
 		setImmediate(async () => {
 			try {
-				for await (const items of repository(repoInfo).getOrganizationRecords({ organization })) {
-					if (items.length > 0) {
-						indexRepositoryData({ repoInfo, items, indexer });
-					}
-				}
+				await reindex({
+					indexer,
+					organization,
+					pages: repository(repoInfo).getOrganizationRecords({ organization }),
+					repoInfo,
+				});
 			} catch (error) {
 				const message = error instanceof Error ? error.message : String(error);
 				logger.error(`Error found indexing repository records. ${message}`);
@@ -153,9 +166,9 @@ export const api = (
 		const repoRecord = await repository(repoInfo).getRecord({ organization, id: recordId });
 
 		if (isEmpty(repoRecord)) {
-			const message = `Record '${recordId}' not found in organization '${organization}'`;
-			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
-			return { successful: false, message };
+			return (
+				(await removeIfRecordDeleted({ organization, recordId, repoInfo })) ?? notFound({ organization, recordId })
+			);
 		}
 
 		setImmediate(async () => {
@@ -193,9 +206,9 @@ export const api = (
 		const repoRecord = await repository(repoInfo).getRecord({ organization, id: recordId });
 
 		if (isEmpty(repoRecord)) {
-			const message = `Record '${recordId}' not found in organization '${organization}'`;
-			logger.error(`Record '${recordId}' not found in organization '${organization}'`);
-			return { successful: false, message };
+			return (
+				(await removeIfRecordDeleted({ organization, recordId, repoInfo })) ?? notFound({ organization, recordId })
+			);
 		}
 
 		setImmediate(async () => {

@@ -2,6 +2,7 @@ import { ElasticSearchSupportedVersions } from '@overture-stack/maestro-common';
 
 import bulkUpsertDataTest from './bulkUpsertIndexedData.spec';
 import createdIndexTest from './createdIndex.spec';
+import documentCleanupTest from './documentCleanup.spec';
 import indexDataTest from './indexData.spec';
 import pingTest from './ping.spec';
 import updateIndexDataTest from './updateIndexedData.spec';
@@ -29,6 +30,9 @@ describe('Integration tests', function () {
 		describe('Bulk upsert Data', function () {
 			bulkUpsertDataTest.call(this);
 		});
+		describe('Document cleanup', function () {
+			documentCleanupTest.call(this);
+		});
 	});
 
 	describe('Client V8', function () {
@@ -52,6 +56,9 @@ describe('Integration tests', function () {
 		});
 		describe('Bulk upsert Data', function () {
 			bulkUpsertDataTest.call(this);
+		});
+		describe('Document cleanup', function () {
+			documentCleanupTest.call(this);
 		});
 	});
 });

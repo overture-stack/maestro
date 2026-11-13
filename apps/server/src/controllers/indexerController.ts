@@ -56,6 +56,8 @@ const indexRecord = validateRequest(indexRecordRequestschema, async (req, res, n
 		if (result?.successful) {
 			// Accepted
 			res.status(202).send(result);
+		} else if (result?.serverFault) {
+			res.status(500).send(result);
 		} else {
 			// Bad Request
 			res.status(400).send(result);
@@ -75,6 +77,8 @@ const removeIndexRecord = validateRequest(indexRecordRequestschema, async (req, 
 		if (result?.successful) {
 			// Accepted
 			res.status(202).send(result);
+		} else if (result?.serverFault) {
+			res.status(500).send(result);
 		} else {
 			// Bad Request
 			res.status(400).send(result);

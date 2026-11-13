@@ -10,7 +10,7 @@ export {
 	RepositoryType,
 	SongRepositoryConfig,
 } from './config.js';
-export { DataRecordNested, DataRecordValue, FailureData, IndexResult } from './dataRecord.js';
+export { DataRecordNested, DataRecordValue, DOCUMENT_NOT_FOUND, FailureData, IndexResult } from './dataRecord.js';
 export { ConsoleLike } from './logger.js';
 export { Repository, RepositoryIndexingOperations } from './repository.js';
-export { ElasticsearchService } from './service.js';
+export { DocumentFieldValue, ElasticsearchService, ScanDocumentsOptions } from './service.js';
