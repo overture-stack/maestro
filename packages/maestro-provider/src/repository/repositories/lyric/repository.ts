@@ -49,9 +49,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 			fullUrl.searchParams.append(QUERY.PAGESIZE, paginationSize.toString());
 		}
 		while (hasMoreData) {
-			if (paginationSize) {
-				fullUrl.searchParams.set(QUERY.PAGE, page.toString());
-			}
+			fullUrl.searchParams.set(QUERY.PAGE, page.toString());
 			try {
 				const response = await sendHttpRequest(fullUrl.toString());
 
@@ -63,16 +61,15 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 						});
 						yield validArray;
 					} else {
-						return;
+						throw new Error(`Lyric answered page ${page} of category '${categoryId}' without a list of records`);
 					}
-					if (paginationSize) {
-						hasMoreData = page < parsedResponse?.pagination?.totalPages;
-						page++;
-					} else {
-						hasMoreData = false;
-					}
-				} else {
+					hasMoreData = page < parsedResponse?.pagination?.totalPages;
+					page++;
+				} else if (response.status === 404 && page === 1) {
+					// Lyric answers 404 for a category holding no records
 					hasMoreData = false;
+				} else {
+					throw new Error(`Lyric answered ${response.status} for page ${page} of category '${categoryId}'`);
 				}
 			} catch (error) {
 				logger.error(`Error fetching Lyric records on category '${categoryId}'`, error);
@@ -99,9 +96,7 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 			fullUrl.searchParams.append(QUERY.PAGESIZE, paginationSize.toString());
 		}
 		while (hasMoreData) {
-			if (paginationSize) {
-				fullUrl.searchParams.set(QUERY.PAGE, page.toString());
-			}
+			fullUrl.searchParams.set(QUERY.PAGE, page.toString());
 			try {
 				const response = await sendHttpRequest(fullUrl.toString());
 
@@ -113,16 +108,15 @@ export const lyricRepository = (config: LyricRepositoryConfig): Repository => {
 						});
 						yield validArray;
 					} else {
-						return;
+						throw new Error(`Lyric answered page ${page} of organization '${organization}' without a list of records`);
 					}
-					if (paginationSize) {
-						hasMoreData = page < parsedResponse?.pagination?.totalPages;
-						page++;
-					} else {
-						hasMoreData = false;
-					}
-				} else {
+					hasMoreData = page < parsedResponse?.pagination?.totalPages;
+					page++;
+				} else if (response.status === 404 && page === 1) {
+					// Lyric answers 404 for an organization holding no records
 					hasMoreData = false;
+				} else {
+					throw new Error(`Lyric answered ${response.status} for page ${page} of organization '${organization}'`);
 				}
 			} catch (error) {
 				logger.error(`Error fetching Lyric records on organization '${organization}'`, error);

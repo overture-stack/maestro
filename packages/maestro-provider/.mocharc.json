@@ -1,6 +1,6 @@
 {
 	"extension": ["ts"],
-	"spec": "test/**/*.spec.ts",
+	"spec": ["src/**/*.spec.ts", "test/**/*.spec.ts"],
 	"ignore": ["test/integration/**/*"],
 	"node-option": ["import=tsx"],
 	"timeout": 35000
