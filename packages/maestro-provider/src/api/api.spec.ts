@@ -2,7 +2,12 @@ import { expect } from 'chai';
 import fetchMock from 'fetch-mock';
 import { afterEach, beforeEach, describe, it } from 'mocha';
 
-import { DOCUMENT_NOT_FOUND, type LyricRepositoryConfig, RepositoryType } from '@overture-stack/maestro-common';
+import {
+	DOCUMENT_NOT_FOUND,
+	InternalServerError,
+	type LyricRepositoryConfig,
+	RepositoryType,
+} from '@overture-stack/maestro-common';
 
 import { lyricAuditResponse, lyricAuditRow } from '../../testing/fixtures/lyricAudit.js';
 import { createRecordingIndexer } from '../../testing/peripherals/recordingIndexer.js';
@@ -90,17 +95,20 @@ describe('api', () => {
 			const result = await api([lyricConfig], indexer).indexRecord('lyric-repo', 'org-a', 'gone');
 
 			expect(result.successful).to.equal(true);
-			expect(result.serverFault).to.equal(undefined);
 		});
 
-		it('is reported as a server fault when the index fails to remove its document', async () => {
+		it('fails with an internal server error when the index fails to remove its document', async () => {
 			const { indexer } = createRecordingIndexer([], { deleteFailureReason: 'ResponseError' });
 			confirmDeletion();
 
-			const result = await api([lyricConfig], indexer).removeIndexRecord('lyric-repo', 'org-a', 'gone');
+			const failure = await api([lyricConfig], indexer)
+				.removeIndexRecord('lyric-repo', 'org-a', 'gone')
+				.then(
+					() => undefined,
+					(error: unknown) => error,
+				);
 
-			expect(result.successful).to.equal(false);
-			expect(result.serverFault).to.equal(true);
+			expect(failure).to.be.instanceOf(InternalServerError);
 		});
 	});
 

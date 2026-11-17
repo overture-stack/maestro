@@ -40,7 +40,7 @@ export class NotImplemented extends Error {
 	timestamp: string;
 	constructor(details?: string) {
 		super('Not Implemented');
-		this.details = details || 'This functionallity is not yet implemented';
+		this.details = details || 'This functionality is not yet implemented';
 		this.timestamp = todaysDate();
 	}
 }

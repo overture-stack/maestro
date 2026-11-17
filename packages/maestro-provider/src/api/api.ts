@@ -1,6 +1,7 @@
 import {
 	type ApiResult,
 	type ElasticsearchService,
+	InternalServerError,
 	isEmpty,
 	logger,
 	type LyricRepositoryConfig,
@@ -31,6 +32,8 @@ export const api = (
 
 	/**
 	 * Removes the document of a record confirmed deleted by Lyric, and answers `undefined` for any other record.
+	 *
+	 * @throws `InternalServerError` when the index fails to remove the document
 	 */
 	const removeIfRecordDeleted = async ({
 		organization,
@@ -64,12 +67,7 @@ export const api = (
 						successful: true,
 					};
 				case REMOVAL_OUTCOME.FAILED:
-					return {
-						indexName: repoInfo.indexName,
-						message: `${deletedRecord}, but the index could not remove its document`,
-						serverFault: true,
-						successful: false,
-					};
+					throw new InternalServerError(`${deletedRecord}, but the index could not remove its document`);
 				case REMOVAL_OUTCOME.KEPT:
 					return undefined;
 			}

@@ -38,6 +38,8 @@ export interface RepositoryIndexingOperations {
 	 * @param organization - The name of the organization containing the record.
 	 * @param recordId - The unique identifier of the record to be indexed.
 	 * @returns A promise indicating the completion of the indexing operation.
+	 * @throws `InternalServerError` when the repository confirms the record deleted and the index fails to remove its
+	 * document
 	 */
 	indexRecord(repoCode: string, organization: string, recordId: string): Promise<ApiResult>;
 
@@ -48,6 +50,8 @@ export interface RepositoryIndexingOperations {
 	 * @param organization - The name of the organization containing the record.
 	 * @param recordId - The unique identifier of the record to be removed from the index.
 	 * @returns A promise indicating the completion of the indexing operation.
+	 * @throws `InternalServerError` when the repository confirms the record deleted and the index fails to remove its
+	 * document
 	 */
 	removeIndexRecord(repoCode: string, organization: string, recordId: string): Promise<ApiResult>;
 }
