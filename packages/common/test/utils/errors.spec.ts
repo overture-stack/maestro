@@ -56,7 +56,7 @@ describe('Errors', () => {
 				const result = new NotImplemented();
 				expect(result).to.be.an.instanceOf(NotImplemented);
 				expect(result.message).to.eql('Not Implemented');
-				expect(result.details).to.eql('This functionallity is not yet implemented');
+				expect(result.details).to.eql('This functionality is not yet implemented');
 				expect(result.timestamp).to.not.eql(undefined);
 			});
 		});

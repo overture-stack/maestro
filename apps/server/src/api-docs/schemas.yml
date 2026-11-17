@@ -39,13 +39,16 @@ components:
     AcceptedResponse:
       type: object
       properties:
+        indexName:
+          type: string
+          description: The name of the index where the data is stored.
+        message:
+          type: string
+          description: Present when the record's repository confirms the record deleted. It says whether its document was removed or the index held none.
         successful:
           type: boolean
           default: true
           description: Indicates whether the indexing operation was successful or not
-        indexName:
-          type: string
-          description: The name of the index where the data is stored.
 
     ErrorResponse:
       type: object

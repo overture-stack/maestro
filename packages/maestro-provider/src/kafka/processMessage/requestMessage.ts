@@ -105,7 +105,7 @@ export const processRequestMessage = async ({
 			}
 		} else {
 			// Fetch a single Document and Index it using api
-			repositoryIndexingApi.indexRecord(
+			await repositoryIndexingApi.indexRecord(
 				parsedPayload.repositoryCode,
 				parsedPayload.studyId.toString(),
 				parsedPayload.analysisId.toString(),

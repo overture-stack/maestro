@@ -1,6 +1,22 @@
 import type { Client, estypes } from 'es8';
 
-import { type DataRecordNested, FailureData, IndexResult, logger } from '@overture-stack/maestro-common';
+import {
+	type DataRecordNested,
+	DOCUMENT_NOT_FOUND,
+	type DocumentFieldValue,
+	FailureData,
+	IndexResult,
+	logger,
+	type ScanDocumentsOptions,
+} from '@overture-stack/maestro-common';
+
+import {
+	buildScanQuery,
+	DEFAULT_SCAN_PAGE_SIZE,
+	isDocumentNotFound,
+	SCROLL_KEEP_ALIVE,
+	toDocumentFieldValues,
+} from '../../common/documents.js';
 
 export const bulkUpsert = async (client: Client, index: string, dataSet: DataRecordNested[]) => {
 	try {
@@ -207,6 +223,15 @@ export const deleteData = async (client: Client, index: string, id: string): Pro
 			failureData,
 		};
 	} catch (error) {
+		if (isDocumentNotFound(error)) {
+			logger.error(`Found no document '${id}' to delete in index '${index}'`, {
+				documentId: id,
+				event: 'maestro.indexer.deleteNotFound',
+				indexName: index,
+				status: 404,
+			});
+			return { failureData: { [id]: [DOCUMENT_NOT_FOUND] }, indexName: index, successful: false };
+		}
 		logger.error(`Error deleting the index: ${error}`);
 
 		let errorMessage = JSON.stringify(error);
@@ -239,5 +264,46 @@ export const ping = async (client: Client): Promise<boolean> => {
 		logger.error(`Error ping server: ${error}`);
 
 		return false;
+	}
+};
+
+const clearScroll = async (client: Client, scrollId: string | undefined): Promise<void> => {
+	if (scrollId) {
+		try {
+			await client.clearScroll({ scroll_id: scrollId });
+		} catch (error) {
+			logger.warn(`Error clearing a scroll: ${error}`);
+		}
+	}
+};
+
+/**
+ * Lists the documents of `index`, one page per request, each with the value of `options.fieldName`, as
+ * `ElasticsearchService.scanDocuments` describes.
+ *
+ * @param client An instance of the Elasticsearch `Client` used to list the documents.
+ * @param index The name of the index to list.
+ * @param options The field to return, and the value a listed document must hold in it.
+ */
+export const scanDocuments = async function* (
+	client: Client,
+	index: string,
+	{ fieldName, fieldValue, pageSize = DEFAULT_SCAN_PAGE_SIZE }: ScanDocumentsOptions,
+): AsyncGenerator<DocumentFieldValue[], void, unknown> {
+	// The scroll position moves with each page, and is cleared however the listing ends
+	let page: estypes.SearchResponse = await client.search({
+		_source: [fieldName],
+		index,
+		query: buildScanQuery(fieldName, fieldValue),
+		scroll: SCROLL_KEEP_ALIVE,
+		size: pageSize,
+	});
+	try {
+		while (page.hits.hits.length > 0 && page._scroll_id) {
+			yield toDocumentFieldValues(page.hits.hits, fieldName, fieldValue);
+			page = await client.scroll({ scroll: SCROLL_KEEP_ALIVE, scroll_id: page._scroll_id });
+		}
+	} finally {
+		await clearScroll(client, page._scroll_id);
 	}
 };

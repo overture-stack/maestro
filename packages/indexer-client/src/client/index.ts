@@ -32,6 +32,7 @@ export const clientProvider = (elasticSearchConfig: ElasticSearchConfig): Elasti
 		createIndex: (index: string) => service.createIndex(index),
 		deleteData: (index: string, id: string) => service.deleteData(index, id),
 		ping: () => service.ping(),
+		scanDocuments: service.scanDocuments?.bind(service),
 		updateData: (index: string, id: string, data: DataRecordNested) => service.updateData(index, id, data),
 	};
 };

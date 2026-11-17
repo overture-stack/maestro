@@ -1,7 +1,7 @@
 /index/repository/{repositoryCode}:
   post:
     summary: Indexes data for a specified repository.
-    description: This operation initializes or updates the index with the provided data. The `repositoryCode` path parameter identifies the repository to be indexed.
+    description: This operation initializes or updates the index with the provided data. The `repositoryCode` path parameter identifies the repository to be indexed. Once every page of records has been read, it also removes the documents of records confirmed deleted by their repository. Maestro's indexing reference lists which repository types confirm deletions.
     tags:
       - Indexing
     parameters:
@@ -32,7 +32,7 @@
 /index/repository/{repositoryCode}/organization/{organization}:
   post:
     summary: Indexes data for a specific organization within the given repository.
-    description: This operation targets organizational data within the repository for indexing. The `repositoryCode` identifies the repository, and the `organization` path parameter specifies the organization whose data will be indexed.
+    description: This operation targets organizational data within the repository for indexing. The `repositoryCode` identifies the repository, and the `organization` path parameter specifies the organization whose data will be indexed. Once every page of the organization's records has been read, it also removes the documents of its records confirmed deleted by their repository. Maestro's indexing reference lists which repository types confirm deletions.
     tags:
       - Indexing
     parameters:
@@ -69,7 +69,7 @@
 /index/repository/{repositoryCode}/organization/{organization}/id/{id}:
   post:
     summary: Indexes data for a specific record identified by its ID within an organization in the given repository.
-    description: This operation allows fine-grained indexing at the record level. The `repositoryCode` identifies the repository, `organization` specifies the organization, and `id` refers to the unique identifier of the record to be indexed.
+    description: This operation allows fine-grained indexing at the record level. The `repositoryCode` identifies the repository, `organization` specifies the organization, and `id` refers to the unique identifier of the record to be indexed. For a record confirmed deleted by its repository, it removes the record's document instead. Maestro's indexing reference lists which repository types confirm deletions.
     tags:
       - Indexing
     parameters:
@@ -110,7 +110,7 @@
         $ref: '#/components/responses/ServiceUnavailableError'
   delete:
     summary: Removes the index entry for a specific record identified by its ID within an organization in the given repository.
-    description: This operation allows fine-grained removal at the record level. The `repositoryCode` identifies the repository, `organization` specifies the organization, and `id` refers to the unique identifier of the record to be removed from the index.
+    description: This operation allows fine-grained removal at the record level. The `repositoryCode` identifies the repository, `organization` specifies the organization, and `id` refers to the unique identifier of the record to be removed from the index. When the repository no longer returns a record, its document is removed only once the repository confirms the deletion. Maestro's indexing reference lists which repository types confirm deletions.
     tags:
       - Indexing
     parameters:
